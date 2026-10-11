@@ -4,7 +4,9 @@ Audit date: 2026-10-11 (America/Sao_Paulo). This is the maintained classificatio
 of existing contributions, their consumers, and their variants. The short
 ownership/destination map is [COMPONENTS](COMPONENTS.md). Architecture and recovery
 contracts remain in [ARCHITECTURE](ARCHITECTURE.md), [INVARIANTS](INVARIANTS.md),
-and [RECOVERY](RECOVERY.md). This audit changes documentation only.
+and [RECOVERY](RECOVERY.md). The original grounding audit changed documentation
+only; the [first cleanup](#first-safe-cleanup) below records subsequent build and
+development safeguards without changing the observed runtime classification.
 
 ## Classification and evidence
 
@@ -163,6 +165,36 @@ replacement, and header-chip experiments in README records are historical. The
 latest documented/source treatment preserves the native delegate and installs
 the helper atomically. Exact deployed Qt binary provenance remains UNKNOWN.
 These adjustments do not implement Ricy Files.
+
+## First safe cleanup
+
+Date: 2026-10-11 (America/Sao_Paulo). **No item is classified/approved REMOVE;
+no file was deleted or moved.** Historical status permits separating development
+entry points, not deleting provenance, rollback, or UNKNOWN consumers.
+
+KNOWN dependency review before changes:
+
+| Surface | Evidence and cleanup consequence |
+|---|---|
+| References and scripts | Repository searches found historical build/activation commands in the seven local READMEs and cumulative successor references. No current unit or root wrapper selects those builders. Historical recipes now carry grounding warnings; the builders require explicit isolated reproduction. |
+| Absolute/runtime paths | Installed user units select autostart, the integration output adapter, and `$HOME/.local/lib/ricy-noctalia/noctalia`; root/installed commands select switching. Historical builders previously shared `$HOME/.cache/ricy-noctalia-src-5.2.1` with the deployed provenance cache. They now reject that cache, repository paths, and symlink aliases before any version probe/download/build. |
+| Mixed-role consumers | `notification-continuity/enable.py` supplies activation and binary/drop-in rollback to later variants. Its `sync-wallpaper.py` retains preparation/restore functionality. These files stay in normal source checks; only its HISTORICAL builder is gated. Current reordering build/validators, switching, autostart, Dolphin and UNKNOWN blur/plugin material remain intact. |
+| Hashes/manifests/history | The old patches are tracked in Git; pre-cleanup builders are available at `1fb1918`. Both original SHA256SUMS and the version-specific correction manifest are historical evidence, not current checksums. Their bytes, transport recipes, archive, assets/licenses, and private backup/state paths are preserved. No duplicate snapshot or regenerated manifest was created. |
+| Rollback dependencies | Binary/source-cache provenance, notification restore, historical effect restoration interfaces, switching's panel/shortcut snapshots, compatibility output wrappers, upstream Noctalia, Plasma and Dolphin remain preserved. Old effect installers still contain valid rollback interfaces and were not disabled or substituted for window-fade-expand. |
+
+Normal `verify shell` source selection now omits the six HISTORICAL cumulative
+folders, notification's old builder, reordering's old effect installer, and the
+two historical root generators. All seven build guards still receive syntax
+checks. This explicit selection is based on the classifications above and does
+not reinterpret missing references, caches, or UNKNOWN as REMOVE. New fixture
+regressions check retained consumers and build rejection before side effects.
+See [DEVELOPMENT](DEVELOPMENT.md#historical-reproduction) for opt-in reproduction
+and the maintained source/effect entry points. Transport/history copies retain
+their original bytes and are explicitly outside normal development/build.
+
+Validation results and live-session limits are recorded in
+[CHANGELOG](CHANGELOG.md). Offline checks and unchanged runtime fingerprints do
+not prove interactive behavior or recovery after a persistent failure.
 
 ## How to use and refresh this audit
 

@@ -1,5 +1,14 @@
 # Smaller icons and hover animation for apps and search
 
+> **Grounding status:** This is a HISTORICAL cumulative variant; its commands and test results describe an earlier stage.
+> Use [CONTRIBUTION-AUDIT](../../../docs/CONTRIBUTION-AUDIT.md) and
+> [DEVELOPMENT](../../../docs/DEVELOPMENT.md#historical-reproduction) before using
+> the recipes below. The builder requires explicit opt-in and an isolated source;
+> it cannot use the deployed cache. Current source development belongs to
+> [app-icon-reordering](../app-icon-reordering/README.md), whose current patch is
+> MIGRATE pending activation. Historical effect installers are not current defaults;
+> preserve their restoration interfaces and backups.
+
 In the bar, the application icons and the search magnifying glass stay 12Smaller % at rest. When passing the mouse, they grow smoothly to the previous visual size; when leaving, they return to the reduced size. Input and output last. 140 ms, with EaseOutCubic, respecting the movement/speed configuration of Noctalia. Reenter during animation continues from the current progress.
 
 The effect transforms only the icon design: click area, spacing, layout of the bar, titles and indicators remain fixed. It applies to images, application fallback icons, and the search launcher image/glyph. It does not modify track or its menus, volume, clock, network, control-center/ Noctalia button, nor does the effect of workspace labels/badges. The existing background highlight of the apps accompanies the hover of 140 Ms.

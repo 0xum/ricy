@@ -1,7 +1,25 @@
 #!/usr/bin/env bash
 set -euo pipefail
 base=$(cd -- "$(dirname -- "$0")" && pwd)
-src="${XDG_CACHE_HOME:-$HOME/.cache}/ricy-noctalia-src-5.2.1"
+# Historical reproduction only; never use the deployed source cache.
+if [[ ${RICY_BUILD_HISTORICAL:-0} != 1 ]]; then
+  echo 'HISTORICAL build disabled. See docs/DEVELOPMENT.md for isolated reproduction.' >&2
+  exit 2
+fi
+if [[ ${RICY_NOCTALIA_SOURCE:-} != /* ]]; then
+  echo 'HISTORICAL build requires an absolute RICY_NOCTALIA_SOURCE outside the kit/cache.' >&2
+  exit 2
+fi
+src=$(realpath -m -- "$RICY_NOCTALIA_SOURCE")
+project=$(realpath -- "$base/../../..")
+cache=$(realpath -m -- "${XDG_CACHE_HOME:-$HOME/.cache}/ricy-noctalia-src-5.2.1")
+home_cache=$(realpath -m -- "$HOME/.cache/ricy-noctalia-src-5.2.1")
+for protected in "$project" "$cache" "$home_cache"; do
+  if [[ $src == "$protected" || $src == "$protected/"* ]]; then
+    echo 'HISTORICAL build refuses repository paths and the deployed source cache (including symlinks).' >&2
+    exit 2
+  fi
+done
 commit=6ef43e2bf2f3d5b4205ec72a72e34a2ab76ce3b4
 if [[ ! $(/usr/bin/noctalia --version) =~ ^noctalia[[:space:]]v5\.2\.1([[:space:]]|$) ]]; then
   echo 'This patch corresponds to Noctalia 5.2.1. Review for the installed version.' >&2

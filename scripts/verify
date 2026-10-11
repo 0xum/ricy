@@ -30,6 +30,16 @@ LOCAL = ('core', 'shell', 'compositor', 'apps', 'services', 'themes',
 PAGES = ('shell/noctalia/README.md', 'compositor/kwin/README.md',
          'apps/file-manager/README.md', 'recovery/plasma/README.md',
          'themes/tokens/README.md', '.agents/references/README.md', 'docs/adr/README.md')
+# Explicit HISTORICAL entries from CONTRIBUTION-AUDIT; mixed-role folders stay.
+HISTORICAL_VARIANTS = ('taskbar-menu-composition', 'tray-menu-composition',
+                       'app-icon-interactions', 'taskbar-app-actions',
+                       'app-indicator-animations', 'app-icon-states')
+HISTORICAL_BUILDS = ('notification-continuity', *HISTORICAL_VARIANTS)
+HISTORICAL_FILES = {
+    'prepare-environment.py', 'generate-kvantum-variant.py',
+    'contributions/notification-continuity/build.sh',
+    'contributions/app-icon-reordering/apply-animations.py',
+}
 failed = 0
 skipped = 0
 
@@ -157,7 +167,12 @@ def source_files():
             if path.suffix in {'.py', '.sh', '.json', '.toml'} or path.name == 'ricy':
                 files.append(path)
     files += [ROOT / name for name in ('start.sh', 'return.sh', 'switch.sh')]
-    return sorted(set(files))
+    kit = ROOT / 'ricy-kit'
+    return sorted({path for path in files
+                   if not path.is_relative_to(kit) or (
+                       path.relative_to(kit).as_posix() not in HISTORICAL_FILES
+                       and not any(path.is_relative_to(kit / 'contributions' / name)
+                                   for name in HISTORICAL_VARIANTS))})
 
 
 def shell():
@@ -185,6 +200,13 @@ def shell():
             report('FAIL', f'{path.relative_to(ROOT)}: {error}')
     if failed == before:
         report('PASS', f'syntax of available files ({len(files)} candidates; skips listed separately)')
+    print('NOT APPLICABLE historical recipes excluded from normal source checks; mixed-role helpers retained')
+    if bash:
+        for name in HISTORICAL_BUILDS:
+            run(f'{name}: historical build guard syntax',
+                [bash, '-n', str(ROOT / 'ricy-kit/contributions' / name / 'build.sh')])
+    else:
+        not_run('historical build guard syntax: Bash unavailable')
     source = Path(os.environ.get('RICY_NOCTALIA_SOURCE',
                   str(Path(os.environ.get('XDG_CACHE_HOME', Path.home() / '.cache')) / 'ricy-noctalia-src-5.2.1')))
     test = ROOT / 'ricy-kit/contributions/app-icon-reordering/validate-actions.py'

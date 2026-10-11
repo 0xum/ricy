@@ -1,5 +1,14 @@
 # Click to restore/minimize and middle button to close
 
+> **Grounding status:** This is a HISTORICAL cumulative variant; its commands and test results describe an earlier stage.
+> Use [CONTRIBUTION-AUDIT](../../../docs/CONTRIBUTION-AUDIT.md) and
+> [DEVELOPMENT](../../../docs/DEVELOPMENT.md#historical-reproduction) before using
+> the recipes below. The builder requires explicit opt-in and an isolated source;
+> it cannot use the deployed cache. Current source development belongs to
+> [app-icon-reordering](../app-icon-reordering/README.md), whose current patch is
+> MIGRATE pending activation. Historical effect installers are not current defaults;
+> preserve their restoration interfaces and backups.
+
 Current behavior of application icons in the KDE/KWin taskbar:
 
 - Left click restores and focuses the minimized window.

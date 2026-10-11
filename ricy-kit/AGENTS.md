@@ -10,6 +10,12 @@ part-level classifications. An active kit contains historical files; the current
 source patch is not necessarily the deployed binary. UNKNOWN is not permission
 to remove or replace a contribution.
 
+For normal development/build, use the source selection in
+[DEVELOPMENT](../docs/DEVELOPMENT.md#historical-reproduction). Historical builders
+require deliberate opt-in and an isolated source; do not bypass guards or run
+transport copies to rebuild the current installation. Notification enable/restore,
+switching wrappers, and backups remain current consumers even beside old patches.
+
 - Noctalia shell/profile/patch: [shell rules](../shell/AGENTS.md).
 - Effects/blur/ABI: [compositor rules](../compositor/AGENTS.md).
 - Search, shortcuts, Dolphin, and KDE: [integrations](../integrations/AGENTS.md).

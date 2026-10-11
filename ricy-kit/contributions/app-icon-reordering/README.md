@@ -1,5 +1,13 @@
 # Reorganize application icons
 
+> **Grounding status:** the deployed earlier cumulative binary is ACTIVE; this
+> folder's current RICY-001 patch/build is MIGRATE pending activation. The bundled
+> `apply-animations.py` and window assets are HISTORICAL; use
+> [window-fade-expand](../window-fade-expand/README.md) for the selected effect.
+> Keep historical restoration interfaces and consult
+> [CONTRIBUTION-AUDIT](../../../docs/CONTRIBUTION-AUDIT.md) before interpreting
+> the earlier commands or session results below.
+
 ## Current single-space policy
 
 RICY-001 supersedes the workspace-group descriptions preserved below. The current

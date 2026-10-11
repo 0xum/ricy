@@ -34,8 +34,9 @@ python3 scripts/test-foundation.py
 
 - `architecture`: required files, skills/frontmatter, local rules, relative
   foundation Markdown links, and syntax of the new scripts.
-- `shell`: Bash/Python/JSON/TOML syntax in active-kit sources (excluding work,
-  outputs, backups, and upstream assets); offline Noctalia action tests when
+- `shell`: Bash/Python/JSON/TOML syntax in maintained active-kit sources (excluding
+  work, outputs, backups, upstream assets, and explicitly HISTORICAL recipes);
+  syntax of the seven historical build guards; offline Noctalia action tests when
   a local source matches the expected commit/patch and PyQt6 is available;
   single-space policy and native drag regressions when that source has a build.
 - `recovery`: existing in-memory panel capture/merge test; QJSEngine window-effect
@@ -44,9 +45,10 @@ python3 scripts/test-foundation.py
 - `doctor`: read-only diagnostics of tools, packages through pacman, reported
   environment, units, and the Plasma Wayland entry. Never performs repairs.
 
-`python3 scripts/test-foundation.py` exercises 17 validator scenarios in a
+`python3 scripts/test-foundation.py` exercises validator scenarios in a
 temporary fixture, including missing files/links, component failure, and an
-unavailable dependency. verify does not run it recursively.
+unavailable dependency, plus historical source selection and build isolation.
+verify does not run it recursively.
 
 Exit codes: verify 0 = executed checks passed without dependency skips;
 1 = a check failed; 2 = an offline check could not run, without FAIL;
@@ -59,6 +61,47 @@ cumulative patch without replacing the private active source cache. Both
 `verify shell` and `app-icon-reordering/build.sh` accept it and still check the
 pinned commit and exact diff. Build commands do not activate the shell. See
 [WORKSPACE-AUDIT](WORKSPACE-AUDIT.md) for the scope and preserved recovery surfaces.
+
+## Historical reproduction
+
+The [grounding audit](CONTRIBUTION-AUDIT.md#first-safe-cleanup) records the first
+cleanup and its dependency review. No item is approved as REMOVE, so no file is
+deleted. Normal source selection excludes the six superseded cumulative folders,
+the notification-only builder, the reordering folder's old effect installer, and
+the two historical root generators. This is an explicit list, not a rule based
+on age or directory names. Notification activation/restoration and wallpaper
+preparation, switching, autostart, Dolphin, and all UNKNOWN sources stay selected.
+Historical build guards still receive Bash syntax checks.
+
+For current shell source development, use
+[app-icon-reordering](../ricy-kit/contributions/app-icon-reordering/README.md).
+Its RICY-001 patch is MIGRATE pending activation; it differs from the deployed
+binary/cache. The deployed binary and cache remain rollback/provenance material.
+The selected window effect belongs to
+[window-fade-expand](../ricy-kit/contributions/window-fade-expand/README.md).
+Never apply an earlier cumulative patch or effect as the current default.
+
+The seven historical shell builders refuse default execution before probing
+Noctalia, cloning, patching, or building. Deliberate reproduction requires both
+`RICY_BUILD_HISTORICAL=1` and an absolute `RICY_NOCTALIA_SOURCE` in a separate
+checkout outside this repository and the preserved source cache. For example,
+from the project root, using a new destination outside the kit:
+
+```bash
+RICY_BUILD_HISTORICAL=1 \
+RICY_NOCTALIA_SOURCE="$HOME/.cache/ricy-history/taskbar-menu-composition" \
+bash ricy-kit/contributions/taskbar-menu-composition/build.sh
+```
+
+This opt-in may download/build the pinned source; it never activates the result.
+Repository/cache paths and symlink aliases are rejected. Keep the resulting
+binary separate from normal activation. Restore historical bytes into an isolated
+destination through Git when needed; the pre-cleanup builders are in commit
+`1fb1918`. Do not add duplicate snapshots or regenerate SHA256SUMS.
+The transport tree, manifests, archive, licenses, old applicators/restorers, and
+compatibility outputs retain their historical paths. Transport recipes are
+preserved evidence and have not received the active-tree guards; do not execute
+them as normal development, installation, or recovery instructions.
 
 Link checking covers foundation files, the root README, and local AGENTS,
 without traversing the entire history, external links, or title anchors.

@@ -38,8 +38,10 @@ Project organized on October 11, 2026.
 
 The `ricy`, `voltar-ao-noctalia`, and `voltar-ao-plasma` commands remain available in
 `~/.local/bin`. Shortcuts and services were updated to this project's paths.
-To move Ricy to another computer, use the documentation and transport kit;
-the active kit contains private state and backups from this installation.
+Before preparing another computer, reconcile historical documentation and transport
+recipes against the [grounding](docs/CONTRIBUTION-AUDIT.md). The transport tree is
+historical evidence, outside the normal build/development path; publication and
+portability remain unproven. The active kit contains private state and backups.
 
 The historical record preserves paths used in previous sessions.
 The organization record and copies of modified files are in

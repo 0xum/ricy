@@ -3,6 +3,44 @@
 Record significant changes in short entries. Minimum fields:
 Model/Agent, Date, Purpose, Validation performed. Do not sign source files.
 
+## 2026-10-11 — First safe cleanup of historical development paths
+
+- **Model/Agent:** Codex (GPT-6), agent for this task.
+- **Date:** 2026-10-11 (America/Sao_Paulo).
+- **Purpose:** use the approved grounding to prevent historical variants from
+  being mistaken for the current build, while preserving the active desktop and
+  Plasma/Dolphin Recovery. No item meets REMOVE; no file was deleted or moved.
+- **Changes:** gated seven historical Noctalia builders behind explicit opt-in
+  and an absolute isolated source, rejecting repository/cache paths and symlink
+  aliases before probing/downloading/building. Normal source selection omits only
+  explicit HISTORICAL recipes; mixed-role activation/restore helpers and UNKNOWN
+  material stay selected. Guard syntax remains checked. README/agent entry points
+  distinguish current source, deployed binary, selected effect and historical
+  transport recipes. Added fixture regressions for isolation/source selection;
+  fixed fixture link validation with an empty archive placeholder, without
+  copying the private ZIP. See the
+  [dependency review](CONTRIBUTION-AUDIT.md#first-safe-cleanup) and
+  [reproduction workflow](DEVELOPMENT.md#historical-reproduction).
+- **Validation performed:** PASS `./scripts/verify architecture`; PASS
+  `python3 scripts/test-foundation.py` (33 behavioral checks). `./scripts/verify all`
+  returned exit 2: PASS maintained-source syntax (65 candidates), all seven guard
+  syntax checks, offline panel capture/merge preservation and 28 window-effect
+  scenarios; NOT RUN Noctalia source tests because the preserved cache differs
+  from the current patch. PASS `git diff --check` and before/after SHA-256/symlink
+  comparison: none of the 1,606 baseline files disappeared; only the intended
+  development scripts/docs changed. Installed units/wrappers, binary/cache,
+  snapshots, both manifests, patches, assets, archive and private kit material
+  retain their bytes. User-unit states, PIDs and ExecStart values remain identical.
+  Doctor returned exit 2 with its two expected UNKNOWN categories. FAIL preexisting
+  blur-selector service state remains unchanged; no repair was attempted.
+- **Limits:** NOT RUN live switching, persistent-failure recovery, login/unlock,
+  interactive Dolphin and visual trials; no session/service was restarted.
+  Builds/downloads and historical activation were NOT RUN; guard tests used a
+  sentinel build body in a disposable fixture. New architecture, migration and
+  visual design are NOT APPLICABLE. Unchanged bytes/state and offline tests do
+  not certify interactive recovery. No extra historical copy or regenerated
+  SHA256SUMS was created; Git retains the pre-cleanup recipes at `1fb1918`.
+
 ## 2026-10-11 — Current contribution grounding
 
 - **Model/Agent:** Codex (GPT-6), agent for this task.

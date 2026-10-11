@@ -1,5 +1,14 @@
 # Continuous notifications with the taskbar
 
+> **Grounding status:** The build/patch are HISTORICAL; `enable.py` remains ACTIVE/RECOVERY and `sync-wallpaper.py` remains MIGRATE.
+> Use [CONTRIBUTION-AUDIT](../../../docs/CONTRIBUTION-AUDIT.md) and
+> [DEVELOPMENT](../../../docs/DEVELOPMENT.md#historical-reproduction) before using
+> the recipes below. The builder requires explicit opt-in and an isolated source;
+> it cannot use the deployed cache. Current source development belongs to
+> [app-icon-reordering](../app-icon-reordering/README.md), whose current patch is
+> MIGRATE pending activation. Historical effect installers are not current defaults;
+> preserve their restoration interfaces and backups.
+
 Distributed Preferences in config.toml Noctalia integration:
 
 ```toml

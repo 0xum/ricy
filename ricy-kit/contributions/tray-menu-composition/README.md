@@ -1,5 +1,14 @@
 # Tray Item Options in Noctalia Composition
 
+> **Grounding status:** This is a HISTORICAL cumulative variant; its commands and test results describe an earlier stage.
+> Use [CONTRIBUTION-AUDIT](../../../docs/CONTRIBUTION-AUDIT.md) and
+> [DEVELOPMENT](../../../docs/DEVELOPMENT.md#historical-reproduction) before using
+> the recipes below. The builder requires explicit opt-in and an isolated source;
+> it cannot use the deployed cache. Current source development belongs to
+> [app-icon-reordering](../app-icon-reordering/README.md), whose current patch is
+> MIGRATE pending activation. Historical effect installers are not current defaults;
+> preserve their restoration interfaces and backups.
+
 DBusMenu menus of tray items use the native panel embedded `ricy:tray-menu`, with bottom/opacity of the bar, continuous blur, junction, animation and external closure of PanelManager. The presentation replaces the independent popup; actions and states continue provided by the application.
 
 In the bottom bar there is a **set down at the base of the menu**, next to the bar. It goes straight back to the tray drawer, keeping monitor, bar and anchor. The horizontal reference is the center of the drawer, regardless of the icon clicked. Menu and return use the same axis; the arrow attached this axis even when a wider menu needs to be moved by the monitor limit. The button uses the native Ghost style: transparent background and highlight when passing the mouse. It is also present inside submenus when the drawer is enabled.

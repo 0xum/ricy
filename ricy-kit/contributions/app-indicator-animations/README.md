@@ -1,5 +1,14 @@
 # Application indicator and window animations
 
+> **Grounding status:** This is a HISTORICAL cumulative variant; its commands and test results describe an earlier stage.
+> Use [CONTRIBUTION-AUDIT](../../../docs/CONTRIBUTION-AUDIT.md) and
+> [DEVELOPMENT](../../../docs/DEVELOPMENT.md#historical-reproduction) before using
+> the recipes below. The builder requires explicit opt-in and an isolated source;
+> it cannot use the deployed cache. Current source development belongs to
+> [app-icon-reordering](../app-icon-reordering/README.md), whose current patch is
+> MIGRATE pending activation. Historical effect installers are not current defaults;
+> preserve their restoration interfaces and backups.
+
 The user confirmed restoring/minimizing the icon and closing with the middle button. This variant adds visual response to the states of the windows.
 
 ## Taskbar purple ball
