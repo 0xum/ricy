@@ -16,6 +16,8 @@
 #include <QGraphicsEffect>
 #include <QPointer>
 #include <QTabBar>
+#include <QTabWidget>
+#include <QToolButton>
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QPainterPath>
@@ -54,8 +56,75 @@ void chip(QPainter *painter, QRectF rect, QColor fill, QColor outline = Qt::tran
 class ChipStyle : public QProxyStyle {
 public:
     explicit ChipStyle(QStyle *base) : QProxyStyle(base) {}
+    int pixelMetric(PixelMetric metric, const QStyleOption *option = nullptr,
+                    const QWidget *widget = nullptr) const override {
+        const auto *tabs = qobject_cast<const QTabBar *>(widget);
+        if (metric == PM_TabBarScrollButtonWidth && tabs &&
+            (tabs->shape() == QTabBar::RoundedNorth || tabs->shape() == QTabBar::RoundedSouth))
+            return 24;
+        return QProxyStyle::pixelMetric(metric, option, widget);
+    }
+    QRect subElementRect(SubElement element, const QStyleOption *option,
+                         const QWidget *widget = nullptr) const override {
+        if (element == SE_TabWidgetTabBar && option) {
+            const auto *container = qobject_cast<const QTabWidget *>(widget);
+            if (container && (container->tabPosition() == QTabWidget::North ||
+                              container->tabPosition() == QTabWidget::South)) {
+                // Reserve the shell's trailing gutter in the actual tab-bar
+                // allocation, including when every tab fits without arrows.
+                QRect available = option->rect;
+                if (container->layoutDirection() == Qt::RightToLeft)
+                    available.adjust(8,0,0,0);
+                else
+                    available.adjust(0,0,-8,0);
+                return QProxyStyle::subElementRect(element, option, widget).intersected(available);
+            }
+        }
+        const auto *tabs = qobject_cast<const QTabBar *>(widget);
+        if (tabs && option && (tabs->shape() == QTabBar::RoundedNorth ||
+                              tabs->shape() == QTabBar::RoundedSouth) &&
+            (element == SE_TabBarTearIndicatorLeft || element == SE_TabBarTearIndicatorRight)) {
+            QRect rect = QProxyStyle::subElementRect(element, option, widget);
+            if (!rect.isEmpty() && rect.width() < 4) {
+                const bool left = (element == SE_TabBarTearIndicatorLeft) !=
+                                  (tabs->layoutDirection() == Qt::RightToLeft);
+                if (left) rect.setWidth(4);
+                else rect.setLeft(rect.right()-3);
+            }
+            return rect;
+        }
+        if (tabs && option && (tabs->shape() == QTabBar::RoundedNorth ||
+                              tabs->shape() == QTabBar::RoundedSouth) &&
+            (element == SE_TabBarScrollLeftButton || element == SE_TabBarScrollRightButton)) {
+            // Qt uses these rectangles for both clipping and layout. The larger
+            // leading rectangle reserves two 24px buttons, an 8px gap and an 8px edge inset;
+            // PM_TabBarScrollButtonWidth retains the native button hit areas.
+            const QRect area = option->rect;
+            const QRect rect = element == SE_TabBarScrollLeftButton
+                ? QRect(area.right() - 63, area.top(), 64, area.height())
+                : QRect(area.right() - 31, area.top(), 24, area.height());
+            return QStyle::visualRect(tabs->layoutDirection(), area, rect);
+        }
+        return QProxyStyle::subElementRect(element, option, widget);
+    }
     void drawPrimitive(PrimitiveElement element, const QStyleOption *option,
                        QPainter *painter, const QWidget *widget = nullptr) const override {
+        if (qobject_cast<const QTabBar *>(widget) &&
+            (element == PE_IndicatorTabTearLeft || element == PE_IndicatorTabTearRight)) {
+            // Keep Qt's native overflow visibility/placement, using the existing
+            // accent and a 4px capsule instead of Kvantum's thin blue line.
+            const QRectF area(option->rect);
+            const qreal width = qMin<qreal>(4, area.width());
+            const QRectF line(area.center().x()-width/2, area.top()+3,
+                              width, qMax<qreal>(0,area.height()-6));
+            painter->save();
+            painter->setRenderHint(QPainter::Antialiasing);
+            painter->setPen(Qt::NoPen);
+            painter->setBrush(QColor("#cba6f7"));
+            painter->drawRoundedRect(line,width/2,width/2);
+            painter->restore();
+            return;
+        }
         if (widget && QByteArray(widget->metaObject()->className()).contains("KUrlNavigator") &&
             (element == PE_IndicatorArrowRight || element == PE_IndicatorArrowLeft || element == PE_IndicatorArrowDown)) {
             painter->save();
@@ -531,6 +600,16 @@ public:
                 }
             }
             if (auto *tabs = qobject_cast<QTabBar *>(object)) {
+                QRect available = tabs->rect();
+                for (auto *arrow : tabs->findChildren<QToolButton *>(QString(), Qt::FindDirectChildrenOnly)) {
+                    if (!arrow->isVisible() || (arrow->objectName() != QStringLiteral("ScrollLeftButton") &&
+                                               arrow->objectName() != QStringLiteral("ScrollRightButton"))) continue;
+                    if (tabs->layoutDirection() == Qt::RightToLeft)
+                        available.setLeft(qMax(available.left(), arrow->geometry().right() + 9));
+                    else
+                        available.setRight(qMin(available.right(), arrow->geometry().left() - 9));
+                    arrow->raise();
+                }
                 for (int index = 0; index < tabs->count(); ++index) {
                     const QRect rect = tabs->tabRect(index);
                     for (auto side : {QTabBar::LeftSide, QTabBar::RightSide}) {
@@ -542,6 +621,10 @@ public:
                                            : rect.right() - 11 - button->width();
                         const QPoint position(x, rect.center().y() - button->height()/2);
                         if (button->pos() != position) button->move(position);
+                        // A clipped tab must not leave an active close button
+                        // over the scroll controls or outside the visible strip.
+                        if (available.contains(button->geometry())) button->clearMask();
+                        else button->setMask(QRegion(QRect(-1,-1,1,1)));
                     }
                 }
             }

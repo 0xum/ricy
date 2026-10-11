@@ -3,6 +3,76 @@
 Record significant changes in short entries. Minimum fields:
 Model/Agent, Date, Purpose, Validation performed. Do not sign source files.
 
+## 2026-10-11 — Dolphin tab overflow controls
+
+- **Model/Agent:** Codex (GPT-6).
+- **Date:** 2026-10-11 (America/Sao_Paulo).
+- **Purpose:** prevent tab close controls from overlapping overflow arrows and
+  provide 8px trailing spacing using existing Dolphin/Qt ownership and spacing.
+- **Changes:** horizontal scroll subelement geometry reserves 64px; native 24px
+  arrow buttons have an 8px gap and 8px edge inset. Close-button paint/hit masks
+  exclude clipped controls and reset after scrolling/resizing. Installed only
+  the Qt helper atomically with a restorer-compatible private backup; existing
+  windows retain their mapped helper. No new architecture or Recovery dependency.
+- **Validation performed:** PASS helper build, 18 Qt overflow layouts across
+  three widths/LTR/RTL/three selections, native close/scroll clicks and restored
+  masks after overflow removal; live Dolphin capture/probe confirms geometry.
+  PASS `./scripts/verify architecture`, `python3 -B themes/tokens/validate.py`
+  and `git diff --check` for the changed files.
+- **FAIL (preexisting):** live probe teardown SIGSEGV in Qt application
+  destruction reproduced with the preserved pre-change helper as well as this
+  change, including window close. Captured geometry passes; clean process exit
+  does not. No unrelated teardown fix is claimed.
+- **Publication validation:** PASS architecture/token checks and helper build
+  against the selected Git index in an isolated export. An existing audit link
+  to the intentionally excluded private ZIP was changed to a plain path; no
+  archive contents were added. Unrelated visual-grounding edits remain local.
+- **NOT RUN:** all monitor scales, live drag/reorder and live Recovery.
+  Offline checks do not certify the session. Transport snapshots are preserved.
+
+
+## 2026-10-11 — Dolphin final-tab containment
+
+- **Model/Agent:** Codex (GPT-6).
+- **Date:** 2026-10-11 (America/Sao_Paulo).
+- **Purpose:** keep the final tab border inside the shell panel when no overflow
+  arrows are shown.
+- **Changes:** bound the horizontal Qt tab-bar allocation with an 8px trailing
+  gutter, mirrored for RTL; preserve content geometry and existing overflow
+  controls. Installed the helper atomically with a restorer-compatible backup.
+  No new architecture, tokens, compositor change or Recovery dependency.
+- **Validation performed:** PASS helper build; eight Qt allocations across
+  four widths/LTR/RTL with and without overflow; native last-tab close;
+  previous 18 overflow cases and close/scroll/mask regressions; live Dolphin
+  seven-tab capture/probe with hidden arrows and an 8px trailing gutter;
+  `./scripts/verify architecture`, `python3 -B themes/tokens/validate.py` and
+  changed-file `git diff --check`.
+- **FAIL (preexisting probe limitation):** live capture process exit 139 at
+  teardown; the previous comparison reproduced failure with the prior helper.
+- **NOT RUN:** all monitor scales, live drag/reorder and live Recovery.
+  Existing processes retain their mapped helper; new windows load this update.
+
+
+## 2026-10-11 — Dolphin rounded purple overflow indicator
+
+- **Model/Agent:** Codex (GPT-6).
+- **Date:** 2026-10-11 (America/Sao_Paulo).
+- **Purpose:** replace the thin blue tab-overflow line with the existing purple
+  accent, a 4px width and rounded ends.
+- **Changes:** Qt helper paints the native tear primitive and reserves its wider
+  horizontal rectangle. Qt retains visibility/placement and native tab controls.
+  No token, compositor, architecture or Recovery dependency changed. Installed
+  the helper atomically with a restorer-compatible private backup.
+- **Validation performed:** PASS helper build; LTR/RTL pixel checks for accent,
+  4px geometry, rounded tips and native visibility; 18 overflow layouts and
+  native close/scroll regressions; live Dolphin capture;
+  `./scripts/verify architecture`, `python3 -B themes/tokens/validate.py` and
+  changed-file `git diff --check`.
+- **FAIL (preexisting probe limitation):** live capture-process teardown again
+  exited 139; the previous baseline comparison reproduced the same failure.
+- **NOT RUN:** all display scales, live Recovery and every tab interaction.
+  Existing windows keep the mapped helper; open a new window for the update.
+
 ## 2026-10-11 — Taskbar actions preserve the clicked KWin window
 
 - **Model/Agent:** Codex (GPT-6).

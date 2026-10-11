@@ -270,3 +270,66 @@ icon inset, keyboard action, submenu and widget action. PASS architecture/token
 checks and diff whitespace. NOT RUN every live submenu, RTL or display scale.
 Latest private backup: `~/.local/state/ricy-dolphin-backups/20261011-192959-179609`.
 Helper surface changes need a new process; QSS is applied to existing windows.
+
+
+## 2026-10-11 — Tab overflow spacing
+
+KNOWN: the existing Qt helper now reserves a 64px overflow strip for two native
+24px scroll buttons, an 8px gap and an 8px trailing inset. Qt's style subelement
+rectangles control both tab clipping and native scroll layout; RTL mirrors the
+same geometry. Close buttons outside the visible strip receive a mask outside the widget bounds, excluding its hit/paint area; buttons regain their full shape when scrolling/resizing exposes them. Native
+signals, tab selection/reordering and the existing 12px close inset remain.
+No palette, token, launcher, KWin or Recovery dependency changed. Ownership stays
+with the Dolphin Qt helper; plain Dolphin remains independent of this helper.
+
+PASS helper compilation, 18 Qt overflow layouts (300/600/900px, LTR/RTL,
+first/middle/last selection), native close/scroll clicks, mask restoration after
+removing overflow, and a live Dolphin capture/probe confirming 24px buttons and
+8px edge inset. PASS architecture/token checks and diff whitespace. NOT RUN all
+monitor scales, live drag/reorder and live Recovery. FAIL probe-process teardown:
+SIGSEGV in QGuiApplicationPrivate destruction occurred with both the changed
+helper and the preserved pre-change helper, including normal window close.
+This preexisting result limits the live validation; it is not a passing exit test.
+Only the installed helper was replaced atomically, with a restorer-compatible
+private backup at the private backup printed during installation.
+Existing processes retain their mapped helper; open a new Dolphin window for this
+change. Historical transport snapshots/manifests remain unchanged.
+
+
+## 2026-10-11 — Contained tab strip without overflow
+
+KNOWN: the Qt helper bounds the horizontal QTabWidget tab-bar allocation with
+an 8px trailing gutter, mirrored for RTL. This reserves actual layout space even
+when the scroll arrows are hidden, preventing the final tab border from extending
+past the shell panel. Existing tab padding, palette, native close/reorder signals,
+content-pane geometry and overflow arrow spacing remain. Ownership stays with
+the existing Qt helper; no Recovery dependency or KWin change is introduced.
+
+PASS helper build, eight Qt tab-container allocations across four widths and
+LTR/RTL with/without overflow, last-tab close, and the previous 18 overflow cases.
+PASS live Dolphin capture/probe with seven tabs, hidden arrows and an 8px trailing
+bar gutter. PASS architecture/token checks and diff whitespace. The live capture
+process again failed at teardown (exit 139); the prior comparison reproduced this
+with the pre-change helper. Clean live shutdown remains FAIL for that probe.
+NOT RUN all display scales, live drag/reorder and Recovery. Atomic helper backup:
+the private backup printed during installation. Open a new Dolphin
+window to load the helper; the existing whole-file restorer supports this backup.
+Historical transport snapshots/manifests remain unchanged.
+
+
+## 2026-10-11 — Rounded accent overflow indicator
+
+KNOWN: the Qt helper paints native tab-tear indicators with the existing accent
+`#cba6f7`, a 4px width and capsule ends (half-width radius), with 3px vertical
+insets. The horizontal tear allocation grows from 2px to 4px so the wider stroke
+fits its native clipping geometry. Qt still controls indicator visibility and
+placement; arrows, tab actions, shell materials and Recovery dependencies remain.
+
+PASS helper build, LTR/RTL pixel checks for accent color/4px allocation/rounded
+tips/native visibility, 18 overflow regression layouts and native close/scroll
+clicks, and a live Dolphin capture. PASS architecture/token/whitespace checks.
+The existing live capture-probe teardown failure (exit 139) recurred; clean live
+shutdown is not validated by this capture. NOT RUN all display scales, live
+Recovery and every tab interaction. The installed helper was replaced atomically;
+private rollback backup: the private backup printed during installation.
+New Dolphin processes load this change. Historical transport snapshots stay intact.

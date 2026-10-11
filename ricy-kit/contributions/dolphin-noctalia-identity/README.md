@@ -200,3 +200,19 @@ PASS Qt capture and menu fixture (icon inset, transparent corners, keyboard
 action and native submenu/widget action), architecture/token/whitespace checks.
 NOT RUN all live submenus, RTL or display scales. QSS updates existing windows.
 Private backup: `~/.local/state/ricy-dolphin-backups/20261011-193208-529316`.
+
+
+## 2026-10-11 — Tab overflow and containment
+
+The existing Qt helper reserves space for overflow arrows, masks close controls
+on clipped tabs, keeps the final tab inside the shell when all tabs fit, and
+uses the existing purple accent for a wider rounded overflow indicator.
+See the [helper implementation and validation record](../dolphin-blur-corners/README.md#2026-10-11--tab-overflow-spacing)
+for geometry, LTR/RTL checks, visual evidence and the preexisting probe-teardown
+failure. Ownership and Recovery dependencies remain unchanged.
+
+The helper was installed atomically with restorer-compatible private backups.
+Use `apply.py --restaurar BACKUP` with the backup printed by installation;
+whole-file rollback can replace later helper updates. Existing processes keep
+their mapped helper; launch a new Dolphin window for the update. No private
+backup contents, compiled helpers or captures are included in the repository.
