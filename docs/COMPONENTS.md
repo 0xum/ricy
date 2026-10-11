@@ -11,6 +11,12 @@ reapply installed preferences.
 Ownership preserves upstream licenses. Each
 component link below leads to its local README; consult the audit before acting.
 
+[Files integration](FILES-INTEGRATION.md) inventories file-manager consumers and
+proposes ownership of the future public contracts, external package handler and
+Dolphin/KDE-only adapters. [ADR-0007](adr/0007-session-file-manager-boundary.md)
+is awaiting approval; it does not change the current ownership table or authorize
+a component migration, new service, toolkit or default association.
+
 The root `ricy-kit/` owns the active installation; this does not make every file
 in it ACTIVE. `docs/ricy-kit/` preserves HISTORICAL transport variants. Read
 [kit rules](../ricy-kit/AGENTS.md) before editing; replicas are not interchangeable.

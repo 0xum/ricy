@@ -10,3 +10,7 @@ their replacement. Format: Status, Context, Decision, Consequences, Constraints.
 - [0004 — Agent-first development](0004-agent-first-development.md)
 - [0005 — Consumable visual tokens](0005-consumable-visual-tokens.md)
 - [0006 — Explicit service template source lookup](0006-service-template-source-lookup.md)
+
+Proposals awaiting explicit approval (not architectural authority):
+
+- [0007 — Session file-manager integration boundary](0007-session-file-manager-boundary.md)

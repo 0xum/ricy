@@ -62,6 +62,13 @@ migrate shell/session runtime or implement an application.
 New Core/Services, IPC, and dedicated-session contracts are UNKNOWN, not implicitly
 approved APIs. See [migration](MIGRATION-PLAN.md).
 
+The [Files integration assessment](FILES-INTEGRATION.md) maps current Dolphin,
+launcher, defaults, D-Bus, device, trash, package, appearance and recovery edges.
+[ADR-0007](adr/0007-session-file-manager-boundary.md) is **Proposed**, not Accepted:
+its session-scoped contracts and independent Dolphin Recovery criteria await
+approval. No file-manager implementation, default change or session isolation
+is claimed; C-002/C-003 remain unresolved.
+
 ## Ownership and boundaries
 - **UPSTREAM**: Noctalia, KWin, Plasma, Dolphin, Qt, Kvantum, and third-party themes.
 - **PATCHES**: cumulative Noctalia diffs and KWin blur; preserve version, commit,

@@ -11,6 +11,14 @@ responsible for wallpaper/desktop; return uses Ricy scripts, user systemd,
 D-Bus, KGlobalAccel, and panel/shortcut snapshots. No isolation against KWin,
 login, or Ricy-script failure has been demonstrated.
 
+The [Files integration assessment](FILES-INTEGRATION.md) records the shared user
+Dolphin desktop override, FileManager1 service and systemd drop-in that still
+reach both shell modes. [ADR-0007](adr/0007-session-file-manager-boundary.md) proposes
+native Dolphin defaults/activation independent of Files and Ricy adapters for
+future Recovery. It remains Proposed: no overrides, associations, packages or
+return paths are changed. A direct binary launch alone does not prove independence;
+session environment, existing daemons and activation/configuration must be tested.
+
 The [contribution grounding](CONTRIBUTION-AUDIT.md) identifies RECOVERY consumers
 and part-level exceptions. On the audited installation, native blur is loaded,
 the ricyblur selector is enabled but failed, and the current single-space source

@@ -3,6 +3,37 @@
 Record significant changes in short entries. Minimum fields:
 Model/Agent, Date, Purpose, Validation performed. Do not sign source files.
 
+## 2026-10-11 — Future Files integration assessment and proposed boundary
+
+- **Model/Agent:** Codex (GPT-6), agent for this task.
+- **Date:** 2026-10-11 (America/Sao_Paulo).
+- **Purpose:** prepare the future Ricy Files integration architecture without
+  implementing the application or changing defaults, MIME associations or Dolphin.
+- **Changes:** added FILES-INTEGRATION with source/installed-registration evidence
+  for directory opens, launcher, FileManager1, MIME/defaults, desktop entries,
+  removable/remote devices, trash, package handlers, themes, external actions and
+  Plasma Recovery. Added ADR-0007 as Proposed with alternatives, recommended
+  session-scoped selection, required Files contracts, Dolphin/KDE-exclusive
+  adapters, external package ownership, migration gates and recovery implications.
+  Linked the proposal from architecture, components, recovery and the ADR index.
+  Accepted ADR-0003 and current ownership/defaults remain unchanged; no session,
+  bus topology, toolkit, backend or new daemon implementation is selected.
+- **Validation performed:** PASS `./scripts/verify architecture` (56 mandatory
+  files, three script syntax checks, 384 local links, zero failures/skips); PASS
+  `git diff --check`; PASS content fingerprint equality for 1,073 inspected
+  runtime/source files, including installed directory/package associations,
+  Dolphin desktop/D-Bus/systemd overrides, wrapper, dolphinrc and Kvantum
+  assignment. Read-only MIME queries and source/registration inventory performed;
+  primary FileManager1, MIME, Desktop Entry, Trash, portal and KDE service-menu
+  documentation reviewed. No private configuration contents exported. Component
+  builds/Visual checks are NOT APPLICABLE to this documentation-only change.
+- **Limits:** source and registration observations do not prove interactive
+  directory/reveal/properties, device/trash/portal behavior or independent
+  Recovery. Live trials and default migration are NOT RUN. Approval is pending;
+  documentation rollback removes the proposal and its navigation references only.
+  Existing uncommitted changes, private backups/state and historical kits remain
+  preserved.
+
 ## 2026-10-11 — Approved service template extraction (M-02)
 
 - **Model/Agent:** Codex (GPT-6), agent for this task.
