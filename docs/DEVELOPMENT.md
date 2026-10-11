@@ -28,6 +28,8 @@ From the project root (or with an absolute path; scripts resolve their own root)
 ./scripts/verify all
 ./scripts/doctor
 python3 scripts/test-foundation.py
+python3 themes/tokens/validate.py
+python3 themes/tokens/render-reference.py --check
 ```
 
 `verify` uses Python 3.11+ and existing tools; it does not install dependencies.
@@ -49,6 +51,13 @@ python3 scripts/test-foundation.py
 temporary fixture, including missing files/links, component failure, and an
 unavailable dependency, plus historical source selection and build isolation.
 verify does not run it recursively.
+
+Token checks use only Python's standard library and do not alter the session.
+`themes/tokens/validate.py` checks the versioned contract, references, unit
+ranges, unchanged identity values, scoped additions, snapshot provenance and
+generated-board equivalence. `render-reference.py --check` compares exact bytes
+with the retained SVG; neither proves live appearance. See the
+[token contract](../themes/tokens/README.md) for explicit regeneration/rollback.
 
 Exit codes: verify 0 = executed checks passed without dependency skips;
 1 = a check failed; 2 = an offline check could not run, without FAIL;

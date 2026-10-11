@@ -49,7 +49,10 @@ CachyOS
 
 The division into `core/`, `shell/noctalia/`, `compositor/kwin/`, `apps/file-manager/`,
 `services/`, `themes/`, `integrations/`, `recovery/plasma/`, `installer/`, and `tools/`
-is a documentary reservation; executables remain in their current locations.
+is primarily a documentary reservation; executables remain in their current locations.
+`themes/tokens/` now holds the canonical consumable JSON and an offline identity
+board renderer under [ADR-0005](adr/0005-consumable-visual-tokens.md); this does not
+migrate shell/session runtime or implement an application.
 New Core/Services, IPC, and dedicated-session contracts are UNKNOWN, not implicitly
 approved APIs. See [migration](MIGRATION-PLAN.md).
 
@@ -74,7 +77,7 @@ These are the kit's baseline, not claims about the latest upstream versions.
 | C-001 | [Workspace audit](WORKSPACE-AUDIT.md) identifies Ricy Noctalia UI/commands and shared Plasma surfaces; [grounding G-02](CONTRIBUTION-AUDIT.md) connects the running binary to the earlier cumulative diff | Current source patch disables Ricy groups/badges, workspace widget, navigation/alert commands and settings; the running binary still matches the pre-policy variant preserved in the transport copy. Visible-window membership remains internal in current source. No activation occurred in either audit. Shared KWin/Plasma shortcuts, menus and gestures remain preserved; full live compliance is UNKNOWN. |
 | C-002 | `integration.py` uses plasmashell/wallpaper and restores through Ricy scripts | Separate, independent recovery is PLANNED. Do not claim isolation has already been achieved. |
 | C-003 | Launcher and FileManager1 integration use customized Dolphin | Preserve until Ricy Files is validated; do not change MIME/defaults at this stage. |
-| C-004 | Tokens exist, but configs/QSS/scripts also contain values | Reference existing tokens; automatic centralized consumption is PLANNED. |
+| C-004 | Canonical consumable JSON now exists in themes/tokens; configs/QSS/scripts still contain values | Offline identity board consumes central tokens with exact byte equality. Runtime migrations remain PLANNED; see ADR-0005 and the token audit. |
 | C-005 | Two kit trees and absolute paths in wrappers | INFERRED: moving directories can break units and shortcuts. Preserve and map references before migration. |
 | C-006 | [Grounding G-03](CONTRIBUTION-AUDIT.md): native blur loaded, ricyblur absent, enabled selector unit failed at a D-Bus method lookup | `blur-continuity` disposition is UNKNOWN; old README claims that ricyblur remains loaded are historical. Preserve existing native blur and recovery; repair/retirement was not performed. |
 | C-007 | [Grounding G-05/G-06/G-08/G-10](CONTRIBUTION-AUDIT.md): installed/source translation differences, mixed optional extensions, version-specific correction manifest | Source recipes and installed artifacts have independent lifecycles. Do not replay old installers, optional extension defaults, or correction bundles as if they reproduce the selected installation exactly. |

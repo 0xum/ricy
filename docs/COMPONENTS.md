@@ -5,7 +5,8 @@ dependencies, cumulative lineage, part-level classifications, recovery impact,
 and read-only observations for all 24 contributions and shared material.
 Classes describe current roles; KNOWN/UNKNOWN describe evidence. Neither a
 registered consumer nor a passing static check certifies runtime functionality.
-All destinations are PLANNED. Ownership preserves upstream licenses. Each
+Runtime destinations remain PLANNED; the token-source exception is recorded below.
+Ownership preserves upstream licenses. Each
 component link below leads to its local README; consult the audit before acting.
 
 The root `ricy-kit/` owns the active installation; this does not make every file
@@ -40,7 +41,7 @@ is loaded; the ricyblur selector is failed. See audit G-02/G-03 for the limits.
 |  [konsole-animated-cursor](../ricy-kit/contributions/konsole-animated-cursor/README.md)  | Terminal profile and palette |  `themes/ + integrations/kde/`  | Konsole, Kvantum | ACTIVE / RICY-OWNED configuration | Terminal should remain available for diagnosis |
 |  [keyboard-cedilla](../ricy-kit/contributions/keyboard-cedilla/README.md)  | XCompose composition and Brave adaptation |  `integrations/`  | Layout/XCompose, optional Brave | ACTIVE / RICY-OWNED | Preserve text entry and preferences |
 |  [noctalia-language-and-localization](../ricy-kit/contributions/noctalia-language-and-localization/README.md)  | Shell language/region/weather |  `shell/noctalia/ + integrations/`  | Noctalia, locale, systemd units | ACTIVE / RICY-OWNED | Do not globalize installation preferences |
-|  [noctalia-visual-identity](../ricy-kit/contributions/noctalia-visual-identity/README.md)  | Tokens and board of existing identity |  `themes/tokens/`  | Config/palette/Style Noctalia and visual contributions | ACTIVE reference / RICY-OWNED reference | No installation; visual differences need to be recorded |
+|  [noctalia-visual-identity](../ricy-kit/contributions/noctalia-visual-identity/README.md)  | Retained snapshot/guide and generated identity board |  [themes/tokens](../themes/tokens/README.md): canonical data implemented; runtime migration PLANNED  | Config/palette/Style Noctalia and visual contributions; Python stdlib for offline board generation | ACTIVE reference / RICY-OWNED reference | No installation or new recovery dependency; existing values preserved |
 |  [driver-aic8800](../ricy-kit/contributions/driver-aic8800/README.md)  | USB Wi-Fi/Bluetooth Driver and DKMS package |  `integrations/hardware/`  | Kernel/headers, DKMS, Radxa source fixed | ACTIVE on this hardware / UPSTREAM + patches + Ricy packaging | Risk of losing network; hardware dependency, not every session |
 
 ## Entry points and cross-cutting components

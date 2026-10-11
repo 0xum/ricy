@@ -1,5 +1,12 @@
 # Ricy’s visual identity — Noctalia reference
 
+Current source status (2026-10-11): [themes/tokens](../../../themes/tokens/README.md)
+now owns the consumable visual contract. This contribution's tokens.json is an
+unchanged provenance/compatibility snapshot; reference.svg is reproduced from
+the central JSON and template with identical bytes. Historical blur/Dolphin
+stages below do not supersede the [current source audit](../../../themes/tokens/AUDIT.md).
+No desktop appearance, profile or recovery setting changed in this promotion.
+
 Existing reference caught in 10/10/2026. Use this guide before harmonizing other parts of the system. Noctalia defines the shell language; KWin is the compositor of the Plasma Wayland session. This document records the appearance and guides future changes. It does not install themes or applies preferences.
 
 The visual signature is dark, bluish and discreet, featuring Mauve, rounded cards, light icons and continuity between embedded panels and bars. The depth comes from the difference between surfaces and the background blur.

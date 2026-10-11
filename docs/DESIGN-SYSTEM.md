@@ -1,11 +1,18 @@
 # Design System
 
 ## CURRENT — KNOWN
-Identity already exists. The detailed guide is [VISUAL IDENTITY](VISUAL-IDENTITY.md);
-structured values are in
-[tokens.json](../ricy-kit/contributions/noctalia-visual-identity/tokens.json).
-This document is the normative entry point; it does not create a second palette.
-The transport copy has its own historical tokens: do not assume synchronization.
+Identity already exists. The canonical consumable values are now in
+[themes/tokens/tokens.json](../themes/tokens/tokens.json), contract 1.0.0/schema 1.
+The [token contract](../themes/tokens/README.md) defines paths, semantics, units,
+consumer status and application consumption. The [source audit](../themes/tokens/AUDIT.md)
+records existing hardcodes and conflicts. This document remains the normative
+entry point; it does not create a second palette.
+
+The detailed [VISUAL IDENTITY](VISUAL-IDENTITY.md) and retained
+[legacy JSON](../ricy-kit/contributions/noctalia-visual-identity/tokens.json) provide
+provenance, including older implementation stages. The legacy JSON is unchanged
+and no longer a second editable authority. The transport copy has its own
+historical tokens: do not assume synchronization.
 
 | Role | Existing token reference |
 |---|---|
@@ -24,7 +31,10 @@ on compositor implementation and window class, not just color/opacity.
 Application icons retain their own identity.
 
 KNOWN: TOML configs, JSON palettes, QSS, and installers still repeat values.
-Tokens are a documentary reference, not an executable configuration or generator.
+Central tokens can be parsed directly or packaged by approved applications;
+they are not executable desktop configuration. The existing identity SVG is the
+only migrated consumer, generated offline with byte-for-byte equality. No live
+shell, Dolphin or global-theme consumer was migrated.
 Workspace badge/group references are legacy records. The current cumulative
 Ricy source patch disables these surfaces; it is not yet the deployed binary,
 as established by [contribution grounding G-02](CONTRIBUTION-AUDIT.md).
@@ -35,14 +45,21 @@ The grounding audit records current native blur and selected Dolphin source/QSS;
 older ricyblur and translucent internal-panel descriptions in identity records
 are historical stages, not instructions to restore that appearance. Exact
 deployed compiled-helper provenance and full private palette equivalence remain
-UNKNOWN; this documentation audit does not change tokens or visual settings.
+UNKNOWN; the grounding audit did not change tokens or visual settings. This
+later token promotion preserves existing values and live settings.
 
-## TARGET — PLANNED
-[themes/tokens](../themes/tokens/README.md) reserves the central location,
-pointing to current tokens without copying values. Migrate consumers one at a time
-with before/after comparison, contract versioning, and rollback. No new generator
-or format has been selected. Do not create arbitrary colors, radii, spacing,
-or animations, or a parallel design system.
+## APPLICATION CONSUMPTION — KNOWN contract / PLANNED runtime
+[ADR-0005](adr/0005-consumable-visual-tokens.md) records the authorized promotion
+of existing values to plain versioned JSON. Future Ricy applications, especially
+Files, consume that source through a local toolkit adapter or bundled resource.
+Use shared color/type/spacing/motion roles; keep shell, KDE, Dolphin and terminal
+adaptations scoped. Font px/pt, scale, fill alpha and compositor blur must not
+be conflated. Blur support for a new application remains UNKNOWN.
+
+Migrate runtime consumers one at a time with before/after comparison, contract
+versioning and rollback. Files' toolkit and implementation remain undecided.
+No desktop generator, SDK or live token loader was introduced. Do not create
+arbitrary colors, radii, spacing, animations or a parallel design system.
 
 Ownership: Ricy maintains visual roles; upstream retains toolkit primitives.
 Dependencies: Noctalia Style, KWin/blur, Qt/Kvantum, and existing KDE/GTK themes.

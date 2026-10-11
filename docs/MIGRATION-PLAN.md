@@ -14,6 +14,12 @@ part-level roles and cumulative variants. It does not authorize relocation or
 removal. The foundation created documentary directories and validators; it did
 not relocate runtime.
 
+The later [token-centralization decision](adr/0005-consumable-visual-tokens.md)
+implements the canonical JSON source in [themes/tokens](../themes/tokens/README.md).
+Only the offline identity board consumes it so far, with exact before/after
+bytes. Existing runtime sources and transport snapshots remain in place;
+application/toolkit and desktop consumer migrations remain PLANNED.
+
 Grounding gates: current RICY-001 source is not deployed (G-02); blur-continuity
 has a failed registered consumer and UNKNOWN disposition (G-03); exact compiled
 Dolphin-helper provenance and individual private plugin consumers remain UNKNOWN.
@@ -26,7 +32,7 @@ been approved. No contribution currently has sufficient evidence for REMOVE.
 |---|---|---|
 | Patches Noctalia and public profile | shell/noctalia/ | Identify cumulative variant and consumers; do not transport private profile |
 | Blur/ricywindowactions/corners | compositor/kwin/ | Preserve version/ABI, licenses, build/install/reversion |
-| Theme Tokens and Assets | themes/ and themes/tokens/ | Defining consumer migration while maintaining values and appearance |
+| Theme Tokens and Assets | themes/ and themes/tokens/ | Canonical JSON and offline board consumption implemented; runtime/assets require individual migration while maintaining values and appearance |
 | Search/ Shortcuts Adapter/KDE/Dolphin | integrations/kde/ | Map D-Bus, units, desktops and paths in both kits |
 | Autostart and integration units | services/ | Preserve order/readiness, names and return policy |
 | Alternance and snapshots | recovery/plasma/ | Validate restoration and reduce Ricy dependency without losing panels |

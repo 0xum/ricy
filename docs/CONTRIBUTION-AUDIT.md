@@ -10,6 +10,14 @@ development safeguards without changing the observed runtime classification.
 
 ## Classification and evidence
 
+Subsequent token task (2026-10-11): [ADR-0005](adr/0005-consumable-visual-tokens.md)
+promotes the existing identity to a consumable source in
+[themes/tokens](../themes/tokens/README.md) and migrates the offline identity
+board with identical bytes. The tables below retain the pre-centralization
+grounding; their token-location/reservation descriptions are superseded only by
+that scoped promotion. Runtime observations and other classifications remain
+unchanged. See the [visual source audit](../themes/tokens/AUDIT.md).
+
 | Class | Meaning in this audit |
 |---|---|
 | ACTIVE | Used by the current installation through a running process, registered entry point, selected configuration/asset, or maintained development reference. The consumer type is explicit; a reference is not runtime code. |

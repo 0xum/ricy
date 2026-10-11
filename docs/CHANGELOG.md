@@ -3,6 +3,39 @@
 Record significant changes in short entries. Minimum fields:
 Model/Agent, Date, Purpose, Validation performed. Do not sign source files.
 
+## 2026-10-11 — Consumable Ricy visual tokens
+
+- **Model/Agent:** Codex (GPT-6), agent for this task.
+- **Date:** 2026-10-11 (America/Sao_Paulo).
+- **Purpose:** prepare existing Ricy identity for future owned applications,
+  especially Files, without redesign, live appearance changes or bulk migration.
+- **Changes:** promoted existing visual values into `themes/tokens/tokens.json`
+  with schema1/contract1.0.0, explicit units and scoped adaptations. Shared
+  Dolphin colors reference canonical roles; derived shell radii are calculated.
+  Added source/hardcode audit, consumption contract, offline renderer/validator
+  and ADR-0005. The existing SVG board is the sole migrated consumer; generated
+  output is byte-for-byte identical. Updated design, component, architecture,
+  migration and Files documentation without choosing a toolkit or implementing
+  an application.
+- **Findings:** native Style provides the spacing/type/radius/motion cadence;
+  existing runtime sources retain hardcodes. Shell fill .70, Dolphin alpha178/255
+  and Konsole .85 remain distinct. Native KWin blur is attributed to grounding
+  G-03; old ricyblur records are historical and new-app blur support remains
+  UNKNOWN. Root/contribution search-support radii differ and were preserved.
+- **Validation performed:** PASS `python3 themes/tokens/validate.py` (contract,
+  references/units, retained-snapshot SHA-256, value/adaptation equality,
+  source-backed additions, SVG XML and accent propagation); PASS
+  `python3 themes/tokens/render-reference.py --check` (exact retained SVG bytes);
+  PASS `./scripts/verify architecture`, token-script syntax, targeted documentation
+  links and `git diff --check`. NOT RUN live visuals, monitors/scaling, motion,
+  session switching, login/unlock or recovery trials. Runtime Integration,
+  Recovery and Environment checks are NOT APPLICABLE to this offline-only change.
+- **Preservation/rollback:** original token JSON and SVG bytes, transport kit,
+  historical manifests, private profiles/state/backups and live consumers remain
+  intact. No applicator, installation or service/compositor activation occurred.
+  Revert this task's source/template/tooling/documentation edits to roll back;
+  recovery has no new token-loader dependency.
+
 ## 2026-10-11 — First safe cleanup of historical development paths
 
 - **Model/Agent:** Codex (GPT-6), agent for this task.

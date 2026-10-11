@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="810" viewBox="0 0 1100 810" role="img" aria-labelledby="title desc">
+<title id="title">Ricy — Visual Identity Noctalia</title><desc id="desc">Dark palette with Mauve, source references and notification schematic junction and bar. Real Blur depends on KWin.</desc>
+<defs><radialGradient id="wall"><stop stop-color="${colors.hover_selection}" stop-opacity=".7"/><stop offset="1" stop-color="${colors.on_accent}"/></radialGradient></defs>
+<rect width="1100" height="810" fill="${colors.on_accent}"/>
+<g font-family="${typography.shell_family}, sans-serif" fill="${colors.on_surface}">
+<text x="52" y="58" font-size="27" font-weight="700">Ricy · Noctalia</text>
+<text x="52" y="88" font-size="${typography.native_sizes.body}" fill="${colors.secondary_text}">Current reference · 2026-10-10 · KDE-Current palette</text>
+
+<rect x="52" y="119" width="146" height="54" rx="8" fill="${colors.surface}" stroke="${colors.outline}"/><text x="52" y="196" font-size="${typography.native_sizes.caption}">Surface</text><text x="52" y="215" font-size="12" fill="${colors.secondary_text}">${colors.surface}</text>
+<rect x="222" y="119" width="146" height="54" rx="8" fill="${colors.card}" stroke="${colors.outline}"/><text x="222" y="196" font-size="${typography.native_sizes.caption}">Card</text><text x="222" y="215" font-size="12" fill="${colors.secondary_text}">${colors.card}</text>
+<rect x="392" y="119" width="146" height="54" rx="8" fill="${colors.on_surface}" stroke="${colors.outline}"/><text x="392" y="196" font-size="${typography.native_sizes.caption}">Text</text><text x="392" y="215" font-size="12" fill="${colors.secondary_text}">${colors.on_surface}</text>
+<rect x="562" y="119" width="146" height="54" rx="8" fill="${colors.secondary_text}" stroke="${colors.outline}"/><text x="562" y="196" font-size="${typography.native_sizes.caption}">Secondary</text><text x="562" y="215" font-size="12" fill="${colors.secondary_text}">${colors.secondary_text}</text>
+<rect x="732" y="119" width="146" height="54" rx="8" fill="${colors.outline}" stroke="${colors.outline}"/><text x="732" y="196" font-size="${typography.native_sizes.caption}">Outline</text><text x="732" y="215" font-size="12" fill="${colors.secondary_text}">${colors.outline}</text>
+<rect x="902" y="119" width="146" height="54" rx="8" fill="${colors.accent}" stroke="${colors.outline}"/><text x="902" y="196" font-size="${typography.native_sizes.caption}">Mauve</text><text x="902" y="215" font-size="12" fill="${colors.secondary_text}">${colors.accent}</text>
+<rect x="52" y="236" width="146" height="54" rx="8" fill="${colors.on_accent}" stroke="${colors.outline}"/><text x="52" y="313" font-size="${typography.native_sizes.caption}">On accent</text><text x="52" y="332" font-size="12" fill="${colors.secondary_text}">${colors.on_accent}</text>
+<rect x="222" y="236" width="146" height="54" rx="8" fill="${colors.hover_selection}" stroke="${colors.outline}"/><text x="222" y="313" font-size="${typography.native_sizes.caption}">Selection</text><text x="222" y="332" font-size="12" fill="${colors.secondary_text}">${colors.hover_selection}</text>
+<rect x="392" y="236" width="146" height="54" rx="8" fill="${colors.success}" stroke="${colors.outline}"/><text x="392" y="313" font-size="${typography.native_sizes.caption}">Success</text><text x="392" y="332" font-size="12" fill="${colors.secondary_text}">${colors.success}</text>
+<rect x="562" y="236" width="146" height="54" rx="8" fill="${colors.error}" stroke="${colors.outline}"/><text x="562" y="313" font-size="${typography.native_sizes.caption}">Error</text><text x="562" y="332" font-size="12" fill="${colors.secondary_text}">${colors.error}</text>
+<rect x="732" y="236" width="146" height="54" rx="8" fill="${colors.warning}" stroke="${colors.outline}"/><text x="732" y="313" font-size="${typography.native_sizes.caption}">Warning</text><text x="732" y="332" font-size="12" fill="${colors.secondary_text}">${colors.warning}</text>
+<rect x="902" y="236" width="146" height="54" rx="8" fill="${colors.information}" stroke="${colors.outline}"/><text x="902" y="313" font-size="${typography.native_sizes.caption}">Info</text><text x="902" y="332" font-size="12" fill="${colors.secondary_text}">${colors.information}</text>
+<text x="52" y="389" font-size="18" font-weight="700">${typography.shell_family} · shell</text>
+<text x="52" y="417" font-size="${typography.native_sizes.body}" fill="${colors.secondary_text}">Body ${typography.native_sizes.body} px · card radius ${derived.radius.extra_large} px at scale 1 · padding ${geometry.native_card_padding_logical_px} px</text>
+<text x="620" y="389" font-family="${typography.kde_family}, monospace" font-size="17">JetBrainsMono · KDE / terminal</text>
+<text x="620" y="417" font-size="${typography.native_sizes.body}" fill="${colors.secondary_text}">Current KDE preference: ${typography.kde_size_pt} pt · bar-specific radii</text>
+<rect x="52" y="453" width="996" height="267" rx="12" fill="url(#wall)"/>
+<rect x="84" y="483" width="314" height="151" rx="${derived.radius.extra_large}" fill="${colors.card}" stroke="${colors.outline}"/>
+<text x="102" y="514" font-size="${typography.native_sizes.title}" font-weight="600">Card</text>
+<text x="102" y="540" font-size="${typography.native_sizes.body}" fill="${colors.secondary_text}">Solid surface · ${derived.card_alpha_label}</text>
+<rect x="102" y="566" width="128" height="43" rx="${derived.radius.large}" fill="${colors.accent}"/>
+<text x="166" y="593" text-anchor="middle" font-size="${typography.native_sizes.body}" fill="${colors.on_accent}">Active</text>
+<rect x="245" y="566" width="135" height="43" rx="${derived.radius.large}" fill="${colors.hover_selection}"/>
+<text x="312" y="593" text-anchor="middle" font-size="${typography.native_sizes.body}" fill="${colors.on_hover_selection}">Selection</text>
+<path d="M52 676 H728 Q744 676 744 660 V556 Q744 540 760 540 H1032 Q1048 540 1048 556 V720 H52 Z" fill="${colors.surface}" fill-opacity="${derived.shell_alpha_svg}"/>
+<text x="763" y="573" font-size="15" font-weight="600">Notification</text>
+<text x="763" y="600" font-size="${typography.native_sizes.caption}" fill="${colors.secondary_text}">Background ${derived.shell_alpha_label} · card connected to the bar</text>
+<rect x="810" y="540" width="125" height="3" rx="1.5" fill="${colors.accent}"/>
+<text x="80" y="704" font-size="${typography.native_sizes.body}">Taskbar · ${geometry.taskbar.height_logical_px} px</text>
+<text x="920" y="704" font-size="${typography.native_sizes.body}">19:30</text>
+<text x="52" y="757" font-size="${typography.native_sizes.body}" fill="${colors.secondary_text}">Schematic sample · the junction uses a single surface to illustrate continuity.</text>
+<text x="52" y="783" font-size="${typography.native_sizes.caption}" fill="${colors.secondary_text}">In the actual session: KWin/ricyblur · fonts, colors, alpha and geometry are independent parameters.</text>
+</g></svg>

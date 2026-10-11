@@ -8,3 +8,4 @@ their replacement. Format: Status, Context, Decision, Consequences, Constraints.
 - [0002 — Plasma Recovery](0002-plasma-recovery.md)
 - [0003 — Ricy Files](0003-ricy-files.md)
 - [0004 — Agent-first development](0004-agent-first-development.md)
+- [0005 — Consumable visual tokens](0005-consumable-visual-tokens.md)
