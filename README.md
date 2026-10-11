@@ -19,7 +19,7 @@ documentation, and public-facing interfaces use US English. Chats may use pt-BR.
 See the complete [language policy](AGENTS.md#project-language).
 
 - [Architecture](docs/ARCHITECTURE.md), [invariants](docs/INVARIANTS.md), and [ADRs](docs/adr/README.md).
-- [Components](docs/COMPONENTS.md) and [design system](docs/DESIGN-SYSTEM.md).
+- [Components](docs/COMPONENTS.md), [contribution grounding](docs/CONTRIBUTION-AUDIT.md), and [design system](docs/DESIGN-SYSTEM.md).
 - [Development and validation](docs/DEVELOPMENT.md), [recovery](docs/RECOVERY.md), and [migration](docs/MIGRATION-PLAN.md).
 
 `./scripts/verify all` runs offline checks; `./scripts/doctor` diagnoses without

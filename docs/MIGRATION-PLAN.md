@@ -5,9 +5,21 @@
 - `ricy-kit/`: contributions, outputs/scripts, demonstrations and installation materials.
 - `docs/ricy-kit/`: preserved transportable variant; it is not automatic mirror.
 - `docs/ricy.md`, `REINSTALL.md`, `VISUAL-IDENTITY.md`: history and references.
-- `archives/ricy.zip`: preserved original file. No Git history confirmed.
+- `archives/ricy.zip`: preserved original file; later local Git selection is
+  documented in [GIT-BASELINE](GIT-BASELINE.md).
 
-Sources and dependencies per contribution are in [COMPONENTS](COMPONENTS.md). The foundation created documentary directories and validators; it did not relocate runtime.
+Sources and dependencies per contribution are in [COMPONENTS](COMPONENTS.md).
+[CONTRIBUTION-AUDIT](CONTRIBUTION-AUDIT.md) grounds all 24 contributions, consumers,
+part-level roles and cumulative variants. It does not authorize relocation or
+removal. The foundation created documentary directories and validators; it did
+not relocate runtime.
+
+Grounding gates: current RICY-001 source is not deployed (G-02); blur-continuity
+has a failed registered consumer and UNKNOWN disposition (G-03); exact compiled
+Dolphin-helper provenance and individual private plugin consumers remain UNKNOWN.
+Preserve these limits before selecting migration inputs. MIGRATE tooling and
+PLANNED destinations do not imply that a move, activation, or new contract has
+been approved. No contribution currently has sufficient evidence for REMOVE.
 
 ## Target structure — PLANNED
 | Current | Destination expected | Condition before migration |

@@ -3,6 +3,42 @@
 Record significant changes in short entries. Minimum fields:
 Model/Agent, Date, Purpose, Validation performed. Do not sign source files.
 
+## 2026-10-11 — Current contribution grounding
+
+- **Model/Agent:** Codex (GPT-6), agent for this task.
+- **Date:** 2026-10-11 (America/Sao_Paulo).
+- **Purpose:** distinguish actual consumers, recovery dependencies, migration
+  inputs and historical variants across all existing Ricy contributions without
+  moving/removing files or changing runtime behavior.
+- **Changes:** added [CONTRIBUTION-AUDIT](CONTRIBUTION-AUDIT.md) with individual
+  classifications for all 24 contribution directories, corresponding transport
+  snapshots, three materialized community plugins and shared/generated material.
+  Records consumers, dependencies, relationships, cumulative lineage, recovery
+  impact, previously mapped future destinations and explicit UNKNOWNs. COMPONENTS
+  now carries class labels; architecture, recovery, migration, design and agent
+  entry points link to the maintained evidence. No REMOVE verdict was justified.
+- **Findings:** running Noctalia matches the earlier reordering variant preserved
+  in the transport diff, not the current single-space source patch; native blur
+  is loaded and the registered ricyblur selector is failed. Window-fade-expand
+  matches the installed effect. Source/installed translations, version-specific
+  destination corrections, disabled adaptivepanelwidth, and unproven community
+  plugin functionality are recorded without replaying installers or repairs.
+- **Validation performed:** PASS `./scripts/verify architecture`, inventory
+  coverage, `git diff --check`, and SHA-256 preservation comparison. PASS shell
+  syntax subcheck (83 candidates); `./scripts/verify shell` returned exit 2 with
+  source-based Noctalia tests NOT RUN because the cache differs from the current
+  patch. PASS `./scripts/verify recovery` (exit 0), including panel preservation
+  and 28 isolated window-effect scenarios. `./scripts/doctor` returned exit 2
+  with two UNKNOWN diagnostic categories. FAIL preexisting blur-selector state
+  was observed separately through systemd/KWin/current-boot journal reads.
+  NOT RUN live login, unlock, switching/failure recovery, interactive Dolphin,
+  plugin use, package installation, input/connectivity and visual validation.
+  New implementation/validator regressions and ADRs are NOT APPLICABLE.
+- **Preservation:** only Markdown documentation and agent routing changed; one
+  documentation file added. No implementation, token, manifest, installed unit,
+  profile, private state, backup, asset or historical record was rewritten. No
+  existing file was moved or removed; no service/compositor was restarted.
+
 ## 2026-10-11 — RICY-001 workspace exposure audit
 
 - **Model/Agent:** Codex (GPT-6), agent for this task.

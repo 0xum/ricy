@@ -5,6 +5,11 @@ Consult [COMPONENTS](../docs/COMPONENTS.md) to locate ownership/boundaries and
 relevant to the task's files/impact. Do not move outputs, contributions, or
 templates without mapping units, wrappers, absolute paths, and backups.
 
+Use [CONTRIBUTION-AUDIT](../docs/CONTRIBUTION-AUDIT.md) for current consumers and
+part-level classifications. An active kit contains historical files; the current
+source patch is not necessarily the deployed binary. UNKNOWN is not permission
+to remove or replace a contribution.
+
 - Noctalia shell/profile/patch: [shell rules](../shell/AGENTS.md).
 - Effects/blur/ABI: [compositor rules](../compositor/AGENTS.md).
 - Search, shortcuts, Dolphin, and KDE: [integrations](../integrations/AGENTS.md).

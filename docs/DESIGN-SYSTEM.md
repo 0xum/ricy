@@ -26,9 +26,16 @@ Application icons retain their own identity.
 KNOWN: TOML configs, JSON palettes, QSS, and installers still repeat values.
 Tokens are a documentary reference, not an executable configuration or generator.
 Workspace badge/group references are legacy records. The current cumulative
-Ricy patch disables these surfaces; see [the inventory](WORKSPACE-AUDIT.md).
+Ricy source patch disables these surfaces; it is not yet the deployed binary,
+as established by [contribution grounding G-02](CONTRIBUTION-AUDIT.md).
+See [the inventory](WORKSPACE-AUDIT.md).
 They do not authorize workspace interfaces. Later guide updates may supersede
 older visual details; record discrepancies.
+The grounding audit records current native blur and selected Dolphin source/QSS;
+older ricyblur and translucent internal-panel descriptions in identity records
+are historical stages, not instructions to restore that appearance. Exact
+deployed compiled-helper provenance and full private palette equivalence remain
+UNKNOWN; this documentation audit does not change tokens or visual settings.
 
 ## TARGET — PLANNED
 [themes/tokens](../themes/tokens/README.md) reserves the central location,

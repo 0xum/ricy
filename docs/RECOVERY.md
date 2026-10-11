@@ -11,6 +11,14 @@ responsible for wallpaper/desktop; return uses Ricy scripts, user systemd,
 D-Bus, KGlobalAccel, and panel/shortcut snapshots. No isolation against KWin,
 login, or Ricy-script failure has been demonstrated.
 
+The [contribution grounding](CONTRIBUTION-AUDIT.md) identifies RECOVERY consumers
+and part-level exceptions. On the audited installation, native blur is loaded,
+the ricyblur selector is enabled but failed, and the current single-space source
+patch is not the deployed Noctalia binary. These observations do not prove
+failure recovery or authorize resetting services/effects. Historical root and
+transport return recipes can restore old full layouts; normal return remains
+the panel-only switching contribution. Do not substitute one for the other.
+
 ## Existing return path — accessible session
 In a terminal within the session, as the desktop user, from the project root:
 

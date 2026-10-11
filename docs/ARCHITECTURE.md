@@ -14,8 +14,11 @@ The [previous README and historical record](ricy.md) and the `start.sh`, `return
 and `switch.sh` wrappers point to `ricy-kit/contributions/plasma-noctalia-switching/ricy`.
 `ricy-kit/` is the active kit; `docs/ricy-kit/` is the preserved transport copy,
 not an automatically synchronized mirror. `archives/ricy.zip` is historical.
-No `.git` was found at the root during the investigation; no local versioned
-history was confirmed. This stage does not initialize Git or publish files.
+The original foundation investigation found no root Git repository; the later
+[local baseline](GIT-BASELINE.md) established Git. The contribution-grounding
+audit confirmed that baseline without changing versioning or publishing files.
+See [CONTRIBUTION-AUDIT](CONTRIBUTION-AUDIT.md) for current consumers and classes;
+directory presence alone does not establish ACTIVE implementation.
 
 ```text
 CachyOS / Plasma Wayland session
@@ -68,11 +71,13 @@ These are the kit's baseline, not claims about the latest upstream versions.
 ## Recorded discrepancies — unresolved at this stage
 | ID | Current evidence | Consequence/treatment |
 |---|---|---|
-| C-001 | [Workspace audit](WORKSPACE-AUDIT.md) identifies Ricy Noctalia UI/commands and shared Plasma surfaces | Current cumulative patch disables Ricy groups/badges, workspace widget, navigation/alert commands and settings. Visible-window membership remains internal. Changes are not activated by the audit. Shared KWin/Plasma shortcuts, menus and gestures remain preserved; full live compliance is UNKNOWN. |
+| C-001 | [Workspace audit](WORKSPACE-AUDIT.md) identifies Ricy Noctalia UI/commands and shared Plasma surfaces; [grounding G-02](CONTRIBUTION-AUDIT.md) connects the running binary to the earlier cumulative diff | Current source patch disables Ricy groups/badges, workspace widget, navigation/alert commands and settings; the running binary still matches the pre-policy variant preserved in the transport copy. Visible-window membership remains internal in current source. No activation occurred in either audit. Shared KWin/Plasma shortcuts, menus and gestures remain preserved; full live compliance is UNKNOWN. |
 | C-002 | `integration.py` uses plasmashell/wallpaper and restores through Ricy scripts | Separate, independent recovery is PLANNED. Do not claim isolation has already been achieved. |
 | C-003 | Launcher and FileManager1 integration use customized Dolphin | Preserve until Ricy Files is validated; do not change MIME/defaults at this stage. |
 | C-004 | Tokens exist, but configs/QSS/scripts also contain values | Reference existing tokens; automatic centralized consumption is PLANNED. |
 | C-005 | Two kit trees and absolute paths in wrappers | INFERRED: moving directories can break units and shortcuts. Preserve and map references before migration. |
+| C-006 | [Grounding G-03](CONTRIBUTION-AUDIT.md): native blur loaded, ricyblur absent, enabled selector unit failed at a D-Bus method lookup | `blur-continuity` disposition is UNKNOWN; old README claims that ricyblur remains loaded are historical. Preserve existing native blur and recovery; repair/retirement was not performed. |
+| C-007 | [Grounding G-05/G-06/G-08/G-10](CONTRIBUTION-AUDIT.md): installed/source translation differences, mixed optional extensions, version-specific correction manifest | Source recipes and installed artifacts have independent lifecycles. Do not replay old installers, optional extension defaults, or correction bundles as if they reproduce the selected installation exactly. |
 
 UNKNOWN: recovery after complete login/compositor failure, workspace compliance
 across the entire session, full portability, and publication readiness.
@@ -80,5 +85,6 @@ Historical tests in READMEs are historical evidence, not tests performed in this
 
 ## Required navigation
 [Components](COMPONENTS.md), [design](DESIGN-SYSTEM.md),
+[contribution grounding](CONTRIBUTION-AUDIT.md),
 [development](DEVELOPMENT.md), [recovery](RECOVERY.md),
 [evidence index](../.agents/references/README.md).
