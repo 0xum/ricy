@@ -3,6 +3,84 @@
 Record significant changes in short entries. Minimum fields:
 Model/Agent, Date, Purpose, Validation performed. Do not sign source files.
 
+## 2026-10-11 — Approved service template extraction (M-02)
+
+- **Model/Agent:** Codex (GPT-6), agent for this task.
+- **Date:** 2026-10-11 (America/Sao_Paulo).
+- **Purpose:** implement the user's approval of option A for the next small batch,
+  making services the owner of three source unit templates.
+- **Changes:** moved the three autostart `.service.in` files into `services/`
+  with exact bytes/modes. The existing installer resolves this resource directory
+  from its own repository location; only its lookup changes. Added ADR-0006,
+  source dependency/copy limits, recovery/rollback documentation and mandatory
+  template availability checks with three missing-file harness regressions.
+  Runtime scripts/profile/state paths and installed legacy IDs remain anchored.
+- **Validation performed:** PASS `./scripts/verify architecture`; PASS
+  `python3 scripts/test-foundation.py` (38 behavioral checks). `./scripts/verify all`
+  returned exit 2 with zero failures: PASS 65 source syntax candidates, seven
+  historical guards, offline panel preservation and 28 window-effect scenarios;
+  NOT RUN Noctalia source tests because the preserved cache differs from the
+  expected patch. PASS exact source template bytes/modes and before/after
+  production read/render equality for six units across ordinary and
+  special-character paths, unrelated cwd and symlink aliases; only selected AST
+  statements executed in disposable fixtures, never the installation body.
+  PASS `git diff --check`, installed unit states/MainPIDs/ExecStart equality,
+  and static source/asset/transport/archive/installed-unit fingerprint comparison.
+  FAIL broad live-state fingerprint equality: private settings/clipboard files
+  changed during observation; the cause is UNKNOWN, contents were not exported
+  and no restoration was attempted. That live state is outside the narrower
+  passing static comparison. FAIL preexisting blur selector state remains.
+- **Limits and rollback:** NOT RUN installation, daemon-reload, service restart,
+  login/switching, persistent-failure recovery or interactive/visual trials.
+  New daemons, Core abstractions and environment changes are NOT APPLICABLE.
+  Copying only the active kit/contribution is no longer sufficient for this
+  maintained installer: its checkout must include `services/`. Historical
+  transport templates, manifests and archive are preserved without fallback
+  links or synchronization. Source rollback restores template placement and
+  installer lookup together; retain the completed M-01 keyboard migration.
+  No installed-state rollback is needed for the source-only extraction.
+
+## 2026-10-11 — Incremental migration preparation and keyboard source move
+
+- **Model/Agent:** Codex (GPT-6), agent for this task.
+- **Date:** 2026-10-11 (America/Sao_Paulo).
+- **Purpose:** turn the existing grounding/component map into concrete incremental
+  batches across the approved subsystems, with one independently safe source move.
+- **Changes:** expanded MIGRATION-PLAN with file-level payload/installer ownership,
+  script/unit/desktop/symlink edges, pinned builds, rollback state and transport
+  limits. Core has no justified extraction candidate. Moved only keyboard-cedilla's
+  README and two opt-in applicators into `integrations/keyboard-cedilla/`;
+  script bytes/modes remain identical. Updated maintained references, relocation
+  map and a scoped historical reinstallation note. Kept explicit syntax coverage
+  and added two harness regressions for moved-source selection/failure propagation.
+- **Findings:** session/Recovery wrappers contain absolute contribution paths;
+  mixed families have sibling imports/build calls and private backup contracts.
+  Installed blur ExecStart still uses `iniciar.py`, whereas the current recipe
+  copies `start.py`; existing selector failure was preserved. Current Noctalia
+  source/deployed provenance mismatch and Dolphin-helper UNKNOWN remain gates.
+  Next template extraction has a concrete resource-lookup proposal awaiting
+  approval; no common resolver, shim, new daemon or independent session was added.
+- **Validation performed:** PASS `./scripts/verify architecture`; PASS
+  `python3 scripts/test-foundation.py` (35 behavioral checks in a disposable
+  fixture); `./scripts/verify all` returned exit 2 with zero failures: PASS syntax
+  (65 candidates), seven historical guard checks, offline panel preservation and
+  28 window-effect scenarios; NOT RUN Noctalia source checks because the preserved
+  cache does not match the current patch. PASS moved README/reinstallation-note
+  relative links and `git diff --check`. PASS before/after fingerprint comparison:
+  1,573 source/asset/private-kit/transport/archive/installed-entry-point/input
+  files and symlinks retain bytes/targets/modes, accounting for relocated scripts;
+  only the relocated README differs within that 1,574-item baseline. PASS installed
+  unit states, MainPIDs and ExecStart equality. FAIL preexisting registered blur
+  selector state remains unchanged; no repair was attempted.
+- **Limits and rollback:** NOT RUN live typing/browser rendering, switching,
+  persistent failure, login/unlock, Dolphin interaction or visual trials. Runtime
+  Integration/Environment changes are NOT APPLICABLE to this source-only move.
+  Both transport manifests, archive, private profile/state/backups and installed
+  preferences remain intact. Revert source placement/references/harness changes
+  together; no session or settings rollback is necessary. External ad hoc callers
+  outside the examined entry-point scope remain UNKNOWN. Remaining coupled
+  extractions, public packaging and architectural decisions are proposals only.
+
 ## 2026-10-11 — Consumable Ricy visual tokens
 
 - **Model/Agent:** Codex (GPT-6), agent for this task.

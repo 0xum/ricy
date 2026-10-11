@@ -5,7 +5,9 @@ dependencies, cumulative lineage, part-level classifications, recovery impact,
 and read-only observations for all 24 contributions and shared material.
 Classes describe current roles; KNOWN/UNKNOWN describe evidence. Neither a
 registered consumer nor a passing static check certifies runtime functionality.
-Runtime destinations remain PLANNED; the token-source exception is recorded below.
+Most runtime destinations remain PLANNED. The implemented token source and
+keyboard/template source migrations are recorded below; moving an applicator does not
+reapply installed preferences.
 Ownership preserves upstream licenses. Each
 component link below leads to its local README; consult the audit before acting.
 
@@ -20,7 +22,7 @@ is loaded; the ricyblur selector is failed. See audit G-02/G-03 for the limits.
 | Current component/location | Responsibility | Future destination | Dependencies | Class / ownership | Impact on recovery |
 |---|---|---|---|---|---|
 |  [noctalia-kde-integration-and-menus](../ricy-kit/contributions/noctalia-kde-integration-and-menus/README.md)  | Qt search, profile, shortcuts and menus adapter |  `integrations/kde/ + services/ + themes/`  | Noctalia, PyGObject, D-Bus, KGlobalAccel, Kvantum | ACTIVE / RICY-OWNED + derivative assets | High: shortcuts, wallpaper and shared style |
-|  [noctalia-autostart](../ricy-kit/contributions/noctalia-autostart/README.md)  | Shell units, search and integration in login |  `services/ + installer/`  | user systemd, Plasma, integration | ACTIVE / RICY-OWNED | High: start only after readiness; Plasma return |
+|  [noctalia-autostart](../ricy-kit/contributions/noctalia-autostart/README.md)  | Shell units, search and integration in login |  Three source templates in `services/`; installer/runtime script migration PLANNED  | user systemd, Plasma, integration | ACTIVE / RICY-OWNED | High: start only after readiness; Plasma return |
 |  [plasma-noctalia-switching](../ricy-kit/contributions/plasma-noctalia-switching/README.md)  | Ricy command, snapshots and panel restoration |  `recovery/plasma/ + integrations/kde/`  | systemd, Python/PyGObject, qdbus6, flock, KGlobalAccel | RECOVERY / RICY-OWNED | Critical: current return path |
 |  [notification-continuity](../ricy-kit/contributions/notification-continuity/README.md)  | Local binary notification patch and activator |  `shell/noctalia/`  | Pinned Noctalia, integration, compositor blur | ACTIVE (split) / PATCHES + RICY-OWNED | Preserve /usr/bin/noctalia, backup and apps |
 |  [taskbar-menu-composition](../ricy-kit/contributions/taskbar-menu-composition/README.md)  | Fitted app menu; cumulative historical variant |  `shell/noctalia/`  | Noctalia and previous patches | HISTORICAL / PATCHES | Shell crash risk; maintain activator/reversion |
@@ -39,7 +41,7 @@ is loaded; the ricyblur selector is failed. See audit G-02/G-03 for the limits.
 |  [login-lock-cursor-appearance](../ricy-kit/contributions/login-lock-cursor-appearance/README.md)  | Assets and applicators for SDDM/Plasma/Qt/GTK |  `themes/ + integrations/kde/`  | SDDM, Plasma, Kvantum, fonts and themes | ACTIVE (split) / UPSTREAM assets + RICY-OWNED | High: login/blocking and global settings |
 |  [login-matched-lock-screen](../ricy-kit/contributions/login-matched-lock-screen/README.md)  | Log-in lock adaptation |  `themes/ + integrations/kde/`  | KDE/Breeze installed, SDDM | ACTIVE / PATCHES / derivative assets | High: keep usable unlocking |
 |  [konsole-animated-cursor](../ricy-kit/contributions/konsole-animated-cursor/README.md)  | Terminal profile and palette |  `themes/ + integrations/kde/`  | Konsole, Kvantum | ACTIVE / RICY-OWNED configuration | Terminal should remain available for diagnosis |
-|  [keyboard-cedilla](../ricy-kit/contributions/keyboard-cedilla/README.md)  | XCompose composition and Brave adaptation |  `integrations/`  | Layout/XCompose, optional Brave | ACTIVE / RICY-OWNED | Preserve text entry and preferences |
+|  [keyboard-cedilla](../integrations/keyboard-cedilla/README.md)  | XCompose composition and Brave adaptation |  `integrations/keyboard-cedilla/` — source migration complete  | Layout/XCompose, optional Brave | ACTIVE preferences; migrated opt-in applicators / RICY-OWNED | Preserve text entry and preferences |
 |  [noctalia-language-and-localization](../ricy-kit/contributions/noctalia-language-and-localization/README.md)  | Shell language/region/weather |  `shell/noctalia/ + integrations/`  | Noctalia, locale, systemd units | ACTIVE / RICY-OWNED | Do not globalize installation preferences |
 |  [noctalia-visual-identity](../ricy-kit/contributions/noctalia-visual-identity/README.md)  | Retained snapshot/guide and generated identity board |  [themes/tokens](../themes/tokens/README.md): canonical data implemented; runtime migration PLANNED  | Config/palette/Style Noctalia and visual contributions; Python stdlib for offline board generation | ACTIVE reference / RICY-OWNED reference | No installation or new recovery dependency; existing values preserved |
 |  [driver-aic8800](../ricy-kit/contributions/driver-aic8800/README.md)  | USB Wi-Fi/Bluetooth Driver and DKMS package |  `integrations/hardware/`  | Kernel/headers, DKMS, Radxa source fixed | ACTIVE on this hardware / UPSTREAM + patches + Ricy packaging | Risk of losing network; hardware dependency, not every session |
@@ -60,6 +62,12 @@ Classes have part-level overrides in the [audit](CONTRIBUTION-AUDIT.md): notably
 notification's historical build/current activator, reordering's deployed/source
 variants, and the appearance bundle's three independent KWin extensions.
 No contribution is classified REMOVE. UNKNOWN does not authorize deletion.
+
+The [file-level extraction map](MIGRATION-PLAN.md#file-level-extraction-map) assigns
+individual payloads, applicators, units and restore interfaces within mixed
+contributions. Core has no justified extraction candidate yet. [ADR-0006](adr/0006-service-template-source-lookup.md)
+records the implemented installer-to-services template lookup; installed units
+and runtime paths retain their existing contracts.
 
 Read [migration](MIGRATION-PLAN.md) before relocating any component. Read
 [RECOVERY](RECOVERY.md) for operations that affect session, login or files.

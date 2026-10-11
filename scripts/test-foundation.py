@@ -16,7 +16,9 @@ with tempfile.TemporaryDirectory(prefix='ricy-foundation-') as tmp:
  def run(scope='architecture',env=None):
   return subprocess.run([sys.executable,'-B',str(dst/'scripts/verify'),scope],cwd='/',env=env,text=True,capture_output=True)
  result=run();check('root resolved outside the project working directory',result.returncode==0,result.stdout+result.stderr)
- for rel in ['AGENTS.md','docs/ARCHITECTURE.md','docs/adr/0001-single-workspace.md','.agents/skills/testing/SKILL.md','shell/AGENTS.md']:
+ for rel in ['AGENTS.md','docs/ARCHITECTURE.md','docs/adr/0001-single-workspace.md','.agents/skills/testing/SKILL.md','shell/AGENTS.md',
+             'services/noctalia-test.service.in','services/noctalia-desktop-search.service.in',
+             'services/ricy-noctalia-integration.service.in']:
   p=dst/rel;data=p.read_bytes();p.unlink();result=run();p.write_bytes(data)
   check('mandatory file missing: '+rel,result.returncode==1 and rel in result.stdout,result.stdout)
  p=dst/'shell/AGENTS.md';data=p.read_text()
@@ -54,6 +56,12 @@ with tempfile.TemporaryDirectory(prefix='ricy-foundation-') as tmp:
   and 'ricy-kit/contributions/app-icon-reordering/apply-animations.py' not in selected
   and 'ricy-kit/prepare-environment.py' not in selected
   and 'ricy-kit/generate-kvantum-variant.py' not in selected)
+ check('migrated keyboard applicators remain in normal source selection',
+  all('integrations/keyboard-cedilla/'+name in selected for name in ('apply.py','apply-brave.py')))
+ p=dst/'integrations/keyboard-cedilla/apply.py';data=p.read_bytes()
+ p.write_text('syntax broken !\n');r=run('shell',env);p.write_bytes(data)
+ check('syntax failure in migrated integration propagates exit 1',
+  r.returncode==1 and 'integrations/keyboard-cedilla/apply.py' in r.stdout,r.stdout+r.stderr)
  for name in historical[1:]:
   check('historical folder excluded: '+name,
    not any(p.startswith('ricy-kit/contributions/'+name+'/') for p in selected))

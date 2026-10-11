@@ -17,7 +17,7 @@ SKILLS = ('architecture-change', 'component-development', 'visual-development',
 DOCS = ('ARCHITECTURE', 'INVARIANTS', 'COMPONENTS', 'DESIGN-SYSTEM',
         'DEVELOPMENT', 'RECOVERY', 'MIGRATION-PLAN', 'CHANGELOG')
 ADRS = ('0001-single-workspace', '0002-plasma-recovery', '0003-ricy-files',
-        '0004-agent-first-development')
+        '0004-agent-first-development', '0006-service-template-source-lookup')
 LOCAL = ('core', 'shell', 'compositor', 'apps', 'services', 'themes',
          'integrations', 'recovery', 'installer', 'tools', 'scripts',
          'ricy-kit', 'ricy-kit/contributions', 'docs/ricy-kit',
@@ -97,6 +97,8 @@ def link_targets(text):
 
 def architecture():
     required = ['AGENTS.md', 'CLAUDE.md', 'README.md', 'scripts/verify', 'scripts/doctor', 'scripts/test-foundation.py']
+    required += [f'services/{name}.service.in' for name in
+                 ('noctalia-test', 'noctalia-desktop-search', 'ricy-noctalia-integration')]
     required += [f'docs/{name}.md' for name in DOCS]
     required += [f'docs/adr/{name}.md' for name in ADRS]
     required += [f'.agents/skills/{name}/SKILL.md' for name in SKILLS]
@@ -166,6 +168,9 @@ def source_files():
         if path.is_file() and not excluded.intersection(path.relative_to(ROOT / 'ricy-kit/contributions').parts):
             if path.suffix in {'.py', '.sh', '.json', '.toml'} or path.name == 'ricy':
                 files.append(path)
+    # The first migrated source has no resident service; retain syntax coverage.
+    files += [ROOT / 'integrations/keyboard-cedilla' / name
+              for name in ('apply.py', 'apply-brave.py')]
     files += [ROOT / name for name in ('start.sh', 'return.sh', 'switch.sh')]
     kit = ROOT / 'ricy-kit'
     return sorted({path for path in files

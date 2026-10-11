@@ -4,6 +4,19 @@ Names `noctalia-teste.service` and `start-test.sh` are historical: after this in
 
 This contribution replaces manual start mode by login, as requested after restart. Plasma remains active for desktop/wallpaper; integration starts Noctalia, adapter and shortcuts and collects panels only after IPC is ready.
 
+## Source layout
+
+The maintained repository stores the three unit templates in
+[services](../../../services/AGENTS.md), following
+[ADR-0006](../../../docs/adr/0006-service-template-source-lookup.md). This installer
+resolves that directory from its own repository path, independently of the working
+directory. Keep `services/` and `ricy-kit/` in the same repository checkout when
+preparing a destination; copying only this contribution or the active kit is no
+longer sufficient for this maintained installer. Runtime scripts, output/profile
+paths, installed unit IDs and backups are unchanged. The preserved transport
+snapshot retains its own local templates and original recipe; it is not a
+fallback template source for the maintained installer.
+
 ## Install
 
 Prepare it first. `noctalia-kde-integration-and-menus` and apply the corrections of the contribution `target-implementation-fixes`. In this prepared copy of the kit:

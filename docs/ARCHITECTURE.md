@@ -49,7 +49,13 @@ CachyOS
 
 The division into `core/`, `shell/noctalia/`, `compositor/kwin/`, `apps/file-manager/`,
 `services/`, `themes/`, `integrations/`, `recovery/plasma/`, `installer/`, and `tools/`
-is primarily a documentary reservation; executables remain in their current locations.
+is primarily a documentary reservation; session executables remain in the kit.
+The opt-in keyboard applicators now reside in `integrations/keyboard-cedilla/`
+without changing installed preferences or introducing a runtime contract.
+The three autostart templates now reside in `services/`, consumed through explicit
+repository-relative lookup by the existing kit installer under
+[ADR-0006](adr/0006-service-template-source-lookup.md). Installed units, runtime
+scripts, profile/state and recovery paths remain unchanged.
 `themes/tokens/` now holds the canonical consumable JSON and an offline identity
 board renderer under [ADR-0005](adr/0005-consumable-visual-tokens.md); this does not
 migrate shell/session runtime or implement an application.

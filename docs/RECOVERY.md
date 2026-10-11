@@ -74,3 +74,15 @@ launchers, and backups require explicit recovery analysis before changes.
 windows, alter the session, or prove end-to-end recovery. A later trial should
 check panels/shortcuts, Dolphin, System Settings, open apps, and login, with
 backups and a return plan.
+
+## Service template source relocation
+
+[ADR-0006](adr/0006-service-template-source-lookup.md) moves only three autostart
+source templates to `services/`. The maintained installer now requires the
+repository's services directory beside the active kit. Current start/return
+scripts do not read these source templates at runtime; installed units, names,
+environment, readiness, panel/shortcut snapshots and backup manifests retain
+their existing contracts. No installation, reload or session switch accompanied
+the move. Source rollback restores templates and installer reads together; no
+installed-state restoration is needed for this source-only change. Offline
+rendering equality does not prove login or failure recovery.

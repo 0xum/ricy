@@ -35,9 +35,11 @@ python3 themes/tokens/render-reference.py --check
 `verify` uses Python 3.11+ and existing tools; it does not install dependencies.
 
 - `architecture`: required files, skills/frontmatter, local rules, relative
-  foundation Markdown links, and syntax of the new scripts.
+  foundation Markdown links, syntax of the new scripts and availability of the
+  three maintained `services/*.service.in` templates.
 - `shell`: Bash/Python/JSON/TOML syntax in maintained active-kit sources (excluding
   work, outputs, backups, upstream assets, and explicitly HISTORICAL recipes);
+  syntax of migrated `integrations/keyboard-cedilla/` applicators;
   syntax of the seven historical build guards; offline Noctalia action tests when
   a local source matches the expected commit/patch and PyQt6 is available;
   single-space policy and native drag regressions when that source has a build.
@@ -49,7 +51,8 @@ python3 themes/tokens/render-reference.py --check
 
 `python3 scripts/test-foundation.py` exercises validator scenarios in a
 temporary fixture, including missing files/links, component failure, and an
-unavailable dependency, plus historical source selection and build isolation.
+unavailable dependency, plus historical source selection/build isolation and syntax failure propagation
+for the migrated keyboard integration, plus missing-service-template detection.
 verify does not run it recursively.
 
 Token checks use only Python's standard library and do not alter the session.

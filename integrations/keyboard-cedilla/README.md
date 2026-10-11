@@ -1,5 +1,10 @@
 # Cedilla on the international US keyboard
 
+RICY-OWNED, opt-in input integration. Source migration from the active kit is
+complete; installed preferences are independent of this directory. Follow the
+[integration rules](../AGENTS.md) and [migration record](../../docs/MIGRATION-PLAN.md#first-source-migration--keyboard-cedilla).
+The transport snapshot retains its historical location and commands.
+
 The destination uses `us(alt-intl)` and an English interface. The original English
 composition interprets an acute accent followed by c/C as ć/Ć. This applicator
 configures `$HOME/.XCompose` to produce ç/Ç, preserving the layout, language, and
@@ -7,9 +12,9 @@ other compositions. In a new file, it includes `"%L"`; in an existing file, it
 preserves user rules and appends the Ricy block.
 
 ```bash
-cd "$HOME/Projects/ricy/ricy-kit"
-python contributions/keyboard-cedilla/apply.py
-python contributions/keyboard-cedilla/apply-brave.py
+cd "$HOME/Projects/ricy"
+python3 integrations/keyboard-cedilla/apply.py
+python3 integrations/keyboard-cedilla/apply-brave.py
 ```
 
 Run without sudo. Fully reopen Konsole and Brave: existing processes may retain

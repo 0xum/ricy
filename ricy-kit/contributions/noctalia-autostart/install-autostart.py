@@ -8,6 +8,7 @@ import subprocess
 import json
 
 base = Path(__file__).resolve().parent
+templates = base.parents[2] / 'services'
 integration = base.parent / 'noctalia-kde-integration-and-menus'
 scripts = integration / 'outputs/noctalia-test'
 home = Path.home()
@@ -53,7 +54,7 @@ for name in names:
         'noctalia-busca-desktop.service': 'noctalia-desktop-search.service.in',
         'ricy-noctalia-integracao.service': 'ricy-noctalia-integration.service.in',
     }
-    text = (base / template_names[name]).read_text()
+    text = (templates / template_names[name]).read_text()
     for key, value in replacements.items():
         text = text.replace(key, value)
     (units / name).write_text(text)

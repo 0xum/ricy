@@ -126,3 +126,28 @@ The mapping applies wherever the original basename occurred in either kit.
 | `versoes-observadas.txt` | `observed-versions.txt` |
 | `voltar-ao-plasma.sh` | `return-to-plasma.sh` |
 | `voltar.sh` | `return.sh` |
+
+## Incremental architectural relocation — 2026-10-11
+
+The active source `ricy-kit/contributions/keyboard-cedilla/` moved to
+`integrations/keyboard-cedilla/` (README and two applicators). Script bytes and
+permissions are unchanged. No installed entry point or repository script calls
+the old location in the examined scope; no forwarding shim or symlink was added.
+Current commands live in the [integration README](../integrations/keyboard-cedilla/README.md).
+Transport commands, historical records and SHA256SUMS retain their original
+paths. External ad hoc commands outside the examined scope are UNKNOWN and must
+use the documented current location. The private `ricy-teclado-backups` path and
+absence markers remain compatible. See [migration](MIGRATION-PLAN.md#first-source-migration--keyboard-cedilla) for rollback.
+
+### Autostart template relocation — approved M-02
+
+The three active `ricy-kit/contributions/noctalia-autostart/*.service.in` files
+moved to `services/` without changing basenames, bytes or modes. The existing
+installer reads them from the repository root, as recorded in
+[ADR-0006](adr/0006-service-template-source-lookup.md). Copying only the active
+kit/contribution no longer supplies all inputs for this maintained installer.
+Installed IDs `noctalia-teste.service`, `noctalia-busca-desktop.service` and
+`ricy-noctalia-integracao.service`, runtime paths and backups remain compatible.
+No legacy source symlink/shim or transport fallback was added; transport
+templates and both SHA256SUMS remain unchanged. Roll back template placement
+and installer reads together.

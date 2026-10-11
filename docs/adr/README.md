@@ -9,3 +9,4 @@ their replacement. Format: Status, Context, Decision, Consequences, Constraints.
 - [0003 — Ricy Files](0003-ricy-files.md)
 - [0004 — Agent-first development](0004-agent-first-development.md)
 - [0005 — Consumable visual tokens](0005-consumable-visual-tokens.md)
+- [0006 — Explicit service template source lookup](0006-service-template-source-lookup.md)

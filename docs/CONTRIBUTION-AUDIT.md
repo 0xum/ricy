@@ -10,6 +10,17 @@ development safeguards without changing the observed runtime classification.
 
 ## Classification and evidence
 
+Subsequent source migration (2026-10-11): the keyboard contribution now lives in
+[integrations/keyboard-cedilla](../integrations/keyboard-cedilla/README.md). The
+active-kit tree now contains 23 contribution directories; all 24 logical
+contributions and all 24 transport snapshots remain accounted for. See the
+[migration record](MIGRATION-PLAN.md#first-source-migration--keyboard-cedilla).
+Subsequent M-02 migration: three autostart source templates now reside in
+`services/`; the existing installer reads them through the approved
+[ADR-0006](adr/0006-service-template-source-lookup.md) lookup. Installed units,
+runtime scripts and transport snapshots retain their original paths.
+Original observations below retain their original scope/date.
+
 Subsequent token task (2026-10-11): [ADR-0005](adr/0005-consumable-visual-tokens.md)
 promotes the existing identity to a consumable source in
 [themes/tokens](../themes/tokens/README.md) and migrates the offline identity
@@ -37,7 +48,7 @@ KNOWN below means a file/reference or read-only observation supports the claim.
 INFERRED identifies a conclusion from that evidence. UNKNOWN is used for missing
 proof. Historical README test results were not rerun merely by reading them.
 
-Scope: all **24** directories under `ricy-kit/contributions/`, all corresponding
+Original grounding scope: all **24** directories under `ricy-kit/contributions/`, all corresponding
 directories in `docs/ricy-kit/contributions/`, both kits' root scripts/outputs,
 the archive, private generated material (including three materialized community
 plugins), root entry points, the agent harness, and reserved target directories.
@@ -97,7 +108,7 @@ Destinations preserve the existing [migration plan](MIGRATION-PLAN.md).
 | [login-lock-cursor-appearance](../ricy-kit/contributions/login-lock-cursor-appearance/README.md) — **ACTIVE, split** | SDDM/mocha-limine, Plasma/mocha-blur, Bibata, Qt/KDE appearance selected (G-05/G-07); lock applicator consumes installed login theme. | SDDM/Breeze/Qt, Plasma, fonts/fontconfig, GTK themes, Kvantum integration assets; common.py used by its applicators and Konsole. | Asset/config export with MIGRATE destination applicators. Optional KWin subcomponents classified below; public wallpaper setter is MIGRATE opt-in tooling. PLANNED `themes/` + `integrations/kde/`. | Critical login/lock/shared appearance surface. Preserve system/user backups, KDE native authentication, theme/font licenses; do not restart SDDM to audit. |
 | [login-matched-lock-screen](../ricy-kit/contributions/login-matched-lock-screen/README.md) — **ACTIVE** | Local lock-screen QML exists; login theme supplies its appearance (G-07). Actual next-lock selection/authentication UNKNOWN. | Installed Plasma/Breeze lock QML and SDDM theme, sibling appearance; generated local shell symlinks preserve other upstream parts. | Native lock adaptation with Qt.callLater authentication-start correction; earlier immediate-true attempt HISTORICAL. PLANNED `themes/` + `integrations/kde/`. | Critical: retain native authentication and restore.py. Presence is not proof that unlocking works. |
 | [konsole-animated-cursor](../ricy-kit/contributions/konsole-animated-cursor/README.md) — **ACTIVE** | Selected PlasmaBlur profile/palette are byte-identical to assets; Konsole process present (G-07). | Konsole animation property, Kvantum, JetBrainsMono, compositor blur; imports appearance/common.py. | Terminal text cursor is distinct from Bibata pointer; not a shell patch. PLANNED `themes/` + `integrations/kde/`. | Diagnostic terminal must remain usable; apply/restore preserves packages and unrelated keys. Animation itself NOT RUN. |
-| [keyboard-cedilla](../ricy-kit/contributions/keyboard-cedilla/README.md) — **ACTIVE** | XCompose Ricy block and Brave X11 preference present (G-07). | Existing us(alt-intl)/Compose handling, optional Brave package wrapper/XWayland. | Two complementary app paths, not replacement keyboard layouts. PLANNED `integrations/`; user-specific opt-in, not a global product default. | Preserve input/preferences and backups. Does not configure virtual consoles or SDDM account; actual typing NOT RUN. |
+| [keyboard-cedilla](../integrations/keyboard-cedilla/README.md) — **ACTIVE** | XCompose Ricy block and Brave X11 preference present (G-07). | Existing us(alt-intl)/Compose handling, optional Brave package wrapper/XWayland. | Two complementary app paths, not replacement keyboard layouts. Sources now reside in `integrations/keyboard-cedilla/`; installed preferences and transport snapshot are unchanged. User-specific opt-in, not a global product default. | Preserve input/preferences and backups. Does not configure virtual consoles or SDDM account; actual typing NOT RUN. |
 | [noctalia-language-and-localization](../ricy-kit/contributions/noctalia-language-and-localization/README.md) — **ACTIVE** | Selected unit has its date/time environment and profile language (G-07). | Noctalia private settings/TOML, locale, unit drop-in; imports notification helper for safe restart; weather network service only for weather. | Preferences/template + applicator; no system-wide region migration. PLANNED `shell/noctalia/` + `integrations/`. | Preserve keyboard/region/accounts, settings backup and application-preserving restart. Weather/event retrieval NOT RUN; location is a per-installation choice. |
 | [noctalia-visual-identity](../ricy-kit/contributions/noctalia-visual-identity/README.md) — **ACTIVE reference** | DESIGN-SYSTEM, themes/tokens README and agents consume tokens.json/reference.svg/guide. No runtime token-loader/generator found. | Existing shell Style/TOML/palettes, Qt/Kvantum/Dolphin adaptations and animation references. | Maintained identity authority; SVG is a schematic, not a screenshot. Central runtime token consumption is PLANNED `themes/tokens/`. Older Dolphin/blur appendix is historical evidence. | Shared identity can affect recovery tools; preserve upstream licenses and distinguish source values from installed appearance. |
 | [driver-aic8800](../ricy-kit/contributions/driver-aic8800/README.md) — **ACTIVE on this hardware** | Package, loaded modules and DKMS registrations confirmed (G-09). | Kernel/headers, DKMS/compiler, pinned Radxa USB source/firmware, BlueZ; optional hardware integration independent of shell/menus. | PKGBUILD/build/modprobe support, not a generic desktop dependency. PLANNED `integrations/hardware/`. | Removing it can lose network/Bluetooth on this host. Preserve firmware/source pins and diagnostics; no connectivity/other-kernel boot claim. |

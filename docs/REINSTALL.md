@@ -75,6 +75,12 @@ This last step is optional. Choose the wallpaper before the next step, as the No
 
 ## 3rd. Cedilla on the international US keyboard
 
+The commands below describe the preserved transport kit. In the maintained
+repository, the source has moved to
+[integrations/keyboard-cedilla](../integrations/keyboard-cedilla/README.md); use
+that README for current commands. Do not redirect transport commands into an
+active private kit.
+
 For the international US keyboard (`us`, variant `alt-intl`) used in this destination, apply also the cedilla composition:
 
 ```bash
