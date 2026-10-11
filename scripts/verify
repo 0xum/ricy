@@ -185,7 +185,8 @@ def shell():
             report('FAIL', f'{path.relative_to(ROOT)}: {error}')
     if failed == before:
         report('PASS', f'syntax of available files ({len(files)} candidates; skips listed separately)')
-    source = Path(os.environ.get('XDG_CACHE_HOME', Path.home() / '.cache')) / 'ricy-noctalia-src-5.2.1'
+    source = Path(os.environ.get('RICY_NOCTALIA_SOURCE',
+                  str(Path(os.environ.get('XDG_CACHE_HOME', Path.home() / '.cache')) / 'ricy-noctalia-src-5.2.1')))
     test = ROOT / 'ricy-kit/contributions/app-icon-reordering/validate-actions.py'
     if not test.is_file():
         report('FAIL', 'existing Noctalia action validator missing')
@@ -204,6 +205,12 @@ def shell():
         not_run(f'Noctalia actions: unverifiable origin: {error}')
         return
     qt_test('Noctalia actions in isolated QJSEngine', test, ['--fonte', str(source)])
+    native_test = ROOT / 'ricy-kit/contributions/app-icon-reordering/validate-native-drag.py'
+    if (source / 'build-ricy/noctalia').is_file() and shutil.which('c++'):
+        run('Noctalia single-space policy and drag (offline)',
+            [sys.executable, '-B', str(native_test), '--fonte', str(source)])
+    else:
+        not_run('Noctalia single-space/native drag: matching build or C++ compiler unavailable')
 
 
 def qt_test(label, path, args=()):

@@ -3,6 +3,44 @@
 Record significant changes in short entries. Minimum fields:
 Model/Agent, Date, Purpose, Validation performed. Do not sign source files.
 
+## 2026-10-11 — RICY-001 workspace exposure audit
+
+- **Model/Agent:** Codex (GPT-6), agent for this task.
+- **Date:** 2026-10-11 (America/Sao_Paulo).
+- **Purpose:** remove safe Ricy-owned workspace exposure while preserving KWin
+  infrastructure and Plasma/Dolphin Recovery. The
+  [pre-change inventory](WORKSPACE-AUDIT.md) classifies product UI, internal APIs,
+  shared recovery surfaces and uncertain external/runtime behavior.
+- **Changes:** updated the current cumulative Noctalia 5.2.1 patch to block the
+  workspace widget and aliases, force a flat taskbar, remove explicit desktop
+  activation fallback, workspace commands/scroll bindings, workspace settings and
+  desktop-triggered bar reveal. Legacy keys still parse; taskbar/window-switcher
+  visible-desktop membership remains internal. The compiled CLI rejects legacy
+  workspace verbs locally, including when an earlier shell is running. Public
+  templates disable grouping/labels; current identity references exclude these
+  surfaces without changing numeric design values. Historical patches, transport
+  kit, manifests, private profile/state and installed recovery settings are preserved.
+- **Harness:** added isolated source selection through `RICY_NOCTALIA_SOURCE` and
+  extended the native drag validator with single-space policy regressions.
+  Foundation fixtures retain linked patch files and isolate source-override tests.
+- **Validation performed:** PASS isolated Meson/Ninja release build; PASS
+  `RICY_NOCTALIA_SOURCE=<isolated-source> ./scripts/verify all` (zero failures and
+  zero unavailable offline checks), including native widget/alias/picker/settings,
+  legacy-profile/drag, CLI rejection, 17 window-action scenarios, panel preservation
+  and 28 window-effect scenarios. PASS `python3 scripts/test-foundation.py`
+  (17 scenarios), order (22), motion (20), indicator/effect (15), and compiled
+  validation of both public TOML templates. PASS clean pinned patch replay: all
+  26 cumulative source files match the validated checkout; ten differ from the
+  previous cumulative variant. PASS exact patch/source diff comparison and original
+  cache preservation. PASS source `git diff --check` and repository
+  `git -c core.whitespace=-blank-at-eol diff --check` (unified-diff blank context
+  markers are intentional patch syntax).
+- **Limits:** NOT RUN live visual, gestures, session switching, persistent failure,
+  login and Dolphin recovery trials. The new binary was compiled separately and
+  was not activated. Shared KWin shortcuts, native desktop menus/settings and
+  possible gestures remain preserved; complete live RICY-001 compliance is UNKNOWN.
+  NOT APPLICABLE compositor ABI/replacement and new architecture: neither changed.
+
 ## 2026-10-11 — Refresh menu launcher after file rename
 
 - **Model/Agent:** Codex (GPT-6), agent for this task.

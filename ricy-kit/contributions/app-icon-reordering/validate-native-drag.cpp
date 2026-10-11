@@ -5,6 +5,12 @@
 #include "render/scene/input_area.h"
 #include "shell/bar/widgets/taskbar_order.h"
 #include "wayland/wayland_connection.h"
+#include "shell/bar/widget_factory.h"
+#include "shell/bar/widget_gesture_defaults.h"
+#include "shell/settings/widget_settings_registry.h"
+#include "cli/schema_msg.h"
+#include "shell/settings/settings_registry.h"
+#include <algorithm>
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
@@ -18,6 +24,8 @@ void flush() { for (auto& callback : DeferredCall::takePending()) callback(); }
 class TaskbarWidgetTestAccess {
 public:
   static void run(TaskbarWidget& widget) {
+    require(!widget.m_groupByWorkspace && !widget.m_showWorkspaceLabel,
+            "legacy grouping and labels cannot expose desktops");
     widget.m_tasks = {{.handleKey = 1, .idLower = "example.brave"}, {.handleKey = 2, .idLower = "example.codex"}};
     widget.applyAppOrder(widget.m_tasks);
     require(widget.reorderEnabled(), "two unfixed apps can be dragged");
@@ -63,6 +71,36 @@ int main() {
   WaylandConnection connection;
   CompositorPlatform platform(connection);
   ConfigService config;
+  WidgetFactory factory({.platform = platform, .config = config});
+  require(factory.create("workspaces", nullptr) == nullptr, "workspace widget is disabled");
+  require(factory.create("legacy_desktops", nullptr) == nullptr, "named workspace alias is disabled");
+  const auto picker = settings::widgetPickerEntries(config.config());
+  require(std::ranges::none_of(picker, [](const auto& entry) {
+            return entry.value == "workspaces" || entry.value == "legacy_desktops";
+          }), "workspace widget and named alias are absent from the picker");
+  require(settings::widgetSettingSpecs("workspaces", nullptr, "Noto Sans", false).empty(),
+          "legacy workspace widget has no settings controls");
+  const auto specs = settings::widgetSettingSpecs("taskbar", nullptr, "Noto Sans", false);
+  std::size_t hidden = 0;
+  for (const auto& spec : specs) {
+    if (spec.requiresCapability == settings::WidgetSettingCapability::TaskbarWorkspaceGrouping) {
+      ++hidden;
+      require(!settings::widgetSettingIsVisible(config.config(), "taskbar", spec, specs,
+                                               {.taskbarWorkspaceGrouping = true}),
+              "desktop setting stays hidden even on a capable compositor");
+    }
+  }
+  require(hidden >= 8, "desktop setting regression covers groups and labels");
+  require(noctalia::bar::gestureDefaultsForType("workspaces").empty(), "no workspace scroll bindings");
+  const auto registry = settings::buildSettingsRegistry(config.config(), nullptr);
+  require(std::ranges::none_of(registry, [](const auto& entry) {
+            return std::ranges::find(entry.path, "show_on_workspace_switch") != entry.path.end()
+                || std::ranges::find(entry.path, "current_workspace_only") != entry.path.end();
+          }), "global settings search exposes no desktop reveal or filter option");
+  for (const auto command : {"workspace-switch", "workspace-alert-add", "workspace-alert-add-window",
+                             "workspace-alert-clear", "workspace-alert-clear-all", "workspace-alert-status"}) {
+    require(noctalia::cli::findMsgCommand(command) == nullptr, "workspace command is absent from CLI discovery");
+  }
   {
     TaskbarWidget widget(platform, config, nullptr, {}, {.barPosition="bottom", .widgetName="taskbar"});
     TaskbarWidgetTestAccess::run(widget);
@@ -80,5 +118,5 @@ int main() {
   require(found != fresh.config().widgets.end(), "new configuration contains taskbar widget");
   const auto options = taskbarWidgetDefinition().resolve(&found->second, "widget.taskbar");
   require(options.appOrder == std::vector<std::string>{"13:example.codex:0", "13:example.brave:0"}, "schema and definition decode order persisted");
-  std::cout << "11 native scenarios passed in temporary profile without connection to the composer.\n";
+  std::cout << "Native single-space and drag scenarios passed in a temporary profile without a compositor connection.\n";
 }

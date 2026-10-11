@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 base=$(cd -- "$(dirname -- "$0")" && pwd)
-src="${XDG_CACHE_HOME:-$HOME/.cache}/ricy-noctalia-src-5.2.1"
+src="${RICY_NOCTALIA_SOURCE:-${XDG_CACHE_HOME:-$HOME/.cache}/ricy-noctalia-src-5.2.1}"
 commit=6ef43e2bf2f3d5b4205ec72a72e34a2ab76ce3b4
 if [[ ! $(/usr/bin/noctalia --version) =~ ^noctalia[[:space:]]v5\.2\.1([[:space:]]|$) ]]; then
   echo 'This patch corresponds to Noctalia 5.2.1. Review for the installed version.' >&2

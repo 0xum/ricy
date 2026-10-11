@@ -25,8 +25,9 @@ Application icons retain their own identity.
 
 KNOWN: TOML configs, JSON palettes, QSS, and installers still repeat values.
 Tokens are a documentary reference, not an executable configuration or generator.
-Workspace badge/group references are legacy discrepancies recorded in C-001;
-they do not authorize new workspace interfaces. Later guide updates may supersede
+Workspace badge/group references are legacy records. The current cumulative
+Ricy patch disables these surfaces; see [the inventory](WORKSPACE-AUDIT.md).
+They do not authorize workspace interfaces. Later guide updates may supersede
 older visual details; record discrepancies.
 
 ## TARGET — PLANNED

@@ -9,7 +9,7 @@ def check(label,condition,detail=''):
  checks.append(label);print('PASS '+label)
 with tempfile.TemporaryDirectory(prefix='ricy-foundation-') as tmp:
  dst=Path(tmp)/'fixture'
- shutil.copytree(ROOT,dst,ignore=shutil.ignore_patterns('work','outputs','assets','archives','__pycache__','.git','*.patch','*.tar.gz','*.zip'))
+ shutil.copytree(ROOT,dst,ignore=shutil.ignore_patterns('work','outputs','assets','archives','__pycache__','.git','*.tar.gz','*.zip'))
  def run(scope='architecture',env=None):
   return subprocess.run([sys.executable,'-B',str(dst/'scripts/verify'),scope],cwd='/',env=env,text=True,capture_output=True)
  result=run();check('root resolved outside the project working directory',result.returncode==0,result.stdout+result.stderr)
@@ -33,6 +33,7 @@ with tempfile.TemporaryDirectory(prefix='ricy-foundation-') as tmp:
  check('script without executable permission rejected',r.returncode==1 and 'not executable' in r.stdout,r.stdout)
  r=run('invalid');check('invalid target returns usage/exit 2',r.returncode==2 and 'Usage:' in r.stderr,r.stdout+r.stderr)
  env=dict(os.environ,XDG_CACHE_HOME=str(Path(tmp)/'empty-cache'))
+ env.pop('RICY_NOCTALIA_SOURCE',None)
  r=run('shell',env);check('missing Noctalia source returns NOT RUN/exit 2',r.returncode==2 and 'NOT RUN Noctalia actions' in r.stdout,r.stdout+r.stderr)
  p=dst/'ricy-kit/contributions/plasma-noctalia-switching/verify.py';p.write_text('raise RuntimeError("intentional failure")\n')
  r=run('recovery');check('component failure propagates exit 1',r.returncode==1 and 'intentional failure' in r.stdout,r.stdout+r.stderr)

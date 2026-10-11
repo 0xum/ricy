@@ -14,5 +14,13 @@ with tempfile.TemporaryDirectory(prefix='ricy-arraste-native-') as temporary:
  subprocess.run(args+['-std=c++23','-c',str(Path(__file__).with_suffix('.cpp')),'-o',str(obj)],cwd=build,check=True)
  subprocess.run(['c++','-o',str(binary),str(obj),*objects,*link],cwd=build,check=True)
  env=os.environ.copy();env['NOCTALIA_CONFIG_HOME']=str(temp/'config');env['NOCTALIA_STATE_HOME']=str(temp/'state');env['NOCTALIA_CACHE_HOME']=str(temp/'cache');env['XDG_CACHE_HOME']=str(temp/'cache');env['XDG_CONFIG_HOME']=str(temp/'config');env['XDG_STATE_HOME']=str(temp/'state');env['XDG_CURRENT_DESKTOP']='unknown';env['WAYLAND_DISPLAY']='ricy-test-unconnected'
- (temp/'config/noctalia').mkdir(parents=True);(temp/'config/noctalia/config.toml').write_text('[shell]\nsetup_wizard_enabled = false\n[widget.taskbar]\napp_order = []\n')
+ (temp/'config/noctalia').mkdir(parents=True);(temp/'config/noctalia/config.toml').write_text('[shell]\nsetup_wizard_enabled = false\n[widget.taskbar]\napp_order = []\ngroup_by_workspace = true\nshow_workspace_label = true\n[widget.legacy_desktops]\ntype = "workspaces"\n')
+ # Use an isolated socket namespace: these checks must never contact the active shell.
+ env['XDG_RUNTIME_DIR']=str(temp);env['WAYLAND_DISPLAY']='ricy-test-unconnected'
+ help_result=subprocess.run([str(build/'noctalia'),'msg','--help'],env=env,text=True,capture_output=True,check=True)
+ assert 'workspace-' not in help_result.stdout,help_result.stdout
+ for verb in ['workspace-switch','workspace-alert-add','workspace-alert-add-window','workspace-alert-clear','workspace-alert-clear-all','workspace-alert-status']:
+  result=subprocess.run([str(build/'noctalia'),'msg',verb,'next'],env=env,text=True,capture_output=True)
+  assert result.returncode==1 and result.stderr=='error: workspace commands are disabled in Ricy\n',(verb,result.stdout,result.stderr)
+ print('PASS compiled CLI rejects legacy workspace verbs before connecting to a shell')
  subprocess.run([str(binary)],env=env,check=True)

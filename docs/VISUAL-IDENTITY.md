@@ -73,7 +73,7 @@ KDE and menus: **JetBrainsMono Nerd Font, 10 pt**; GTK records the same family a
 
 Noctalia Control Icons use simple, readable drawing, with state highlight. System icon theme: Breeze Dark; colorful application icons maintain your identity. Avoid redefining the icon of each application as Mauve.
 
-Icons from the taskbar applications and the search magnifying glass use visual scale **0,88 at rest and 1,0 no hover**, with transition from **140 ms / EaseOutCubic** to get in and out. They maintain click area, spacing and fixed indicators. The effect is restricted to these icons: tray/menus, volume, time, network, Noctalia button and workspace badges maintain previous behavior. The hover scale respects the global movement/speed of the shell.
+Icons from taskbar applications and the search magnifying glass use visual scale **0.88 at rest and 1.0 on hover**, with a **140 ms / EaseOutCubic** transition. They retain click area, spacing and application indicators. Tray/menus, volume, clock, network and the Noctalia button retain their existing behavior. Workspace badges and groups are excluded from Ricy by RICY-001; see [the audit](WORKSPACE-AUDIT.md). The hover scale respects the shell's global motion/speed preference.
 
 Native animation constants: 100 / 200 / 400 ms, with base speed 1. They are transition references, not real latency measures. Keep the indicator active, focus and the notification time bar readable in each state. The timer and hover pause remain native.
 

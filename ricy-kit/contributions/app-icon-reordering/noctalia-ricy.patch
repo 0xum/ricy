@@ -1,3 +1,144 @@
+diff --git a/src/app/application_ipc.cpp b/src/app/application_ipc.cpp
+index f73710e..e3f76e5 100644
+--- a/src/app/application_ipc.cpp
++++ b/src/app/application_ipc.cpp
+@@ -428,47 +428,6 @@ void Application::initIpc() {
+     return "ok\n";
+   });
+ 
+-  m_ipcService.bindCycle(noctalia::cli::msg::workspaceSwitch, [this](const std::string& args) -> std::string {
+-    const auto parts = noctalia::ipc::splitWords(args);
+-    if (parts.size() != 1 || (parts[0] != "next" && parts[0] != "prev")) {
+-      return "error: workspace-switch requires <next|prev>\n";
+-    }
+-    // A bar widget gesture targets its own monitor; a keybind targets the focused one.
+-    wl_output* output = nullptr;
+-    if (const auto& context = m_ipcService.invocationContext(); context.has_value()) {
+-      output = context->output;
+-    }
+-    if (output == nullptr) {
+-      output = m_compositorPlatform.preferredInteractiveOutput();
+-    }
+-    const auto workspaces = m_compositorPlatform.workspaces(output);
+-    if (workspaces.empty()) {
+-      return "error: no workspaces on the target monitor\n";
+-    }
+-
+-    const bool forward = parts[0] == "next";
+-    const auto active = std::ranges::find(workspaces, true, &Workspace::active);
+-    std::size_t target = 0;
+-    if (active == workspaces.end()) {
+-      target = forward ? 0 : workspaces.size() - 1;
+-    } else {
+-      const auto current = static_cast<std::size_t>(std::ranges::distance(workspaces.begin(), active));
+-      if (forward) {
+-        if (current + 1 >= workspaces.size()) {
+-          return "ok\n";
+-        }
+-        target = current + 1;
+-      } else {
+-        if (current == 0) {
+-          return "ok\n";
+-        }
+-        target = current - 1;
+-      }
+-    }
+-    m_compositorPlatform.activateWorkspace(output, workspaces[target]);
+-    return "ok\n";
+-  });
+-
+   m_ipcService.bindCycle(noctalia::cli::msg::keyboardLayoutCycle, [this](const std::string& args) -> std::string {
+     if (!noctalia::ipc::splitWords(args).empty()) {
+       return "error: keyboard-layout-cycle takes no arguments\n";
+@@ -482,71 +441,6 @@ void Application::initIpc() {
+     return "ok\n";
+   });
+ 
+-  auto workspaceAlertStatus = [this]() {
+-    const auto tokens = m_workspaceAlertService.tokens();
+-    if (tokens.empty()) {
+-      return std::string{"(no workspace alerts)\n"};
+-    }
+-    return StringUtils::join(tokens, "\n") + "\n";
+-  };
+-
+-  m_ipcService.bind(noctalia::cli::msg::workspaceAlertAdd, [this](const std::string& args) -> std::string {
+-    const std::string workspace = StringUtils::trim(args);
+-    if (workspace.empty()) {
+-      return "error: workspace-alert-add requires <workspace>\n";
+-    }
+-    if (!m_compositorPlatform.isKnownWorkspaceAlertKey(workspace)) {
+-      return "error: unknown workspace '" + workspace + "'\n";
+-    }
+-    // Store unconditionally. The overlay only marks inactive rows, so
+-    // alerting the active workspace simply shows once the user leaves it and
+-    // auto-clears on return; on per-output compositors this also lets an
+-    // inactive duplicate alert even when the same workspace is active elsewhere.
+-    (void)m_workspaceAlertService.add(workspace);
+-    m_bar.refresh();
+-    return "ok\n";
+-  });
+-  m_ipcService.bind(noctalia::cli::msg::workspaceAlertAddWindow, [this](const std::string& args) -> std::string {
+-    const auto parts = noctalia::ipc::splitWords(args);
+-    if (parts.size() != 1) {
+-      return "error: workspace-alert-add-window requires <window-id>\n";
+-    }
+-    const auto workspace = m_compositorPlatform.workspaceAlertKeyForWindow(parts[0]);
+-    if (!workspace.has_value()) {
+-      return "error: could not resolve workspace for window id '" + parts[0] + "'\n";
+-    }
+-    (void)m_workspaceAlertService.add(*workspace);
+-    m_bar.refresh();
+-    return "ok\n";
+-  });
+-  m_ipcService.bind(noctalia::cli::msg::workspaceAlertClear, [this](const std::string& args) -> std::string {
+-    const std::string workspace = StringUtils::trim(args);
+-    if (workspace.empty()) {
+-      return "error: workspace-alert-clear requires <workspace>\n";
+-    }
+-    (void)m_workspaceAlertService.clear(workspace);
+-    m_bar.refresh();
+-    return "ok\n";
+-  });
+-  m_ipcService.bind(noctalia::cli::msg::workspaceAlertClearAll, [this](const std::string& args) -> std::string {
+-    if (!noctalia::ipc::splitWords(args).empty()) {
+-      return "error: workspace-alert-clear-all takes no arguments\n";
+-    }
+-    m_workspaceAlertService.clearAll();
+-    m_bar.refresh();
+-    return "ok\n";
+-  });
+-  m_ipcService.bind(
+-      noctalia::cli::msg::workspaceAlertStatus,
+-      [workspaceAlertStatus](const std::string& args) -> std::string {
+-        if (!noctalia::ipc::splitWords(args).empty()) {
+-          return "error: workspace-alert-status takes no arguments\n";
+-        }
+-        return workspaceAlertStatus();
+-      },
+-      IpcService::HandlerOptions{.actionEditorVisibility = IpcService::ActionEditorVisibility::Hidden}
+-  );
+-
+   registerSessionIpc(m_ipcService, m_sessionActionRunner, m_lockScreen, m_configService);
+ 
+   if (m_powerProfilesService != nullptr) {
+diff --git a/src/cli/schema_msg.h b/src/cli/schema_msg.h
+index 3d89dee..82be26d 100644
+--- a/src/cli/schema_msg.h
++++ b/src/cli/schema_msg.h
+@@ -938,12 +938,6 @@ namespace noctalia::cli {
+       msg::wifiStatus,
+       msg::wifiToggle,
+       msg::windowSwitcher,
+-      msg::workspaceAlertAdd,
+-      msg::workspaceAlertAddWindow,
+-      msg::workspaceAlertClear,
+-      msg::workspaceAlertClearAll,
+-      msg::workspaceAlertStatus,
+-      msg::workspaceSwitch,
+   };
+ 
+   inline constexpr Command kMsgCmd{
 diff --git a/src/compositors/compositor_platform.cpp b/src/compositors/compositor_platform.cpp
 index fe63e3a..35647e0 100644
 --- a/src/compositors/compositor_platform.cpp
@@ -190,6 +331,88 @@ index d28390d..d26197e 100644
      };
  
      [[nodiscard]] bool ensureScriptFile(std::string& scriptPath) const;
+diff --git a/src/ipc/cli.cpp b/src/ipc/cli.cpp
+index dcb5bf3..aa96421 100644
+--- a/src/ipc/cli.cpp
++++ b/src/ipc/cli.cpp
+@@ -19,6 +19,11 @@ namespace noctalia::ipc {
+     }
+ 
+     const std::string_view command = argv[2];
++    // RICY-001: reject legacy verbs locally, even if an older shell is running.
++    if (command == "workspace-switch" || command.starts_with("workspace-alert-")) {
++      std::fputs("error: workspace commands are disabled in Ricy\n", stderr);
++      return 1;
++    }
+     if (command == "--help" || command == "-h") {
+       std::print("{}", cli::renderHelp(cli::kMsgCmd, "noctalia msg"));
+       return 0;
+diff --git a/src/shell/bar/bar.cpp b/src/shell/bar/bar.cpp
+index ff71f3d..7b9f81f 100644
+--- a/src/shell/bar/bar.cpp
++++ b/src/shell/bar/bar.cpp
+@@ -1642,28 +1642,7 @@ void Bar::closeAllInstances() {
+ void Bar::onOutputChange() { syncInstances(); }
+ 
+ void Bar::onWorkspaceChanged() {
+-  if (m_platform == nullptr || m_overlayDisplaySuppressed) {
+-    return;
+-  }
+-
+-  bool anyChanged = false;
+-  for (const auto& output : m_platform->outputs()) {
+-    const std::string activeId = activeWorkspaceId(m_platform->workspaces(output.output));
+-    if (activeId.empty()) {
+-      continue;
+-    }
+-
+-    auto& last = m_lastActiveWorkspaceByOutput[output.name];
+-    if (!last.empty() && last != activeId) {
+-      m_pendingWorkspaceRevealOutputs.insert(output.name);
+-      anyChanged = true;
+-    }
+-    last = activeId;
+-  }
+-
+-  if (anyChanged) {
+-    m_workspaceRevealDebounce.start(kWorkspaceRevealDebounce, [this]() { applyPendingWorkspaceReveal(); });
+-  }
++  // RICY-001: desktop changes never reveal a Ricy bar.
+   scheduleSmartAutoHideReevaluation();
+ }
+ 
+diff --git a/src/shell/bar/widget_factory.cpp b/src/shell/bar/widget_factory.cpp
+index 0b89670..70fc6b0 100644
+--- a/src/shell/bar/widget_factory.cpp
++++ b/src/shell/bar/widget_factory.cpp
+@@ -126,6 +126,11 @@ std::unique_ptr<Widget> WidgetFactory::create(
+     type = it->second.type;
+   }
+ 
++  // RICY-001: legacy names and aliases remain parseable, but never create desktop UI.
++  if (type == "workspaces") {
++    return nullptr;
++  }
++
+   // Config path prefix used when a widget definition reports a bad setting value.
+   const std::string settingContext = std::format("widget.{}", name);
+ 
+diff --git a/src/shell/bar/widget_gesture_defaults.cpp b/src/shell/bar/widget_gesture_defaults.cpp
+index 802fb5f..868b02f 100644
+--- a/src/shell/bar/widget_gesture_defaults.cpp
++++ b/src/shell/bar/widget_gesture_defaults.cpp
+@@ -74,9 +74,8 @@ namespace noctalia::bar {
+     constexpr std::array<GestureBinding, 2> kTaskbar{
+         {{Gesture::ScrollUp, "taskbar-cycle prev"}, {Gesture::ScrollDown, "taskbar-cycle next"}}
+     };
+-    constexpr std::array<GestureBinding, 2> kWorkspaces{
+-        {{Gesture::ScrollUp, "workspace-switch prev"}, {Gesture::ScrollDown, "workspace-switch next"}}
+-    };
++    // RICY-001: legacy workspace widgets have no navigation gestures.
++    constexpr std::array<GestureBinding, 0> kWorkspaces{};
+     constexpr std::array<GestureBinding, 1> kSettings{{{Gesture::Left, "settings-open"}}};
+     constexpr std::array<GestureBinding, 1> kSysmon{{{Gesture::Left, "panel-toggle control-center system"}}};
+     constexpr std::array<GestureBinding, 1> kWallpaper{{{Gesture::Left, "panel-toggle wallpaper"}}};
 diff --git a/src/shell/bar/widgets/launcher_widget.cpp b/src/shell/bar/widgets/launcher_widget.cpp
 index d7ac86c..fd24eb4 100644
 --- a/src/shell/bar/widgets/launcher_widget.cpp
@@ -456,7 +679,7 @@ index 0000000..118ef96
 +
 +} // namespace taskbar_order
 diff --git a/src/shell/bar/widgets/taskbar_widget.cpp b/src/shell/bar/widgets/taskbar_widget.cpp
-index fdada6d..685ac2d 100644
+index fdada6d..967b7b9 100644
 --- a/src/shell/bar/widgets/taskbar_widget.cpp
 +++ b/src/shell/bar/widgets/taskbar_widget.cpp
 @@ -8,8 +8,11 @@
@@ -585,7 +808,22 @@ index fdada6d..685ac2d 100644
    constexpr auto kDragHoldDelay = std::chrono::milliseconds(300);
    // Lifts the dragged tile above the rest of the strip while it follows the pointer.
    constexpr std::int32_t kDragTileZIndex = 200;
-@@ -288,7 +386,168 @@ std::string_view TaskbarWidget::workspaceBindingWindowId(const TaskModel& task)
+@@ -223,9 +321,11 @@ TaskbarWidget::TaskbarWidget(
+ 
+ void TaskbarWidget::syncWorkspaceGroupingCapability() {
+   const bool supported = m_platform.supportsTaskbarWorkspaceGrouping();
+-  const bool groupByWorkspace = supported && m_configOptions.groupByWorkspace;
+-  const bool onlyActiveWorkspace = supported && m_configOptions.onlyActiveWorkspace;
+-  const bool showWorkspaceLabel = !supported || m_configOptions.showWorkspaceLabel;
++  // RICY-001: legacy preferences cannot expose desktop groups or navigation.
++  const bool groupByWorkspace = false;
++  // Membership is internal: do not offer windows on another desktop as focus targets.
++  const bool onlyActiveWorkspace = supported;
++  const bool showWorkspaceLabel = false;
+   const bool hideEmptyWorkspaces = supported && m_configOptions.hideEmptyWorkspaces;
+   const bool workspaceGroupCapsule = !supported || m_configOptions.workspaceGroupCapsule;
+   const bool groupSingleIconPerApp = supported && m_configOptions.groupSingleIconPerApp;
+@@ -288,7 +388,168 @@ std::string_view TaskbarWidget::workspaceBindingWindowId(const TaskModel& task)
    return !task.exactWindowId.empty() ? std::string_view(task.exactWindowId) : std::string_view(task.workspaceWindowId);
  }
  
@@ -755,20 +993,29 @@ index fdada6d..685ac2d 100644
    if (task.firstHandle != nullptr
        || !task.workspaceWindowId.empty()
        || (compositors::isKde() && (!task.title.empty() || !task.appId.empty()))) {
-@@ -298,7 +557,11 @@ void TaskbarWidget::activateTaskModel(const TaskModel& task) {
+@@ -298,16 +559,12 @@ void TaskbarWidget::activateTaskModel(const TaskModel& task) {
      window.identifier = !task.exactWindowId.empty() ? task.exactWindowId : task.workspaceWindowId;
      window.handle = !task.exactWindowId.empty() ? nullptr : task.firstHandle;
      window.exactIdentity = !task.exactWindowId.empty();
 -    m_platform.activateToplevelInfo(window);
+-    return;
+-  }
+-  if (!task.workspaceKey.empty()) {
+-    for (const auto& workspace : m_workspaces) {
+-      if (taskInWorkspaceGroup(task, workspace)) {
+-        m_platform.activateWorkspace(workspaceHostOutput(workspace), workspace.workspace);
+-        return;
+-      }
 +    if (toggleMinimize) {
 +      m_platform.toggleTaskbarToplevelInfo(window);
 +    } else {
 +      m_platform.activateToplevelInfo(window);
-+    }
-     return;
+     }
++    return;
    }
-   if (!task.workspaceKey.empty()) {
-@@ -337,7 +600,7 @@ bool TaskbarWidget::reorderEnabled() const {
+ }
+ 
+@@ -337,7 +594,7 @@ bool TaskbarWidget::reorderEnabled() const {
    if (m_groupByWorkspace || m_widgetName.empty()) {
      return false;
    }
@@ -777,7 +1024,7 @@ index fdada6d..685ac2d 100644
  }
  
  float TaskbarWidget::pointerMainOnStrip(const InputArea& area, float localX, float localY) const {
-@@ -345,36 +608,32 @@ float TaskbarWidget::pointerMainOnStrip(const InputArea& area, float localX, flo
+@@ -345,36 +602,32 @@ float TaskbarWidget::pointerMainOnStrip(const InputArea& area, float localX, flo
  }
  
  std::size_t TaskbarWidget::computeDragTargetIndex() const {
@@ -830,7 +1077,7 @@ index fdada6d..685ac2d 100644
    });
    return true;
  }
-@@ -397,7 +656,7 @@ void TaskbarWidget::beginDrag() {
+@@ -397,7 +650,7 @@ void TaskbarWidget::beginDrag() {
    // neighbours move, but this node keeps whatever position we give it.
    m_drag.restMain = m_vertical ? m_drag.area->y() : m_drag.area->x();
    m_drag.restCross = m_vertical ? m_drag.area->x() : m_drag.area->y();
@@ -839,7 +1086,7 @@ index fdada6d..685ac2d 100644
    // The press that started this gesture has already shown the tile's tooltip; it would hang over
    // the strip for the whole drag.
    TooltipManager::instance().onHoverChange(nullptr, static_cast<zwlr_layer_surface_v1*>(nullptr), nullptr);
-@@ -419,7 +678,7 @@ void TaskbarWidget::moveDragTile() {
+@@ -419,7 +672,7 @@ void TaskbarWidget::moveDragTile() {
    // Slot i sits at restMain + (i - sourceIndex) * pitch, so clamping travel to the first and last
    // slots keeps the tile from wandering somewhere it could never be dropped.
    const auto source = static_cast<std::ptrdiff_t>(m_drag.sourceIndex);
@@ -848,7 +1095,7 @@ index fdada6d..685ac2d 100644
    const float minMain = m_drag.restMain - static_cast<float>(source) * m_tilePitchMain;
    const float maxMain = m_drag.restMain + static_cast<float>(last - source) * m_tilePitchMain;
    const float travelled = m_drag.restMain + (m_drag.currentMain - m_drag.startMain);
-@@ -435,7 +694,7 @@ void TaskbarWidget::moveDragTile() {
+@@ -435,7 +688,7 @@ void TaskbarWidget::moveDragTile() {
  void TaskbarWidget::endDrag(bool commit) {
    m_drag.holdTimer.stop();
    const bool wasActive = m_drag.active;
@@ -857,7 +1104,7 @@ index fdada6d..685ac2d 100644
      // A consumed gesture must not also activate or launch the app on release.
      m_suppressTileClick = true;
    }
-@@ -610,7 +869,11 @@ void TaskbarWidget::launchDesktopEntry(const TaskModel& task) {
+@@ -610,7 +863,11 @@ void TaskbarWidget::launchDesktopEntry(const TaskModel& task) {
    });
  }
  
@@ -870,7 +1117,7 @@ index fdada6d..685ac2d 100644
    auto windows = m_platform.enrichedWindowsForApp(task.idLower, task.startupWmClassLower, toplevelOutputFilter());
    if (windows.empty() && !task.appIdLower.empty() && task.appIdLower != task.idLower) {
      windows = m_platform.enrichedWindowsForApp(task.appIdLower, task.startupWmClassLower, toplevelOutputFilter());
-@@ -620,7 +883,11 @@ void TaskbarWidget::activateOrLaunchPinned(const TaskModel& task) {
+@@ -620,7 +877,11 @@ void TaskbarWidget::activateOrLaunchPinned(const TaskModel& task) {
      return;
    }
    if (windows.size() == 1) {
@@ -883,7 +1130,7 @@ index fdada6d..685ac2d 100644
      return;
    }
  
-@@ -629,10 +896,41 @@ void TaskbarWidget::activateOrLaunchPinned(const TaskModel& task) {
+@@ -629,10 +890,41 @@ void TaskbarWidget::activateOrLaunchPinned(const TaskModel& task) {
    if (cursor >= windows.size()) {
      cursor = 0;
    }
@@ -926,7 +1173,7 @@ index fdada6d..685ac2d 100644
  void TaskbarWidget::applyPinnedMerge(std::vector<TaskModel>& tasks) {
    const auto& pinnedIds = pinnedConfigIds();
    if (pinnedIds.empty()) {
-@@ -691,6 +989,7 @@ void TaskbarWidget::applyPinnedMerge(std::vector<TaskModel>& tasks) {
+@@ -691,6 +983,7 @@ void TaskbarWidget::applyPinnedMerge(std::vector<TaskModel>& tasks) {
      tile.running = true;
      tile.desktopEntryId = entry.id;
      tile.instanceCount = matching.size();
@@ -934,7 +1181,7 @@ index fdada6d..685ac2d 100644
      if (tile.idLower.empty()) {
        tile.idLower = entry.idLower;
      }
-@@ -799,6 +1098,17 @@ void TaskbarWidget::rebuild(Renderer& renderer) {
+@@ -799,6 +1092,17 @@ void TaskbarWidget::rebuild(Renderer& renderer) {
    if (m_taskStrip == nullptr) {
      return;
    }
@@ -952,7 +1199,7 @@ index fdada6d..685ac2d 100644
    m_taskTiles.clear();
    m_taskTiles.reserve(m_tasks.size());
    // The strip's children are about to be destroyed; drop the gesture and its visuals so nothing
-@@ -809,6 +1119,9 @@ void TaskbarWidget::rebuild(Renderer& renderer) {
+@@ -809,6 +1113,9 @@ void TaskbarWidget::rebuild(Renderer& renderer) {
    m_dragParked = false;
    clearChildren(m_taskStrip);
    buildTaskButtons(renderer);
@@ -962,7 +1209,7 @@ index fdada6d..685ac2d 100644
  }
  
  void TaskbarWidget::clearChildren(Flex* flex) const {
-@@ -873,7 +1186,7 @@ void TaskbarWidget::buildTaskButtons(Renderer& renderer) {
+@@ -873,7 +1180,7 @@ void TaskbarWidget::buildTaskButtons(Renderer& renderer) {
    const bool showWindowTitle = m_showWindowTitle && windowTitleWidth > minWindowTitleWidth;
    const float tileWidthWithTitle = tileSize + (showWindowTitle ? windowTitleWidth + windowTitleGap : 0.0F);
  
@@ -971,7 +1218,7 @@ index fdada6d..685ac2d 100644
      auto hoverBox = ui::box({
          .radius = resolvedBarCapsuleRadius(width, height),
          .width = width,
-@@ -885,15 +1198,17 @@ void TaskbarWidget::buildTaskButtons(Renderer& renderer) {
+@@ -885,15 +1192,17 @@ void TaskbarWidget::buildTaskButtons(Renderer& renderer) {
      auto* hoverBoxPtr = static_cast<Box*>(area.addChild(std::move(hoverBox)));
  
      auto progress = std::make_shared<float>(0.0F);
@@ -992,7 +1239,7 @@ index fdada6d..685ac2d 100644
              hoverBoxPtr->setVisible(p > 0.001F);
              ColorSpec c = fill;
              c.alpha = 0.1F * p;
-@@ -904,15 +1219,17 @@ void TaskbarWidget::buildTaskButtons(Renderer& renderer) {
+@@ -904,15 +1213,17 @@ void TaskbarWidget::buildTaskButtons(Renderer& renderer) {
        );
        requestFrameTick();
      });
@@ -1013,7 +1260,7 @@ index fdada6d..685ac2d 100644
              hoverBoxPtr->setVisible(p > 0.001F);
              ColorSpec c = fill;
              c.alpha = 0.1F * p;
-@@ -935,7 +1252,7 @@ void TaskbarWidget::buildTaskButtons(Renderer& renderer) {
+@@ -935,7 +1246,7 @@ void TaskbarWidget::buildTaskButtons(Renderer& renderer) {
      };
    };
  
@@ -1022,7 +1269,7 @@ index fdada6d..685ac2d 100644
    auto createTaskTile = [&](TaskRef taskRef, std::vector<TaskRef> cycleCandidates = {}, std::string cycleKey = {},
                              std::size_t badgeCount = 1) {
      // Unreachable at build time: every ref is built from a live m_tasks element at the current
-@@ -965,7 +1282,7 @@ void TaskbarWidget::buildTaskButtons(Renderer& renderer) {
+@@ -965,7 +1276,7 @@ void TaskbarWidget::buildTaskButtons(Renderer& renderer) {
          if (data.button != BTN_LEFT || !ownsGesture) {
            return;
          }
@@ -1031,7 +1278,7 @@ index fdada6d..685ac2d 100644
          endDrag(m_drag.generation == m_taskGeneration);
          return;
        }
-@@ -1071,7 +1388,7 @@ void TaskbarWidget::buildTaskButtons(Renderer& renderer) {
+@@ -1071,7 +1382,7 @@ void TaskbarWidget::buildTaskButtons(Renderer& renderer) {
              return;
            }
            if (data.button == BTN_LEFT) {
@@ -1040,7 +1287,7 @@ index fdada6d..685ac2d 100644
              return;
            }
            if (data.button == BTN_RIGHT && areaPtr != nullptr) {
-@@ -1094,6 +1411,13 @@ void TaskbarWidget::buildTaskButtons(Renderer& renderer) {
+@@ -1094,6 +1405,13 @@ void TaskbarWidget::buildTaskButtons(Renderer& renderer) {
          }
          if (data.button == BTN_LEFT) {
            if (!cycleCandidates.empty()) {
@@ -1054,7 +1301,7 @@ index fdada6d..685ac2d 100644
              std::size_t& cursor = m_groupedAppCycleCursor[cycleKey];
              if (cursor >= cycleCandidates.size()) {
                cursor = 0;
-@@ -1101,11 +1425,11 @@ void TaskbarWidget::buildTaskButtons(Renderer& renderer) {
+@@ -1101,11 +1419,11 @@ void TaskbarWidget::buildTaskButtons(Renderer& renderer) {
              const TaskModel* target = resolveTask(m_tasks, cycleCandidates[cursor], m_taskGeneration);
              cursor = (cursor + 1) % cycleCandidates.size();
              if (target != nullptr) {
@@ -1068,7 +1315,7 @@ index fdada6d..685ac2d 100644
            return;
          }
          if (data.button == BTN_RIGHT
-@@ -1129,6 +1453,14 @@ void TaskbarWidget::buildTaskButtons(Renderer& renderer) {
+@@ -1129,6 +1447,14 @@ void TaskbarWidget::buildTaskButtons(Renderer& renderer) {
          }
      );
  
@@ -1083,7 +1330,7 @@ index fdada6d..685ac2d 100644
      if (!task.iconPath.empty()) {
        auto image = ui::image({
            .fit = ImageFit::Contain,
-@@ -1138,14 +1470,14 @@ void TaskbarWidget::buildTaskButtons(Renderer& renderer) {
+@@ -1138,14 +1464,14 @@ void TaskbarWidget::buildTaskButtons(Renderer& renderer) {
        image->setAppIconColorization(effectiveShellAppIconColorizationTint(m_configService.config().shell));
        image->setSourceFile(renderer, task.iconPath, static_cast<int>(std::round(iconSize)), true);
        if (image->hasImage()) {
@@ -1100,7 +1347,7 @@ index fdada6d..685ac2d 100644
        }
      } else {
        auto glyph = ui::glyph({
-@@ -1153,8 +1485,19 @@ void TaskbarWidget::buildTaskButtons(Renderer& renderer) {
+@@ -1153,8 +1479,19 @@ void TaskbarWidget::buildTaskButtons(Renderer& renderer) {
            .glyphSize = iconSize,
        });
        glyph->measure(renderer);
@@ -1121,7 +1368,7 @@ index fdada6d..685ac2d 100644
  
      Label* titleLabelPtr = nullptr;
      if (showWindowTitle) {
-@@ -1211,7 +1554,7 @@ void TaskbarWidget::buildTaskButtons(Renderer& renderer) {
+@@ -1211,7 +1548,7 @@ void TaskbarWidget::buildTaskButtons(Renderer& renderer) {
              .height = lineThickness,
          });
          indicatorPtr = indicator.get();
@@ -1130,7 +1377,7 @@ index fdada6d..685ac2d 100644
          indicator->setPosition(tilePadding, std::round(tileSize));
          area->addChild(std::move(indicator));
        } else {
-@@ -1222,7 +1565,7 @@ void TaskbarWidget::buildTaskButtons(Renderer& renderer) {
+@@ -1222,7 +1559,7 @@ void TaskbarWidget::buildTaskButtons(Renderer& renderer) {
              .height = d,
          });
          indicatorPtr = indicator.get();
@@ -1139,7 +1386,7 @@ index fdada6d..685ac2d 100644
          indicator->setPosition(std::round((tileSize - d) * 0.5F), std::round(tileSize - d - bottomInset));
          area->addChild(std::move(indicator));
        }
-@@ -1242,8 +1585,15 @@ void TaskbarWidget::buildTaskButtons(Renderer& renderer) {
+@@ -1242,8 +1579,15 @@ void TaskbarWidget::buildTaskButtons(Renderer& renderer) {
          .area = area.get(),
          .titleLabel = titleLabelPtr,
          .activeIndicator = indicatorPtr,
@@ -1156,7 +1403,7 @@ index fdada6d..685ac2d 100644
      return area;
    };
  
-@@ -1526,7 +1876,8 @@ void TaskbarWidget::buildTaskButtons(Renderer& renderer) {
+@@ -1526,7 +1870,8 @@ void TaskbarWidget::buildTaskButtons(Renderer& renderer) {
            } else {
              auto& grouped = groupedItems[it->second];
              grouped.candidates.push_back(taskRefFor(*task));
@@ -1166,7 +1413,7 @@ index fdada6d..685ac2d 100644
                grouped.representative = task;
              }
            }
-@@ -1847,6 +2198,7 @@ void TaskbarWidget::updateModels() {
+@@ -1847,6 +2192,7 @@ void TaskbarWidget::updateModels() {
        task.title = window.title;
        task.displayName = run.entry.name;
        task.active = activeHandle != nullptr && activeHandle == window.handle;
@@ -1174,7 +1421,7 @@ index fdada6d..685ac2d 100644
        task.firstHandle = window.handle;
        if (window.exactIdentity && !window.identifier.empty()) {
          task.workspaceWindowId = window.identifier;
-@@ -1876,6 +2228,7 @@ void TaskbarWidget::updateModels() {
+@@ -1876,6 +2222,7 @@ void TaskbarWidget::updateModels() {
      task.order = window.order;
      task.title = window.title;
      task.active = activeHandle != nullptr && activeHandle == window.handle;
@@ -1182,7 +1429,7 @@ index fdada6d..685ac2d 100644
      task.firstHandle = window.handle;
      if (window.exactIdentity && !window.identifier.empty()) {
        task.workspaceWindowId = window.identifier;
-@@ -1982,7 +2335,7 @@ void TaskbarWidget::updateModels() {
+@@ -1982,7 +2329,7 @@ void TaskbarWidget::updateModels() {
          const bool idMatch = !activeToplevel->identifier.empty()
              && !task.workspaceWindowId.empty()
              && task.workspaceWindowId == activeToplevel->identifier;
@@ -1191,7 +1438,7 @@ index fdada6d..685ac2d 100644
            task.active = true;
          }
        }
-@@ -2774,6 +3127,13 @@ void TaskbarWidget::updateModels() {
+@@ -2774,6 +3121,13 @@ void TaskbarWidget::updateModels() {
        return a.handleKey < b.handleKey;
      });
      applyPinnedMerge(nextTasks);
@@ -1205,7 +1452,7 @@ index fdada6d..685ac2d 100644
    }
  
    const ModelComparison comparison =
-@@ -2783,7 +3143,7 @@ void TaskbarWidget::updateModels() {
+@@ -2783,7 +3137,7 @@ void TaskbarWidget::updateModels() {
      m_workspaces = std::move(nextWorkspaces);
      if (comparison.titlesChanged || comparison.activesChanged) {
        bool textChanged = false;
@@ -1214,7 +1461,7 @@ index fdada6d..685ac2d 100644
          if (tile.taskIndex >= m_tasks.size()) {
            continue;
          }
-@@ -2797,6 +3157,7 @@ void TaskbarWidget::updateModels() {
+@@ -2797,6 +3151,7 @@ void TaskbarWidget::updateModels() {
            }
          }
          if (comparison.activesChanged) {
@@ -1222,7 +1469,7 @@ index fdada6d..685ac2d 100644
            if (tile.area != nullptr) {
              float opacity = task.active ? m_activeOpacity : m_inactiveOpacity;
              if (task.pinned && !task.running) {
-@@ -2805,7 +3166,7 @@ void TaskbarWidget::updateModels() {
+@@ -2805,7 +3160,7 @@ void TaskbarWidget::updateModels() {
              tile.area->setOpacity(opacity);
            }
            if (tile.activeIndicator != nullptr) {
@@ -1231,7 +1478,7 @@ index fdada6d..685ac2d 100644
            }
          }
        }
-@@ -2827,18 +3188,6 @@ void TaskbarWidget::updateModels() {
+@@ -2827,18 +3182,6 @@ void TaskbarWidget::updateModels() {
    }
  }
  
@@ -1250,7 +1497,7 @@ index fdada6d..685ac2d 100644
  void TaskbarWidget::openTaskContextMenu(const TaskModel& task, InputArea& area) {
    auto* renderContext = PanelManager::instance().renderContext();
    if (renderContext == nullptr) {
-@@ -2987,12 +3336,10 @@ void TaskbarWidget::openTaskContextMenu(const TaskModel& task, InputArea& area)
+@@ -2987,12 +3330,10 @@ void TaskbarWidget::openTaskContextMenu(const TaskModel& task, InputArea& area)
      return;
    }
  
@@ -1267,7 +1514,7 @@ index fdada6d..685ac2d 100644
      if (entry.id == -4) {
        if (menuEntry.has_value()) {
          setEntryPinned(*menuEntry, !isPinned);
-@@ -3051,87 +3398,24 @@ void TaskbarWidget::openTaskContextMenu(const TaskModel& task, InputArea& area)
+@@ -3051,87 +3392,24 @@ void TaskbarWidget::openTaskContextMenu(const TaskModel& task, InputArea& area)
          }
        }
      }
@@ -1369,7 +1616,7 @@ index fdada6d..685ac2d 100644
  }
  
  std::string TaskbarWidget::toLower(std::string value) { return StringUtils::toLower(std::move(value)); }
-@@ -3191,7 +3475,8 @@ TaskbarWidget::ModelComparison TaskbarWidget::compareModels(
+@@ -3191,7 +3469,8 @@ TaskbarWidget::ModelComparison TaskbarWidget::compareModels(
    for (std::size_t i = 0; i < nextTasks.size(); ++i) {
      const bool titleChanged =
          nextTasks[i].title != previousTasks[i].title || nextTasks[i].displayName != previousTasks[i].displayName;
@@ -1771,6 +2018,135 @@ index d458d18..5ff56b9 100644
    // Bar that opened the active panel; empty when none was recorded.
    [[nodiscard]] std::string_view attachedSourceBarName() const noexcept;
    [[nodiscard]] const std::string& activePanelId() const noexcept;
+diff --git a/src/shell/settings/settings_registry.cpp b/src/shell/settings/settings_registry.cpp
+index 7b6e600..8db222b 100644
+--- a/src/shell/settings/settings_registry.cpp
++++ b/src/shell/settings/settings_registry.cpp
+@@ -2041,14 +2041,6 @@ namespace settings {
+         {"shell", "window_switcher", "show_all_outputs"}, ToggleSetting{cfg.shell.windowSwitcher.showAllOutputs},
+         "window switcher alt tab monitor display output screen all current"
+     ));
+-    entries.push_back(makeEntry(
+-        SettingsSection::Shell, "window-switcher",
+-        tr("settings.schema.shell.window-switcher-current-workspace-only.label"),
+-        tr("settings.schema.shell.window-switcher-current-workspace-only.description"),
+-        {"shell", "window_switcher", "current_workspace_only"},
+-        ToggleSetting{cfg.shell.windowSwitcher.currentWorkspaceOnly},
+-        "window switcher alt tab workspace current only filter"
+-    ));
+     entries.push_back(makeEntry(
+         SettingsSection::Osd, "osd", tr("settings.schema.shell.osd-enabled.label"),
+         tr("settings.schema.shell.osd-enabled.description"), {"osd", "enabled"}, ToggleSetting{cfg.osd.enabled},
+@@ -3226,19 +3218,6 @@ namespace settings {
+           autoHideModeSelect(barAutoHideMode(bar.autoHide, bar.smartAutoHide), path("smart_auto_hide")),
+           "autohide smart workspace"
+       ));
+-      const SettingVisibility autoHideOn = [barName = bar.name](const Config& c) {
+-        const BarConfig* b = findBar(c, barName);
+-        return b != nullptr && b->isAutoHideEnabled();
+-      };
+-      {
+-        auto e = makeEntry(
+-            section, "general", tr("settings.schema.bar.show-on-workspace-switch.label"),
+-            tr("settings.schema.bar.show-on-workspace-switch.description"), path("show_on_workspace_switch"),
+-            ToggleSetting{bar.showOnWorkspaceSwitch}, "workspace reveal peek autohide"
+-        );
+-        e.visibleWhen = autoHideOn;
+-        entries.push_back(std::move(e));
+-      }
+       entries.push_back(makeEntry(
+           section, "general", tr("settings.schema.shared.reserve-space.label"),
+           tr("settings.schema.bar.reserve-space.description"), path("reserve_space"), ToggleSetting{bar.reserveSpace},
+@@ -3561,24 +3540,6 @@ namespace settings {
+             ),
+             "autohide smart workspace"
+         ));
+-        const SettingVisibility monitorAutoHideOn = [barName = bar.name, match = ovr.match](const Config& c) {
+-          const BarConfig* b = findBar(c, barName);
+-          if (b == nullptr) {
+-            return false;
+-          }
+-          const BarMonitorOverride* o = findMonitorOverride(*b, match);
+-          return o != nullptr ? o->isAutoHideEnabled(b->autoHide, b->smartAutoHide) : b->isAutoHideEnabled();
+-        };
+-        {
+-          auto e = makeEntry(
+-              section, "general", tr("settings.schema.bar.show-on-workspace-switch.label"),
+-              tr("settings.schema.bar.show-on-workspace-switch.description"), monitorPath("show_on_workspace_switch"),
+-              ToggleSetting{ovr.showOnWorkspaceSwitch.value_or(bar.showOnWorkspaceSwitch)},
+-              "workspace reveal peek autohide"
+-          );
+-          e.visibleWhen = monitorAutoHideOn;
+-          entries.push_back(std::move(e));
+-        }
+         entries.push_back(makeEntry(
+             section, "general", tr("settings.schema.shared.reserve-space.label"),
+             tr("settings.schema.bar.reserve-space.description"), monitorPath("reserve_space"),
+diff --git a/src/shell/settings/widget_settings_registry.cpp b/src/shell/settings/widget_settings_registry.cpp
+index 488281b..97b8f46 100644
+--- a/src/shell/settings/widget_settings_registry.cpp
++++ b/src/shell/settings/widget_settings_registry.cpp
+@@ -259,7 +259,7 @@ namespace settings {
+         {.type = "volume", .labelKey = "settings.widgets.types.volume", .glyph = "volume-high"},
+         {.type = "wallpaper", .labelKey = "settings.widgets.types.wallpaper", .glyph = "wallpaper-selector"},
+         {.type = "weather", .labelKey = "settings.widgets.types.weather", .glyph = "weather-cloud"},
+-        {.type = "workspaces", .labelKey = "settings.widgets.types.workspaces", .glyph = "layout-grid"},
++        {.type = "workspaces", .labelKey = "settings.widgets.types.workspaces", .glyph = "layout-grid", .visibleInPicker = false},
+     };
+ 
+     const WidgetTypeSpec* findWidgetTypeSpec(std::string_view type) {
+@@ -570,6 +570,10 @@ namespace settings {
+     }
+ 
+     for (const auto& [name, widget] : cfg.widgets) {
++      // RICY-001: a named alias must not reintroduce the disabled workspace picker.
++      if (widget.type == "workspaces") {
++        continue;
++      }
+       if (isBuiltInWidgetType(name)) {
+         continue;
+       }
+@@ -990,12 +994,13 @@ namespace settings {
+ 
+   bool widgetSettingIsVisible(
+       const Config& config, std::string_view widgetName, const WidgetSettingSpec& spec,
+-      const std::vector<WidgetSettingSpec>& allSpecs, const WidgetSettingCapabilities& capabilities
++      const std::vector<WidgetSettingSpec>& allSpecs, const WidgetSettingCapabilities& /*capabilities*/
+   ) {
+     const auto capabilityAvailable = [&](WidgetSettingCapability capability) {
+       switch (capability) {
+       case WidgetSettingCapability::TaskbarWorkspaceGrouping:
+-        return capabilities.taskbarWorkspaceGrouping;
++        // RICY-001: keep compatibility fields out of settings, including search.
++        return false;
+       }
+       return false;
+     };
+@@ -1071,6 +1076,10 @@ namespace settings {
+   std::vector<WidgetSettingSpec> widgetSettingSpecs(
+       std::string_view type, const WidgetConfig* config, std::string_view shellFontFamily, bool populateFontCatalogs
+   ) {
++    // Keep validation compatibility without presenting legacy workspace controls.
++    if (type == "workspaces") {
++      return {};
++    }
+     if (auto pw = resolvePluginWidget(type)) {
+       scripting::PluginTranslationCatalog translations;
+       translations.load(pw->pluginDir);
+diff --git a/src/shell/switcher/window_switcher.cpp b/src/shell/switcher/window_switcher.cpp
+index 5ff6e51..7d614b6 100644
+--- a/src/shell/switcher/window_switcher.cpp
++++ b/src/shell/switcher/window_switcher.cpp
+@@ -820,7 +820,8 @@ void WindowSwitcher::refreshWindows() {
+ 
+   const int iconSize = static_cast<int>(std::round((Style::controlHeightLg + Style::spaceLg) * shellUiScale(m_config)));
+   const bool allOutputs = m_config == nullptr || m_config->config().shell.windowSwitcher.showAllOutputs;
+-  const bool currentWorkspaceOnly = m_config != nullptr && m_config->config().shell.windowSwitcher.currentWorkspaceOnly;
++  // RICY-001: desktop membership is internal, never a user-selectable navigation mode.
++  const bool currentWorkspaceOnly = true;
+   buildWindowEntries(
+       *m_platform, *m_wayland, m_iconResolver, iconSize, allOutputs ? nullptr : m_output, m_windows,
+       currentFocusedWindowKey(*m_platform), mruEnabled() ? &m_mruKeys : nullptr, currentWorkspaceOnly
 diff --git a/src/shell/tray/tray_menu.cpp b/src/shell/tray/tray_menu.cpp
 index 2c704f0..a925c59 100644
 --- a/src/shell/tray/tray_menu.cpp

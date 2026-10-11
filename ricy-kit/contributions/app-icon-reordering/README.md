@@ -1,5 +1,33 @@
 # Reorganize application icons
 
+## Current single-space policy
+
+RICY-001 supersedes the workspace-group descriptions preserved below. The current
+cumulative patch disables the workspace widget (including named aliases), desktop
+grouping/badges/navigation, workspace IPC/gesture commands and related settings.
+Taskbar and window-switcher membership stays limited to visible desktops as an
+internal window-management detail. Legacy configuration keys remain parseable but
+cannot enable these interfaces. Plasma/KWin desktop support and recovery are
+unchanged. See [the pre-change inventory](../../../docs/WORKSPACE-AUDIT.md).
+
+Use a clean isolated source for this updated patch; the existing cache may contain
+the earlier cumulative diff and the build deliberately rejects it. Set
+`RICY_NOCTALIA_SOURCE=/absolute/path/to/isolated/source` for `build.sh` and
+`scripts/verify`. Keep the old cache/binary and activation backups. Build and
+offline verification are separate from activation; this audit does not activate
+or restart the shell. Existing restore paths remain available.
+
+For a later, separately planned activation of an isolated build, the existing
+activator requires `--bin "$RICY_NOCTALIA_SOURCE/build-ricy/noctalia"`; its default
+still points to the preserved original cache. Do not activate that earlier binary
+as evidence of the current policy. The activator creates a private rollback
+backup and restarts shell/adapter; read its recovery instructions first.
+
+`validate-native-drag.py` now also checks legacy grouping preferences, named
+workspace aliases, widget picker/settings visibility, CLI command discovery and
+workspace scroll defaults using the compiled Noctalia objects in a temporary
+profile without a compositor connection.
+
 The user confirmed “Passed” in the real session. Left-click, drag to the desired position and drop. The icon accompanies the cursor; a space indicates the destination and the neighbors change position. The gesture starts when overtaking the native drag threshold; one stopped click continues to restore/minimize. The consumed drag does not trigger opening, focus or minimization when dropping. Right button and middle-click keep the previous actions.
 
 The upstream mechanism was limited to the fixed list. It now works across the entire flat range of applications, including unfixed open and launchers. Search is another widget and saves its position. Tray, controls and workspace grouping stay out of this reordering. Horizontal/vertical tracks use the corresponding axis, bounded to existing slots. Width of titles, scale and spacing enter the actual pitch of the tiles.

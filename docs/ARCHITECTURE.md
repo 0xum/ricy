@@ -68,7 +68,7 @@ These are the kit's baseline, not claims about the latest upstream versions.
 ## Recorded discrepancies — unresolved at this stage
 | ID | Current evidence | Consequence/treatment |
 |---|---|---|
-| C-001 | Taskbar config contains `only_active_workspace=true`; patches retain upstream groups/badges; identity mentions workspaces | RICY-001 is normative. UNKNOWN: effective exposure in all menus, shortcuts, and gestures. Audit and remove exposure in a separate task; KWin's `workspace` identifier does not itself imply multiple desktops. |
+| C-001 | [Workspace audit](WORKSPACE-AUDIT.md) identifies Ricy Noctalia UI/commands and shared Plasma surfaces | Current cumulative patch disables Ricy groups/badges, workspace widget, navigation/alert commands and settings. Visible-window membership remains internal. Changes are not activated by the audit. Shared KWin/Plasma shortcuts, menus and gestures remain preserved; full live compliance is UNKNOWN. |
 | C-002 | `integration.py` uses plasmashell/wallpaper and restores through Ricy scripts | Separate, independent recovery is PLANNED. Do not claim isolation has already been achieved. |
 | C-003 | Launcher and FileManager1 integration use customized Dolphin | Preserve until Ricy Files is validated; do not change MIME/defaults at this stage. |
 | C-004 | Tokens exist, but configs/QSS/scripts also contain values | Reference existing tokens; automatic centralized consumption is PLANNED. |

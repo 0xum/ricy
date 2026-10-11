@@ -36,7 +36,8 @@ python3 scripts/test-foundation.py
   foundation Markdown links, and syntax of the new scripts.
 - `shell`: Bash/Python/JSON/TOML syntax in active-kit sources (excluding work,
   outputs, backups, and upstream assets); offline Noctalia action tests when
-  a local source matches the expected commit/patch and PyQt6 is available.
+  a local source matches the expected commit/patch and PyQt6 is available;
+  single-space policy and native drag regressions when that source has a build.
 - `recovery`: existing in-memory panel capture/merge test; QJSEngine window-effect
   tests when PyQt6 is available. Does not switch shell/compositor.
 - `all`: combines the above; does not certify the desktop.
@@ -52,6 +53,12 @@ Exit codes: verify 0 = executed checks passed without dependency skips;
 invalid usage also returns 2. Live trials always remain `NOT RUN`, outside
 automatic scope. Doctor: 0 = queries completed; 2 = some information is UNKNOWN;
 this never means the desktop is healthy. No command uses sudo.
+
+Set `RICY_NOCTALIA_SOURCE` to an isolated checkout to validate or build the current
+cumulative patch without replacing the private active source cache. Both
+`verify shell` and `app-icon-reordering/build.sh` accept it and still check the
+pinned commit and exact diff. Build commands do not activate the shell. See
+[WORKSPACE-AUDIT](WORKSPACE-AUDIT.md) for the scope and preserved recovery surfaces.
 
 Link checking covers foundation files, the root README, and local AGENTS,
 without traversing the entire history, external links, or title anchors.
