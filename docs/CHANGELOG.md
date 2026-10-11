@@ -3,6 +3,25 @@
 Record significant changes in short entries. Minimum fields:
 Model/Agent, Date, Purpose, Validation performed. Do not sign source files.
 
+## 2026-10-11 — Refresh menu launcher after file rename
+
+- **Model/Agent:** Codex (GPT-6), agent for this task.
+- **Date:** 2026-10-11 (America/Sao_Paulo).
+- **Purpose:** repair menu activation after the English file rename.
+- **Evidence:** the installed desktop entry already referenced `open-menu.sh`,
+  but KWin's embedded KGlobalAccel retained the previous service object and
+  attempted the removed filename. Application database rebuilding and action-only
+  re-registration were insufficient.
+- **Changes:** recreated only the menu launcher component, restoring its active
+  and default shortcuts from a private snapshot; documented the required refresh
+  in [FILE-RENAMES](FILE-RENAMES.md). No compositor, shell, or session restart.
+- **Validation performed:** PASS desktop-entry validation, executable target,
+  active/default shortcut comparison, registered `_launch` invocation, and
+  Noctalia's live `activePanelId=launcher` response. No new missing-program error
+  appeared in the journal after the successful invocation. PASS architecture
+  verification and `git diff --check`.
+- **Limits:** NOT RUN full login/crash recovery; live validation covers menu activation.
+
 ## 2026-10-11 — English file names
 
 - **Model/Agent:** Codex (GPT-6), agent for this task.

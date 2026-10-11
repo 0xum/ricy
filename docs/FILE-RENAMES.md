@@ -22,6 +22,30 @@ provenance. They describe the original snapshot, not the renamed/translated
 working tree; use this map to locate current names. Operational correction
 manifests use current paths and replacement digests.
 
+## Refreshing already registered launchers
+
+Updating a `.desktop` file and rebuilding the application database with
+`kbuildsycoca6 --noincremental` does not refresh a launcher already retained by
+KWin's embedded KGlobalAccel. The menu shortcut continued to execute the old
+`open-menu.sh` predecessor even though the installed desktop entry was correct.
+KGlobalAccel's [service-action component](https://github.com/KDE/kglobalacceld/blob/master/src/kserviceactioncomponent.cpp)
+retains the service object used for launching.
+
+For this installation, the menu component was recreated through its D-Bus
+`cleanUp` method, followed by `doRegister`. Before cleanup, its active shortcuts
+and defaults were captured in a private backup under
+`$HOME/.local/state/ricy-launcher-refresh-backups/`. Both were restored and
+compared with the snapshot: Super and Super+Space remained active, with
+Super+Space as the default. Unregistering only the action did not refresh the
+retained service object and was insufficient.
+
+The registered `_launch` action was then invoked through D-Bus. Noctalia
+reported `activePanelId=launcher`; no new missing-program error appeared in
+the journal. KWin, Noctalia, and the session were not restarted. For another
+installation, capture and preserve its own shortcut assignments rather than
+applying this installation's values. This verifies menu activation, not full
+login or crash recovery.
+
 ## Name mapping
 
 The mapping applies wherever the original basename occurred in either kit.
