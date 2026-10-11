@@ -238,11 +238,11 @@ def shell():
         return
     qt_test('Noctalia actions in isolated QJSEngine', test, ['--fonte', str(source)])
     native_test = ROOT / 'ricy-kit/contributions/app-icon-reordering/validate-native-drag.py'
-    if (source / 'build-ricy/noctalia').is_file() and shutil.which('c++'):
-        run('Noctalia single-space policy and drag (offline)',
+    if (source / 'build-ricy/noctalia').is_file() and shutil.which('c++') and shutil.which('dbus-run-session'):
+        run('Noctalia single-space, drag and KDE window identity (offline)',
             [sys.executable, '-B', str(native_test), '--fonte', str(source)])
     else:
-        not_run('Noctalia single-space/native drag: matching build or C++ compiler unavailable')
+        not_run('Noctalia single-space/native drag/KDE identity: matching build, C++ compiler or dbus-run-session unavailable')
 
 
 def qt_test(label, path, args=()):

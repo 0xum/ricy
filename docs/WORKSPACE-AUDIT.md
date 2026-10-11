@@ -72,6 +72,11 @@ the running binary and private source cache are not replaced by this task.
 Live visual, gesture and recovery trials require a prepared session and remain
 NOT RUN in this offline audit.
 
+Subsequent task: the window-identity correction activated the maintained
+cumulative RICY-001/UUID build on 2026-10-11, with the previous binary/cache
+preserved. See [CHANGELOG](CHANGELOG.md). This does not retroactively change the
+offline audit's validation scope or prove live gestures/Recovery.
+
 PASS: isolated release build, complete harness with the selected source, native
 legacy-profile/widget/alias/picker/settings/CLI regressions, public template
 validation, clean cumulative patch replay and original-cache preservation. The

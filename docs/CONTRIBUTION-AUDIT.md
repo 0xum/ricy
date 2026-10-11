@@ -21,6 +21,19 @@ Subsequent M-02 migration: three autostart source templates now reside in
 runtime scripts and transport snapshots retain their original paths.
 Original observations below retain their original scope/date.
 
+Subsequent window-identity correction (2026-10-11): the maintained
+[reordering source](../ricy-kit/contributions/app-icon-reordering/README.md)
+now marks KWin UUIDs as exact identities. The current cumulative RICY-001/UUID
+revision was built in an isolated checkout and activated with the existing
+application-preserving activator. The running executable matches that build;
+its KWin tracking adapter and status IPC are available. This supersedes only
+G-02's earlier-binary observation and the reordering source's pending-activation
+classification: the corrected source/build is ACTIVE. The original cache and
+previous binary backup remain rollback/provenance material. Other runtime
+observations below are unchanged. The user reported successful real-session
+icon focus after activation; agent-operated clicks/captures and live Recovery
+remain NOT RUN. See [CHANGELOG](CHANGELOG.md) for validation and limits.
+
 Subsequent token task (2026-10-11): [ADR-0005](adr/0005-consumable-visual-tokens.md)
 promotes the existing identity to a consumable source in
 [themes/tokens](../themes/tokens/README.md) and migrates the offline identity

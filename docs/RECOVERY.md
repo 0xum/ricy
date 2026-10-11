@@ -25,8 +25,10 @@ ADRs0007/0008/0009 and the own prototype are historical, not current contracts.
 
 The [contribution grounding](CONTRIBUTION-AUDIT.md) identifies RECOVERY consumers
 and part-level exceptions. On the audited installation, native blur is loaded,
-the ricyblur selector is enabled but failed, and the current single-space source
-patch is not the deployed Noctalia binary. These observations do not prove
+the ricyblur selector is enabled but failed. Its original earlier-binary
+observation was superseded by the isolated cumulative RICY-001/UUID activation
+recorded in [CHANGELOG](CHANGELOG.md); the previous source/cache/binary backup
+remains available. These observations do not prove
 failure recovery or authorize resetting services/effects. Historical root and
 transport return recipes can restore old full layouts; normal return remains
 the panel-only switching contribution. Do not substitute one for the other.

@@ -3,6 +3,54 @@
 Record significant changes in short entries. Minimum fields:
 Model/Agent, Date, Purpose, Validation performed. Do not sign source files.
 
+## 2026-10-11 — Taskbar actions preserve the clicked KWin window
+
+- **Model/Agent:** Codex (GPT-6).
+- **Date:** 2026-10-11 (America/Sao_Paulo).
+- **Purpose:** fix separate Brave/Dolphin icons activating another window of
+  the same application, particularly across two monitor bars.
+- **Changes:** the cumulative Noctalia 5.2.1 patch (pinned commit
+  `6ef43e2bf2f3d5b4205ec72a72e34a2ab76ce3b4`) marks nonempty KWin UUIDs as exact
+  identities. This uses the existing authoritative task identity for
+  focus/minimize/close, preventing monitor/placement reconciliation from
+  substituting a same-app window. No runtime dependency, ownership boundary,
+  design value, window effect or session architecture changed. The native
+  validator now covers the compiled KDE adapter/model/action path on a private
+  D-Bus KWin fixture; `dbus-run-session` is an offline-test dependency only.
+- **Validation performed:** PASS isolated release build, clean patch replay
+  (26 source files), `verify architecture`, `verify shell` with the matching
+  isolated source, `verify recovery` offline, 39 foundation regressions,
+  32 compiled KDE identity/action scenarios, 17 JS action scenarios,
+  22 ordering scenarios, 20 icon-motion scenarios, 15 indicator/historical
+  effect scenarios, native single-space/drag regressions, active service
+  configuration validation and diff whitespace. The new regression failed
+  against the preserved earlier build with a substituted window UUID and
+  passed against the corrected build. GCC emitted an unrelated warning in
+  unchanged upstream `theme/fixed_palette.cpp`; compilation completed.
+  PASS user-reported real-session icon focus after activation ("Passed");
+  the exact application/monitor/title combinations were not independently recorded.
+- **Activation:** the existing notification-continuity activator backed up the
+  previous binary/drop-in and restarted the shell with its temporary
+  application-preserving KillMode. This also deploys the previously accepted
+  cumulative RICY-001 source revision. PASS running-executable/build byte
+  equality, previous-binary backup equality, original cache/diff/binary
+  preservation, active shell/search/Plasmashell units, new-shell ownership of
+  the KWin tracking adapter, and valid live status IPC. Thirty-eight captured
+  child PIDs remained alive; one transient PID ended between snapshots, so
+  the initial blanket child-PID assertion was too broad. No real window was
+  closed/minimized for validation.
+- **NOT RUN:** agent-operated physical clicks/visual captures, all
+  scales/orientations, persistent shell failure, login and a live
+  Plasma/Dolphin Recovery round trip. Process/IPC readiness does not certify
+  those interactions or independent Recovery.
+- **NOT APPLICABLE:** KWin/effect installation, session migration, token
+  changes and transport-tree synchronization.
+- **Recovery:** restore using `notification-continuity/enable.py --restaurar`
+  with the private backup printed by the activator. The original cache,
+  upstream `/usr/bin/noctalia`, private settings, Plasma/Dolphin tools and
+  existing return paths are preserved. Historical transport/manifests remain
+  unchanged. Private profiles, binaries and backups are excluded from this commit.
+
 ## 2026-10-11 — Dolphin selected; own Ricy Files retired
 
 - **Model/Agent:** Codex (GPT-6).

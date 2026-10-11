@@ -36,8 +36,9 @@ they are not executable desktop configuration. The existing identity SVG is the
 only migrated consumer, generated offline with byte-for-byte equality. No live
 shell, Dolphin or global-theme consumer was migrated.
 Workspace badge/group references are legacy records. The current cumulative
-Ricy source patch disables these surfaces; it is not yet the deployed binary,
-as established by [contribution grounding G-02](CONTRIBUTION-AUDIT.md).
+Ricy source patch disables these surfaces. The cumulative RICY-001/UUID build
+was activated on 2026-10-11, superseding the earlier-binary observation in
+[contribution grounding G-02](CONTRIBUTION-AUDIT.md); visual values are unchanged.
 See [the inventory](WORKSPACE-AUDIT.md).
 They do not authorize workspace interfaces. Later guide updates may supersede
 older visual details; record discrepancies.

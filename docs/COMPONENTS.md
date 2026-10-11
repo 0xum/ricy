@@ -20,9 +20,11 @@ The root `ricy-kit/` owns the active installation; this does not make every file
 in it ACTIVE. `docs/ricy-kit/` preserves HISTORICAL transport variants. Read
 [kit rules](../ricy-kit/AGENTS.md) before editing; replicas are not interchangeable.
 The current source reference is app-icon-reordering, with window-fade-expand for
-windows. The deployed Noctalia binary still matches the earlier reordering diff
-preserved in the transport copy, not the RICY-001 source revision. Native blur
-is loaded; the ricyblur selector is failed. See audit G-02/G-03 for the limits.
+windows. The current cumulative RICY-001/UUID correction was activated from an
+isolated build on 2026-10-11; the earlier deployed binary/source cache remains
+rollback material. See the [activation record](CHANGELOG.md). Native blur
+is loaded; the ricyblur selector is failed. Audit G-02 describes the earlier
+binary; G-03's blur observation is unchanged by this shell fix.
 
 | Current component/location | Responsibility | Future destination | Dependencies | Class / ownership | Impact on recovery |
 |---|---|---|---|---|---|
@@ -36,7 +38,7 @@ is loaded; the ricyblur selector is failed. See audit G-02/G-03 for the limits.
 |  [taskbar-app-actions](../ricy-kit/contributions/taskbar-app-actions/README.md)  | Focus/minimization/closing by UUID; historical |  `shell/noctalia/ + integrations/kde/`  | KWin and Noctalia API | HISTORICAL / PATCHES | Tests should not close user work |
 |  [app-indicator-animations](../ricy-kit/contributions/app-indicator-animations/README.md)  | Indicators and previous window animation |  `shell/noctalia/ + compositor/kwin/`  | Noctalia and KWin | HISTORICAL / PATCHES + KDE derivative | Previous variant; do not apply on the current |
 |  [app-icon-states](../ricy-kit/contributions/app-icon-states/README.md)  | Icon movement by action; history |  `shell/noctalia/`  | Noctalia, KDE effects | HISTORICAL / PATCHES | Do not replace current cumulative variant by accident |
-|  [app-icon-reordering](../ricy-kit/contributions/app-icon-reordering/README.md)  | Cumulative reference variant: ordering/icons/actions |  `shell/noctalia/`  | Pinned Noctalia 5.2.1, Meson/Ninja/C++, KWin | ACTIVE deployed variant; MIGRATE source revision / PATCHES | Rebuild and separate activation; preserve rollback |
+|  [app-icon-reordering](../ricy-kit/contributions/app-icon-reordering/README.md)  | Cumulative reference variant: ordering/icons/actions |  `shell/noctalia/`  | Pinned Noctalia 5.2.1, Meson/Ninja/C++, KWin | ACTIVE current cumulative source/build / PATCHES | Rebuild in isolated source; preserve earlier cache and activation rollback |
 |  [window-fade-expand](../ricy-kit/contributions/window-fade-expand/README.md)  | Current animation ricywindowactions and Scale |  `compositor/kwin/`  | KWin script API, PyQt6 for testing | ACTIVE / RICY-OWNED derivative KDE | Change shared effects with Plasma |
 |  [blur-continuity](../ricy-kit/contributions/blur-continuity/README.md)  | ricyblur derived from upstream blur |  `compositor/kwin/`  | KWin 6.7.5/headers, Qt/KF6, C++ | UNKNOWN / PATCHES | Registered unit failed; native blur loaded; preserve ABI/fallback |
 |  [dolphin-noctalia-identity](../ricy-kit/contributions/dolphin-noctalia-identity/README.md)  | Theme/QSS and Launcher Dolphin, FileManager1 |  `integrations/kde/ + themes/`  | Dolphin, Kvantum, helper Qt | ACTIVE / RICY-OWNED + derived themes | High: access to files in recovery |

@@ -1,12 +1,48 @@
 # Reorganize application icons
 
-> **Grounding status:** the deployed earlier cumulative binary is ACTIVE; this
-> folder's current RICY-001 patch/build is MIGRATE pending activation. The bundled
+> **Current status (2026-10-11):** the cumulative RICY-001/UUID correction is ACTIVE
+> after isolated build and activation; the earlier cache/binary is retained for rollback. The bundled
 > `apply-animations.py` and window assets are HISTORICAL; use
 > [window-fade-expand](../window-fade-expand/README.md) for the selected effect.
 > Keep historical restoration interfaces and consult
 > [CONTRIBUTION-AUDIT](../../../docs/CONTRIBUTION-AUDIT.md) before interpreting
 > the earlier commands or session results below.
+
+## Exact window activation
+
+The KDE inventory now marks each nonempty KWin UUID as an exact window identity.
+KNOWN: previously `windowsForApp()` supplied a UUID without `exactIdentity`, so
+taskbar monitor/placement reconciliation could replace that UUID with another
+window of the same application when the original window was absent from the
+monitor's assignment list. The icon kept its original title and ordering key
+while its action targeted another window. This was reproduced against the
+preserved deployed build in the compiled regression fixture.
+
+The fix uses the existing `TaskModel.exactWindowId` path for activation,
+minimization and single-window close. App grouping, pinned-app cycling, icon
+geometry, design values and window effects retain their existing behavior.
+Ownership remains the cumulative Noctalia patch under the existing shell/KDE
+integration boundary; no new dependency or architecture is introduced at runtime.
+
+`validate-native-drag.py` also compiles `validate-window-identity.cpp`, which
+feeds synthetic KDE inventory through the actual adapter and taskbar model, then
+captures focus/toggle/close scripts on a private D-Bus KWin fixture. It covers
+Brave/Dolphin identities, equal/different titles, both monitor bars, reversed
+discovery, title/minimization changes and monitor moves. `dbus-run-session` is
+required only for this offline test; no active compositor/window is contacted.
+For comparison against the preserved earlier build, use `--identity-only`.
+
+Build this revision in an isolated checkout with `RICY_NOCTALIA_SOURCE`; retain
+the original cache and binary backup. Activation uses the existing
+`notification-continuity/enable.py --bin <isolated-source>/build-ricy/noctalia`
+application-preserving path. Restoration uses that activator's emitted backup,
+without changing KWin, Plasma/Dolphin defaults or private settings. Build/offline
+results and activation are recorded in [CHANGELOG](../../../docs/CHANGELOG.md).
+PASS: 32 compiled model/action scenarios; the running executable matches the
+isolated build and the KWin tracking adapter is owned by the new shell process.
+PASS: the user reported successful icon focus in the real session after activation.
+The exact application/monitor/title combinations were not independently recorded.
+NOT RUN: agent-operated physical clicks/visual captures and a live Recovery round trip.
 
 ## Current single-space policy
 
@@ -22,10 +58,11 @@ Use a clean isolated source for this updated patch; the existing cache may conta
 the earlier cumulative diff and the build deliberately rejects it. Set
 `RICY_NOCTALIA_SOURCE=/absolute/path/to/isolated/source` for `build.sh` and
 `scripts/verify`. Keep the old cache/binary and activation backups. Build and
-offline verification are separate from activation; this audit does not activate
-or restart the shell. Existing restore paths remain available.
+offline verification are separate from activation. The earlier single-space
+audit did not activate the shell; the subsequent window-identity fix activated
+the maintained cumulative revision. Existing restore paths remain available.
 
-For a later, separately planned activation of an isolated build, the existing
+For activation of an isolated build, the existing
 activator requires `--bin "$RICY_NOCTALIA_SOURCE/build-ricy/noctalia"`; its default
 still points to the preserved original cache. Do not activate that earlier binary
 as evidence of the current policy. The activator creates a private rollback

@@ -172,7 +172,7 @@ index a333500..df19e23 100644
    void closeToplevelInfo(const ToplevelInfo& window);
    void focusCompositorWindow(const std::string& windowId, bool warpPointer = false) const;
 diff --git a/src/compositors/kde/kwin_active_window.cpp b/src/compositors/kde/kwin_active_window.cpp
-index c641e40..f2f82fa 100644
+index c641e40..c7b808d 100644
 --- a/src/compositors/kde/kwin_active_window.cpp
 +++ b/src/compositors/kde/kwin_active_window.cpp
 @@ -47,7 +47,7 @@ function windowUuid(window) {
@@ -212,15 +212,17 @@ index c641e40..f2f82fa 100644
    if (typeof window.outputChanged !== "undefined") {
      window.outputChanged.connect(updateTracked);
    }
-@@ -376,6 +390,7 @@ namespace compositors::kde {
+@@ -376,6 +390,9 @@ namespace compositors::kde {
                .order = order++,
                .handle = nullptr,
                .extHandle = nullptr,
++              // KWin UUIDs must never be rebound by title/app/monitor reconciliation.
++              .exactIdentity = !window.uuid.empty(),
 +              .minimized = window.minimized,
            }
        );
      }
-@@ -459,7 +474,7 @@ namespace compositors::kde {
+@@ -459,7 +476,7 @@ namespace compositors::kde {
    }
  
    void KwinActiveWindow::activateWindow(
@@ -229,7 +231,7 @@ index c641e40..f2f82fa 100644
    ) {
      if (!m_scriptInstalled) {
        return;
-@@ -471,6 +486,7 @@ const targetUuid = {};
+@@ -471,6 +488,7 @@ const targetUuid = {};
  const targetClass = {};
  const targetCaption = {};
  const warpPointer = {};
@@ -237,7 +239,7 @@ index c641e40..f2f82fa 100644
  function movePointerToFocus() {{
    callDBus(
        "org.kde.kglobalaccel",
-@@ -485,23 +501,25 @@ for (const window of workspace.windowList()) {{
+@@ -485,23 +503,25 @@ for (const window of workspace.windowList()) {{
      continue;
    }}
    const uuid = window.internalId === undefined ? "" : String(window.internalId);
@@ -275,7 +277,7 @@ index c641e40..f2f82fa 100644
      );
  
      const std::string label = std::format("noctalia-activate-{}", ++m_transientScriptSerial);
-@@ -526,14 +544,12 @@ for (const window of workspace.windowList()) {{
+@@ -526,14 +546,12 @@ for (const window of workspace.windowList()) {{
    }}
    const uuid = window.internalId === undefined ? "" : String(window.internalId);
    const byUuid = targetUuid && uuid === targetUuid;
@@ -291,7 +293,7 @@ index c641e40..f2f82fa 100644
    }}
    break;
  }}
-@@ -738,6 +754,7 @@ for (const window of workspace.windowList()) {{
+@@ -738,6 +756,7 @@ for (const window of workspace.windowList()) {{
            .title = StringUtils::windowTitleSingleLine(fields[2]),
            .outputName = fields.size() >= 5 ? fields[4] : std::string{},
            .desktopIds = {},
@@ -299,7 +301,7 @@ index c641e40..f2f82fa 100644
        };
        if (fields.size() >= 4 && !fields[3].empty() && fields[3] != "*") {
          window.desktopIds = splitString(fields[3], ',');
-@@ -762,7 +779,8 @@ for (const window of workspace.windowList()) {{
+@@ -762,7 +781,8 @@ for (const window of workspace.windowList()) {{
              || lhs.appId != rhs.appId
              || lhs.title != rhs.title
              || lhs.outputName != rhs.outputName
