@@ -1,0 +1,84 @@
+{
+  ".config/kdeglobals": {
+    "General": {
+      "font": "JetBrainsMono Nerd Font,10,-1,5,50,0,0,0,0,0",
+      "fixed": "JetBrainsMono Nerd Font,10,-1,5,50,0,0,0,0,0",
+      "menuFont": "JetBrainsMono Nerd Font,10,-1,5,50,0,0,0,0,0",
+      "smallestReadableFont": "JetBrainsMono Nerd Font,10,-1,5,50,0,0,0,0,0",
+      "toolBarFont": "JetBrainsMono Nerd Font,10,-1,5,50,0,0,0,0,0"
+    },
+    "WM": {
+      "activeFont": "JetBrainsMono Nerd Font,10,-1,5,50,0,0,0,0,0"
+    },
+    "KDE": {
+      "LookAndFeelPackage": "Catppuccin-Mocha-Mauve",
+      "widgetStyle": "kvantum",
+      "contrast": "7",
+      "frameContrast": "0.2"
+    },
+    "Icons": {
+      "Theme": "breeze-dark"
+    }
+  },
+  ".config/kcminputrc": {
+    "Mouse": {
+      "cursorSize": "16",
+      "cursorTheme": "Bibata-Modern-Classic"
+    }
+  },
+  ".config/plasmarc": {
+    "Theme": {
+      "name": "mocha-blur"
+    }
+  },
+  ".config/ksplashrc": {
+    "KSplash": {
+      "Engine": "KSplashQML",
+      "Theme": "Catppuccin-Mocha-Mauve"
+    }
+  },
+  ".config/kwinrc": {
+    "org.kde.kdecoration2": {
+      "BorderSize": "None",
+      "BorderSizeAuto": "false",
+      "NoPlugin": "false",
+      "library": "org.kde.breeze",
+      "theme": "Breeze"
+    },
+    "Effect-blur": {
+      "BlurStrength": "5",
+      "NoiseStrength": "2"
+    },
+    "Plugins": {
+      "blurEnabled": "true"
+    }
+  },
+  ".config/gtk-3.0/settings.ini": {
+    "Settings": {
+      "gtk-application-prefer-dark-theme": "true",
+      "gtk-cursor-theme-name": "Bibata-Modern-Classic",
+      "gtk-cursor-theme-size": "16",
+      "gtk-decoration-layout": "icon:minimize,maximize,close",
+      "gtk-enable-animations": "true",
+      "gtk-font-name": "JetBrainsMono Nerd Font,  10",
+      "gtk-icon-theme-name": "breeze-dark",
+      "gtk-sound-theme-name": "ocean",
+      "gtk-theme-name": "adw-gtk3-dark",
+      "gtk-xft-dpi": "98304"
+    }
+  },
+  ".config/gtk-4.0/settings.ini": {
+    "Settings": {
+      "gtk-application-prefer-dark-theme": "true",
+      "gtk-cursor-theme-name": "Bibata-Modern-Classic",
+      "gtk-cursor-theme-size": "16",
+      "gtk-decoration-layout": "icon:minimize,maximize,close",
+      "gtk-enable-animations": "true",
+      "gtk-font-name": "JetBrainsMono Nerd Font,  10",
+      "gtk-icon-theme-name": "breeze-dark",
+      "gtk-sound-theme-name": "ocean",
+      "gtk-theme-name": "adw-gtk3-dark",
+      "gtk-xft-dpi": "98304"
+    }
+  }
+}

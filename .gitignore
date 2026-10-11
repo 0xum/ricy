@@ -1,0 +1,44 @@
+# Estado privado e checkouts materializados dos kits; nunca remover do disco
+# para preparar Git. Fontes, patches, assets e outputs reproduzíveis permanecem.
+/ricy-kit/work/
+/ricy-kit/contributions/*/work/
+/docs/ricy-kit/work/
+/docs/ricy-kit/contributions/*/work/
+
+# Capturas do destino geradas pelos preparadores e scripts de recuperação.
+**/outputs/noctalia-test/plasma-antes.tar.gz
+**/outputs/noctalia-test/backup-manifest.json
+**/outputs/noctalia-test/clipboard-atalho-original.json
+**/outputs/noctalia-test/super-atalho-original.json
+**/outputs/noctalia-test/restaurar-wallpaper.js
+**/outputs/noctalia-test/teste-ativo
+**/outputs/kde-outlines/kde-antes-contornos.tar.gz
+**/outputs/kde-outlines/estado-antes.json
+**/outputs/kde-outlines/menuFont-antes.txt
+**/outputs/kde-outlines/widgetStyle-antes.txt
+**/outputs/kde-outlines/kvantum-config-antes
+**/outputs/kde-outlines/kvantum-ausente-antes
+
+# Este arquivo histórico contém notification_history.json; preservar localmente.
+# Não ignorar archives/ inteiro nem outros archives/fontes por extensão.
+/archives/ricy.zip
+
+# Bytecode, caches de ferramentas e temporários de editor.
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.*.swp
+.*.swo
+
+# Produtos de makepkg nos únicos diretórios de empacotamento atuais.
+/ricy-kit/contributions/driver-aic8800/src/
+/ricy-kit/contributions/driver-aic8800/pkg/
+/ricy-kit/contributions/driver-aic8800/*.pkg.tar.*
+/ricy-kit/contributions/driver-aic8800/aic8800-*.tar.gz
+/docs/ricy-kit/contributions/driver-aic8800/src/
+/docs/ricy-kit/contributions/driver-aic8800/pkg/
+/docs/ricy-kit/contributions/driver-aic8800/*.pkg.tar.*
+/docs/ricy-kit/contributions/driver-aic8800/aic8800-*.tar.gz

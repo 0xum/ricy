@@ -1,0 +1,12 @@
+{
+  "KPackageStructure": "KWin/Script",
+  "X-Plasma-API": "declarativescript",
+  "X-Plasma-MainScript": "ui/main.qml",
+  "KPlugin": {
+    "Id": "windowsarrows",
+    "Name": "Setas para maximizar e restaurar",
+    "Description": "Setas mantêm a mesma janela como alvo até soltar Super",
+    "Version": "1.1",
+    "License": "MIT"
+  }
+}

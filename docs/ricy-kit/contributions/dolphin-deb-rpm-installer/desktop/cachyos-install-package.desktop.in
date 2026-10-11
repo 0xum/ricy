@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Service
+MimeType=application/vnd.debian.binary-package;application/x-debian-package;application/x-rpm;
+Actions=installPackage;
+X-KDE-Priority=TopLevel
+
+[Desktop Action installPackage]
+Name=Instalar no CachyOS…
+Icon=system-software-install
+Exec=/usr/bin/python @INSTALLER@ %f

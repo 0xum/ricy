@@ -1,0 +1,14 @@
+[Unit]
+Description=Ricy Noctalia integration at KDE login
+Wants=plasma-plasmashell.service
+After=plasma-plasmashell.service
+PartOf=graphical-session.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=@START@
+TimeoutStartSec=90
+
+[Install]
+WantedBy=plasma-workspace.target

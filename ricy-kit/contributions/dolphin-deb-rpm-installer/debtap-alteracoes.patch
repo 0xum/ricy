@@ -1,0 +1,68 @@
+--- debtap-3.6.3-original
++++ app/debtap-portavel
+@@ -151,7 +151,7 @@
+ 	echo -e "${red}Error: You haven't specified a valid deb package${NC}"; exit 1
+ fi
+ 
+-if [[ ! $(ls /var/cache/pkgfile | grep -E '*.files?(.[[:digit:]]{3})' 2> /dev/null) ]] || [[ ! $(ls /var/cache/debtap/*-packages-files 2> /dev/null) ]] || [[ ! -e /var/cache/debtap/extended-base-packages-list ]] || [[ ! -e /var/cache/debtap/aur-packages ]] || [[ ! -e /var/cache/debtap/virtual-packages ]]; then
++if [[ ! $(ls /var/cache/pkgfile | grep -E '\.files(\.[[:digit:]]{3})?$' 2> /dev/null) ]] || [[ ! $(ls /var/cache/debtap/*-packages-files 2> /dev/null) ]] || [[ ! -e /var/cache/debtap/extended-base-packages-list ]] || [[ ! -e /var/cache/debtap/aur-packages ]] || [[ ! -e /var/cache/debtap/virtual-packages ]]; then
+ 	if [[ $pseudo != set ]]; then
+ 		echo -e "${red}Error: You must run at least once \"debtap -u\" with root privileges (preferably recently), before running this script${NC}"; exit 1
+ 	else
+@@ -201,6 +201,9 @@
+     exit 1
+ fi
+ ar p "$package_with_full_path" "$control_tar_check" | $control_extract
++
++# Local fix: normalize CRLF and folded dependency fields.
++/usr/bin/python "$(dirname -- "$(readlink -f -- "${BASH_SOURCE[0]}")")/normalize_control.py" control || exit 1
+ 
+ if [[ $pseudo == set ]] && [[ $(grep ^Architecture: control | grep -q i386; echo $?) != 0 ]]; then
+     echo -e "${red}Error: Invalid package architecture. Removing extracted package data and exiting...${NC}"
+@@ -2659,7 +2662,7 @@
+ 		if [[ ! -e matches ]]; then
+ 			word_count=$(echo "$j" | sed s'/^lib//' | sed s'/[0-9]\|\.\|-/ /g' | wc -w)
+ 			pacman -Ssq $(echo "$j" | sed s'/^lib//' | sed s'/[0-9]\|\.\|-/ /g' | gawk '{print $1}') | sed s'/-svn$\|-git$\|-cvs$\|-bzr$\|-darcs$\|-hg$//' > result3
+-			for s in $(eval echo {$word_count..1}); do
++			for ((s=word_count; s>=1; s--)); do
+ 			grep -q "^$(echo "$j" | sed -e s'/[0-9]\|\.\|-/ /g' -e s'/ \+/ /g' | cut -d ' ' -f1-$s | sed s'/ /-/g')$" result3 /var/cache/debtap/virtual-packages /var/cache/debtap/aur-packages && echo "$j" | sed -e s'/[0-9]\|\.\|-/ /g' -e s'/ \+/ /g' | cut -d ' ' -f1-$s | sed s'/ /-/g' >> matches
+ 			grep -q "^$(echo "$j" | sed s'/^lib//' | sed -e s'/[0-9]\|\.\|-/ /g' -e s'/ \+/ /g' | cut -d ' ' -f1-$s | sed s'/ /-/g')$" result3 /var/cache/debtap/virtual-packages /var/cache/debtap/aur-packages && echo "$j" | sed s'/^lib//' | sed -e s'/[0-9]\|\.\|-/ /g' -e s'/ \+/ /g' | cut -d ' ' -f1-$s | sed s'/ /-/g' >> matches
+ 			done
+@@ -3251,6 +3254,19 @@
+ # Removing metadata of original .deb package
+ rm -rf control preinst postinst prerm postrm conffiles
+ 
++# Exact native ABI providers resolved from Debian dependency alternatives.
++if [[ -f .native-dependencies ]]; then
++    while IFS= read -r native_dependency; do
++        [[ -z "$native_dependency" ]] && continue
++        grep -Fxq "depend = $native_dependency" .PKGINFO || echo "depend = $native_dependency" >> .PKGINFO
++    done < .native-dependencies
++    rm -f .native-dependencies
++fi
++
++# Local fix: Btrfs directory sizes can make the upstream estimate negative.
++payload_size=$(find . -type f ! -name .PKGINFO ! -name .INSTALL -printf "%s\n" | awk '{s+=$1} END {print s+0}')
++sed -i "s/^size =.*/size = $payload_size/" .PKGINFO
++
+ # Generating .MTREE file
+ echo -e "\n${lightgreen}==>${NC} ${bold}Generating .MTREE file...${normal}"
+ 
+@@ -3259,10 +3275,15 @@
+ # Creating final package in a fakeroot environment
+ if [[ $Pkgbuild != set ]]; then
+ echo -e "\n${lightgreen}==>${NC} ${bold}Creating final package...${normal}"
+-fakeroot << EOF
+-tar --force-local -pcf $(grep '^pkgname =' .PKGINFO | gawk '{print $3}')-$(grep '^pkgver =' .PKGINFO | gawk '{print $3}')-$(grep '^arch =' .PKGINFO | gawk '{print $3}').pkg.tar --exclude='pkgbuildinstallations*' * .PKGINFO .INSTALL .MTREE 2> /dev/null
++fakeroot /usr/bin/bash -e << 'EOF'
++optional_install=()
++[[ -f .INSTALL ]] && optional_install=(.INSTALL)
++tar --force-local -pcf $(grep '^pkgname =' .PKGINFO | gawk '{print $3}')-$(grep '^pkgver =' .PKGINFO | gawk '{print $3}')-$(grep '^arch =' .PKGINFO | gawk '{print $3}').pkg.tar --exclude='pkgbuildinstallations*' * .PKGINFO .MTREE ${optional_install[@]}
+ zstd -q -T0 --ultra -15 *.tar
+ EOF
++if [[ $? != 0 ]]; then
++    echo "Error: Failed to create the Arch package archive."; exit 1
++fi
+ if [[ $output == set ]]; then
+ 	mv *.zst "$outputdirectory"
+ 	if [[ $? != 0 ]]; then

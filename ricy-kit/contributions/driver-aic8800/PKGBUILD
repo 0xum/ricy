@@ -1,0 +1,49 @@
+pkgname=aic8800-usb-dkms-ricy
+pkgver=5.0.20260123.9
+pkgrel=3
+pkgdesc='AIC8800 USB Wi-Fi and Bluetooth, Radxa source with maintained kernel patches'
+arch=('any')
+url='https://github.com/radxa-pkg/aic8800'
+license=('GPL-2.0-only')
+depends=('dkms')
+makedepends=('python')
+optdepends=('clang: toolchain for CachyOS kernels' 'bluez: Bluetooth service')
+conflicts=('aic8800-dkms' 'aic8800d80-dkms' 'aic8800-fdrv-dkms' 'aic8800-usb-dkms')
+_commit=d13d07963cd15d731e2895e8288a04cca6152ac9
+source=("aic8800-${_commit}.tar.gz::https://codeload.github.com/radxa-pkg/aic8800/tar.gz/${_commit}"
+        'dkms.conf' '90-aic8800-usb.conf' 'build.sh')
+sha256sums=('8885bda125037cbaefd58828ac907a4036316a012cc72b5b1ae87a48f852113d'
+            'd08b2cc6631cedff267ab58d667b31876c0a4b6433dea74b8f39e6d85aa31ff0'
+            'ee59db1d23227b10f0ab2b4d4aa5a5d930e1f362127b9858d5c35768d545d581'
+            '2eca2cd8d73ec92eea850aebd785ec4527e6b84461b0996f6be3c0330e6f379d')
+
+prepare() {
+    cd "aic8800-${_commit}"
+    python - <<'PY'
+from pathlib import Path
+for p in Path('src').rglob('*'):
+    if p.is_file() and (p.suffix in {'.c', '.h'} or p.name in {'Makefile', 'Kconfig'}):
+        raw = p.read_bytes()
+        if b'\r\n' in raw:
+            p.write_bytes(raw.replace(b'\r\n', b'\n'))
+PY
+    while IFS= read -r patch_name; do
+        [[ -z "$patch_name" || "$patch_name" == \#* ]] && continue
+        sed 's/\r$//' "debian/patches/$patch_name" | patch --batch -p1
+    done < debian/patches/series
+}
+
+package() {
+    local root="${srcdir}/aic8800-${_commit}"
+    local dest="${pkgdir}/usr/src/${pkgname}-${pkgver}"
+    install -dm755 "$dest"
+    cp -a "$root/src/USB/driver_fw/drivers/aic8800" "$dest/"
+    cp -a "$root/src/USB/driver_fw/drivers/aic_btusb" "$dest/"
+    find "$dest" -type f -name '*.orig' -delete
+    install -Dm644 "${srcdir}/dkms.conf" "$dest/dkms.conf"
+    install -Dm755 "${srcdir}/build.sh" "$dest/build.sh"
+    install -dm755 "${pkgdir}/usr/lib/firmware/aic8800_fw/USB"
+    cp -a "$root/src/USB/driver_fw/fw/." "${pkgdir}/usr/lib/firmware/aic8800_fw/USB/"
+    install -Dm644 "${srcdir}/90-aic8800-usb.conf" "${pkgdir}/usr/lib/modprobe.d/90-aic8800-usb.conf"
+    install -Dm644 "$root/LICENSE" "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}

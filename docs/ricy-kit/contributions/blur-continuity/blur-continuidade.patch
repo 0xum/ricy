@@ -1,0 +1,743 @@
+diff --git a/src/plugins/blur/blur.cpp b/src/plugins/blur/blur.cpp
+index 25a143c..964f4ec 100644
+--- a/src/plugins/blur/blur.cpp
++++ b/src/plugins/blur/blur.cpp
+@@ -44,17 +44,23 @@
+ 
+ #include <KDecoration3/Decoration>
+ 
+-Q_LOGGING_CATEGORY(KWIN_BLUR, "kwin_effect_blur", QtWarningMsg)
++Q_LOGGING_CATEGORY(RICY_BLUR, "kwin_effect_blur", QtWarningMsg)
+ 
+ static void ensureResources()
+ {
+     // Must initialize resources manually because the effect is a static lib.
+-    Q_INIT_RESOURCE(blur);
++    Q_INIT_RESOURCE(ricyblur);
+ }
+ 
+ namespace KWin
+ {
+ 
++// Only Noctalia's connected shell surfaces share a background; other apps keep native blur.
++static bool isNoctaliaSurface(const EffectWindow *w)
++{
++    return w->window()->resourceClass() == QLatin1String("noctalia");
++}
++
+ static const QByteArray s_blurAtomName = QByteArrayLiteral("_KDE_NET_WM_BLUR_BEHIND_REGION");
+ 
+ static QMatrix4x4 colorTransformMatrix(qreal saturation, qreal contrast)
+@@ -85,16 +91,16 @@ static QMatrix4x4 colorTransformMatrix(qreal saturation, qreal contrast)
+     return contrastMatrix * saturationMatrix;
+ }
+ 
+-BlurEffect::BlurEffect()
++RicyBlurEffect::RicyBlurEffect()
+ {
+-    BlurConfig::instance(effects->config());
++    RicyBlurConfig::instance(effects->config());
+     ensureResources();
+ 
+     m_onscreenPass.shader = ShaderManager::instance()->generateShaderFromFile(ShaderTrait::MapTexture,
+-                                                                              QStringLiteral(":/effects/blur/shaders/vertex.vert"),
+-                                                                              QStringLiteral(":/effects/blur/shaders/onscreen.frag"));
++                                                                              QStringLiteral(":/effects/ricyblur/shaders/vertex.vert"),
++                                                                              QStringLiteral(":/effects/ricyblur/shaders/onscreen.frag"));
+     if (!m_onscreenPass.shader) {
+-        qCWarning(KWIN_BLUR) << "Failed to load onscreen pass shader";
++        qCWarning(RICY_BLUR) << "Failed to load onscreen pass shader";
+         return;
+     } else {
+         m_onscreenPass.mvpMatrixLocation = m_onscreenPass.shader->uniformLocation("modelViewProjectionMatrix");
+@@ -104,10 +110,10 @@ BlurEffect::BlurEffect()
+     }
+ 
+     m_roundedOnscreenPass.shader = ShaderManager::instance()->generateShaderFromFile(ShaderTrait::MapTexture,
+-                                                                                     QStringLiteral(":/effects/blur/shaders/onscreen_rounded.vert"),
+-                                                                                     QStringLiteral(":/effects/blur/shaders/onscreen_rounded.frag"));
++                                                                                     QStringLiteral(":/effects/ricyblur/shaders/onscreen_rounded.vert"),
++                                                                                     QStringLiteral(":/effects/ricyblur/shaders/onscreen_rounded.frag"));
+     if (!m_roundedOnscreenPass.shader) {
+-        qCWarning(KWIN_BLUR) << "Failed to load onscreen pass shader";
++        qCWarning(RICY_BLUR) << "Failed to load onscreen pass shader";
+         return;
+     } else {
+         m_roundedOnscreenPass.mvpMatrixLocation = m_roundedOnscreenPass.shader->uniformLocation("modelViewProjectionMatrix");
+@@ -120,10 +126,10 @@ BlurEffect::BlurEffect()
+     }
+ 
+     m_downsamplePass.shader = ShaderManager::instance()->generateShaderFromFile(ShaderTrait::MapTexture,
+-                                                                                QStringLiteral(":/effects/blur/shaders/vertex.vert"),
+-                                                                                QStringLiteral(":/effects/blur/shaders/downsample.frag"));
++                                                                                QStringLiteral(":/effects/ricyblur/shaders/vertex.vert"),
++                                                                                QStringLiteral(":/effects/ricyblur/shaders/downsample.frag"));
+     if (!m_downsamplePass.shader) {
+-        qCWarning(KWIN_BLUR) << "Failed to load downsampling pass shader";
++        qCWarning(RICY_BLUR) << "Failed to load downsampling pass shader";
+         return;
+     } else {
+         m_downsamplePass.mvpMatrixLocation = m_downsamplePass.shader->uniformLocation("modelViewProjectionMatrix");
+@@ -132,10 +138,10 @@ BlurEffect::BlurEffect()
+     }
+ 
+     m_upsamplePass.shader = ShaderManager::instance()->generateShaderFromFile(ShaderTrait::MapTexture,
+-                                                                              QStringLiteral(":/effects/blur/shaders/vertex.vert"),
+-                                                                              QStringLiteral(":/effects/blur/shaders/upsample.frag"));
++                                                                              QStringLiteral(":/effects/ricyblur/shaders/vertex.vert"),
++                                                                              QStringLiteral(":/effects/ricyblur/shaders/upsample.frag"));
+     if (!m_upsamplePass.shader) {
+-        qCWarning(KWIN_BLUR) << "Failed to load upsampling pass shader";
++        qCWarning(RICY_BLUR) << "Failed to load upsampling pass shader";
+         return;
+     } else {
+         m_upsamplePass.mvpMatrixLocation = m_upsamplePass.shader->uniformLocation("modelViewProjectionMatrix");
+@@ -144,10 +150,10 @@ BlurEffect::BlurEffect()
+     }
+ 
+     m_noisePass.shader = ShaderManager::instance()->generateShaderFromFile(ShaderTrait::MapTexture,
+-                                                                           QStringLiteral(":/effects/blur/shaders/vertex.vert"),
+-                                                                           QStringLiteral(":/effects/blur/shaders/noise.frag"));
++                                                                           QStringLiteral(":/effects/ricyblur/shaders/vertex.vert"),
++                                                                           QStringLiteral(":/effects/ricyblur/shaders/noise.frag"));
+     if (!m_noisePass.shader) {
+-        qCWarning(KWIN_BLUR) << "Failed to load noise pass shader";
++        qCWarning(RICY_BLUR) << "Failed to load noise pass shader";
+         return;
+     } else {
+         m_noisePass.mvpMatrixLocation = m_noisePass.shader->uniformLocation("modelViewProjectionMatrix");
+@@ -165,11 +171,11 @@ BlurEffect::BlurEffect()
+ 
+     waylandServer()->backgroundEffectManager()->addBlurCapability();
+ 
+-    connect(effects, &EffectsHandler::windowAdded, this, &BlurEffect::slotWindowAdded);
+-    connect(effects, &EffectsHandler::windowDeleted, this, &BlurEffect::slotWindowDeleted);
+-    connect(effects, &EffectsHandler::viewRemoved, this, &BlurEffect::slotViewRemoved);
++    connect(effects, &EffectsHandler::windowAdded, this, &RicyBlurEffect::slotWindowAdded);
++    connect(effects, &EffectsHandler::windowDeleted, this, &RicyBlurEffect::slotWindowDeleted);
++    connect(effects, &EffectsHandler::viewRemoved, this, &RicyBlurEffect::slotViewRemoved);
+ #if KWIN_BUILD_X11
+-    connect(effects, &EffectsHandler::propertyNotify, this, &BlurEffect::slotPropertyNotify);
++    connect(effects, &EffectsHandler::propertyNotify, this, &RicyBlurEffect::slotPropertyNotify);
+     connect(effects, &EffectsHandler::xcbConnectionChanged, this, [this]() {
+         net_wm_blur_region = effects->announceSupportProperty(s_blurAtomName, this);
+     });
+@@ -184,12 +190,12 @@ BlurEffect::BlurEffect()
+     m_valid = true;
+ }
+ 
+-BlurEffect::~BlurEffect()
++RicyBlurEffect::~RicyBlurEffect()
+ {
+     waylandServer()->backgroundEffectManager()->removeBlurCapability();
+ }
+ 
+-void BlurEffect::initBlurStrengthValues()
++void RicyBlurEffect::initBlurStrengthValues()
+ {
+     // This function creates an array of blur strength values that are evenly distributed
+ 
+@@ -247,16 +253,16 @@ void BlurEffect::initBlurStrengthValues()
+     }
+ }
+ 
+-void BlurEffect::reconfigure(ReconfigureFlags flags)
++void RicyBlurEffect::reconfigure(ReconfigureFlags flags)
+ {
+-    BlurConfig::self()->read();
++    RicyBlurConfig::self()->read();
+ 
+-    int blurStrength = BlurConfig::blurStrength() - 1;
++    int blurStrength = RicyBlurConfig::blurStrength() - 1;
+     m_iterationCount = blurStrengthValues[blurStrength].iteration;
+     m_offset = blurStrengthValues[blurStrength].offset;
+     m_expandSize = blurOffsets[m_iterationCount - 1].expandSize;
+-    m_noiseStrength = BlurConfig::noiseStrength();
+-    m_colorMatrix = colorTransformMatrix(BlurConfig::saturation() / 100.0, 1.0);
++    m_noiseStrength = RicyBlurConfig::noiseStrength();
++    m_colorMatrix = colorTransformMatrix(RicyBlurConfig::saturation() / 100.0, 1.0);
+     for (auto &[window, data] : m_windows) {
+         data.blurItem->setPixelsToExpandRepaintsBelowOpaqueRegions(m_expandSize);
+     }
+@@ -265,7 +271,7 @@ void BlurEffect::reconfigure(ReconfigureFlags flags)
+     effects->addRepaintFull();
+ }
+ 
+-void BlurEffect::updateBlurRegion(EffectWindow *w)
++void RicyBlurEffect::updateBlurRegion(EffectWindow *w)
+ {
+     std::optional<RegionF> content;
+     std::optional<RegionF> frame;
+@@ -312,7 +318,7 @@ void BlurEffect::updateBlurRegion(EffectWindow *w)
+     }
+ 
+     if (content.has_value() || frame.has_value()) {
+-        BlurEffectData &data = m_windows[w];
++        RicyBlurEffectData &data = m_windows[w];
+         data.content = content;
+         data.frame = frame;
+         if (!data.blurItem) {
+@@ -328,7 +334,7 @@ void BlurEffect::updateBlurRegion(EffectWindow *w)
+     }
+ }
+ 
+-void BlurEffect::slotWindowAdded(EffectWindow *w)
++void RicyBlurEffect::slotWindowAdded(EffectWindow *w)
+ {
+     SurfaceInterface *surf = w->surface();
+ 
+@@ -352,7 +358,7 @@ void BlurEffect::slotWindowAdded(EffectWindow *w)
+     updateBlurRegion(w);
+ }
+ 
+-void BlurEffect::slotWindowDeleted(EffectWindow *w)
++void RicyBlurEffect::slotWindowDeleted(EffectWindow *w)
+ {
+     if (auto it = m_windows.find(w); it != m_windows.end()) {
+         effects->makeOpenGLContextCurrent();
+@@ -364,8 +370,11 @@ void BlurEffect::slotWindowDeleted(EffectWindow *w)
+     }
+ }
+ 
+-void BlurEffect::slotViewRemoved(KWin::RenderView *view)
++void RicyBlurEffect::slotViewRemoved(KWin::RenderView *view)
+ {
++    effects->makeOpenGLContextCurrent();
++    m_sharedNoctalia.erase(view);
++    m_sharedReady.erase(view);
+     for (auto &[window, data] : m_windows) {
+         if (auto it = data.render.find(view); it != data.render.end()) {
+             effects->makeOpenGLContextCurrent();
+@@ -375,7 +384,7 @@ void BlurEffect::slotViewRemoved(KWin::RenderView *view)
+ }
+ 
+ #if KWIN_BUILD_X11
+-void BlurEffect::slotPropertyNotify(EffectWindow *w, long atom)
++void RicyBlurEffect::slotPropertyNotify(EffectWindow *w, long atom)
+ {
+     if (w && atom == net_wm_blur_region && net_wm_blur_region != XCB_ATOM_NONE) {
+         updateBlurRegion(w);
+@@ -383,7 +392,7 @@ void BlurEffect::slotPropertyNotify(EffectWindow *w, long atom)
+ }
+ #endif
+ 
+-void BlurEffect::setupDecorationConnections(EffectWindow *w)
++void RicyBlurEffect::setupDecorationConnections(EffectWindow *w)
+ {
+     if (!w->decoration()) {
+         return;
+@@ -394,7 +403,7 @@ void BlurEffect::setupDecorationConnections(EffectWindow *w)
+     });
+ }
+ 
+-bool BlurEffect::eventFilter(QObject *watched, QEvent *event)
++bool RicyBlurEffect::eventFilter(QObject *watched, QEvent *event)
+ {
+     auto internal = qobject_cast<QWindow *>(watched);
+     if (internal && event->type() == QEvent::DynamicPropertyChange) {
+@@ -408,7 +417,7 @@ bool BlurEffect::eventFilter(QObject *watched, QEvent *event)
+     return false;
+ }
+ 
+-bool BlurEffect::enabledByDefault()
++bool RicyBlurEffect::enabledByDefault()
+ {
+     const auto context = effects->openglContext();
+     if (!context || context->isSoftwareRenderer()) {
+@@ -429,17 +438,17 @@ bool BlurEffect::enabledByDefault()
+     return true;
+ }
+ 
+-bool BlurEffect::supported()
++bool RicyBlurEffect::supported()
+ {
+     return effects->isOpenGLCompositing();
+ }
+ 
+-bool BlurEffect::decorationSupportsBlurBehind(const EffectWindow *w) const
++bool RicyBlurEffect::decorationSupportsBlurBehind(const EffectWindow *w) const
+ {
+     return w->decoration() && !w->decoration()->blurRegion().isNull();
+ }
+ 
+-RegionF BlurEffect::decorationBlurRegion(const EffectWindow *w) const
++RegionF RicyBlurEffect::decorationBlurRegion(const EffectWindow *w) const
+ {
+     if (!decorationSupportsBlurBehind(w)) {
+         return RegionF();
+@@ -450,7 +459,7 @@ RegionF BlurEffect::decorationBlurRegion(const EffectWindow *w) const
+     return decorationRegion.intersected(RegionF(w->decoration()->blurRegion()));
+ }
+ 
+-RegionF BlurEffect::blurRegion(EffectWindow *w) const
++RegionF RicyBlurEffect::blurRegion(EffectWindow *w) const
+ {
+     RegionF region;
+ 
+@@ -476,14 +485,26 @@ RegionF BlurEffect::blurRegion(EffectWindow *w) const
+     return region;
+ }
+ 
+-void BlurEffect::prePaintScreen(ScreenPrePaintData &data)
++void RicyBlurEffect::prePaintScreen(ScreenPrePaintData &data)
+ {
+     m_currentView = data.view;
++    m_sharedReady.erase(data.view);
++    m_unifyNoctalia = std::any_of(m_windows.begin(), m_windows.end(), [](const auto &entry) {
++        const auto *w = entry.first;
++        return w->isVisible() && isNoctaliaSurface(w)
++            && w->frameGeometry().width() > 64 && w->frameGeometry().height() > 64;
++    });
++    if (m_unifyNoctalia) {
++        // Reconstruct the background before the first shell surface, avoiding feedback
++        // from a retained frame containing a previous translucent bar or popup.
++        data.mask |= PAINT_SCREEN_WITH_TRANSFORMED_WINDOWS;
++        data.paint = Region::infinite();
++    }
+ 
+     effects->prePaintScreen(data);
+ }
+ 
+-bool BlurEffect::shouldBlur(const EffectWindow *w, int mask, const WindowPaintData &data) const
++bool RicyBlurEffect::shouldBlur(const EffectWindow *w, int mask, const WindowPaintData &data) const
+ {
+     if (effects->activeFullScreenEffect() && !w->data(WindowForceBlurRole).toBool()) {
+         return false;
+@@ -503,7 +524,7 @@ bool BlurEffect::shouldBlur(const EffectWindow *w, int mask, const WindowPaintDa
+     return true;
+ }
+ 
+-void BlurEffect::drawWindow(const RenderTarget &renderTarget, const RenderViewport &viewport, EffectWindow *w, int mask, const Region &deviceRegion, WindowPaintData &data)
++void RicyBlurEffect::drawWindow(const RenderTarget &renderTarget, const RenderViewport &viewport, EffectWindow *w, int mask, const Region &deviceRegion, WindowPaintData &data)
+ {
+     blur(renderTarget, viewport, w, mask, deviceRegion, data);
+ 
+@@ -511,7 +532,7 @@ void BlurEffect::drawWindow(const RenderTarget &renderTarget, const RenderViewpo
+     effects->drawWindow(renderTarget, viewport, w, mask, deviceRegion, data);
+ }
+ 
+-GLTexture *BlurEffect::ensureNoiseTexture()
++GLTexture *RicyBlurEffect::ensureNoiseTexture()
+ {
+     if (m_noiseStrength == 0) {
+         return nullptr;
+@@ -547,15 +568,16 @@ GLTexture *BlurEffect::ensureNoiseTexture()
+     return m_noisePass.noiseTexture.get();
+ }
+ 
+-void BlurEffect::blur(const RenderTarget &renderTarget, const RenderViewport &viewport, EffectWindow *w, int mask, const Region &deviceRegion, WindowPaintData &data)
++void RicyBlurEffect::blur(const RenderTarget &renderTarget, const RenderViewport &viewport, EffectWindow *w, int mask, const Region &deviceRegion, WindowPaintData &data)
+ {
+     auto it = m_windows.find(w);
+     if (it == m_windows.end()) {
+         return;
+     }
+ 
+-    BlurEffectData &blurInfo = it->second;
+-    BlurRenderData &renderInfo = blurInfo.render[m_currentView];
++    RicyBlurEffectData &blurInfo = it->second;
++    const bool shared = m_unifyNoctalia && isNoctaliaSurface(w);
++    BlurRenderData &renderInfo = shared ? m_sharedNoctalia[m_currentView] : blurInfo.render[m_currentView];
+     if (!shouldBlur(w, mask, data)) {
+         return;
+     }
+@@ -571,11 +593,11 @@ void BlurEffect::blur(const RenderTarget &renderTarget, const RenderViewport &vi
+ 
+     blurShape.translate(w->pos());
+ 
+-    const Rect backgroundRect = blurShape.boundingRect().rounded();
++    // Identical sampling coordinates and source for the bar, attached panels and toasts.
++    const Rect backgroundRect = shared ? viewport.renderRect().rounded() : blurShape.boundingRect().rounded();
+     const Rect scaledBackgroundRect = backgroundRect.scaled(viewport.scale()).rounded();
+     const Rect deviceBackgroundRect = viewport.mapToDeviceCoordinates(backgroundRect).rounded();
+     const auto opacity = w->opacity() * data.opacity();
+-
+     // Get the effective shape that will be actually blurred. It's possible that all of it will be clipped.
+     QList<RectF> effectiveShape;
+     effectiveShape.reserve(blurShape.rects().size());
+@@ -611,9 +633,9 @@ void BlurEffect::blur(const RenderTarget &renderTarget, const RenderViewport &vi
+ 
+         glClearColor(0, 0, 0, 0);
+         for (size_t i = 0; i <= m_iterationCount; ++i) {
+-            auto texture = GLTexture::allocate(textureFormat, backgroundRect.size() / (1 << i));
++            auto texture = GLTexture::allocate(textureFormat, (backgroundRect.size() / (1 << i)).expandedTo(QSize(1, 1)));
+             if (!texture) {
+-                qCWarning(KWIN_BLUR) << "Failed to allocate an offscreen texture";
++                qCWarning(RICY_BLUR) << "Failed to allocate an offscreen texture";
+                 return;
+             }
+             texture->setFilter(GL_LINEAR);
+@@ -621,7 +643,7 @@ void BlurEffect::blur(const RenderTarget &renderTarget, const RenderViewport &vi
+ 
+             auto framebuffer = std::make_unique<GLFramebuffer>(texture.get());
+             if (!framebuffer->valid()) {
+-                qCWarning(KWIN_BLUR) << "Failed to create an offscreen framebuffer";
++                qCWarning(RICY_BLUR) << "Failed to create an offscreen framebuffer";
+                 return;
+             }
+             EglContext::currentContext()->pushFramebuffer(framebuffer.get());
+@@ -632,10 +654,19 @@ void BlurEffect::blur(const RenderTarget &renderTarget, const RenderViewport &vi
+         }
+     }
+ 
++    // A shell-window scissor must not truncate the common background copy/filter.
++    const bool restoreScissor = shared && glIsEnabled(GL_SCISSOR_TEST);
++    if (restoreScissor) {
++        glDisable(GL_SCISSOR_TEST);
++    }
++
+     // Fetch the pixels behind the shape that is going to be blurred.
+     const Region dirtyRegion = viewport.mapFromDeviceCoordinatesContained(deviceRegion) & backgroundRect;
+-    for (const Rect &dirtyRect : dirtyRegion.rects()) {
+-        renderInfo.framebuffers[0]->blitFromRenderTarget(renderTarget, viewport, dirtyRect, dirtyRect.translated(-backgroundRect.topLeft()));
++    if (!shared || !m_sharedReady.contains(m_currentView)) {
++        const Region source = shared ? Region(backgroundRect) : dirtyRegion;
++        for (const Rect &dirtyRect : source.rects()) {
++            renderInfo.framebuffers[0]->blitFromRenderTarget(renderTarget, viewport, dirtyRect, dirtyRect.translated(-backgroundRect.topLeft()));
++        }
+     }
+ 
+     // Upload the geometry: the first 6 vertices are used when downsampling and upsampling offscreen,
+@@ -736,65 +767,77 @@ void BlurEffect::blur(const RenderTarget &renderTarget, const RenderViewport &vi
+ 
+         vbo->unmap();
+     } else {
+-        qCWarning(KWIN_BLUR) << "Failed to map vertex buffer";
++        qCWarning(RICY_BLUR) << "Failed to map vertex buffer";
+         return;
+     }
+ 
+     vbo->bindArrays();
+ 
+-    // The downsample pass of the dual Kawase algorithm: the background will be scaled down 50% every iteration.
+-    {
+-        ShaderManager::instance()->pushShader(m_downsamplePass.shader.get());
++    if (!shared || !m_sharedReady.contains(m_currentView)) {
++        // The downsample pass of the dual Kawase algorithm: the background will be scaled down 50% every iteration.
++        {
++            ShaderManager::instance()->pushShader(m_downsamplePass.shader.get());
++
++            QMatrix4x4 projectionMatrix;
++            projectionMatrix.ortho(QRectF(0.0, 0.0, backgroundRect.width(), backgroundRect.height()));
+ 
+-        QMatrix4x4 projectionMatrix;
+-        projectionMatrix.ortho(QRectF(0.0, 0.0, backgroundRect.width(), backgroundRect.height()));
++            m_downsamplePass.shader->setUniform(m_downsamplePass.mvpMatrixLocation, projectionMatrix);
++            m_downsamplePass.shader->setUniform(m_downsamplePass.offsetLocation, float(m_offset));
+ 
+-        m_downsamplePass.shader->setUniform(m_downsamplePass.mvpMatrixLocation, projectionMatrix);
+-        m_downsamplePass.shader->setUniform(m_downsamplePass.offsetLocation, float(m_offset));
++            for (size_t i = 1; i < renderInfo.framebuffers.size(); ++i) {
++                const auto &read = renderInfo.framebuffers[i - 1];
++                const auto &draw = renderInfo.framebuffers[i];
+ 
+-        for (size_t i = 1; i < renderInfo.framebuffers.size(); ++i) {
+-            const auto &read = renderInfo.framebuffers[i - 1];
+-            const auto &draw = renderInfo.framebuffers[i];
++                const QVector2D halfpixel(0.5 / read->colorAttachment()->width(),
++                                          0.5 / read->colorAttachment()->height());
++                m_downsamplePass.shader->setUniform(m_downsamplePass.halfpixelLocation, halfpixel);
+ 
+-            const QVector2D halfpixel(0.5 / read->colorAttachment()->width(),
+-                                      0.5 / read->colorAttachment()->height());
+-            m_downsamplePass.shader->setUniform(m_downsamplePass.halfpixelLocation, halfpixel);
++                read->colorAttachment()->bind();
+ 
+-            read->colorAttachment()->bind();
++                GLFramebuffer::pushFramebuffer(draw.get());
++                vbo->draw(GL_TRIANGLES, 0, 6);
++            }
+ 
+-            GLFramebuffer::pushFramebuffer(draw.get());
+-            vbo->draw(GL_TRIANGLES, 0, 6);
++            ShaderManager::instance()->popShader();
+         }
+ 
+-        ShaderManager::instance()->popShader();
+-    }
++        // The upsample pass of the dual Kawase algorithm: the background will be scaled up 200% every iteration.
++        {
++            ShaderManager::instance()->pushShader(m_upsamplePass.shader.get());
+ 
+-    // The upsample pass of the dual Kawase algorithm: the background will be scaled up 200% every iteration.
+-    {
+-        ShaderManager::instance()->pushShader(m_upsamplePass.shader.get());
++            QMatrix4x4 projectionMatrix;
++            projectionMatrix.ortho(QRectF(0.0, 0.0, backgroundRect.width(), backgroundRect.height()));
+ 
+-        QMatrix4x4 projectionMatrix;
+-        projectionMatrix.ortho(QRectF(0.0, 0.0, backgroundRect.width(), backgroundRect.height()));
++            m_upsamplePass.shader->setUniform(m_upsamplePass.mvpMatrixLocation, projectionMatrix);
++            m_upsamplePass.shader->setUniform(m_upsamplePass.offsetLocation, float(m_offset));
+ 
+-        m_upsamplePass.shader->setUniform(m_upsamplePass.mvpMatrixLocation, projectionMatrix);
+-        m_upsamplePass.shader->setUniform(m_upsamplePass.offsetLocation, float(m_offset));
++            for (size_t i = renderInfo.framebuffers.size() - 1; i > 1; --i) {
++                GLFramebuffer::popFramebuffer();
++                const auto &read = renderInfo.framebuffers[i];
+ 
+-        for (size_t i = renderInfo.framebuffers.size() - 1; i > 1; --i) {
+-            GLFramebuffer::popFramebuffer();
+-            const auto &read = renderInfo.framebuffers[i];
++                const QVector2D halfpixel(0.5 / read->colorAttachment()->width(),
++                                          0.5 / read->colorAttachment()->height());
++                m_upsamplePass.shader->setUniform(m_upsamplePass.halfpixelLocation, halfpixel);
+ 
+-            const QVector2D halfpixel(0.5 / read->colorAttachment()->width(),
+-                                      0.5 / read->colorAttachment()->height());
+-            m_upsamplePass.shader->setUniform(m_upsamplePass.halfpixelLocation, halfpixel);
++                read->colorAttachment()->bind();
+ 
+-            read->colorAttachment()->bind();
++                vbo->draw(GL_TRIANGLES, 0, 6);
++            }
+ 
+-            vbo->draw(GL_TRIANGLES, 0, 6);
++            ShaderManager::instance()->popShader();
+         }
+ 
+-        ShaderManager::instance()->popShader();
++        if (shared) {
++            m_sharedReady.insert(m_currentView);
++        }
++    } else {
++        // The onscreen pass pops this target before drawing onto the output.
++        GLFramebuffer::pushFramebuffer(renderInfo.framebuffers[1].get());
+     }
+ 
++    if (restoreScissor) {
++        glEnable(GL_SCISSOR_TEST);
++    }
+     const float modulation = opacity * opacity;
+ 
+     if (const BorderRadius cornerRadius = w->window()->borderRadius(); !cornerRadius.isNull()) {
+@@ -906,12 +949,12 @@ void BlurEffect::blur(const RenderTarget &renderTarget, const RenderViewport &vi
+     vbo->unbindArrays();
+ }
+ 
+-bool BlurEffect::isActive() const
++bool RicyBlurEffect::isActive() const
+ {
+     return m_valid && !effects->isScreenLocked();
+ }
+ 
+-bool BlurEffect::blocksDirectScanout() const
++bool RicyBlurEffect::blocksDirectScanout() const
+ {
+     return false;
+ }
+diff --git a/src/plugins/blur/blur.h b/src/plugins/blur/blur.h
+index 3692a20..58cb81c 100644
+--- a/src/plugins/blur/blur.h
++++ b/src/plugins/blur/blur.h
+@@ -14,6 +14,7 @@
+ #include <QList>
+ 
+ #include <unordered_map>
++#include <unordered_set>
+ 
+ namespace KWin
+ {
+@@ -28,7 +29,7 @@ struct BlurRenderData
+     std::vector<std::unique_ptr<GLFramebuffer>> framebuffers;
+ };
+ 
+-struct BlurEffectData
++struct RicyBlurEffectData
+ {
+     /// The region that should be blurred behind the window
+     std::optional<RegionF> content;
+@@ -45,13 +46,13 @@ struct BlurEffectData
+     std::unique_ptr<BackgroundEffectItem> blurItem;
+ };
+ 
+-class BlurEffect : public KWin::Effect
++class RicyBlurEffect : public KWin::Effect
+ {
+     Q_OBJECT
+ 
+ public:
+-    BlurEffect();
+-    ~BlurEffect() override;
++    RicyBlurEffect();
++    ~RicyBlurEffect() override;
+ 
+     static bool supported();
+     static bool enabledByDefault();
+@@ -145,6 +146,9 @@ private:
+     long net_wm_blur_region = 0;
+ #endif
+     RenderView *m_currentView = nullptr;
++    bool m_unifyNoctalia = false;
++    std::unordered_map<RenderView *, BlurRenderData> m_sharedNoctalia;
++    std::unordered_set<RenderView *> m_sharedReady;
+ 
+     QMatrix4x4 m_colorMatrix;
+     size_t m_iterationCount; // number of times the texture will be downsized to half size
+@@ -170,10 +174,10 @@ private:
+     QList<BlurValuesStruct> blurStrengthValues;
+ 
+     QMap<EffectWindow *, QMetaObject::Connection> windowBlurChangedConnections;
+-    std::unordered_map<EffectWindow *, BlurEffectData> m_windows;
++    std::unordered_map<EffectWindow *, RicyBlurEffectData> m_windows;
+ };
+ 
+-inline bool BlurEffect::provides(Effect::Feature feature)
++inline bool RicyBlurEffect::provides(Effect::Feature feature)
+ {
+     if (feature == Blur) {
+         return true;
+diff --git a/src/plugins/blur/blur.qrc b/src/plugins/blur/blur.qrc
+index 3f74f1d..e7c20ed 100644
+--- a/src/plugins/blur/blur.qrc
++++ b/src/plugins/blur/blur.qrc
+@@ -1,5 +1,5 @@
+ <!DOCTYPE RCC><RCC version="1.0">
+-<qresource prefix="/effects/blur/">
++<qresource prefix="/effects/ricyblur/">
+   <file>shaders/downsample.frag</file>
+   <file>shaders/noise.frag</file>
+   <file>shaders/onscreen.frag</file>
+diff --git a/src/plugins/blur/blurconfig.kcfgc b/src/plugins/blur/blurconfig.kcfgc
+index 4fb3fe5..11114ca 100644
+--- a/src/plugins/blur/blurconfig.kcfgc
++++ b/src/plugins/blur/blurconfig.kcfgc
+@@ -1,5 +1,5 @@
+ File=blur.kcfg
+-ClassName=BlurConfig
++ClassName=RicyBlurConfig
+ NameSpace=KWin
+ Singleton=true
+ Mutators=true
+diff --git a/src/plugins/blur/main.cpp b/src/plugins/blur/main.cpp
+index b537062..4b99a2b 100644
+--- a/src/plugins/blur/main.cpp
++++ b/src/plugins/blur/main.cpp
+@@ -9,11 +9,11 @@
+ namespace KWin
+ {
+ 
+-KWIN_EFFECT_FACTORY_SUPPORTED_ENABLED(BlurEffect,
+-                                      "metadata.json.stripped",
+-                                      return BlurEffect::supported();
++KWIN_EFFECT_FACTORY_SUPPORTED_ENABLED(RicyBlurEffect,
++                                      "metadata.json",
++                                      return RicyBlurEffect::supported();
+                                       ,
+-                                      return BlurEffect::enabledByDefault();)
++                                      return RicyBlurEffect::enabledByDefault();)
+ 
+ } // namespace KWin
+ 
+diff --git a/src/plugins/blur/metadata.json b/src/plugins/blur/metadata.json
+index 739f6c2..16b7141 100644
+--- a/src/plugins/blur/metadata.json
++++ b/src/plugins/blur/metadata.json
+@@ -1,105 +1 @@
+-{
+-    "KPlugin": {
+-        "Category": "Appearance",
+-        "Description": "Blurs the background behind semi-transparent windows",
+-        "Description[ar]": "تغشي الخلفية خلف النوافذ شبه الشفافة",
+-        "Description[az]": "Yarımşəffaf pəncərələrin altındakı fonu yayğınlaşdırmaq",
+-        "Description[be]": "Размыццё фону за паўпразрыстымі вокнамі",
+-        "Description[bg]": "Размива фона зад полупрозрачни прозорци",
+-        "Description[ca@valencia]": "Difumina el fons de darrere de les finestres semitransparents",
+-        "Description[ca]": "Difumina el fons de darrere de les finestres semitransparents",
+-        "Description[cs]": "Rozostří pozadí poloprůhledných oken",
+-        "Description[da]": "Slører baggrunden bag semigennemsigtige vinduer",
+-        "Description[de]": "Verwischt den Hintergrund halbtransparenter Fenster",
+-        "Description[en_GB]": "Blurs the background behind semi-transparent windows",
+-        "Description[eo]": "Malklarigas la fonon malantaŭ duontravideblaj fenestroj",
+-        "Description[es]": "Difumina el fondo detrás de las ventanas semitransparentes",
+-        "Description[et]": "Poolläbipaistvate akende tausta hägustamine",
+-        "Description[eu]": "Leiho erdi-gardenen atzeko planoa lausotzen du",
+-        "Description[fi]": "Sumentaa taustan puoliksi läpikuultavien ikkunoiden takana",
+-        "Description[fr]": "Rend flou l'arrière-plan sous les fenêtres semi-transparentes",
+-        "Description[gl]": "Desenfoca o fondo tras das xanelas semitransparentes.",
+-        "Description[he]": "מטשטש את הרקע מאחורי חלונות שקופים למחצה",
+-        "Description[hu]": "Elmosódottá teszi a félig áttetsző ablakok hátterét",
+-        "Description[ia]": "Obscura le fundo detra fenestras semi-transparente",
+-        "Description[id]": "Memburamkan belakang latar-belakang jendela semi transparan",
+-        "Description[is]": "Setur bakgrunn undir hálfgagnsæjum gluggum í móðu",
+-        "Description[it]": "Sfoca lo sfondo dietro a finestre semitrasparenti",
+-        "Description[ja]": "半透明なウィンドウの背景をぼかします",
+-        "Description[ka]": "ნახევრადგამჭვირვალე ფანჯრებს მიღმა ფონის დაბინდვა",
+-        "Description[ko]": "반투명 창의 뒷배경을 흐리게 합니다",
+-        "Description[lt]": "Sulieja už pusiau permatomų langų esantį foną",
+-        "Description[lv]": "Aizmiglo fonu aiz puscaurspīdīgiem logiem",
+-        "Description[nb]": "Gjør bakgrunnen til halvgjennomsiktige vinduer uklar",
+-        "Description[nl]": "Vervaagt de achtergrond van halftransparante vensters",
+-        "Description[nn]": "Gjer bakgrunnen til halvgjennomsiktige vindauge uklar",
+-        "Description[pl]": "Rozmywa tło za półprzezroczystymi oknami",
+-        "Description[pt]": "Desfoca o fundo atrás de janelas semitransparentes",
+-        "Description[pt_BR]": "Borra o plano de fundo por trás das janelas semitransparentes",
+-        "Description[ro]": "Încețoșează fundalul în spatele ferestrelor semi-transparente",
+-        "Description[ru]": "Размывание фона под полупрозрачными окнами",
+-        "Description[sa]": "अर्धपारदर्शकजालकस्य पृष्ठतः पृष्ठभूमिं धुन्धलं करोति",
+-        "Description[sk]": "Rozmaže pozadie za polopriehľadnými oknami",
+-        "Description[sl]": "Zabriše ozadje za polprosojnimi okni",
+-        "Description[sv]": "Gör bakgrunden bakom halvgenomskinliga fönster suddig",
+-        "Description[ta]": "ஒளிபுகும் சாளரங்களின் பின்புலத்தை மங்கலாக்கும்",
+-        "Description[tr]": "Yarısaydam pencerelerin ardını bulanıklaştırır",
+-        "Description[uk]": "Розмивання тла напівпрозорих вікон",
+-        "Description[vi]": "Làm mờ phần nền phía sau các cửa sổ bán trong suốt",
+-        "Description[zh_CN]": "对半透明窗口的背景进行虚化处理",
+-        "Description[zh_TW]": "模糊半透明視窗的背景",
+-        "EnabledByDefault": true,
+-        "License": "GPL",
+-        "Name": "Blur",
+-        "Name[ar]": "الغشاوة",
+-        "Name[az]": "Bulanıq",
+-        "Name[be]": "Размыццё",
+-        "Name[bg]": "Замъгляване",
+-        "Name[ca@valencia]": "Difuminat",
+-        "Name[ca]": "Difuminat",
+-        "Name[cs]": "Rozostření",
+-        "Name[da]": "Slør",
+-        "Name[de]": "Verwischen",
+-        "Name[en_GB]": "Blur",
+-        "Name[eo]": "Malklarigi",
+-        "Name[es]": "Desenfocar",
+-        "Name[et]": "Hägu",
+-        "Name[eu]": "Lausotu",
+-        "Name[fi]": "Sumennus",
+-        "Name[fr]": "Flou",
+-        "Name[gl]": "Desenfocar",
+-        "Name[he]": "טשטוש",
+-        "Name[hu]": "Elmosás",
+-        "Name[ia]": "Obscura (Blur)",
+-        "Name[id]": "Buram",
+-        "Name[is]": "Móða",
+-        "Name[it]": "Sfocatura",
+-        "Name[ja]": "ぼかし",
+-        "Name[ka]": "ბუნდოვნება",
+-        "Name[ko]": "흐리게",
+-        "Name[lt]": "Suliejimas",
+-        "Name[lv]": "Aizmiglot",
+-        "Name[nb]": "Uklar",
+-        "Name[nl]": "Vervagen",
+-        "Name[nn]": "Uklar",
+-        "Name[pl]": "Rozmycie",
+-        "Name[pt]": "Desfoque",
+-        "Name[pt_BR]": "Borrar",
+-        "Name[ro]": "Încețoșare",
+-        "Name[ru]": "Размытие",
+-        "Name[sa]": "धुन्धला",
+-        "Name[sk]": "Rozmazanie",
+-        "Name[sl]": "Zabriši",
+-        "Name[sv]": "Oskärpa",
+-        "Name[ta]": "மங்கலாக்கு",
+-        "Name[tr]": "Bulanıklaştır",
+-        "Name[uk]": "Розмиття",
+-        "Name[vi]": "Mờ",
+-        "Name[zh_CN]": "窗口背景虚化",
+-        "Name[zh_TW]": "模糊"
+-    },
+-    "X-KDE-ConfigModule": "kwin_blur_config",
+-    "org.kde.kwin.effect": {
+-        "enabledByDefaultMethod": true
+-    }
+-}
++{"KPlugin": {"Name": "Ricy: blur cont\u00ednuo Noctalia", "Description": "Native blur with a shared background for attached Noctalia surfaces", "License": "GPL-2.0-or-later", "EnabledByDefault": false}, "X-KDE-Ordering": 20}
+\ No newline at end of file

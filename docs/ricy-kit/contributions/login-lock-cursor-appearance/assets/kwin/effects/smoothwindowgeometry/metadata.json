@@ -1,0 +1,13 @@
+{
+  "KPackageStructure": "KWin/Effect",
+  "KPlugin": {
+    "Id": "smoothwindowgeometry",
+    "Name": "Transições suaves de janelas",
+    "Description": "Anima encaixes, mudanças de posição e redimensionamentos não interativos",
+    "Version": "1.0",
+    "License": "MIT"
+  },
+  "X-Plasma-API": "javascript",
+  "X-KDE-Ordering": 60,
+  "X-KWin-Exclusive-Category": "maximize"
+}

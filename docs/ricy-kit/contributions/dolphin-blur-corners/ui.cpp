@@ -1,0 +1,434 @@
+// SPDX-License-Identifier: MIT
+#include <QGenericPlugin>
+#include <QApplication>
+#include <QWidget>
+#include <QEvent>
+#include <QTimer>
+#include <QProxyStyle>
+#include <QStyleFactory>
+#include <QStyleOptionViewItem>
+#include <QStyleOptionHeader>
+#include <QFont>
+#include <QPainter>
+#include <QAbstractItemView>
+#include <QAbstractItemDelegate>
+#include <QGraphicsWidget>
+#include <QGraphicsEffect>
+#include <QPointer>
+#include <QTabBar>
+#include <QGraphicsView>
+#include <QGraphicsScene>
+#include <QPainterPath>
+#include <QListView>
+
+namespace {
+struct PlacesPaint { QString text; int iconSize; };
+
+thread_local const QRectF *rowPaint = nullptr;
+thread_local int *rowDepth = nullptr;
+thread_local bool *rowFocus = nullptr;
+thread_local const QRectF *headerPaint = nullptr;
+thread_local int lastHeaderSection = -1;
+bool fileViewport(const QWidget *widget) {
+    for (const QWidget *parent = widget; parent; parent = parent->parentWidget())
+        if (parent->inherits("KItemListContainerViewport")) return true;
+    return false;
+}
+void chip(QPainter *painter, QRectF rect, QColor fill, QColor outline = Qt::transparent) {
+    if (rect.isEmpty()) return;
+    painter->save();
+    painter->setRenderHint(QPainter::Antialiasing);
+    painter->setPen(outline.alpha() ? QPen(outline, 1) : QPen(Qt::NoPen));
+    painter->setBrush(fill);
+    const qreal radius = qMin<qreal>(10, rect.height()/2);
+    painter->drawRoundedRect(rect, radius, radius);
+    painter->restore();
+}
+class ChipStyle : public QProxyStyle {
+public:
+    explicit ChipStyle(QStyle *base) : QProxyStyle(base) {}
+    void drawPrimitive(PrimitiveElement element, const QStyleOption *option,
+                       QPainter *painter, const QWidget *widget = nullptr) const override {
+        const auto *viewOption = qstyleoption_cast<const QStyleOptionViewItem *>(option);
+        const QWidget *candidate = widget ? widget : (viewOption ? viewOption->widget : nullptr);
+        if (!candidate) candidate = dynamic_cast<QWidget *>(painter->device());
+        const QAbstractItemView *placesView = nullptr;
+        for (const QWidget *parent = candidate; parent; parent = parent->parentWidget()) {
+            if (parent->inherits("KFilePlacesView")) {
+                placesView = qobject_cast<const QAbstractItemView *>(parent);
+                break;
+            }
+        }
+        PlacesPaint context;
+        const PlacesPaint *placesPaint = nullptr;
+        if (placesView) {
+            QModelIndex index = viewOption ? viewOption->index : QModelIndex();
+            if (!index.isValid()) index = placesView->indexAt(option->rect.center());
+            if (index.isValid()) {
+                context = {index.data(Qt::DisplayRole).toString(), placesView->iconSize().width()};
+                placesPaint = &context;
+            }
+        }
+        const bool places = placesPaint != nullptr;
+        const bool files = rowPaint || fileViewport(widget);
+        if (element == PE_IndicatorBranch) {
+            if (rowDepth && (option->state & State_Item)) {
+                // Native branch slots advance one row height per nesting level.
+                const int offset = option->direction == Qt::RightToLeft && rowPaint
+                    ? int(rowPaint->width()) - option->rect.right() - 1
+                    : option->rect.left();
+                *rowDepth = qMax(0, qRound(qreal(offset - 20) / qMax(1, option->rect.height())));
+            }
+            // State_Children comes from Dolphin's model: ordinary files get no arrow.
+            if (!(option->state & State_Children)) return;
+            painter->save();
+            painter->setRenderHint(QPainter::Antialiasing);
+            QPen pen(QColor("#a6adc8"), 1.5, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
+            painter->setPen(pen); painter->setBrush(Qt::NoBrush);
+            QPointF center = QRectF(option->rect).center();
+            const int branchOffset = option->direction == Qt::RightToLeft && rowPaint
+                ? int(rowPaint->width()) - option->rect.right() - 1 : option->rect.left();
+            if (branchOffset > 20 + option->rect.height()/2)
+                center.rx() += option->direction == Qt::RightToLeft ? -4 : 4;
+            QPainterPath path;
+            if (option->state & State_Open) {
+                path.moveTo(center + QPointF(-3,-1.5));
+                path.lineTo(center + QPointF(0,1.5));
+                path.lineTo(center + QPointF(3,-1.5));
+            } else {
+                const qreal direction = option->direction == Qt::RightToLeft ? -1 : 1;
+                path.moveTo(center + QPointF(-1.5*direction,-3));
+                path.lineTo(center + QPointF(1.5*direction,0));
+                path.lineTo(center + QPointF(-1.5*direction,3));
+            }
+            painter->drawPath(path); painter->restore(); return;
+        }
+        if ((places || files) && element == PE_PanelItemViewItem) {
+            const bool selected = option->state & State_Selected;
+            const bool hovered = option->state & State_MouseOver;
+            if (!places && !selected && !hovered) return;
+            QRectF rect = (rowPaint ? *rowPaint : QRectF(option->rect)).adjusted(3, 2, -3, -2);
+            if (places) {
+                rect = QRectF(option->rect).adjusted(0, 2, 0, -2);
+                // Equal-width buttons include native labels, icons and device
+                // controls; the native delegate retains all interaction.
+                const QColor fill(selected ? "#cba6f7" : hovered ? "#977dba" : "#242435");
+                painter->save();
+                painter->setRenderHint(QPainter::Antialiasing);
+                painter->setPen(QPen(QColor(selected ? "#cba6f7" : "#46485c"), 1));
+                painter->setBrush(fill);
+                painter->drawRoundedRect(rect, 8, 8);
+                painter->restore();
+                return;
+            }
+            QColor fill("#977dba");
+            fill.setAlpha(selected ? 170 : 95);
+            if (selected && hovered) fill.setAlpha(195);
+            chip(painter, rect, fill);
+            return;
+        }
+        if ((places || files) && element == PE_FrameFocusRect) {
+            if (rowFocus) { *rowFocus = true; return; }
+            chip(painter, (rowPaint ? *rowPaint : QRectF(option->rect)).adjusted(3, 2, -3, -2), Qt::transparent, QColor("#cba6f7"));
+            return;
+        }
+        QProxyStyle::drawPrimitive(element, option, painter, widget);
+    }
+    QRectF headerChipRect(const QStyleOptionHeader *header, const QWidget *widget) const {
+        // Shared edges: previous column ends at boundary+3, next begins at
+        // boundary+9. This leaves a consistent 6px gap, preserving Name's arrow.
+        QRectF rect = QRectF(header->rect).adjusted(header->section == 0 ? -8 : 9, 3, 3, -3);
+        const bool trailing = header->section == lastHeaderSection
+            || header->position == QStyleOptionHeader::End;
+        if (headerPaint) {
+            const QRectF inner = headerPaint->adjusted(5,3,-5,-3);
+            if (trailing) rect.setRight(inner.right());
+            rect = rect.intersected(inner);
+        }
+        if (header->section > 0 && header->sortIndicator != QStyleOptionHeader::None) {
+            const QRect arrow = subElementRect(SE_HeaderArrow, header, widget);
+            if (arrow.center().x() < header->rect.center().x())
+                rect.setLeft(qMax(rect.left(), qreal(arrow.right() + 4)));
+            else
+                rect.setRight(qMin(rect.right(), qreal(arrow.left() - 4)));
+        }
+        return rect;
+    }
+    void drawControl(ControlElement element, const QStyleOption *option,
+                     QPainter *painter, const QWidget *widget = nullptr) const override {
+        if (element == CE_Header && (headerPaint || fileViewport(widget))) {
+            const auto *header = qstyleoption_cast<const QStyleOptionHeader *>(option);
+            if (!header) return;
+            // Dolphin paints the trailing padding immediately before its last label.
+            if (header->text.isEmpty() && header->position == QStyleOptionHeader::End)
+                lastHeaderSection = header->section - 1;
+            if (option->state & State_MouseOver) {
+                QColor fill("#977dba"); fill.setAlpha(65);
+                const QRectF hover = headerChipRect(header, widget);
+                chip(painter, hover, fill);
+            }
+            // The common rounded header backing is drawn once by HeaderChip.
+            // Keep native text layout, sorting arrows, resizing and reordering.
+            QStyleOptionHeader label(*header);
+            label.rect = subElementRect(SE_HeaderLabel, header, widget);
+            if (!header->text.isEmpty()) {
+                const QRectF capsule = headerChipRect(header, widget);
+                label.rect.setLeft(qMax(label.rect.left(), int(capsule.left()) + 8));
+                label.rect.setRight(qMin(label.rect.right(), int(capsule.right()) - 8));
+            }
+            QProxyStyle::drawControl(CE_HeaderLabel, &label, painter, widget);
+            if (header->sortIndicator != QStyleOptionHeader::None) {
+                QStyleOptionHeader arrow(*header);
+                arrow.rect = subElementRect(SE_HeaderArrow, header, widget);
+                QProxyStyle::drawPrimitive(PE_IndicatorHeaderArrow, &arrow, painter, widget);
+            }
+            return;
+        }
+        QProxyStyle::drawControl(element, option, painter, widget);
+    }
+};
+
+// KFilePlacesView keeps its native delegate and all its internal event connections.
+// ChipStyle obtains the label via the public view/model API during painting.
+
+// Native alternating rows use fillRect, outside the style API. Keep that palette
+// transparent and draw a rounded backing before each file item's native content.
+// drawSource preserves text, previews, expansion arrows and selection toggles.
+class RowChip : public QGraphicsEffect {
+public:
+    explicit RowChip(QGraphicsWidget *item) : m_item(item) {}
+protected:
+    void draw(QPainter *painter) override {
+        QRectF bounds = sourceBoundingRect(Qt::LogicalCoordinates);
+        if (m_item && m_item->scene() && !m_item->scene()->views().isEmpty()) {
+            auto *view = m_item->scene()->views().first();
+            const QRectF visible = m_item->mapFromScene(
+                view->mapToScene(view->viewport()->rect())).boundingRect();
+            // Round the visible row, not the wider offscreen columns.
+            bounds = bounds.intersected(visible);
+        }
+        const bool row = bounds.width() > 140 && bounds.height() <= 64;
+        const QRectF *previous = rowPaint;
+        int *previousDepth = rowDepth;
+        bool *previousFocus = rowFocus;
+        rowFocus = row ? &m_focus : nullptr;
+        rowPaint = row ? &bounds : nullptr;
+        rowDepth = row ? &m_depth : nullptr;
+        QPoint offset;
+        const QPixmap content = sourcePixmap(Qt::LogicalCoordinates, &offset, NoPad);
+        rowDepth = previousDepth;
+        rowFocus = previousFocus;
+        // Align a nested chip with its parent folder icon: native 20px
+        // gutter plus one row-height slot for each expansion level.
+        const qreal nestingInset = m_depth > 0 ? 20 + m_depth * bounds.height() : 0;
+        const QRectF rect = bounds.adjusted(3 + nestingInset,2,-3,-2);
+        if (row) {
+            QColor fill("#313244"); fill.setAlpha(90);
+            chip(painter, rect, fill);
+        }
+        painter->save();
+        if (row) {
+            QPainterPath clip;
+            clip.addRoundedRect(rect, qMin<qreal>(10,rect.height()/2), qMin<qreal>(10,rect.height()/2));
+            painter->setClipPath(clip, Qt::IntersectClip);
+        }
+        painter->drawPixmap(offset, content);
+        painter->restore();
+        if (row && m_focus) chip(painter, rect, Qt::transparent, QColor("#cba6f7"));
+        rowPaint = previous;
+    }
+    void sourceChanged(ChangeFlags flags) override {
+        if (flags & SourceInvalidated) m_focus = false;
+        QGraphicsEffect::sourceChanged(flags);
+    }
+private:
+    QPointer<QGraphicsWidget> m_item;
+    int m_depth = 0;
+    bool m_focus = false;
+};
+class HeaderChip : public QGraphicsEffect {
+protected:
+    void draw(QPainter *painter) override {
+        QColor fill("#313244"); fill.setAlpha(155);
+        QColor border("#46485c"); border.setAlpha(150);
+        const QRectF bounds = sourceBoundingRect(Qt::LogicalCoordinates);
+        chip(painter, bounds.adjusted(3,1,-3,-1), fill, border);
+        const QRectF *previous = headerPaint;
+        const int previousLast = lastHeaderSection;
+        lastHeaderSection = -1;
+        headerPaint = &bounds;
+        drawSource(painter);
+        headerPaint = previous;
+        lastHeaderSection = previousLast;
+    }
+};
+
+// One backing widget paints both arms, so there is no seam between the
+// toolbar and Places. It never participates in layout or receives input.
+class ShellPanel : public QWidget {
+public:
+    explicit ShellPanel(QWidget *window) : QWidget(window) {
+        setObjectName(QStringLiteral("ricyShellPanel"));
+        setAttribute(Qt::WA_TransparentForMouseEvents);
+        setAttribute(Qt::WA_NoSystemBackground);
+        setFocusPolicy(Qt::NoFocus);
+    }
+protected:
+    void paintEvent(QPaintEvent *) override {
+        QWidget *window = parentWidget();
+        qreal innerX = width() - 8, innerY = 64;
+        bool found = false;
+        bool sidebarVisible = false;
+        for (auto *child : window->findChildren<QWidget *>()) {
+            if (child->inherits("KFilePlacesView") && child->isVisible() && child->window() == window)
+                sidebarVisible = true;
+            if (!child->inherits("KItemListContainer") || !child->isVisible()) continue;
+            const QPoint pos = child->mapTo(window, QPoint());
+            if (!found || pos.x() < innerX) innerX = pos.x();
+            if (!found || pos.y() < innerY) innerY = pos.y();
+            found = true;
+        }
+        const qreal left = 8, top = 8, right = width()-8, bottom = height()-8;
+        if (right <= left || bottom <= top) return;
+        // File cards have their own 8px margin; the L ends at the container
+        // edge, leaving that same gutter between the two panels.
+        innerX = qBound(left+24, innerX, right);
+        innerY = qBound(top+24, innerY, bottom);
+        const qreal radius = qMin<qreal>(12, qMin((innerX-left)/2, (innerY-top)/2));
+        if (!sidebarVisible) {
+            QPainter painter(this);
+            painter.setRenderHint(QPainter::Antialiasing);
+            painter.setPen(Qt::NoPen);
+            painter.setBrush(QColor("#313244"));
+            painter.drawRoundedRect(QRectF(left,top,right-left,innerY-top),12,12);
+            return;
+        }
+        QPainterPath path;
+        path.moveTo(left+radius, top);
+        path.lineTo(right-radius, top);
+        path.quadTo(right, top, right, top+radius);
+        path.lineTo(right, innerY-radius);
+        path.quadTo(right, innerY, right-radius, innerY);
+        path.lineTo(innerX+radius, innerY);
+        path.quadTo(innerX, innerY, innerX, innerY+radius);
+        path.lineTo(innerX, bottom-radius);
+        path.quadTo(innerX, bottom, innerX-radius, bottom);
+        path.lineTo(left+radius, bottom);
+        path.quadTo(left, bottom, left, bottom-radius);
+        path.lineTo(left, top+radius);
+        path.quadTo(left, top, left+radius, top);
+        path.closeSubpath();
+        QPainter painter(this);
+        painter.setRenderHint(QPainter::Antialiasing);
+        painter.setPen(Qt::NoPen);
+        painter.setBrush(QColor("#313244"));
+        painter.drawPath(path);
+    }
+};
+}
+
+class RicyDolphinUi : public QObject {
+public:
+    RicyDolphinUi() : QObject(qApp) {
+        qApp->installEventFilter(this);
+        QTimer::singleShot(0, this, [this] {
+            if (QStyle *base = QStyleFactory::create(QStringLiteral("kvantum"))) {
+                m_chipStyle = new ChipStyle(base);
+                qApp->setStyle(m_chipStyle);
+                // Qt's stylesheet wrapper drops PE_IndicatorBranch when Dolphin
+                // passes a plain QStyleOption. Graphics items don't use QSS;
+                // route them directly to our style to retain folder chevrons.
+                for (auto *widget : qApp->allWidgets())
+                    if (auto *view = qobject_cast<QGraphicsView *>(widget))
+                        if (view->inherits("KItemListContainerViewport") && view->scene())
+                            for (auto *item : view->scene()->items())
+                                if (auto *graphics = dynamic_cast<QGraphicsWidget *>(item))
+                                    graphics->setStyle(m_chipStyle);
+                for (auto *widget : qApp->allWidgets())
+                    if (widget->inherits("KFilePlacesView")) {
+                        QPalette palette = widget->palette();
+                        palette.setColor(QPalette::HighlightedText, QColor("#11111b"));
+                        palette.setColor(QPalette::Highlight, QColor("#cba6f7"));
+                        widget->setPalette(palette);
+                    }
+            }
+        });
+    }
+    bool eventFilter(QObject *object,QEvent *event) override {
+        if (event->type() == QEvent::Resize || event->type() == QEvent::LayoutRequest ||
+            event->type() == QEvent::Show || event->type() == QEvent::Hide || event->type() == QEvent::Move) {
+            auto *widget = qobject_cast<QWidget *>(object);
+            auto *window = widget ? widget->window() : nullptr;
+            if (window && window->inherits("DolphinMainWindow") &&
+                (widget == window || widget->inherits("KItemListContainer") ||
+                 widget->inherits("QDockWidget"))) {
+                auto *panel = window->findChild<QWidget *>(QStringLiteral("ricyShellPanel"), Qt::FindDirectChildrenOnly);
+                if (!panel) panel = new ShellPanel(window);
+                panel->setGeometry(window->rect());
+                panel->lower();
+                panel->show();
+                panel->update();
+            }
+        }
+        // QSS positions Dolphin's native tab close buttons at the outer edge.
+        // Keep the native buttons/signals, but align their actual hit rectangles
+        // inside the pill after Qt has finished laying out the tab bar.
+        if (event->type() == QEvent::Paint) {
+            if (auto *tabs = qobject_cast<QTabBar *>(object)) {
+                for (int index = 0; index < tabs->count(); ++index) {
+                    const QRect rect = tabs->tabRect(index);
+                    for (auto side : {QTabBar::LeftSide, QTabBar::RightSide}) {
+                        auto *button = tabs->tabButton(index, side);
+                        if (!button) continue;
+                        const bool left = (side == QTabBar::LeftSide) !=
+                                          (tabs->layoutDirection() == Qt::RightToLeft);
+                        const int x = left ? rect.left() + 12
+                                           : rect.right() - 11 - button->width();
+                        const QPoint position(x, rect.center().y() - button->height()/2);
+                        if (button->pos() != position) button->move(position);
+                    }
+                }
+            }
+        }
+        if(event->type() == QEvent::Polish) {
+            auto *widget = qobject_cast<QWidget *>(object);
+            if (auto *tabs = qobject_cast<QTabBar *>(widget)) tabs->setDrawBase(false);
+            if (widget && widget->inherits("KFilePlacesView"))
+                if (auto *places = qobject_cast<QListView *>(widget)) {
+                    places->setSpacing(1);
+                    places->setIconSize(QSize(24,24));
+                    QPalette palette = places->palette();
+                    for (auto group : {QPalette::Active, QPalette::Inactive, QPalette::Disabled}) {
+                        palette.setColor(group, QPalette::HighlightedText, QColor("#11111b"));
+                        palette.setColor(group, QPalette::Highlight, QColor("#cba6f7"));
+                    }
+                    places->setPalette(palette);
+                    places->viewport()->setPalette(palette);
+                }
+            if(widget && widget->inherits("DolphinMainWindow") && !widget->testAttribute(Qt::WA_WState_Created))
+                widget->setAttribute(Qt::WA_TranslucentBackground,true);
+            auto *item = qobject_cast<QGraphicsWidget *>(object);
+            if(item && m_chipStyle) item->setStyle(m_chipStyle);
+            if(item && item->inherits("KItemListWidget") && !item->graphicsEffect())
+                item->setGraphicsEffect(new RowChip(item));
+            if(item && item->inherits("KItemListHeaderWidget") && !item->graphicsEffect()) {
+                item->setFont(QFont(QStringLiteral("Noto Sans"), 10));
+                item->setGraphicsEffect(new HeaderChip);
+            }
+        }
+        return false;
+    }
+private:
+    QPointer<QStyle> m_chipStyle;
+};
+class RicyDolphinUiPlugin : public QGenericPlugin {
+    Q_OBJECT
+    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QGenericPluginFactoryInterface" FILE "ui.json")
+public:
+    QObject *create(const QString &name,const QString &) override {
+        if(name == QStringLiteral("ricydolphinui") && QCoreApplication::applicationName() == QStringLiteral("dolphin"))
+            return new RicyDolphinUi;
+        return nullptr;
+    }
+};
+#include "ui.moc"

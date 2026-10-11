@@ -1,0 +1,151 @@
+[shell]
+font_family = "Noto Sans"
+setup_wizard_enabled = false
+clipboard_enabled = true
+screen_time_enabled = false
+polkit_agent = false
+corner_radius_scale = 1.3
+lang = "en"
+
+[shell.launcher]
+compact = true
+sort_by_usage = true
+fetch_exchange_rates = false
+
+[bar.default]
+panel_overlap = 0
+position = "bottom"
+layer = "top"
+thickness = 44
+scale = 1.5
+font_scale = 0.85
+auto_hide = false
+smart_auto_hide = false
+reserve_space = true
+show_on_workspace_switch = false
+margin_ends = 0
+margin_edge = 0
+radius = 6
+radius_top_left = 6
+radius_top_right = 6
+radius_bottom_left = 0
+radius_bottom_right = 0
+concave_edge_corners = false
+background_opacity = 0.70
+compositor_blur = true
+start = ["launcher", "taskbar"]
+center = []
+end = ["tray", "volume", "network", "clock", "control-center"]
+
+[widget.taskbar]
+scale = 0.666667
+icon_scale = 1.725
+item_spacing = 6
+only_active_workspace = true
+show_all_outputs = false
+show_active_indicator = true
+show_window_title = false
+
+[wallpaper]
+enabled = false
+
+[backdrop]
+enabled = false
+
+[desktop_widgets]
+enabled = false
+
+[dock]
+enabled = false
+
+[lockscreen]
+enabled = false
+
+[osd]
+enabled = false
+
+[weather]
+enabled = true
+unit = "metric"
+
+[theme]
+mode = "dark"
+source = "custom"
+custom_palette = "KDE-Atual"
+builtin = "Noctalia"
+
+[theme.templates]
+enable_builtin_templates = false
+enable_community_templates = false
+builtin_ids = []
+community_ids = []
+
+[widget.network]
+show_label = false
+
+[widget.volume]
+show_label = false
+
+[shell.panel]
+clipboard_placement = "floating"
+clipboard_position = "center"
+launcher_placement = "attached"
+launcher_position = "auto"
+open_near_click_launcher = true
+transparency_mode = "solid"
+control_center_placement = "attached"
+control_center_position = "auto"
+open_near_click_control_center = true
+
+[widget.tray]
+drawer = true
+drawer_columns = 3
+drawer_item_size = 24
+detached_panel = false
+
+[bar]
+order = ["search_edge", "default"]
+
+[bar.search_edge]
+panel_overlap = 0
+position = "top"
+enabled = true
+thickness = 16
+auto_hide = false
+smart_auto_hide = false
+reserve_space = false
+show_on_workspace_switch = false
+layer = "overlay"
+background_opacity = 0.70
+compositor_blur = true
+margin_ends = 640
+margin_edge = 8
+padding = 0
+radius = 8
+radius_top_left = 8
+radius_top_right = 8
+radius_bottom_left = 8
+radius_bottom_right = 8
+concave_edge_corners = false
+shadow = false
+start = []
+center = []
+end = []
+
+[notification]
+position = "bottom_right"
+follow_focused_output = true
+background_opacity = 0.70
+border = false
+offset_x = 0
+offset_y = 0
+
+[location]
+
+auto_locate = false
+address = "Cosmopolis, Sao Paulo, Brazil"
+
+[calendar]
+
+enabled = true
+

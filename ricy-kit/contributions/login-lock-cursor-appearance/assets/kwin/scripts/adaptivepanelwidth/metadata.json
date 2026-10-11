@@ -1,0 +1,12 @@
+{
+    "KPackageStructure": "KWin/Script",
+    "X-Plasma-API": "javascript",
+    "X-Plasma-MainScript": "code/main.js",
+    "KPlugin": {
+        "Id": "adaptivepanelwidth",
+        "Name": "Largura adaptativa do painel",
+        "Description": "Expande o painel inferior quando uma janela se aproxima dele",
+        "Version": "1.0",
+        "License": "MIT"
+    }
+}

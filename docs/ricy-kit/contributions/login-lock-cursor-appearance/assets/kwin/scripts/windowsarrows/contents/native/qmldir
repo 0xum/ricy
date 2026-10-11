@@ -1,0 +1,3 @@
+module WindowSequence
+plugin windowsequence
+classname WindowSequencePlugin

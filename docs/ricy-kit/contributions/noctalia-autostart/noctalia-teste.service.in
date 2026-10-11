@@ -1,0 +1,16 @@
+[Unit]
+Description=Ricy Noctalia shell for KDE Plasma Wayland
+After=plasma-plasmashell.service
+Wants=noctalia-busca-desktop.service
+PartOf=graphical-session.target
+
+[Service]
+Type=exec
+# Preserve applications launched by the shell when it stops.
+KillMode=process
+Environment=@CONFIG_ENV@
+Environment=@STATE_ENV@
+ExecStart=/usr/bin/noctalia
+Restart=on-failure
+RestartSec=2
+

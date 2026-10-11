@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Instalar pacote no CachyOS
+Comment=Converter e instalar pacotes DEB e RPM pelo pacman
+Icon=system-software-install
+Exec=/usr/bin/python @INSTALLER@ %f
+Terminal=false
+Categories=System;PackageManager;
+MimeType=application/vnd.debian.binary-package;application/x-debian-package;application/x-rpm;
+StartupNotify=false

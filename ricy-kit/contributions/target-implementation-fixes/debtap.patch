@@ -1,0 +1,31 @@
+--- contributions/dolphin-deb-rpm-installer/app/debtap
++++ contributions/dolphin-deb-rpm-installer/app/debtap
+@@ -3264,13 +3264,17 @@
+ fi
+ 
+ # Local fix: Btrfs directory sizes can make the upstream estimate negative.
+-payload_size=$(find . -type f ! -name .PKGINFO ! -name .INSTALL -printf "%s\n" | awk '{s+=$1} END {print s+0}')
++payload_size=$(find . -type f ! -name .PKGINFO ! -name .INSTALL ! -name "namcap-*" ! -name "pkgbuildinstallations*" -printf "%s\n" | awk '{s+=$1} END {print s+0}')
+ sed -i "s/^size =.*/size = $payload_size/" .PKGINFO
+ 
+ # Generating .MTREE file
+ echo -e "\n${lightgreen}==>${NC} ${bold}Generating .MTREE file...${normal}"
+ 
+-bsdtar -czf .MTREE --format=mtree --options='!all,use-set,type,uid,gid,mode,time,size,md5,sha256,link' * .PKGINFO .INSTALL 2> /dev/null
++optional_install=()
++[[ -f .INSTALL ]] && optional_install=(.INSTALL)
++if ! bsdtar --uid 0 --gid 0 --exclude='namcap-*' --exclude='pkgbuildinstallations*' -czf .MTREE --format=mtree --options='!all,use-set,type,uid,gid,mode,time,size,md5,sha256,link' * .PKGINFO "${optional_install[@]}"; then
++    echo "Error: Failed to generate package metadata."; exit 1
++fi
+ 
+ # Creating final package in a fakeroot environment
+ if [[ $Pkgbuild != set ]]; then
+@@ -3278,7 +3282,7 @@
+ fakeroot /usr/bin/bash -e << 'EOF'
+ optional_install=()
+ [[ -f .INSTALL ]] && optional_install=(.INSTALL)
+-tar --force-local -pcf $(grep '^pkgname =' .PKGINFO | gawk '{print $3}')-$(grep '^pkgver =' .PKGINFO | gawk '{print $3}')-$(grep '^arch =' .PKGINFO | gawk '{print $3}').pkg.tar --exclude='pkgbuildinstallations*' * .PKGINFO .MTREE ${optional_install[@]}
++tar --force-local --owner=0 --group=0 --numeric-owner -pcf $(grep '^pkgname =' .PKGINFO | gawk '{print $3}')-$(grep '^pkgver =' .PKGINFO | gawk '{print $3}')-$(grep '^arch =' .PKGINFO | gawk '{print $3}').pkg.tar --exclude='pkgbuildinstallations*' --exclude='namcap-*' * .PKGINFO .MTREE ${optional_install[@]}
+ zstd -q -T0 --ultra -15 *.tar
+ EOF
+ if [[ $? != 0 ]]; then

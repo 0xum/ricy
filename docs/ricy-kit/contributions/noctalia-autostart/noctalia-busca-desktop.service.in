@@ -1,0 +1,13 @@
+[Unit]
+Description=Ricy Noctalia desktop search adapter
+Requires=noctalia-teste.service
+BindsTo=noctalia-teste.service
+After=noctalia-teste.service
+PartOf=noctalia-teste.service graphical-session.target
+
+[Service]
+Type=exec
+ExecStart=/usr/bin/python @ADAPTER@
+Restart=on-failure
+RestartSec=2
+

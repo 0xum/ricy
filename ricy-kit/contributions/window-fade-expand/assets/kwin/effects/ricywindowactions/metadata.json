@@ -1,0 +1,14 @@
+{
+  "KPackageStructure": "KWin/Effect",
+  "KPlugin": {
+    "Id": "ricywindowactions",
+    "Name": "Ricy Window Actions",
+    "Description": "Centered fade and expansion for minimize/restore, coordinated with KDE Scale for opening/closing",
+    "Category": "Appearance",
+    "License": "GPL-2.0-or-later",
+    "EnabledByDefault": false
+  },
+  "X-KDE-Ordering": 60,
+  "X-KWin-Exclusive-Category": "minimize",
+  "X-Plasma-API": "javascript"
+}

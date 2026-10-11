@@ -1,0 +1,2 @@
+konsole 26.08.2-1.1
+AnimatingCursorEnabled : bool — reconhecido por /usr/bin/konsole --list-profile-properties

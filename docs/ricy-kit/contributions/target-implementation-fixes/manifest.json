@@ -1,0 +1,14 @@
+[
+  {
+    "target": "contributions/noctalia-kde-integration-and-menus/outputs/noctalia-test/configurar-super.py",
+    "replacement": "configurar-super.py",
+    "original_sha256": "996eb21e045b8a55262e049bf975bacd4743608f1273164946dcd8c61c5c4abe",
+    "replacement_sha256": "6e88c3bad7114f25fc45fff969473d4aa53b53a00bc77931c6d8fd985d2ee9a0"
+  },
+  {
+    "target": "contributions/dolphin-deb-rpm-installer/app/debtap",
+    "replacement": "debtap",
+    "original_sha256": "29ef21dfd549f05f8c7535ef1348fe2345e3e97f5e1904e9092d6082b0cd1961",
+    "replacement_sha256": "28a0cca7ffc30a235f2ed1cacee688942471aa848ad251c32814c3b02e86a1ac"
+  }
+]
