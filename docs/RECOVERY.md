@@ -1,68 +1,68 @@
 # Recovery
 
-## Contrato e estado
+## Contract and state
 Primary Session (TARGET / PLANNED): **Ricy + Noctalia**.
-Recovery Session (TARGET / PLANNED): **Plasma + Dolphin** e ferramentas KDE.
-Princípio: recovery deve ter tão poucas dependências de componentes específicos
-Ricy quanto razoavelmente possível. Leia [ADR-0002](adr/0002-plasma-recovery.md).
+Recovery Session (TARGET / PLANNED): **Plasma + Dolphin** and KDE tools.
+Principle: recovery should depend on as few Ricy-specific components as reasonably
+possible. Read [ADR-0002](adr/0002-plasma-recovery.md).
 
-CURRENT / KNOWN: a alternância ocorre dentro de Plasma Wayland. Plasmashell
-continua responsável pelo wallpaper/desktop; a volta usa scripts Ricy,
-systemd de usuário, D-Bus, KGlobalAccel e snapshots de painéis/atalhos.
-Não existe isolamento comprovado contra falha de KWin, login ou scripts Ricy.
+CURRENT / KNOWN: switching occurs within Plasma Wayland. Plasmashell remains
+responsible for wallpaper/desktop; return uses Ricy scripts, user systemd,
+D-Bus, KGlobalAccel, and panel/shortcut snapshots. No isolation against KWin,
+login, or Ricy-script failure has been demonstrated.
 
-## Retorno existente — sessão acessível
-No terminal da própria sessão, como o usuário do desktop, a partir da raiz:
+## Existing return path — accessible session
+In a terminal within the session, as the desktop user, from the project root:
 
 ```bash
-./voltar.sh
-# Alternativa instalada pelo kit:
+./return.sh
+# Alternative installed by the kit:
 ricy plasma
 ```
 
-Execute uma alternativa, não ambas por rotina. Esses comandos **mudam** a sessão:
-desabilitam a integração Noctalia no login, encerram shell/adaptador e restauram
-painéis, atalhos e KRunner. Plasmashell pode reiniciar brevemente. KWin e apps
-são preservados pela intenção do código; a tarefa de fundação não testa a troca.
-[Comando](../ricy-kit/contributions/plasma-noctalia-switching/ricy) e
-[implementação](../ricy-kit/contributions/plasma-noctalia-switching/integracao.py)
-são as evidências. Wrappers raiz atuais usam caminho absoluto desta instalação.
+Run one alternative, not both routinely. These commands **change** the session:
+they disable Noctalia login integration, stop shell/adapter, and restore panels,
+shortcuts, and KRunner. Plasmashell may restart briefly. Preserving KWin and apps
+is the code's intent; the foundation task does not test switching.
+The [command](../ricy-kit/contributions/plasma-noctalia-switching/ricy) and
+[implementation](../ricy-kit/contributions/plasma-noctalia-switching/integration.py)
+are the evidence. Current root wrappers use this installation's absolute path.
 
-Diagnóstico somente leitura:
+Read-only diagnostics:
 ```bash
 ./scripts/doctor
 systemctl --user is-active plasma-plasmashell.service
 journalctl --user -u ricy-noctalia-integracao.service
 ```
 
-Serviço ativo não garante painéis visíveis, login ou Dolphin funcional.
-`ricy status` retorna Plasma quando a unidade Noctalia não está ativa, inclusive
-em falhas: não usar esse resultado isolado como prova de recovery.
+An active service does not guarantee visible panels, login, or working Dolphin.
+`ricy status` returns Plasma when the Noctalia unit is inactive, including after
+failures: do not use that result alone as proof of recovery.
 
-## Falhas e dependências críticas
-| Ponto | Comportamento conhecido / limite |
+## Failures and critical dependencies
+| Failure point | Known behavior / limit |
 |---|---|
-| Config Noctalia inválida | Integração valida antes de recolher painéis; falhas nessa etapa não comprovam recovery de toda a sessão. |
-| Shell/adaptador falha durante a troca | Bloco protegido de `start()` chama `restore()`; comando desabilita preferência se restart falhar. Nem toda exceção fica no bloco protegido. |
-| Shell cai depois da troca | Unidades têm política de reinício; UNKNOWN: fallback garantido após falha persistente. |
-| Snapshot ausente/corrompido ou D-Bus indisponível | Retorno pode falhar; manter backups e investigar erro, não sobrescrever layout por suposição. |
-| Falha KWin/login/sessão de usuário | UNKNOWN: roteiro independente ainda não validado. Sessão de recovery desacoplada é PLANNED. |
-| Dolphin personalizado / plugin incompatível | Há launcher, QSS, plugin Qt e efeito KWin; consultar restauradores das contribuições, não remover Dolphin. |
+| Invalid Noctalia config | Integration validates before hiding panels; failures at this stage do not prove recovery of the entire session. |
+| Shell/adapter fails during switching | The protected block in `start()` calls `restore()`; the command disables the preference if restart fails. Not every exception is inside that block. |
+| Shell crashes after switching | Units have a restart policy; UNKNOWN: guaranteed fallback after persistent failure. |
+| Missing/corrupted snapshot or unavailable D-Bus | Return may fail; preserve backups and investigate the error instead of overwriting the layout based on assumptions. |
+| KWin/login/user-session failure | UNKNOWN: an independent procedure has not yet been validated. A decoupled recovery session is PLANNED. |
+| Customized Dolphin / incompatible plugin | Launcher, QSS, Qt plugin, and KWin effect exist; consult contribution restorers instead of removing Dolphin. |
 
-Snapshots atuais ficam em `${XDG_STATE_HOME:-$HOME/.local/state}/ricy-alternancia/`.
-O instalador documenta backups e restauração em
+Current snapshots are in `${XDG_STATE_HOME:-$HOME/.local/state}/ricy-alternancia/`.
+The installer documents backups and restoration in
 [plasma-noctalia-switching](../ricy-kit/contributions/plasma-noctalia-switching/README.md).
-O seed histórico `plasma-antes.tar.gz` não deve ser substituído. Não restaurar
-archives completos antigos para alternar: poderiam sobrescrever wallpaper/widgets.
-Para Dolphin, consultar [identidade](../ricy-kit/contributions/dolphin-noctalia-identity/README.md)
-e [plugins](../ricy-kit/contributions/dolphin-blur-corners/README.md).
-Não inventar caminhos de backup; usar o caminho emitido pelo instalador real.
+The historical `plasma-antes.tar.gz` seed must not be replaced. Do not restore
+old complete archives for switching: they could overwrite wallpaper/widgets.
+For Dolphin, consult [identity](../ricy-kit/contributions/dolphin-noctalia-identity/README.md)
+and [plugins](../ricy-kit/contributions/dolphin-blur-corners/README.md).
+Do not invent backup paths; use the path emitted by the actual installer.
 
-## Superfícies protegidas
-Pacotes Plasma/Dolphin, KWin e ABI de plugins, display manager, units/targets,
-D-Bus, KGlobalAccel, atalhos, appletsrc/plasmashellrc, defaults MIME/FileManager1,
-launchers e backups exigem análise explícita de recovery antes de mudanças.
-O teste `./scripts/verify recovery` cobre merge de painéis em memória; não
-abre janelas, não altera a sessão e não comprova recovery end-to-end.
-Um ensaio posterior deve conferir painéis/atalhos, Dolphin, System Settings,
-apps abertos e login, com backup e plano de retorno.
+## Protected surfaces
+Plasma/Dolphin packages, KWin and plugin ABI, display manager, units/targets,
+D-Bus, KGlobalAccel, shortcuts, appletsrc/plasmashellrc, MIME/FileManager1 defaults,
+launchers, and backups require explicit recovery analysis before changes.
+`./scripts/verify recovery` checks in-memory panel merging; it does not open
+windows, alter the session, or prove end-to-end recovery. A later trial should
+check panels/shortcuts, Dolphin, System Settings, open apps, and login, with
+backups and a return plan.

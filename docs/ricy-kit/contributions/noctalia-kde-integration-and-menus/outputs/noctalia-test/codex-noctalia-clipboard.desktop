@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
-Name=Área de transferência Noctalia
-Exec=PREPARAR_NO_DESTINO/abrir-clipboard.sh
+Name=Noctalia Clipboard
+Exec=PREPARAR_NO_DESTINO/open-clipboard.sh
 Icon=edit-paste
 Categories=Utility;
 X-KDE-Shortcuts=Meta+V

@@ -2,5 +2,5 @@
 
 @AGENTS.md
 
-AGENTS.md é a constituição canônica do repositório.
-Não mantenha regras ou decisões arquiteturais paralelas neste arquivo.
+AGENTS.md is the repository's canonical constitution.
+Do not maintain parallel rules or architectural decisions in this file.

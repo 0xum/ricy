@@ -1,7 +1,8 @@
 # shell
 
-Noctalia é principal; não introduzir UI de workspaces. Consumir tokens existentes e considerar crash/retorno Plasma. Implementação ainda está nas contribuições do kit.
+Noctalia is primary; do not introduce workspace UI. Consume existing tokens and
+consider crashes/return to Plasma. Implementation remains in kit contributions.
 
-Visual/UI: [DESIGN-SYSTEM](../docs/DESIGN-SYSTEM.md). Patches/APIs/integração:
+Visual/UI: [DESIGN-SYSTEM](../docs/DESIGN-SYSTEM.md). Patches/APIs/integration:
 [noctalia-development](../.agents/skills/noctalia-development/SKILL.md).
-Sessão/crash/fallback: [RECOVERY](../docs/RECOVERY.md).
+Session/crash/fallback: [RECOVERY](../docs/RECOVERY.md).

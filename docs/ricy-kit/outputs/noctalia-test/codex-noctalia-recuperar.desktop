@@ -1,6 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=Restaurar Plasma após teste Noctalia
-Exec="/home/delta/ricy-kit/outputs/noctalia-test/recuperar-no-login.sh"
-OnlyShowIn=KDE;
-X-KDE-autostart-phase=2

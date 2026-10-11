@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=Return to Plasma
+Exec="/home/delta/Projects/ricy/ricy-kit/outputs/noctalia-test/return-to-plasma.sh"
+Icon=noctalia
+Categories=Utility;

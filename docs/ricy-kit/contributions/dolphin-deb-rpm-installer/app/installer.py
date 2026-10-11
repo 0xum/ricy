@@ -28,15 +28,15 @@ class Installer(QWidget):
     def __init__(self, filename=None):
         super().__init__()
         self.filename, self.package, self.busy = filename, None, False
-        self.setWindowTitle('Instalar pacote no CachyOS')
+        self.setWindowTitle('Install Package on CachyOS')
         self.resize(760, 520)
         layout = QVBoxLayout(self)
         self.label = QLabel()
         self.label.setTextFormat(Qt.TextFormat.PlainText)
         self.label.setWordWrap(True)
         layout.addWidget(self.label)
-        self.note = QLabel('O pacote será convertido para o formato do CachyOS. '
-                           'A instalação permanece gerenciada pelo pacman.')
+        self.note = QLabel('The package will be converted to CachyOS format. '
+                           'Installation remains managed by pacman.')
         self.note.setWordWrap(True)
         layout.addWidget(self.note)
         self.info = QPlainTextEdit()
@@ -45,14 +45,14 @@ class Installer(QWidget):
         self.progress = QProgressBar()
         self.progress.hide()
         layout.addWidget(self.progress)
-        self.button = QPushButton('Preparar pacote' if filename else 'Selecionar .deb ou .rpm')
+        self.button = QPushButton('Prepare Package' if filename else 'Select .deb or .rpm')
         self.button.clicked.connect(self.clicked)
         layout.addWidget(self.button)
         self.status = QLabel('')
         self.status.setTextFormat(Qt.TextFormat.PlainText)
         self.status.setWordWrap(True)
         layout.addWidget(self.status)
-        self.label.setText(Path(filename).name if filename else 'Escolha um pacote local para instalar.')
+        self.label.setText(Path(filename).name if filename else 'Choose a local package to install.')
         self.logs = []
         if filename:
             QTimer.singleShot(0, self.clicked)
@@ -61,8 +61,8 @@ class Installer(QWidget):
         if self.busy:
             return
         if not self.filename:
-            filename, _ = QFileDialog.getOpenFileName(self, 'Selecionar pacote',
-                str(Path.home() / 'Downloads'), 'Pacotes (*.deb *.rpm)')
+            filename, _ = QFileDialog.getOpenFileName(self, 'Select Package',
+                str(Path.home() / 'Downloads'), 'Packages (*.deb *.rpm)')
             if not filename:
                 return
             self.filename = filename
@@ -72,8 +72,8 @@ class Installer(QWidget):
         self.button.setEnabled(False)
         self.progress.setRange(0, 0)
         self.progress.show()
-        self.status.setText('Instalando… Autorize na janela de senha do sistema.' if self.installing
-                            else 'Convertendo e verificando dependências… Isso pode levar alguns minutos.')
+        self.status.setText('Installing… Authorize in the system password dialog.' if self.installing
+                            else 'Converting and checking dependencies… This may take a few minutes.')
         self.worker = Worker(backend.install if self.installing else backend.prepare,
                              self.package or self.filename)
         self.worker.line.connect(self.log)
@@ -91,16 +91,16 @@ class Installer(QWidget):
         ok, value = result
         if not ok:
             self.status.setText(value)
-            self.button.setText('Tentar novamente')
+            self.button.setText('Try Again')
             self.button.setEnabled(True)
         elif self.installing:
-            self.status.setText('Pacote instalado com sucesso. Se ele oferece um aplicativo, procure-o no menu.')
-            self.button.setText('Instalado')
+            self.status.setText('Package installed successfully. If it provides an application, find it in the menu.')
+            self.button.setText('Installed')
         else:
             self.package, info = value
             self.info.setPlainText(info)
-            self.status.setText('Pacote preparado. Clique em Instalar para confirmar a instalação.')
-            self.button.setText('Instalar')
+            self.status.setText('Package prepared. Click Install to confirm the installation.')
+            self.button.setText('Install')
             self.button.setEnabled(True)
         if self.logs:
             backend.CACHE.mkdir(parents=True, exist_ok=True)
@@ -108,8 +108,8 @@ class Installer(QWidget):
 
     def closeEvent(self, event):
         if self.busy:
-            QMessageBox.information(self, 'Operação em andamento',
-                                    'Aguarde a conclusão da operação antes de fechar esta janela.')
+            QMessageBox.information(self, 'Operation in progress',
+                                    'Wait for the operation to finish before closing this window.')
             event.ignore()
         else:
             event.accept()
@@ -117,7 +117,7 @@ class Installer(QWidget):
 
 if __name__ == '__main__':
     if os.geteuid() == 0:
-        sys.exit('Abra o instalador como usuário normal.')
+        sys.exit('Open the installer as a normal user.')
     app = QApplication(sys.argv)
     app.setDesktopFileName('cachyos-local-package-installer')
     window = Installer(sys.argv[1] if len(sys.argv) > 1 else None)

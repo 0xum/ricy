@@ -1,0 +1,11 @@
+--- contributions/noctalia-kde-integration-and-menus/outputs/noctalia-test/configure-super.py
++++ contributions/noctalia-kde-integration-and-menus/outputs/noctalia-test/configure-super.py
+@@ -26,6 +26,8 @@
+ else:
+  for entry in original:
+   call('setForeignShortcut','(asai)',(entry['id'],[k for k in entry['keys'] if k!=meta]))
++ call('doRegister','(as)',(mine,))
++ call('setShortcut','(asaiu)',(mine,[meta,268435488],2))
+  call('setForeignShortcut','(asai)',(mine,[meta,268435488]))
+  entries=call('getGlobalShortcutsByKey','(i)',(meta,))[0]
+  if not any(e[2]==mine[0] for e in entries):raise SystemExit('Unable to register Super for Noctalia')

@@ -1,25 +1,25 @@
 ---
 name: noctalia-development
-description: Alterar patches, APIs, comportamento do perfil ou integração Noctalia/KWin do Ricy; ajustes apenas de valores visuais existentes seguem DESIGN-SYSTEM e regras locais.
+description: Change Ricy Noctalia patches, APIs, profile behavior, or Noctalia/KWin integration; changes limited to existing visual values follow DESIGN-SYSTEM and local rules.
 ---
 
 # noctalia-development
 
-1. Siga as regras locais da shell. Consulte [COMPONENTS](../../../docs/COMPONENTS.md)
-   ao localizar ownership/contratos; [ARCHITECTURE](../../../docs/ARCHITECTURE.md)
-   se mudar responsabilidades/coexistência. Noctalia é a shell principal.
-2. Identifique a variante cumulativa atual e confirme versão/commit/patch real.
-   Não aplique em sequência patches completos históricos. Ricy pode ter patches
-   próprios, claramente distinguíveis do upstream e acompanhados de licença.
-3. Verifique APIs na fonte da versão compatível; não presumir API de outra
-   implementação/release chamada Noctalia. Build atual fixa Noctalia 5.2.1.
-4. Workspaces não fazem parte do produto. Não acrescentar UI, ações ou gestos.
-   Registre resíduos existentes sem confundir objetos internos KWin com a UX.
-5. Respeite KWin como gerenciador de janelas; use integrações existentes. Visual
-   exige DESIGN-SYSTEM; use [visual-development](../visual-development/SKILL.md)
-   para estados/interações, materiais ou adaptações entre componentes.
-6. Se afetar crash, prontidão, aplicativos filhos, atalhos ou retorno Plasma,
-   leia RECOVERY e os invariantes/ADRs pertinentes. Preserve /usr/bin/noctalia,
-   snapshots e ativador/reversão. Não reinicie a shell para validar documentação.
-7. Rode checks apropriados conforme [DEVELOPMENT](../../../docs/DEVELOPMENT.md),
-   documente versão, evidência e limitações de integração/visual/recovery.
+1. Follow local shell rules. Consult [COMPONENTS](../../../docs/COMPONENTS.md)
+   to locate ownership/contracts; [ARCHITECTURE](../../../docs/ARCHITECTURE.md)
+   when responsibilities/coexistence change. Noctalia is the primary shell.
+2. Identify the current cumulative variant and confirm the actual version/commit/patch.
+   Do not apply complete historical patches sequentially. Ricy may have its own patches,
+   clearly distinguished from upstream and accompanied by a license.
+3. Verify APIs in the compatible version's source; do not assume APIs from another
+   implementation/release named Noctalia. The current build pins Noctalia 5.2.1.
+4. Workspaces are not part of the product. Do not add UI, actions, or gestures.
+   Record existing remnants without confusing internal KWin objects with the UX.
+5. Respect KWin as the window manager; use existing integrations. Visual work requires
+   DESIGN-SYSTEM; use [visual-development](../visual-development/SKILL.md) for
+   states/interactions, materials, or adaptations between components.
+6. If crashes, readiness, child applications, shortcuts, or Plasma return are affected,
+   read RECOVERY and relevant invariants/ADRs. Preserve /usr/bin/noctalia, snapshots,
+   and activation/reversal tools. Do not restart the shell to validate documentation.
+7. Run appropriate checks from [DEVELOPMENT](../../../docs/DEVELOPMENT.md),
+   and document the version, evidence, and integration/visual/recovery limitations.

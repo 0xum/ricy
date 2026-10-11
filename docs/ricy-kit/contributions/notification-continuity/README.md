@@ -1,6 +1,6 @@
-# Notificações contínuas com a taskbar
+# Continuous notifications with the taskbar
 
-Preferências distribuídas no config.toml da integração Noctalia:
+Distributed Preferences in config.toml Noctalia integration:
 
 ```toml
 [notification]
@@ -12,105 +12,57 @@ offset_x = 0
 offset_y = 0
 ```
 
-As notificações aparecem no monitor ativo, junto à taskbar inferior e à borda
-direita, com a mesma transparência. O Noctalia 5.2.1 já desenha uma barra de
-tempo que diminui até expirar; ao passar o ponteiro, a contagem pausa.
-Avisos persistentes sem prazo não ganham um prazo artificial.
+Notifications appear on the active monitor, next to the lower taskbar and the right edge, with the same transparency. 5.2.1 already draws a time bar that decreases until it expires; when passing the pointer, the count pauses. Persistent warnings without a deadline do not gain an artificial deadline.
 
-O cartão nativo deixa um recorte arredondado na junção com a taskbar.
-`notificacao-canto-direito.patch` mantém o canto inferior direito reto e abre
-o canto inferior esquerdo para fora, com uma curva côncava que encontra a barra.
-Os dois cantos superiores permanecem arredondados. Isso se aplica quando a
-posição é bottom_right com offset_x=0 e offset_y=0. A superfície reserva espaço
-à esquerda sem reduzir o conteúdo nem afastar o cartão da borda direita.
-Desenho, recorte da animação e região de blur seguem essa geometria, sem alterar
-a lógica do daemon ou da contagem regressiva.
+The native card leaves a rounded cut at the junction with the taskbar. `notification-right-corner.patch` keeps the lower right corner straight and opens the bottom left corner out, with a concave curve that finds the bar. The top two corners remain rounded. This applies when the position is bottom_right with offset_x=0 and offset_y=0. The surface reserves space to the left without reducing the content or moving the card from the right edge. Drawing, clipping of the animation and blur region follow this geometry, without changing the logic of the daemon or countdown.
 
-## Reproduzir
+## Reproduce
 
-Primeiro prepare e instale a integração permanente Noctalia deste kit.
-Esta contribuição foi feita para Noctalia **5.2.1**, commit upstream
-`6ef43e2bf2f3d5b4205ec72a72e34a2ab76ce3b4`. O script recusa outras versões;
-revise/rebaseie o patch antes de migrar para outro Noctalia.
+First prepare and install the permanent integration Noctalia of this kit. This contribution was made to Noctalia **5.2.1**, commit upstream `6ef43e2bf2f3d5b4205ec72a72e34a2ab76ce3b4`. The script refuses other versions; review/rebase the patch before migrating to another Noctalia.
 
-No CachyOS/Arch, confira as dependências do BUILDING.md upstream. Neste destino
-foi necessário acrescentar apenas:
+In CachyOS/Arch, check out the dependencies of BUILDING.md upstream. In this destination it was necessary to add only:
 
 ```bash
 sudo pacman -S --needed meson ninja wayland-protocols nlohmann-json stb
 cd "$HOME/ricy-kit/contributions/notification-continuity"
-bash compilar.sh
-python ativar.py
+bash build.sh
+python enable.py
 ```
 
-A compilação usa prefixo /usr apenas para encontrar os assets do pacote; não
-executa `meson install` e não substitui `/usr/bin/noctalia`. O executável local
-fica em `$HOME/.local/lib/ricy-noctalia/noctalia`, selecionado por um drop-in
-da unidade noctalia-teste.service. O CLI original continua enviando IPC para
-a mesma shell. O código-fonte/build ficam no cache do usuário, fora do kit.
+Compilation uses prefix /usr only to find package assets; does not execute `meson install` and does not replace `/usr/bin/noctalia`. The local executable is in `$HOME/.local/lib/ricy-noctalia/noctalia`, selected by a drop-in of the unit noctalia-teste.service. The original CLI continues to send IPC to the same shell. The source/build code is in the user cache outside the kit.
 
-`ativar.py` guarda binário/drop-in anteriores, recarrega a unidade e reinicia
-a shell/adaptador. Durante essa troca aplica temporariamente KillMode=process
-para preservar os aplicativos lançados pelo menu; remove esse override logo
-após a troca. A configuração permanente de encerramento da unidade é mantida.
+`enable.py` saves previous binary/drop-in, recharges the drive and restarts the shell/adapter. During this exchange temporarily applies KillMode=process to preserve the applications launched by the menu; removes this override right after the switch. The permanent unit closure setting is maintained.
 
-Atualizar o pacote Noctalia não atualiza automaticamente o executável local.
-Ao atualizar a versão, revise o patch e recompile, ou restaure o pacote original
-antes de adotar assets/configuração da versão nova.
+Updating the Noctalia package does not automatically update the local executable. Updating the version, review the patch and recompile, or restore the original package before adopting assets/configuration of the new version.
 
-## Restaurar
+## Restore
 
 ```bash
-python ativar.py --restaurar "$HOME/.local/state/ricy-notificacoes-backups/DATA-HORA"
+python enable.py --restaurar "$HOME/.local/state/ricy-notificacoes-backups/DATA-HORA"
 ```
 
-Use o backup impresso pelo ativador (contém manifest.json), que restaura a
-seleção anterior da shell e seu binário local, se existia. Isso não reverte
-as preferências visuais no config.toml; para isso restaure o backup de
-configuração ou ajuste apenas `[notification]`. O aplicador não remove pacotes.
+Use backup printed by activator (contains manifest.json), which restores the previous shell selection and its local binary, if any. This does not reverse visual preferences in config.toml; to do this restore the configuration backup or adjust only `[notification]`. The applicator does not remove packages.
 
-Código upstream sob licença MIT, incluída em LICENSE.
-Referências: [notificações](https://docs.noctalia.dev/noctalia/services/notifications/)
-e [compilação da versão](https://github.com/noctalia-dev/noctalia/blob/v5.2.1/BUILDING.md).
+Upstream code under MIT license, included in LICENSE. References: [notifications](https://docs.noctalia.dev/noctalia/services/notifications/) and [version compilation](https://github.com/noctalia-dev/noctalia/blob/v5.2.1/BUILDING.md).
 
-## Wallpaper do cartão Home com desktop Plasma
+## Home Card Wallpaper with Desktop Plasma
 
-A variante local também permite que o cartão Home use o caminho configurado
-quando `[wallpaper] enabled = false`. O Noctalia continua sem desenhar o fundo
-do desktop; a miniatura do cartão é carregada independentemente pelo serviço
-nativo de thumbnails. A opacidade e o blur dos painéis permanecem os mesmos.
+The local variant also allows the Home card to use the path configured when `[wallpaper] enabled = false`. Noctalia continues without drawing the desktop background; the card thumbnail is loaded independently by the native thumbnail service. The opacity and blur of the panels remain the same.
 
-Após compilar/ativar, registre a imagem dos desktops Plasma:
+After building/activating, register the image of Plasma desktops:
 
 ```bash
-python sincronizar-wallpaper.py
+python sync-wallpaper.py
 ```
 
-O script usa a API do Plasma e só prossegue quando todos os desktops usam a
-mesma imagem estática local. Guarda settings.toml da integração em backup
-privado e usa o IPC wallpaper-set do Noctalia para registrar essa mesma imagem
-(a API também sincroniza a seleção com o Plasma). Fundos diferentes, animados
-ou archives ausentes são recusados antes de alterar preferências. Não copia
-imagens pessoais para o kit. Execute novamente se mudar o wallpaper no Plasma;
-esta contribuição não instala um monitor automático de mudanças.
+The script uses the Plasma API and only goes on when all desktops use the same local static image. settings.toml from private backup integration and uses Noctalia's IPC wallpaper-set to register that same image (the API also syncs selection with Plasma). Different, animated or missing files are rejected before changing preferences. Do not copy personal images to the kit. Run again if you change the wallpaper in Plasma; this contribution does not install an automatic change monitor.
 
-A imagem é do cartão Home; o restante do menu mantém o fundo translúcido com
-blur da cena atrás dele. O wallpaper não é desenhado sobre o painel inteiro.
-Restaurar o binário pelo ativador também restaura o comportamento anterior do
-cartão; settings.toml e wallpaper do Plasma são preferências separadas. Revise
-um backup de settings antes de restaurá-lo, pois contém outras preferências.
+The image is from Home Card; the rest of the menu keeps the background translucent with blur from the scene behind it. The wallpaper is not drawn on the entire panel. Restore the binary by the activator also restores the previous behavior of the card; settings.toml and Plasma wallpaper are separate preferences. Review a backup of settings before restoring it as it contains other preferences.
 
-## Variante composta atual
+## Current compound variant
 
-Para reproduzir também o menu da taskbar como painel Noctalia encaixado e
-sem rolagem, use ../taskbar-menu-composition/compilar.sh e seu patch completo.
-Este compilador anterior permanece como referência da variante de
-notificações/Home; ele recusa corretamente um cache com mudanças diferentes.
-O ativador/restaurador desta pasta continua sendo usado pela variante nova.
+To also play the Taskbar menu as a Noctalia panel fitted and without scrolling, use ../taskbar-menu-composition/build.sh and its full patch. This previous compiler remains as a reference for the notification/Home variant; it correctly refuses a cache with different changes. The activator/restaurator of this folder continues to be used by the new variant.
 
-## Atualização: menus do tray
+## Update: Tray menus
 
-O estado atual inclui também as opções dos itens do tray como painel Noctalia
-e setinha para retornar à gaveta. Para reconstruir todas as mudanças, use
-../tray-menu-composition/compilar.sh e seu patch completo. Este compilador
-anterior permanece como referência histórica e recusa cache diferente.
+The current state also includes the options of the Tray items as Noctalia panel and set to return to the drawer. To rebuild all changes, use ../tray-menu-composition/build.sh and its patch complete. This previous compiler remains as historical reference and refuses different cache.

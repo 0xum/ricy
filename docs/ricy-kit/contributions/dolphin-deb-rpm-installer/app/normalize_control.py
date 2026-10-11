@@ -67,7 +67,7 @@ def constrained_provider(item, library):
     # Debian epochs/revisions describe Debian packaging, not upstream ABI versions.
     upstream = version.split(':')[-1].split('-')[0]
     if operator not in {'>=', '>>'}:
-        raise RuntimeError('A restrição de versão exige adaptação manual: ' + item.strip())
+        raise RuntimeError('Version restriction requires manual adaptation: ' + item.strip())
     local = subprocess.run(['/usr/bin/pacman', '-Q', package], text=True, capture_output=True)
     if not local.returncode:
         native_version = local.stdout.split()[1]
@@ -102,7 +102,7 @@ def native_dependencies(text):
                                   for item, lib in zip(alternatives, libraries)]
                     found = next((item for item in candidates if item), None)
                     if not found:
-                        raise RuntimeError('Nenhuma biblioteca nativa compatível foi encontrada para ' + group.strip())
+                        raise RuntimeError('No native compatible library was found for ' + group.strip())
                     dependencies.add(found)
                 else:
                     remaining.append(group.strip())

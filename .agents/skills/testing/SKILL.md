@@ -1,28 +1,28 @@
 ---
 name: testing
-description: Definir níveis ou combinação de testes Ricy, planejar validação de integração/recovery ou distinguir PASS, UNKNOWN e NOT RUN; dispensável para executar um check já conhecido.
+description: Select Ricy test levels or combinations, plan integration/recovery validation, or distinguish PASS, UNKNOWN, and NOT RUN; not required to execute an already known check.
 ---
 
 # testing
 
-Consulte a seção “Níveis e evidência” de [DEVELOPMENT](../../../docs/DEVELOPMENT.md)
-e as regras do componente para escolher Static, Component, Integration, Recovery,
-Visual e Environment. Leia os validadores selecionados antes de executá-los.
+Consult the “Levels and evidence” section in [DEVELOPMENT](../../../docs/DEVELOPMENT.md)
+and component rules to select Static, Component, Integration, Recovery, Visual, and
+Environment. Read the selected validators before running them.
 
-Use verify para checks seguros, doctor para diagnóstico somente leitura.
-Não instale/reinicie serviços ou execute aplicadores como se fossem testes.
-Dependência ausente é NOT RUN/UNKNOWN, nunca PASS. Exit 0 do doctor não
-certifica saúde. Não transcreva testes históricos como se tivessem sido rodados.
-Corrija problemas causados pela mudança; registre problemas preexistentes.
+Use verify for safe checks and doctor for read-only diagnostics.
+Do not install/restart services or run applicators as if they were tests.
+A missing dependency means NOT RUN/UNKNOWN, never PASS. Doctor exit 0 does not
+certify health. Do not report historical tests as if they had just been run.
+Fix problems caused by the change; record preexisting problems.
 
-No encerramento, use o formato abaixo, com comandos e resultados concretos:
+At completion, use the following format with concrete commands and results:
 ```text
 Validation:
-PASS <check e escopo>
-FAIL <check e erro, quando houver>
-NOT RUN <check e motivo>
-NOT APPLICABLE <nível e motivo>
+PASS <check and scope>
+FAIL <check and error, when applicable>
+NOT RUN <check and reason>
+NOT APPLICABLE <level and reason>
 ```
 
-Proibido concluir “This should work.”, “Probably fixed.” ou “Everything is
-working.” sem evidência. Um teste offline aprovado não prova toda a sessão.
+Do not conclude “This should work.”, “Probably fixed.”, or “Everything is
+working.” without evidence. A passing offline test does not prove the entire session.

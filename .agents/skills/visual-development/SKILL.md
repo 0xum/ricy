@@ -1,21 +1,21 @@
 ---
 name: visual-development
-description: Alterar estados/interações visuais, materiais ou adaptar identidade entre componentes Ricy; para ajuste isolado de token existente, DESIGN-SYSTEM e regras locais bastam.
+description: Change visual states/interactions, materials, or adapt identity between Ricy components; an isolated change to an existing token only requires DESIGN-SYSTEM and local rules.
 ---
 
 # visual-development
 
-1. Leia [DESIGN-SYSTEM](../../../docs/DESIGN-SYSTEM.md) e somente o trecho relevante
-   do guia de identidade. Procure tokens e componentes já existentes.
-2. Identifique o consumidor real (Style Noctalia, Qt/QSS/Kvantum, KWin ou tema).
-   Reutilize papéis e valores existentes, respeitando unidades, escala e toolkit.
-3. Proibido: random colors, random radius, random spacing, random animations e
-   parallel design systems. Não copiar tokens para estabelecer outra autoridade.
-4. Preserve geometria, legibilidade, ícones de aplicativos, redução de movimento,
-   hit areas e identidade Ricy. Não generalize o blur de Noctalia para outros apps.
-5. Quando houver ferramenta capaz, verifique antes/depois em normal, hover, foco,
-   seleção e desabilitado, escalas/monitores relevantes e junções de blur.
-   Sem acesso visual, declare NOT RUN e o limite; parse não prova aparência.
-6. Atualize referência só quando a mudança correspondente estiver validada;
-   registre recovery se afetar Plasma/Dolphin. Valores novos exigem justificativa
-   no sistema central, não uma convenção paralela escondida no componente.
+1. Read [DESIGN-SYSTEM](../../../docs/DESIGN-SYSTEM.md) and only the relevant
+   identity guide section. Look for existing tokens and components.
+2. Identify the actual consumer (Noctalia Style, Qt/QSS/Kvantum, KWin, or a theme).
+   Reuse existing roles and values, respecting units, scale, and toolkit.
+3. Prohibited: random colors, random radius, random spacing, random animations, and
+   parallel design systems. Do not copy tokens to establish another authority.
+4. Preserve geometry, readability, application icons, reduced motion,
+   hit areas, and Ricy identity. Do not generalize Noctalia blur to other apps.
+5. When a suitable tool is available, verify before/after in normal, hover, focus,
+   selected, and disabled states, relevant scales/monitors, and blur junctions.
+   Without visual access, report NOT RUN and the limitation; parsing does not prove appearance.
+6. Update the reference only when the corresponding change is validated;
+   record recovery implications for Plasma/Dolphin. New values require justification
+   in the central system, not a parallel convention hidden in the component.

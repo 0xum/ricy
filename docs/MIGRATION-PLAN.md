@@ -1,78 +1,59 @@
-# Migração incremental
+# Incremental migration
 
 ## Current structure — KNOWN
-- Raiz: README e wrappers com caminhos absolutos para o kit ativo.
-- `ricy-kit/`: contribuições, outputs/scripts, manifests e materiais da instalação.
-- `docs/ricy-kit/`: variante transportável preservada; não é espelho automático.
-- `docs/ricy.md`, `REINSTALAR.md`, `IDENTIDADE-VISUAL.md`: história e referências.
-- `archives/ricy.zip`: arquivo original preservado. Nenhum histórico Git confirmado.
+- Root: README and wrappers with absolute paths to the active kit.
+- `ricy-kit/`: contributions, outputs/scripts, demonstrations and installation materials.
+- `docs/ricy-kit/`: preserved transportable variant; it is not automatic mirror.
+- `docs/ricy.md`, `REINSTALL.md`, `VISUAL-IDENTITY.md`: history and references.
+- `archives/ricy.zip`: preserved original file. No Git history confirmed.
 
-Fontes e dependências por contribuição estão em [COMPONENTS](COMPONENTS.md).
-A fundação criou diretórios documentais e validadores; não realocou runtime.
+Sources and dependencies per contribution are in [COMPONENTS](COMPONENTS.md). The foundation created documentary directories and validators; it did not relocate runtime.
 
 ## Target structure — PLANNED
-| Atual | Destino esperado | Condição antes da migração |
+| Current | Destination expected | Condition before migration |
 |---|---|---|
-| Patches Noctalia e perfil público | shell/noctalia/ | Identificar variante cumulativa e consumidores; não transportar perfil privado |
-| Blur/ricywindowactions/cantos | compositor/kwin/ | Preservar versão/ABI, licenças, build/instalação/reversão |
-| Tokens e assets de temas | themes/ e themes/tokens/ | Definir migração dos consumidores mantendo valores e aparência |
-| Adaptador busca/atalhos/KDE/Dolphin | integrations/kde/ | Mapear D-Bus, units, desktops e paths nos dois kits |
-| Units de autostart e integração | services/ | Preservar ordem/prontidão, nomes e política de retorno |
-| Alternância e snapshots | recovery/plasma/ | Validar restore e reduzir dependência Ricy sem perder painéis |
-| Preparação/aplicadores | installer/ | Separar materiais públicos de backups/estado por allowlist |
-| Driver AIC8800 | integrations/hardware/ | Manter opcional, pin/licenças e suporte de kernel |
-| Wrappers/helpers comuns | core/ se justificado | Procurar duplicação real; não criar framework |
-| Nenhuma aplicação Files atual | apps/file-manager/ | Nova proposta de implementação, toolkit/contratos aprovados |
-| Verificações desta etapa | scripts/ | Manter offline; tools/ só para ferramentas necessárias |
+| Patches Noctalia and public profile | shell/noctalia/ | Identify cumulative variant and consumers; do not transport private profile |
+| Blur/ricywindowactions/corners | compositor/kwin/ | Preserve version/ABI, licenses, build/install/reversion |
+| Theme Tokens and Assets | themes/ and themes/tokens/ | Defining consumer migration while maintaining values and appearance |
+| Search/ Shortcuts Adapter/KDE/Dolphin | integrations/kde/ | Map D-Bus, units, desktops and paths in both kits |
+| Autostart and integration units | services/ | Preserve order/readiness, names and return policy |
+| Alternance and snapshots | recovery/plasma/ | Validate restoration and reduce Ricy dependency without losing panels |
+| Preparation/applicators | installer/ | Separate public backup/state materials by allowlist |
+| AIC8800 Driver | integrations/hardware/ | Keep optional, pin/licenses and kernel support |
+| Common wrappers/helpers | core/ if justified | Find real duplication; do not create framework |
+| No current Files application | apps/file-manager/ | New implementation proposal, approved toolkit/contracts |
+| Checks of this step | scripts/ | Keep offline; tools/ only for needed tools |
 
 ## Safe migrations
-Documentar fronteiras, acrescentar regras/links e testes somente leitura são
-seguros nesta etapa. Consolidar referências pode preceder movimentação de fontes.
-Mesmo uma mudança de caminho aparentemente simples exige busca de chamadores.
-Antes de cada migração: inventário → referências → backup → mudança mínima →
-validação apropriada → atualização de docs/manifests afetados → rollback claro.
+Documenting borders, adding rules/links and read-only tests are safe at this stage. Consolidating references can precede movement of sources. Even a seemingly simple change of path requires search for callers. Before each migration: inventory → references → backup → minimum change → appropriate validation → update of affected docs/manifests → clear rollback.
 
-## Risky migrations — não executadas
-Renomear contributions/outputs; unificar os kits; mover perfis/snapshots; mudar
-caminhos gravados em unidades, symlinks, desktop entries e wrappers; reorganizar
-patches cumulativos; alterar ativadores; separar sessão Plasma/Noctalia; remover
-Dolphin; trocar gerenciador de login. Exigem plano próprio e testes de recovery.
-Não regenerar SHA256SUMS históricos para disfarçar divergências da instalação.
+## Risky migrations — not executed
+Rename contributions/outputs; unify kits; move profiles/snapshots; change paths recorded in drives, symlinks, desktop entries and wrappers; reorganize cumulative patches; change activators; separate Plasma/Noctalia session; remove Dolphin; exchange login manager. Require own plan and recovery tests. Do not regenerate historical SHA256SUMS to disguise installation divergences.
 
-## Deprecated concepts — preservados como história
-Os nomes `noctalia-teste.service`/`iniciar-teste.sh` não significam sessão temporária
-hoje. “Transportar configuração” permanece útil para reprodução, mas não define
-mais todo o produto. Compiladores cumulativos anteriores continuam históricos.
-Workspaces herdados não definem a experiência futura. Nenhum arquivo foi removido
-por aparentar obsolescência.
+## Deprecated Concepts — Preserved as History
+Names `noctalia-teste.service`/`start-test.sh` do not mean temporary session today. “Transport configuration” remains useful for playback, but no longer defines the whole product. Previous cumulative compilers remain historical. Inherited workspaces do not define future experience. No files have been removed because it appears obsolete.
 
 ## Migration order
-1. Auditar RICY-001 em configs, UI, menus, atalhos e gestos, distinguindo API KWin
-   de exposição ao usuário; propor ajuste mínimo sem alterar fallback.
-2. Inventariar referências e preparar baseline pública revisada: fontes/licenças,
-   paths portáveis, ausência de dados privados; escolher versionamento antes de publicar.
-3. Centralizar consumo de tokens, um componente por vez, com comparação visual.
-4. Extrair patches/builds e integrações por componente com compatibilidade de paths.
-5. Projetar isolamento de Plasma Recovery e só então uma sessão Ricy independente.
-6. Propor implementação de Ricy Files mantendo Dolphin como recovery.
+1. Audit RICY-001 in configs, UI, menus, shortcuts and gestures, distinguishing API KWin
+of exposure to the user; propose minimum adjustment without altering fallback.
+2. Inventory references and prepare revised public baseline: sources/licenses,
+portable path, absence of private data; choose versioning before publishing.
+3. Centralize consumption of tokens, one component at a time, with visual comparison.
+4. Extract patches/builds and component integrations with path compatibility.
+5. Design Plasma Recovery isolation and only then an independent Ricy session.
+6. Propose implementation of Ricy Files by keeping Dolphin as recovery.
 
-## Architecture Decisions Required — somente partes futuras bloqueadas
+## Architecture Decisions Required — Only Blocked Future Parts
 
 ARCHITECTURE DECISION REQUIRED
 
-**Problem:** como separar a futura sessão Ricy sem perder wallpaper/desktop e a
-recuperação que hoje dependem de plasmashell e scripts Ricy?
+**Problem:** how to separate the future Ricy session without losing wallpaper/desktop and recovery that today depend on plasmashell and Ricy scripts?
 
-**Evidence:** `plasma-noctalia-switching/integracao.py` mantém plasmashell,
-usa D-Bus/KGlobalAccel e lê snapshots Ricy ao restaurar. Ver
-[ARCHITECTURE C-002](ARCHITECTURE.md) e [RECOVERY](RECOVERY.md).
+**Evidence:**  `plasma-noctalia-switching/integration.py` keeps plasmashell, uses D-Bus/KGlobalAccel and reads Ricy snapshots when restoring. View
+[ARCHITECTURE C-002](ARCHITECTURE.md) and [RECOVERY](RECOVERY.md).
 
-**Options:** A. conservar a integração atual enquanto se especifica e testa uma
-rota independente; B. criar sessões dedicadas e definir ownership de wallpaper,
-login e recuperação antes de migrar.
+**Options:** A. conserve the current integration while specifying and testing an independent route; B. create dedicated sessions and set wallpaper ownership, login and recovery before migrating.
 
-**Recommended:** A nesta fundação; elaborar proposta comparativa antes de B.
+**Recommended:** A in this foundation; draw up comparative proposal before B.
 
-**Impact:** units, login, wallpaper, atalhos, compositor e retorno após crash.
-A separação runtime fica PLANNED e não é implementada sem aprovação explícita.
-A reserva documental já solicitada continua válida e independente dessa decisão.
+**Impact:** units, login, wallpaper, shortcuts, compositor and return after crash. Runtime separation is PLANNED and is not implemented without explicit approval. The already requested documentary reservation remains valid and independent of this decision.

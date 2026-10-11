@@ -4,18 +4,18 @@ Status: Accepted
 
 ## Context
 
-O futuro desktop precisa de um gerenciador alinhado à identidade e às interações Ricy. Dolphin já é usado e personalizado, e sua remoção antes de existir substituto deixaria uma lacuna funcional.
+The future desktop needs a file manager aligned with Ricy identity and interactions. Dolphin is already used and customized; removing it before a replacement exists would leave a functional gap.
 
 ## Decision
 
-Adotar RICY-005: reservar apps/file-manager/ para Ricy Files; ele será o padrão da futura sessão Ricy. Dolphin permanece disponível para Plasma Recovery.
+Adopt RICY-005: reserve apps/file-manager/ for Ricy Files; it will be the default for the future Ricy session. Dolphin remains available for Plasma Recovery.
 
 ## Consequences
 
-Separar a futura aplicação das adaptações Dolphin existentes. Toolkit, contratos e cronograma de Files permanecem UNKNOWN até proposta aprovada.
+Separate the future application from existing Dolphin adaptations. The toolkit, contracts, and Files timeline remain UNKNOWN until a proposal is approved.
 
 ## Constraints
 
-Não implementar Files ou Settings agora, não mudar associações MIME/FileManager1 nem remover Dolphin. Não reutilizar sem análise wrappers globais que afetariam recovery.
+Do not implement Files or Settings now, change MIME/FileManager1 associations, or remove Dolphin. Do not reuse global wrappers that affect recovery without analysis.
 
-Referências: [INVARIANTS](../INVARIANTS.md), [ARCHITECTURE](../ARCHITECTURE.md).
+References: [INVARIANTS](../INVARIANTS.md), [ARCHITECTURE](../ARCHITECTURE.md).

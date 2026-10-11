@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
-Name=Menu Noctalia (teste)
-Exec="/home/delta/Projects/ricy/ricy-kit/outputs/noctalia-test/abrir-menu.sh"
+Name=Noctalia Menu (test)
+Exec="/home/delta/Projects/ricy/ricy-kit/outputs/noctalia-test/open-menu.sh"
 Icon=noctalia
 Categories=Utility;
 X-KDE-Shortcuts=Meta+Space

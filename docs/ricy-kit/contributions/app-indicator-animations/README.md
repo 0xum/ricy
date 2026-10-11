@@ -1,128 +1,68 @@
-# Indicador dos aplicativos e animações das janelas
+# Application indicator and window animations
 
-O usuário confirmou restaurar/minimizar pelo ícone e fechar com o botão do
-meio. Esta variante acrescenta resposta visual aos estados das janelas.
+The user confirmed restoring/minimizing the icon and closing with the middle button. This variant adds visual response to the states of the windows.
 
-## Bolinha roxa da taskbar
+## Taskbar purple ball
 
-O indicador mantém a cor configurada no Noctalia:
+The indicator keeps the color set in Noctalia:
 
-| Estado | Opacidade | Escala visual |
+| Status | Opacity | Visual scale |
 |---|---:|---:|
-| Janela ativa | 1,00 | 1,00 |
-| Aberta em segundo plano | 0,55 | 0,82 |
-| Minimizada | 0,28 | 0,65 |
-| Ícone fixado sem janela | 0,00 | 0,55 |
+| Active Window |  1,00  |  1,00  |
+| Opened in the background |  0,55  |  0,82  |
+| minimized |  0,28  |  0,65  |
+| Icon fixed without window |  0,00  |  0,55  |
 
-Transição de 160 ms, EaseOutCubic, no AnimationManager nativo, respeitando
-movimento/velocidade da shell. A animação parte do valor visual atual ao ser
-interrompida. Os valores são preservados quando os tiles são reconstruídos,
-permitindo também apagar suavemente o indicador de um app fixado fechado.
-Ícone não fixado é removido quando sua última janela fecha. Não muda área de
-clique, layout, hover dos ícones nem opções do tray. A opção show_active_indicator
-continua sendo respeitada. Quando há títulos visíveis, a linha indicadora usa
-os mesmos estados. Os pontos do resumo de workspaces mantêm sua composição.
+Transition from 160 ms, EaseOutCubic, in the Native AnimationManager, respecting the motion/speed of the shell. The animation starts from the current visual value when interrupted. The values are preserved when tiles are reconstructed, allowing also to gently delete the indicator of a fixed closed app. Unfixed icon is removed when your last window closes. Do not change the area of click, layout, hover icons or trace options. The show_active_indicator option continues to be respected. When there are visible titles, the indicator line uses the same states. Workspaces summary points maintain its composition.
 
-O script KDE envia agora o estado de minimização de cada UUID e conecta
-minimizedChanged. Uma janela minimizada não permanece ativa por foco antigo
-retido sobre uma superfície da shell. Seleção ativa prioriza UUID, evitando
-acender outra janela de mesmo título. Nos fixados agrupados, o estado minimizado
-significa que todas as janelas estão minimizadas; nos grupos de workspace,
-a representação prioriza uma janela ativa ou visível. A estrutura ToplevelInfo
-também preserva o estado anunciado por wlr, quando disponível.
+The KDE script now sends the minimization status of each UUID and connects minimalizedChanged. A minimized window does not remain active by ancient focus retained on a shell surface. Active selection prioritizes UUID, avoiding lighting another window of the same title. In grouped fixed, the minimized state means that all windows are minimized; in the workspace groups, the representation prioritizes an active or visible window. The ToplevelInfo structure also preserves the state announced by wlr when available.
 
-## Animações no KWin
+## Animations in KWin
 
-ricywindowactions deriva do efeito Squash do KDE: comprime/desloca/esmaece
-para minimizar e inverte para restaurar, com duração base 240 ms, InCubic/OutCubic.
-Reversões rápidas reutilizam a animação; se não for possível, ela é cancelada
-antes da nova. Mantém blur forçado durante a transição e o libera ao terminar.
+ricywindowactions derives from KDE's squash effect: compresses/displaces/smears to minimize and reverses to restore, with base duration 240 ms, InCubic/OutCubic. Fast reversals reuse the animation; if not possible, it is cancelled before the new one. Keeps blur forced during the transition and releases it when finished.
 
-O efeito nativo Squash não anima sem iconGeometry. Noctalia não publica essa
-geometria de ícone Plasma. Esta variante usa a geometria quando fornecida;
-na ausência dela, usa um destino de 18×18 no mesmo monitor, centrado na
-horizontal da janela e a 22 px da borda inferior, referência da taskbar de 44 px.
-Esse destino é aproximado: não é a posição exata do ícone. Não desloca a
-janela de um monitor para outro. Para barra em outra posição/altura, revise
-o destino de fallback. Anima somente janelas normais que aparecem na taskbar;
-painéis, busca, tray e efeitos de tela cheia não recebem essa animação.
+The native effect Squash does not animates without iconGeometry. Noctalia does not publish this Plasma icon geometry. This variant uses geometry when provided; in the absence of it, it uses a Plasma destination 18×18 on the same monitor, centered on the horizontal of the window and 22 bottom edge px, Taskbar reference 44 px. This destination is approximate: it is not the exact position of the icon. It does not move the window from one monitor to another. For bar in another position/height, review the fallback destination. It only animates normal windows that appear in the taskbar; panels, search, track and full screen effects do not receive this animation.
 
-Abertura/fechamento usam o efeito nativo Scale, duração base 180 ms,
-escala 0,92↔1 e fade. Fechamento ocorre após o aplicativo aceitar o pedido,
-respeitando diálogos de salvar. Scale também pode animar diálogos conforme
-sua implementação nativa. Desativados Squash/Magic Lamp e Fade para evitar
-sobreposição com os efeitos escolhidos. Smooth Window Geometry permanece.
+Opening/closing use the native effect Scale, base duration 180 ms, scale 0,92↔1 and fade. Closure occurs after the application accepts the request, respecting save dialogues. Scale can also animate dialogues according to its native implementation. Disabled squash/magic lamp and fade to avoid overlapping with the chosen effects. Smooth Window Geometry remains.
 
-animationTime respeita a velocidade global do KDE. Na sessão validada,
-AnimationDurationFactor=0,25 reduz 240 ms para cerca de 60 ms e 180 ms para
-cerca de 45 ms. A preferência global foi preservada. Noctalia e KWin têm
-preferências de movimento independentes; os tempos citados são de referência,
-não medidas de latência real. Composições anteriores e ricyblur permanecem.
+animationTime respects the global speed of KDE. In the validated session, AnimationDurationFactor=0,25 reduce 240 ms for about 60 ms and 180 ms for about 45 ms. Global preference has been preserved. Noctalia and KWin have independent movement preferences; the mentioned times are of reference, not real latency measures. Previous compositions and ricyblur remain.
 
-## Reproduzir
+## Reproduce
 
-Fonte Noctalia 5.2.1, commit
-6ef43e2bf2f3d5b4205ec72a72e34a2ab76ce3b4; efeito validado no KWin 6.7.5.
-Dependências de compilação: BUILDING.md upstream e notificacoes-continuidade.
-Aplicador requer Python, kwriteconfig6 e qdbus6 na sessão, sem sudo.
+Font Noctalia 5.2.1, commit 6ef43e2bf2f3d5b4205ec72a72e34a2ab76ce3b4; validated effect on KWin 6.7.5. Build Dependencies: BUILDING.md upstream and notifications-continuity. Applicator requires Python, kwriteconfig6 and qdbus6 in session without sudo.
 
 ```bash
 cd "$HOME/ricy-kit/contributions/app-indicator-animations"
-bash compilar.sh
-python ../notification-continuity/ativar.py
-python aplicar-animacoes.py
+bash build.sh
+python ../notification-continuity/enable.py
+python apply-animations.py
 ```
 
-O patch completo preserva as contribuições anteriores. O compilador aceita
-fonte limpa ou exatamente este diff; ao migrar, preserve o cache anterior e
-use fonte limpa conforme taskbar-menu-composition/README.md. Ajuste caminhos
-quando XDG_CACHE_HOME estiver definido. Não substitui /usr/bin/noctalia.
-O ativador da shell preserva aplicativos durante a troca. O aplicador do efeito
-registra backup das chaves que altera e do pacote local anterior, instala em
-XDG_DATA_HOME/kwin/effects/ricywindowactions e carrega sem reiniciar KWin.
-Reveja/recompile ao atualizar as versões Noctalia/KWin.
+The full patch preserves previous contributions. The compiler accepts clean font or exactly this diff; when migrating, preserve the previous cache and use clean font as per taskbar-menu-composition/README.md. Adjust paths when XDG_CACHE_HOME is set. Do not replace /usr/bin/noctalia. The shell activator preserves applications during the exchange. The effect applicator records backup of the changing keys and the previous local package, installs in XDG_DATA_HOME/kwin/effects/ricywindowactions and loads without restarting KWin. Review/recompile when updating the Noctalia/KWin versions.
 
-## Validação e reversão
+## Validation and reversal
 
-Compilação, reprodução, bash -n, validação do perfil, git diff --check e
-aplicação reversa do patch passaram. Comparado com taskbar-app-actions:
-mudanças adicionais limitadas a TaskbarWidget, KwinActiveWindow e
-WaylandToplevels, cada um com fonte/header. Outros blocos preservados.
+Compilation, playback, bash-n, profile validation, git diff --check and reverse patch application passed. Compared to taskbar-app-actions: additional changes limited to TaskbarWidget, KwinActiveWindow and WaylandToplevels, each with source/header. Other preserved blocks.
 
 ```bash
-# Requer Python/PyQt6; executa JS real extraído da fonte, sem janelas reais.
-python validar-acoes.py
-python validar-indicador.py
-# Fonte alternativa:
-python validar-indicador.py --fonte /caminho/para/noctalia
+# Require Python/PyQt6; performs actual JS extracted from source without actual windows.
+python validate-actions.py
+python validate-indicator.py
+# Alternative source:
+python validate-indicator.py --fonte /caminho/para/noctalia
 ```
 
-17 cenários preservam restauração/minimização/fechamento e identidade exata;
-15 verificam sinal de minimização, serialização, foco, fallback de monitor,
-reversão e cleanup do blur. Uma janela Qt descartável na sessão real confirmou
-estados de restaurar/minimizar/restaurar e fechar, com os efeitos efetivamente
-ativos durante as transições. Capturas locais verificaram a mudança do
-indicador ativo→minimizado; capturas não são distribuídas. A velocidade global
-0,25 exige observar o efeito antes de 60 ms: uma consulta inicial após 65 ms
-perdeu a animação; a verificação dentro da transição passou. Scripts/objeto DBus
-de teste removidos. Nenhuma janela com trabalho foi fechada. A confirmação do
-usuário é da variante anterior; este ajuste ainda aguarda avaliação visual dele.
-Não valida todos os grupos, aplicativos, escalas ou movimentos rápidos reais.
+17 scenarios preserve restoration/minimization/closement and exact identity; 15 check signal of minimization, serialization, focus, monitor fallback, reversal and blur cleanup. A disposable Qt window in the real session confirmed states of restoring/minimizing/restoring and closing, with the effects effectively active during transitions. Local captures verified the change of the active indicator→minimized; captures are not distributed. 0,25 it requires to observe the effect before 60 ms: an initial consultation after 65 ms lost the animation; check within the transition passed. Test Scripts/object DBus removed. No working window has been closed. User confirmation is from the previous variant; this setting still awaits visual evaluation of it. Do not validate all groups, applications, scales or real fast movements.
 
-Para desfazer, restaure as duas partes usando os backups impressos:
+To undo, restore both parts using printed backups:
 
 ```bash
-python aplicar-animacoes.py --restaurar "$HOME/.local/state/ricy-indicador-animacoes-backups/DATA-HORA"
-python ../notification-continuity/ativar.py --restaurar "$HOME/.local/state/ricy-notificacoes-backups/DATA-HORA"
+python apply-animations.py --restaurar "$HOME/.local/state/ricy-indicador-animacoes-backups/DATA-HORA"
+python ../notification-continuity/enable.py --restaurar "$HOME/.local/state/ricy-notificacoes-backups/DATA-HORA"
 ```
 
-Noctalia/patch sob MIT (LICENSE). Efeito derivado do KDE Squash sob
-GPL-2.0-or-later, com créditos preservados no main.js e licença separada em
-LICENSE-KWIN-GPL-2.0-or-later.txt. Kit sem binários, capturas, clipboard,
-contas, estado privado, bytecode ou backups.
+Nottalia/patch under MIT (LICENSE).2.0-or-later, with credits preserved in main.js and separate licence in LICENSE-KWIN-GPL-2.0-or-later.txt. Kit without binaries, captures, clipboard, accounts, private status, bytecode or backups.
 
-## Variante posterior: ícones e arraste
+## Later variable: icons and drag
 
-A referência cumulativa atual é ../icones-apps-reordenacao. Inclui pulso/bounce
-por estado, correção do fundo preto e reordenação persistente de apps.
-Para reconstruir a sessão atual use o compilador dessa contribuição.
+The current cumulative reference is ../icones-apps-reordenacao. Includes pulse/bounce by status, black background correction and persistent reordering of apps. To rebuild the current session use the compiler of this contribution.

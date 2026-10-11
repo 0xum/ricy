@@ -1,34 +1,19 @@
-# AIC8800 USB — Wi-Fi e Bluetooth no CachyOS
+# AIC8800 USB — Wi-Fi and Bluetooth on CachyOS
 
-Este destino possui o adaptador USB `a69c:8800`, que após carregar o firmware
-passa a `a69c:8801`: duas interfaces Bluetooth e uma Wi-Fi. O pacote local
-`aic8800-usb-dkms-ricy` inclui firmware, fonte dos três módulos
-`aic_load_fw`, `aic8800_fdrv` e `aic_btusb`, e configuração DKMS.
+This destination has the USB adapter `a69c:8800`, which after loading the firmware passes to `a69c:8801`: two Bluetooth interfaces and a Wi-Fi. The local package `aic8800-usb-dkms-ricy` includes firmware, source of the three modules `aic_load_fw`, `aic8800_fdrv` and `aic_btusb`, and DKMS configuration.
 
-Fonte primária: [Radxa aic8800](https://github.com/radxa-pkg/aic8800), fixada no
-commit `d13d07963cd15d731e2895e8288a04cca6152ac9`, com SHA256 do arquivo original
-no PKGBUILD. A preparação normaliza os finais de linha e aplica a série de
-patches mantida pelo próprio Radxa, incluindo compatibilidade com kernel 7.2
-e modo BlueZ para Bluetooth. O código compilado é USB; PCIe/SDIO não são
-instalados. DKMS seleciona Clang ou GCC conforme a configuração de cada kernel.
+Primary source: [Radxa aic8800](https://github.com/radxa-pkg/aic8800), fixed on the commit `d13d07963cd15d731e2895e8288a04cca6152ac9`, with SHA256 from the original file in PKGBUILD. The preparation normalizes the line endings and applies the patch series maintained by Radxa itself, including kernel compatibility 7.2 and BlueZ mode for Bluetooth. The compiled code is USB; PCIe/SDIO are not installed. DKMS selects Clang or GCC according to the configuration of each kernel.
 
-O pacote inclui o firmware em `/usr/lib/firmware/aic8800_fw/USB`. A configuração
-de modprobe registra o driver Bluetooth antes de a carga de firmware
-reinicializar o dispositivo e dá prioridade ao driver AIC sobre btusb. Não bloqueia btusb
-globalmente. Não inclui credenciais Wi-Fi, dispositivos pareados ou perfis
-NetworkManager da máquina de origem.
+The package includes firmware in `/usr/lib/firmware/aic8800_fw/USB`. The modprobe configuration logs the Bluetooth driver before the firmware charge restarts the device and gives priority to the AIC driver over btusb. It does not block btusb globally. It does not include Wi-Fi credentials, paired devices or NetworkManager profiles of the original machine.
 
-## Reproduzir em CachyOS
+## Play in CachyOS
 
-Confira os hashes do kit antes de executar. Instale os headers correspondentes
-exatamente aos kernels do destino e as ferramentas indicadas abaixo. Ao atualizar
-kernel/headers, atualize o sistema como conjunto e reinicie no kernel novo antes
-de validar o adaptador.
+Check out the hashes of the kit before running. Install the headers corresponding exactly to the target kernels and the tools listed below. When updating kernel/headers, update the system as a set and restart in the new kernel before validating the adapter.
 
 ```bash
 sudo pacman -S --needed dkms base-devel clang llvm lld python bluez bluez-utils
-# Neste destino foram usados linux-cachyos-headers e linux-cachyos-lts-headers.
-# Use os pacotes de headers dos kernels efetivamente instalados no novo destino.
+# Linux-cachyos-headers and linux-cachyos-lts-headers were used in this destination.
+# Use kernel header packages effectively installed in the new destination.
 cd "$HOME/ricy-kit/contributions/driver-aic8800"
 makepkg --noconfirm
 sudo pacman -U aic8800-usb-dkms-ricy-5.0.20260123.9-3-any.pkg.tar.zst
@@ -40,35 +25,22 @@ nmcli device
 bluetoothctl list
 ```
 
-O launcher/modalias USB carrega os módulos automaticamente nas próximas
-conexões do adaptador. DKMS recompila após atualizações de kernel com headers
-disponíveis. Reveja a compatibilidade upstream para kernels futuros: não existe
-garantia de que a fonte fixada continuará funcionando em qualquer versão.
+The USB launcher/modalias automatically loads the modules on the next adapter connections. DKMS recompiles after kernel updates with available headers. Review upstream compatibility for future kernels: there is no guarantee that the fixed source will continue to work in any version.
 
-Use o painel de rede para conectar ao Wi-Fi e o painel Bluetooth para parear.
-A instalação do driver não escolhe uma rede nem fornece senha.
+Use the network panel to connect to the Wi-Fi and Bluetooth panel to pair. The driver installation does not choose a network or provide password.
 
-## Verificação e reversão
+## Verification and reversal
 
-No destino foram reconhecidas as interfaces wlan0 e hci0, sem bloqueio rfkill;
-Wi-Fi encontrou redes e BlueZ iniciou descoberta de dispositivos. A conexão
-a uma rede e o pareamento precisam ser realizados pelo usuário.
+In the destination, wlan0 and hci0 interfaces were recognized, without rfkill lock; Wi-Fi found networks and BlueZ started discovery of devices. Connection to a network and matching need to be performed by the user.
 
-Para remover o driver e o firmware:
+To remove the driver and firmware:
 
 ```bash
 sudo pacman -R aic8800-usb-dkms-ricy
 ```
 
-DKMS remove os módulos instalados. Reconecte o adaptador ou reinicie para
-encerrar os módulos que ainda estejam carregados. DKMS e BlueZ podem ser
-mantidos para outros dispositivos. O serviço Bluetooth deste destino já
-estava habilitado antes da instalação; ele apenas foi iniciado.
+DKMS removes the installed modules. Reconnect the adapter or restart to close the modules that are still loaded. DKMS and BlueZ can be maintained for other devices. The Bluetooth service of this destination was already enabled before installation; it was only started.
 
-Logs locais da implementação: `$HOME/.local/state/ricy-aic8800/`.
-Os logs e caches de compilação não fazem parte do kit portátil.
+Local implementation logs: `$HOME/.local/state/ricy-aic8800/`. Compilation logs and caches are not part of the portable kit.
 
-Compilação e instalação DKMS verificadas para CachyOS 7.2.9-2 (Clang) e
-CachyOS LTS 6.18.55-2 (GCC). O teste funcional foi na sessão com 7.2; não
-houve boot no LTS. O código upstream ainda emite avisos de compilação e
-traces de debug; eles não foram tratados como falha de instalação.
+Compilation and installation DKMS verified for CachyOS 7.2.9-2 (Clang) and CachyOS LTS 6.18.55-2 (GCC) The functional test was in the session with 7.2; there was no boot on the LTS. Upstream code still emits build notices and debug strokes; they were not treated as installation failure.

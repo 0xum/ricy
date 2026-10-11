@@ -25,7 +25,7 @@ def run(args, cwd, log, capture=False):
         for line in (proc.stdout + proc.stderr).splitlines():
             log(line)
         if proc.returncode:
-            raise RuntimeError('Falha em ' + Path(args[0]).name + '. Consulte os detalhes abaixo.')
+            raise RuntimeError('Failed during ' + Path(args[0]).name + '. See the details below.')
         return proc.stdout
     with subprocess.Popen(args, cwd=cwd, stdin=subprocess.DEVNULL,
                           stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
@@ -35,7 +35,7 @@ def run(args, cwd, log, capture=False):
             output.append(line)
             log(re.sub(r'\x1b(?:\[[0-?]*[ -/]*[@-~]|\([A-Z])', '', line).rstrip())
         if proc.wait():
-            raise RuntimeError('Falha em ' + Path(args[0]).name + '. Consulte os detalhes abaixo.')
+            raise RuntimeError('Failed during ' + Path(args[0]).name + '. See the details below.')
     return ''.join(output) if capture else None
 
 
@@ -47,18 +47,18 @@ def rpm_to_deb(source, work, log):
     query = lambda fmt: run(rpm + ['-qp', '--qf', fmt, str(source)], work, log, True)
     name, version, release, arch = query('%{NAME}\n%{VERSION}\n%{RELEASE}\n%{ARCH}').splitlines()
     if arch not in {platform.machine(), 'noarch'}:
-        raise RuntimeError(f'Arquitetura RPM incompatível: {arch}.')
+        raise RuntimeError(f'Uncompatible RPM architecture: {arch}.')
     if not re.fullmatch(r'[a-zA-Z0-9][a-zA-Z0-9+._-]*', name):
-        raise RuntimeError('Nome de pacote RPM inválido.')
+        raise RuntimeError('Invalid RPM package name.')
     scripts = run(rpm + ['-qp', '--scripts', str(source)], work, log, True)
     triggers = run(rpm + ['-qp', '--triggers', str(source)], work, log, True)
     filetriggers = run(rpm + ['-qp', '--filetriggers', str(source)], work, log, True)
     if scripts.strip() or triggers.strip() or filetriggers.strip():
-        raise RuntimeError('Este RPM contém scripts de instalação ou gatilhos que precisam de '
-                           'adaptação para o CachyOS. A conversão automática não os ignora. '
-                           'Procure a versão deste programa nos repositórios/AUR ou use um .deb.')
+        raise RuntimeError('This RPM contains installation scripts or triggers that need to '
+                           'The automatic conversion doesn\'t ignore them. '
+                           'Look for this program in the repositories/AUR or use a .deb.')
     payload = work / 'payload.tar.gz'
-    log('Extraindo conteúdo do RPM…')
+    log('Extracting RPM content...')
     with payload.open('wb') as stream:
         proc = subprocess.run(['/usr/bin/rpm2archive', str(source)], cwd=work,
                               stdout=stream, stderr=subprocess.PIPE)
@@ -70,7 +70,7 @@ def rpm_to_deb(source, work, log):
         # Python's data filter blocks traversal, devices and escaping links.
         archive.extractall(root, filter='data')
     if (root / 'DEBIAN').exists():
-        raise RuntimeError('O RPM contém um diretório de controle inesperado.')
+        raise RuntimeError('The RPM contains an unexpected control directory.')
     control = root / 'DEBIAN'
     control.mkdir()
     summary = query('%{SUMMARY}').replace('\n', ' ').strip()
@@ -95,11 +95,11 @@ def rpm_to_deb(source, work, log):
             elif len(choices) == 1:
                 deps.update(choices)
             else:
-                raise RuntimeError(f'Não foi possível identificar a dependência RPM {dep}.')
+                raise RuntimeError(f'Unable to identify RPM dependency {dep}.')
         elif re.fullmatch(r'[a-zA-Z0-9][a-zA-Z0-9+._-]*', dep):
             deps.add(dep.lower())
         else:
-            raise RuntimeError(f'A dependência RPM {dep} exige adaptação manual.')
+            raise RuntimeError(f'RPM dependence {dep} requires manual adaptation.')
     deb_arch = {'x86_64': 'amd64', 'aarch64': 'arm64', 'noarch': 'all'}[arch]
     deb_version = re.sub(r'[^a-zA-Z0-9.+~]', '.', version + '-' + release)
     if not deb_version[0].isdigit():
@@ -120,15 +120,15 @@ def rpm_to_deb(source, work, log):
 def prepare(filename, log=print):
     source = Path(filename).resolve(strict=True)
     if not source.is_file() or source.suffix.lower() not in {'.deb', '.rpm'}:
-        raise RuntimeError('Selecione um arquivo .deb ou .rpm local.')
+        raise RuntimeError('Select a local .deb or .rpm file.')
     CACHE.mkdir(parents=True, exist_ok=True, mode=0o700)
     with (CACHE / 'conversion.lock').open('w') as lock:
         try:
             fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         except BlockingIOError:
-            raise RuntimeError('Outro pacote está sendo convertido. Aguarde a conclusão.')
+            raise RuntimeError('Another package is being converted. Please wait for completion.')
         work = Path(tempfile.mkdtemp(prefix='conversion-', dir=CACHE))
-        log('Arquivos e registro da conversão: ' + str(work))
+        log('Conversion files and log: ' + str(work))
         copied = work / ('input' + source.suffix.lower())
         shutil.copyfile(source, copied)
         deb = rpm_to_deb(copied, work, log) if copied.suffix == '.rpm' else copied
@@ -139,7 +139,7 @@ def prepare(filename, log=print):
         run([converter, '-Q', '-o', str(output), str(deb)], work, log)
         packages = list(output.glob('*.pkg.tar.*'))
         if len(packages) != 1:
-            raise RuntimeError('O conversor não gerou um único pacote válido.')
+            raise RuntimeError('The converter did not generate a single valid package.')
         package = packages[0]
         info = run(['/usr/bin/pacman', '-Qip', str(package)], work, log, True)
         # Fail before the Install button if pacman cannot resolve the transaction.

@@ -4,8 +4,8 @@
   "X-Plasma-MainScript": "ui/main.qml",
   "KPlugin": {
     "Id": "windowsarrows",
-    "Name": "Setas para maximizar e restaurar",
-    "Description": "Setas mantêm a mesma janela como alvo até soltar Super",
+    "Name": "Arrow Keys to Maximize and Restore",
+    "Description": "Arrows keep the same window as target until Super releases",
     "Version": "1.1",
     "License": "MIT"
   }

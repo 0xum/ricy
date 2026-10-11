@@ -1,7 +1,8 @@
 # tools
 
-Reservado a ferramentas de manutenção com necessidade comprovada. Verificações simples vivem em scripts/; evitar framework ou formato de componente próprio.
+Reserved for maintenance tools with a demonstrated need. Simple checks belong
+in scripts/; avoid a framework or a custom component format.
 
-Use [DEVELOPMENT](../docs/DEVELOPMENT.md) se precisar escolher checks;
-[component-development](../.agents/skills/component-development/SKILL.md) somente
-para componente aprovado novo, migração ou mudança de contratos/dependências.
+Use [DEVELOPMENT](../docs/DEVELOPMENT.md) to select checks;
+[component-development](../.agents/skills/component-development/SKILL.md) only
+for a new approved component, migration, or changes to contracts/dependencies.

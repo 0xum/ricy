@@ -1,16 +1,25 @@
-# Desenvolvimento orientado por agentes
+# Agent-first Development
 
-## Entrada e fluxo
-Siga a hierarquia aplicável e o roteamento por consequência em [AGENTS](../AGENTS.md).
-Correção localizada começa no código, documentação e testes locais. Carregue docs
-adicionais quando o impacto atingir seu domínio; a ordem de autoridade não é
-uma lista universal de leitura. Se descobrir uma fronteira ou contrato afetado,
-amplie o contexto antes de implementar. Comando de validação conhecido não exige
-carregar a skill testing. Não execute instaladores para entender como funcionam.
-No kit ativo, perfis, backups e estado são privados.
+## Entry point and workflow
+Follow the applicable hierarchy and consequence-based routing in [AGENTS](../AGENTS.md).
+A local fix starts with local code, documentation, and tests. Load additional docs
+when impact reaches their domain; the authority order is not a universal reading
+list. If an affected boundary or contract is discovered, expand context before
+implementing. A known validation command does not require loading the testing
+skill. Do not run installers to understand them. Active-kit profiles, backups,
+and state are private.
 
-## Validações executáveis
-Da raiz do projeto (ou usando caminho absoluto; os scripts resolvem sua raiz):
+## Project language
+[Always use en-US as the language.]
+
+Use US English for project documentation, agent instructions, comments,
+developer messages, and public-facing interfaces. Chats may use pt-BR.
+The full [language policy](../AGENTS.md#project-language) requires en-US file names while preserving deployed compatibility identifiers,
+private state, historical manifests, licenses, upstream localization catalogs,
+and private regional preferences. See [FILE-RENAMES](FILE-RENAMES.md). New public content and names use en-US.
+
+## Executable validation
+From the project root (or with an absolute path; scripts resolve their own root):
 
 ```bash
 ./scripts/verify architecture
@@ -21,55 +30,56 @@ Da raiz do projeto (ou usando caminho absoluto; os scripts resolvem sua raiz):
 python3 scripts/test-foundation.py
 ```
 
-`verify` usa Python 3.11+ e ferramentas existentes; não instala dependências.
-- `architecture`: arquivos obrigatórios, skills/frontmatter, regras locais,
-  links Markdown relativos da fundação e sintaxe dos novos scripts.
-- `shell`: sintaxe Bash/Python/JSON/TOML nos sources do kit ativo (exclui
-  work, outputs, backups e assets upstream); teste offline de ações Noctalia
-  se existir fonte local compatível com commit/patch esperado e PyQt6.
-- `recovery`: teste existente de capture/merge de painéis em memória; teste
-  QJSEngine do efeito de janelas se PyQt6 existir. Não troca shell/compositor.
-- `all`: agrega os anteriores; não significa certificação do desktop.
-- `doctor`: diagnóstico somente leitura de ferramentas, pacotes via pacman,
-  ambiente declarado, unidades e entrada Plasma Wayland. Nunca executa reparos.
+`verify` uses Python 3.11+ and existing tools; it does not install dependencies.
 
-`python3 scripts/test-foundation.py` exercita 17 cenários dos validadores em
-fixture temporária, incluindo arquivos/links ausentes, erro de componente e
-dependência indisponível. Não é executado recursivamente por verify.
+- `architecture`: required files, skills/frontmatter, local rules, relative
+  foundation Markdown links, and syntax of the new scripts.
+- `shell`: Bash/Python/JSON/TOML syntax in active-kit sources (excluding work,
+  outputs, backups, and upstream assets); offline Noctalia action tests when
+  a local source matches the expected commit/patch and PyQt6 is available.
+- `recovery`: existing in-memory panel capture/merge test; QJSEngine window-effect
+  tests when PyQt6 is available. Does not switch shell/compositor.
+- `all`: combines the above; does not certify the desktop.
+- `doctor`: read-only diagnostics of tools, packages through pacman, reported
+  environment, units, and the Plasma Wayland entry. Never performs repairs.
 
-Códigos de saída: verify 0 = checks executados passaram sem skips de dependência;
-1 = alguma verificação falhou; 2 = algum check offline não pôde rodar, sem FAIL;
-uso inválido também retorna 2. Ensaios live ficam sempre `NOT RUN`, fora do
-escopo automático. Doctor: 0 = consultas concluídas; 2 = alguma informação
-UNKNOWN; isso nunca significa desktop saudável. Nenhum comando recebe sudo.
+`python3 scripts/test-foundation.py` exercises 17 validator scenarios in a
+temporary fixture, including missing files/links, component failure, and an
+unavailable dependency. verify does not run it recursively.
 
-A checagem de links cobre arquivos da fundação, README raiz e AGENTS locais,
-sem percorrer todo o histórico, links externos ou validar âncoras de títulos.
-Ela verifica destinos Markdown inline e referências de links; texto em blocos
-de código não é link. Paths em código inline e symlinks runtime não são cobertos.
-Documentos históricos preservados podem ter caminhos antigos.
+Exit codes: verify 0 = executed checks passed without dependency skips;
+1 = a check failed; 2 = an offline check could not run, without FAIL;
+invalid usage also returns 2. Live trials always remain `NOT RUN`, outside
+automatic scope. Doctor: 0 = queries completed; 2 = some information is UNKNOWN;
+this never means the desktop is healthy. No command uses sudo.
 
-## Níveis e evidência
-| Nível | Quando é relevante | Limite |
+Link checking covers foundation files, the root README, and local AGENTS,
+without traversing the entire history, external links, or title anchors.
+It checks inline Markdown targets and link references; text in code blocks
+is not a link. Inline-code paths and runtime symlinks are outside its scope.
+Preserved historical documents may contain old paths.
+
+## Levels and evidence
+| Level | When relevant | Limit |
 |---|---|---|
-| Static | Docs, regras, scripts/configs alterados | Parse/link não garante comportamento |
-| Component | Lógica do componente | Rodar regressões locais apropriadas |
-| Integration | Contratos D-Bus, unidades, perfil e KWin | Executar em ambiente preparado, com retorno |
-| Recovery | Login, compositor, shell, defaults/arquivos | Offline não substitui ida/volta e login reais |
-| Visual | Mudança de aparência/interação | Registrar captura/observação, monitores e escala |
-| Environment | Dependências e versões | Presença de pacote não prova compatibilidade |
+| Static | Changed docs, rules, scripts/configs | Parsing/link checks do not guarantee behavior |
+| Component | Component logic | Run appropriate local regressions |
+| Integration | D-Bus contracts, units, profile, and KWin | Run in a prepared environment with a return path |
+| Recovery | Login, compositor, shell, defaults/files | Offline tests do not replace real round trips and login |
+| Visual | Appearance/interaction changes | Record captures/observations, monitors, and scale |
+| Environment | Dependencies and versions | Package presence does not prove compatibility |
 
-Use `PASS`, `FAIL`, `NOT RUN <motivo>` e `NOT APPLICABLE <motivo>` no relatório.
-Não afirmar “This should work”, “Probably fixed” ou “Everything is working” sem
-evidência. Resultados históricos devem ser atribuídos à sessão original.
+Report `PASS`, `FAIL`, `NOT RUN <reason>`, and `NOT APPLICABLE <reason>`.
+Do not claim “This should work”, “Probably fixed”, or “Everything is working”
+without evidence. Attribute historical results to their original session.
 
-## Mudanças e publicação futura
-Use [CHANGELOG](CHANGELOG.md) para Model/Agent, Date, Purpose, Validation performed.
-Mudança arquitetural não prevista segue
+## Changes and future publication
+Use [CHANGELOG](CHANGELOG.md) for Model/Agent, Date, Purpose, and Validation performed.
+Unplanned architectural changes follow
 [architecture-change](../.agents/skills/architecture-change/SKILL.md).
-A seleção do baseline Git local está registrada em [GIT-BASELINE](GIT-BASELINE.md).
-Antes de publicação, revisar as ressalvas de privacidade, portabilidade e
-licenças/atribuição ali registradas. Manter a seleção explícita de fontes e assets
-separada de perfis, clipboard, backups e estado; não fazer `git add .` no kit ativo.
-Nenhum remote, licença global ou release foi escolhido.
-Consulte [MIGRATION-PLAN](MIGRATION-PLAN.md) para ordem e riscos.
+The local Git baseline selection is recorded in [GIT-BASELINE](GIT-BASELINE.md).
+Before publication, review the privacy, portability, and license/attribution
+caveats recorded there. Keep the explicit source/asset selection separate from
+profiles, clipboard, backups, and state; do not run `git add .` in the active kit.
+No remote, global license, or release has been selected.
+Consult [MIGRATION-PLAN](MIGRATION-PLAN.md) for sequence and risks.

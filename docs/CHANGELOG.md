@@ -1,83 +1,139 @@
-# Registro técnico de mudanças
+# Technical Changelog
 
-Registre mudanças significativas em entradas curtas. Campos mínimos:
-Model/Agent, Date, Purpose, Validation performed. Não assinar arquivos de código.
+Record significant changes in short entries. Minimum fields:
+Model/Agent, Date, Purpose, Validation performed. Do not sign source files.
 
-## 2026-10-11 — Baseline Git local
+## 2026-10-11 — English file names
 
-- **Model/Agent:** Codex (GPT-6), agente desta tarefa.
+- **Model/Agent:** Codex (GPT-6), agent for this task.
 - **Date:** 2026-10-11 (America/Sao_Paulo).
-- **Purpose:** estabelecer baseline Git auditável em `main`, com seleção explícita
-  de fontes e assets, sem remote, publicação, reorganização ou mudança de runtime.
-- **Changes:** `.gitignore` conservador, registro em [GIT-BASELINE](GIT-BASELINE.md)
-  e atualização do estado Git em DEVELOPMENT. Seleção de 1.098 arquivos;
-  1.939 arquivos locais excluídos do índice, preservados no disco. Backups,
-  clipboard, histórico de notificações, perfil/work, bytecode e ZIP com estado
-  privado não entram no baseline. Templates, patches, evidências e assets ficam.
-- **Validation performed:** PASS `./scripts/verify architecture` (52 arquivos
-  obrigatórios e links locais); PASS `./scripts/verify all` (83 candidatos de
-  sintaxe, 17 cenários Noctalia, capture/merge de painéis e 28 cenários KWin);
-  PASS `python3 scripts/test-foundation.py` (17 cenários). Todos com exit 0.
-  Busca heurística nos 1.098 arquivos staged, incluindo 244 SVGZ descomprimidos,
-  sem credenciais evidentes. Índice sem gitlinks; permissões executáveis preservadas.
-- **Preservation:** inventário inicial com SHA-256; nenhum arquivo preexistente
-  removido ou com permissões alteradas. Apenas DEVELOPMENT e este CHANGELOG
-  foram editados pela tarefa. O histórico de notificações privado mudou durante
-  a sessão por atividade externa; não foi escrito, revertido ou versionado.
-- **Limits:** NOT RUN sessão/recovery live; NOT APPLICABLE validação visual e
-  instalação, pois não houve mudança de comportamento. Licenças, referências
-  pessoais/de máquina e portabilidade ainda exigem revisão para publicação;
-  o baseline local não certifica publicação segura integral.
+- **Purpose:** extend the en-US policy to existing project file names at the
+  user's explicit request, superseding the previous path-preservation exception.
+- **Changes:** renamed 227 files across the repository root and both kits using
+  74 English basename mappings. Updated callers, imports, installers, launcher
+  references, palette names, patches, validators, and documentation. Added
+  [FILE-RENAMES](FILE-RENAMES.md) with the complete mapping and compatibility limits.
+  Existing directory names were already in English. Historical SHA256SUMS and
+  private backup/state paths remain unchanged; operational manifest paths and
+  replacement digests use current sources. Existing systemd IDs remain compatible
+  through an explicit mapping to English template names.
+- **Recovery implications:** five installed unit/launcher files referenced old
+  repository paths. Their references were corrected after creating private backups
+  outside the repository; systemd configuration was reloaded without stopping or
+  restarting services. No session switch or installation was performed.
+- **Validation performed:** PASS `./scripts/verify all` and
+  `python3 scripts/test-foundation.py` (17 scenarios); PASS `git diff --check`.
+  PASS all 227 rename destinations, old-path absence, and executable permissions;
+  PASS parsing 123 Python files, Bash syntax for 69 scripts, and 36 JSON files in
+  the public source selection. PASS installed systemd unit verification and
+  absence of obsolete filename references in current sources (historical manifests
+  and the rename map are intentional exceptions).
+- **Limits:** NOT RUN live session/login/crash recovery. Other installed copies
+  require their own reference updates or deliberate reinstallation.
 
-## 2026-10-11 — Fundação agent-first
+## 2026-10-11 — en-US project language
 
-- **Model/Agent:** Codex (GPT-6), agente desta tarefa.
+- **Model/Agent:** Codex (GPT-6), agent for this task.
 - **Date:** 2026-10-11 (America/Sao_Paulo).
-- **Purpose:** formalizar arquitetura solicitada em torno dos kits existentes,
-  com invariantes/ADRs, mapa de 24 contribuições, regras/skills progressivas,
-  diagnóstico e verificações offline, sem migrar runtime ou alterar a sessão.
-- **Changes:** AGENTS/CLAUDE, docs arquiteturais, reservas documentais, sete skills,
-  regras locais, scripts/verify e scripts/doctor. README recebe entrada arquitetural;
-  texto preexistente é preservado. Nenhum arquivo legado removido.
-- **Validation performed:** `./scripts/verify architecture` e `./scripts/verify all`
-  passaram (exit 0): estrutura/links, sintaxe de 83 arquivos do kit, 17 cenários
-  Noctalia, regressões de capture/merge de painéis e 28 cenários KWin isolados.
-  `python3 scripts/test-foundation.py`: 17 verificações comportamentais passaram.
-  As sete skills passaram em `skill-creator/scripts/quick_validate.py`, usando
-  ambiente virtual temporário com PyYAML 6.0.3, sem dependência nova no runtime.
-  `./scripts/doctor`: exit 2 esperado, duas informações UNKNOWN (recovery live e
-  conformidade integral RICY-001); consultas de pacotes/unidades concluídas.
-  O primeiro quick_validate não rodou no Python do sistema por falta de PyYAML;
-  foi repetido com sucesso no ambiente isolado.
-- **Limits:** não testar login, alternância ou crash recovery nesta alteração
-  documental. C-001 a C-005 são divergências registradas, não correções de runtime.
+- **Purpose:** use US English for project content and public-facing interfaces,
+  while allowing pt-BR in chats according to the user's preference.
+- **Changes:** translated project documentation, ADRs, local agent rules/skills,
+  comments, script diagnostics, interface labels, metadata, and visual-reference
+  text in the active and transport kit trees. Added `[Always use en-US as the language.]`
+  to AGENTS, README, and DEVELOPMENT, with routing through the ricy/documentation skills.
+  Existing paths, identifiers, private state, licenses, upstream localization catalogs,
+  and historical SHA256SUMS remain preserved. The restore confirmation now displays
+  and accepts `y/N`. Operational correction-manifest hashes were updated for translated
+  sources; the active kit's preexisting modified target remains protected from replacement.
+- **Validation performed:** PASS `./scripts/verify architecture` and
+  `./scripts/verify all` (required files/links, syntax, 17 Noctalia scenarios,
+  panel capture/merge, and 28 isolated KWin scenarios); PASS
+  `python3 scripts/test-foundation.py` (17 scenarios); PASS `git diff --check`.
+  Both kits' changed sources passed checks: 121 Python files, 43 Bash files,
+  16 JSON files, and 2 SVG/XML files. Python AST comparison confirmed no
+  changes beyond string constants/comments. PASS transport correction patch
+  applicability and replacement-file hash checks. The active correction target's
+  preexisting hash mismatch remains rejected. Installer labels/layout were
+  inspected in an offscreen Qt window without selecting a package; the translated
+  SVG reference was rendered and visually inspected.
+- **Recovery implications:** shell/session selection, backups, and recovery paths
+  remain in place. No installation, service restart, or session switching was performed.
+- **Limits:** NOT RUN live session/login/crash recovery or full desktop visual review.
+  The installer UI was inspected offscreen without selecting or installing a package.
+  No publication or migration was performed.
 
-- **Preservation check:** 51 arquivos novos; README foi o único arquivo
-  preexistente editado pela tarefa, preservando integralmente seu texto anterior.
-  Comparação SHA-256 de 2.978 arquivos iniciais encontrou também mudança no
-  `notification_history.json` do perfil ativo durante a sessão. Esse estado não
-  foi escrito pela tarefa e não foi revertido. Os outros 2.976 arquivos mantiveram
-  hash; nenhum arquivo preexistente removido ou com permissões alteradas.
+## 2026-10-11 — Local Git baseline
 
-## 2026-10-11 — Contexto por consequência
-
-- **Model/Agent:** Codex (GPT-6), agente desta tarefa.
+- **Model/Agent:** Codex (GPT-6), agent for this task.
 - **Date:** 2026-10-11 (America/Sao_Paulo).
-- **Purpose:** reduzir leitura universal sem alterar autoridade ou aprovação
-  de arquitetura. CLAUDE importa AGENTS; raiz/DEVELOPMENT/índice e roteadores
-  locais carregam fontes conforme impacto. Skills component-development, testing,
-  documentation, noctalia-development e visual-development têm gatilhos mais
-  específicos; KWin mantém invariantes/recovery e consulta o mapa por domínio.
-  DESIGN-SYSTEM condiciona apenas o acionamento da skill visual; valores e
-  garantias visuais permanecem intactos.
-- **Context before → after:** ajuste visual local antes encadeava arquitetura,
-  invariantes, mapa e skills gerais; agora usa hierarquia AGENTS, DESIGN-SYSTEM e
-  código/docs/testes locais. Nova arquitetura continua exigindo ARCHITECTURE,
-  INVARIANTS, ADRs pertinentes, mapa das fronteiras e aprovação explícita.
-- **Validation performed:** `./scripts/verify architecture` e `./scripts/verify all`
-  passaram (exit 0); `python3 scripts/test-foundation.py` passou nos 17 cenários;
-  as sete skills passaram em quick_validate.py no ambiente virtual já existente.
-  Import `@AGENTS.md` conferido estaticamente; carregamento pelo Claude Code
-  não foi executado. Testes de sessão/recovery live permanecem NOT RUN.
-- **Runtime Changes:** None. Invariantes, ADRs, fontes de arquitetura/recovery,
-  validadores e implementação preservados; nenhum arquivo novo ou removido.
+- **Purpose:** establish an auditable Git baseline on `main`, with explicit source
+  and asset selection, without a remote, publication, reorganization, or runtime change.
+- **Changes:** conservative `.gitignore`, record in [GIT-BASELINE](GIT-BASELINE.md),
+  and Git state update in DEVELOPMENT. Selected 1,098 files; excluded 1,939 local files
+  from the index while preserving them on disk. Backups, clipboard, notification
+  history, profile/work, bytecode, and ZIP containing private state are outside the
+  baseline. Templates, patches, evidence, and assets remain.
+- **Validation performed:** PASS `./scripts/verify architecture` (52 required files
+  and local links); PASS `./scripts/verify all` (83 syntax candidates, 17 Noctalia
+  scenarios, panel capture/merge, and 28 KWin scenarios); PASS
+  `python3 scripts/test-foundation.py` (17 scenarios). All exited 0. Heuristic search
+  of 1,098 staged files, including 244 decompressed SVGZ files, found no evident
+  credentials. No gitlinks in the index; executable permissions preserved.
+- **Preservation:** initial SHA-256 inventory; no preexisting file removed or with
+  changed permissions. Only DEVELOPMENT and this CHANGELOG were edited by the task.
+  Private notification history changed during the session through external activity;
+  it was not written, reverted, or versioned by the task.
+- **Limits:** NOT RUN live session/recovery; NOT APPLICABLE visual validation and
+  installation because behavior did not change. Licenses, personal/machine references,
+  and portability still require review before publication; the local baseline does
+  not certify that all content is safe to publish.
+
+## 2026-10-11 — Agent-first foundation
+
+- **Model/Agent:** Codex (GPT-6), agent for this task.
+- **Date:** 2026-10-11 (America/Sao_Paulo).
+- **Purpose:** formalize the requested architecture around existing kits, with
+  invariants/ADRs, a map of 24 contributions, progressive rules/skills, diagnostics,
+  and offline checks, without migrating runtime or changing the session.
+- **Changes:** AGENTS/CLAUDE, architectural docs, documentary reservations, seven
+  skills, local rules, scripts/verify, and scripts/doctor. README gains an architectural
+  entry point; preexisting text is preserved. No legacy file removed.
+- **Validation performed:** `./scripts/verify architecture` and `./scripts/verify all`
+  passed (exit 0): structure/links, syntax of 83 kit files, 17 Noctalia scenarios,
+  panel capture/merge regressions, and 28 isolated KWin scenarios.
+  `python3 scripts/test-foundation.py`: 17 behavioral checks passed.
+  The seven skills passed `skill-creator/scripts/quick_validate.py` using a temporary
+  virtual environment with PyYAML 6.0.3, without a new runtime dependency.
+  `./scripts/doctor`: expected exit 2, two UNKNOWN items (live recovery and complete
+  RICY-001 compliance); package/unit queries completed. The first quick_validate
+  did not run in system Python because PyYAML was missing; it was repeated successfully
+  in the isolated environment.
+- **Limits:** login, switching, and crash recovery were not tested in this documentary
+  change. C-001 through C-005 are recorded discrepancies, not runtime fixes.
+- **Preservation check:** 51 new files; README was the only preexisting file edited by
+  the task, retaining its entire previous text. SHA-256 comparison of 2,978 initial
+  files also found a change in the active profile's `notification_history.json`
+  during the session. The task did not write or revert that state. The other 2,976
+  files retained their hashes; no preexisting file was removed or had permissions changed.
+
+## 2026-10-11 — Context by consequence
+
+- **Model/Agent:** Codex (GPT-6), agent for this task.
+- **Date:** 2026-10-11 (America/Sao_Paulo).
+- **Purpose:** reduce universal reading without changing architectural authority or
+  approval. CLAUDE imports AGENTS; root/DEVELOPMENT/index and local routers load
+  sources by impact. The component-development, testing, documentation,
+  noctalia-development, and visual-development skills have more specific triggers;
+  KWin retains invariants/recovery and consults the map by domain. DESIGN-SYSTEM
+  only conditions invocation of the visual skill; visual values and guarantees remain.
+- **Context before → after:** a local visual change previously chained architecture,
+  invariants, the map, and general skills; it now uses the AGENTS hierarchy,
+  DESIGN-SYSTEM, and local code/docs/tests. New architecture still requires
+  ARCHITECTURE, INVARIANTS, relevant ADRs, a boundary map, and explicit approval.
+- **Validation performed:** `./scripts/verify architecture` and `./scripts/verify all`
+  passed (exit 0); `python3 scripts/test-foundation.py` passed all 17 scenarios;
+  the seven skills passed quick_validate.py in the existing virtual environment.
+  The `@AGENTS.md` import was checked statically; loading through Claude Code was
+  not executed. Live session/recovery tests remain NOT RUN.
+- **Runtime Changes:** None. Invariants, ADRs, architecture/recovery sources,
+  validators, and implementation preserved; no new or removed file.

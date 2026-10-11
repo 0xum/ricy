@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Diagnóstico somente leitura. UNKNOWN nunca é PASS de saúde do desktop."""
+"""Read-only diagnostics. UNKNOWN never means the desktop is healthy."""
 import os
 from pathlib import Path
 import shutil
@@ -24,25 +24,25 @@ def query(command):
 
 
 def main():
-    print('Diagnóstico de presença/estado observado; não é teste de funcionamento ou reparo.')
+    print('Diagnostics of observed presence and state; this does not test functionality or perform repairs.')
     emit('KNOWN', f'Python {sys.version.split()[0]}')
     try:
         fields = dict(line.split('=', 1) for line in Path('/etc/os-release').read_text().splitlines() if '=' in line)
-        emit('KNOWN', 'OS declarado: ' + fields.get('PRETTY_NAME', fields.get('ID', 'não identificado')).strip('"'))
+        emit('KNOWN', 'Reported OS: ' + fields.get('PRETTY_NAME', fields.get('ID', 'unidentified')).strip('"'))
     except OSError:
-        emit('UNKNOWN', '/etc/os-release indisponível')
+        emit('UNKNOWN', '/etc/os-release unavailable')
     for name in ('XDG_SESSION_TYPE', 'XDG_CURRENT_DESKTOP', 'WAYLAND_DISPLAY'):
         value = os.environ.get(name)
-        emit('KNOWN' if value else 'UNKNOWN', f'{name}: {value or "não declarado"} (ambiente, não prova de sessão)')
+        emit('KNOWN' if value else 'UNKNOWN', f'{name}: {value or "not declared"} (environment, not session proof)')
     for name in ('bash', 'python3', 'systemctl', 'qdbus6', 'flock', 'kbuildsycoca6', 'noctalia', 'kwin_wayland', 'plasmashell', 'dolphin', 'systemsettings'):
         path = shutil.which(name)
-        emit('KNOWN' if path else 'UNKNOWN', f'{name}: {path or "não encontrado no PATH"}')
+        emit('KNOWN' if path else 'UNKNOWN', f'{name}: {path or "not found in PATH"}')
     if shutil.which('pacman'):
         for package in ('noctalia', 'kwin', 'plasma-workspace', 'dolphin'):
             code, output = query(['pacman', '-Q', package])
-            emit('KNOWN' if code == 0 and output else 'UNKNOWN', f'pacote: {output if code == 0 and output else package + " não consultável/ausente"}')
+            emit('KNOWN' if code == 0 and output else 'UNKNOWN', f'package: {output if code == 0 and output else package + " unavailable/missing"}')
     else:
-        emit('UNKNOWN', 'pacman ausente; versões de pacotes não consultadas')
+        emit('UNKNOWN', 'pacman unavailable; package versions not queried')
     if shutil.which('systemctl'):
         for unit in ('noctalia-teste.service', 'noctalia-busca-desktop.service', 'ricy-noctalia-integracao.service', 'plasma-plasmashell.service'):
             code, output = query(['systemctl', '--user', 'show', unit, '--property=LoadState,ActiveState,SubState,UnitFileState'])
@@ -50,14 +50,14 @@ def main():
             if code == 0 and values.get('LoadState') == 'loaded' and values.get('ActiveState'):
                 emit('KNOWN', f'{unit}: ' + ', '.join(f'{key}={value}' for key, value in values.items()))
             else:
-                emit('UNKNOWN', f'{unit}: unidade não carregada ou barramento de usuário inacessível')
+                emit('UNKNOWN', f'{unit}: unit not loaded or user bus inaccessible')
     else:
-        emit('UNKNOWN', 'systemd de usuário não consultado')
+        emit('UNKNOWN', 'user systemd not queried')
     entries = list(Path('/usr/share/wayland-sessions').glob('*plasma*.desktop'))
-    emit('KNOWN' if entries else 'UNKNOWN', 'entrada Plasma Wayland: ' + (', '.join(str(p) for p in entries) if entries else 'não localizada'))
-    emit('UNKNOWN', 'login, painéis, Dolphin interativo e recovery após falha: exigem ensaio real')
-    emit('UNKNOWN', 'RICY-001 em menus/atalhos/gestos da sessão inteira: auditoria pendente')
-    print(f'{unknown} informação(ões) UNKNOWN. Nenhuma configuração alterada.')
+    emit('KNOWN' if entries else 'UNKNOWN', 'Plasma Wayland entry: ' + (', '.join(str(p) for p in entries) if entries else 'not located'))
+    emit('UNKNOWN', 'login, panels, interactive Dolphin, and recovery after failure: require a live test')
+    emit('UNKNOWN', 'RICY-001 across session menus, shortcuts, and gestures: audit pending')
+    print(f'{unknown} UNKNOWN items. No configuration changed.')
     return 2 if unknown else 0
 
 

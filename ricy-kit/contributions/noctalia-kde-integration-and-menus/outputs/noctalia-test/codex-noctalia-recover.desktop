@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=Recover Noctalia integration in login
+Exec="/home/delta/Projects/ricy/ricy-kit/contributions/noctalia-kde-integration-and-menus/outputs/noctalia-test/recover-at-login.sh"
+OnlyShowIn=KDE;
+X-KDE-autostart-phase=2

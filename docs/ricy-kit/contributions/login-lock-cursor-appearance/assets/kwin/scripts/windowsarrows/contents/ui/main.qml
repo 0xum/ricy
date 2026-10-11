@@ -32,25 +32,25 @@ QtObject {
     }
     property var upKey: KWin.ShortcutHandler {
         name: "WindowsArrowsUp"
-        text: "Maximizar ou encaixar acima conforme o estado"
+        text: "Maximize or fit up as the state"
         sequence: "Meta+Up"
         onActivated: root.handle("up")
     }
     property var downKey: KWin.ShortcutHandler {
         name: "WindowsArrowsDown"
-        text: "Restaurar, encaixar abaixo ou minimizar conforme o estado"
+        text: "Restore, fit below or minimize as state"
         sequence: "Meta+Down"
         onActivated: root.handle("down")
     }
     property var leftKey: KWin.ShortcutHandler {
         name: "WindowsArrowsLeft"
-        text: "Encaixar à esquerda na mesma sequência de Super"
+        text: "Tile left within the same Super key sequence"
         sequence: "Meta+Left"
         onActivated: root.handle("left")
     }
     property var rightKey: KWin.ShortcutHandler {
         name: "WindowsArrowsRight"
-        text: "Encaixar à direita na mesma sequência de Super"
+        text: "Tile right within the same Super key sequence"
         sequence: "Meta+Right"
         onActivated: root.handle("right")
     }

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Checks offline; nunca instala, ativa ou repara o desktop."""
+"""Offline checks; never install, activate or repair the desktop."""
 import ast
 import json
 import os
@@ -80,7 +80,7 @@ def link_targets(text):
         matched = next((value for name, value in refs.items()
                         if name.casefold() == key.casefold()), None)
         if matched is None:
-            yield None, f'referência indefinida [{key}]'
+            yield None, f'undefined reference [{key}]'
     for target in inline + list(refs.values()):
         yield target.strip('<>'), None
 
@@ -93,17 +93,17 @@ def architecture():
     required += [f'{name}/AGENTS.md' for name in LOCAL] + list(PAGES)
     missing = [name for name in required if not (ROOT / name).is_file()]
     for name in missing:
-        report('FAIL', f'arquivo obrigatório ausente: {name}')
+        report('FAIL', f'Required file missing: {name}')
     if not missing:
-        report('PASS', f'{len(required)} arquivos obrigatórios presentes')
+        report('PASS', f'{len(required)} mandatory files present')
     for script in ('verify', 'doctor', 'test-foundation.py'):
         path = ROOT / 'scripts' / script
         if path.is_file():
             if script != 'test-foundation.py' and not os.access(path, os.X_OK):
-                report('FAIL', f'scripts/{script} não executável')
+                report('FAIL', f'scripts/{script} not executable')
             try:
                 ast.parse(path.read_text(), filename=str(path))
-                report('PASS', f'scripts/{script}: sintaxe Python')
+                report('PASS', f'scripts/{script}: Python syntax')
             except (OSError, SyntaxError) as error:
                 report('FAIL', f'{path.name}: {error}')
     for name in SKILLS:
@@ -119,7 +119,7 @@ def architecture():
     pages = {ROOT / name for name in required if name.endswith('.md')}
     pages.update((ROOT / 'docs').glob('*.md'))
     # Historical documents are preserved, outside foundation link scope.
-    pages.difference_update(ROOT / 'docs' / name for name in ('ricy.md', 'REINSTALAR.md', 'IDENTIDADE-VISUAL.md'))
+    pages.difference_update(ROOT / 'docs' / name for name in ('ricy.md', 'REINSTALL.md', 'VISUAL-IDENTITY.md'))
     pages.update((ROOT / 'docs/adr').glob('*.md'))
     pages.update(ROOT.rglob('AGENTS.md'))
     before = failed
@@ -139,14 +139,14 @@ def architecture():
             resolved = (path.parent / unquote(parts.path)).resolve()
             count += 1
             if not resolved.exists():
-                report('FAIL', f'{path.relative_to(ROOT)}: link quebrado {target}')
+                report('FAIL', f'{path.relative_to(ROOT)}: broken link {target}')
             elif resolved.is_file() and resolved.suffix == '.md' and (ROOT / 'docs') in resolved.parents:
                 valid_doc = True
         if path.name == 'AGENTS.md' and path != ROOT / 'AGENTS.md' and not valid_doc:
-            report('FAIL', f'{path.relative_to(ROOT)}: falta referência válida a documentação docs/')
+            report('FAIL', f'{path.relative_to(ROOT)}: missing reference to valid docs/ documentation')
     if before == failed:
-        report('PASS', f'{count} links locais da fundação; AGENTS locais apontam para docs')
-    print('NOT APPLICABLE URLs externas, âncoras e links históricos não são verificados')
+        report('PASS', f'{count} local links of the foundation; local AGENTS point to docs')
+    print('NOT APPLICABLE external URLs, anchors and historical links are not checked')
 
 
 def source_files():
@@ -156,7 +156,7 @@ def source_files():
         if path.is_file() and not excluded.intersection(path.relative_to(ROOT / 'ricy-kit/contributions').parts):
             if path.suffix in {'.py', '.sh', '.json', '.toml'} or path.name == 'ricy':
                 files.append(path)
-    files += [ROOT / name for name in ('iniciar.sh', 'voltar.sh', 'alternar.sh')]
+    files += [ROOT / name for name in ('start.sh', 'return.sh', 'switch.sh')]
     return sorted(set(files))
 
 
@@ -164,7 +164,7 @@ def shell():
     before = failed
     files = source_files()
     if not files:
-        report('FAIL', 'nenhuma fonte de kit encontrada')
+        report('FAIL', 'no kit source found')
         return
     bash = shutil.which('bash')
     for path in files:
@@ -180,55 +180,55 @@ def shell():
                 if result.returncode:
                     report('FAIL', f'{path.relative_to(ROOT)}: {result.stderr.strip()}')
             else:
-                not_run(f'Bash indisponível: {path.relative_to(ROOT)}')
+                not_run(f'Bash unavailable: {path.relative_to(ROOT)}')
         except (OSError, ValueError, SyntaxError, subprocess.TimeoutExpired) as error:
             report('FAIL', f'{path.relative_to(ROOT)}: {error}')
     if failed == before:
-        report('PASS', f'sintaxe dos arquivos disponíveis ({len(files)} candidatos; skips listados separadamente)')
+        report('PASS', f'syntax of available files ({len(files)} candidates; skips listed separately)')
     source = Path(os.environ.get('XDG_CACHE_HOME', Path.home() / '.cache')) / 'ricy-noctalia-src-5.2.1'
-    test = ROOT / 'ricy-kit/contributions/app-icon-reordering/validar-acoes.py'
+    test = ROOT / 'ricy-kit/contributions/app-icon-reordering/validate-actions.py'
     if not test.is_file():
-        report('FAIL', 'validador existente de ações Noctalia ausente')
+        report('FAIL', 'existing Noctalia action validator missing')
         return
     if not (source / 'src/compositors/kde/kwin_active_window.cpp').is_file() or not shutil.which('git'):
-        not_run('ações Noctalia: fonte em cache/git indisponível; nenhum download automático')
+        not_run('Noctalia actions: source in cache/git unavailable; no automatic download')
         return
     try:
         head = subprocess.run(['git', '-C', str(source), 'rev-parse', 'HEAD'], capture_output=True, text=True, timeout=10)
         diff = subprocess.run(['git', '-C', str(source), 'diff', '--binary', 'HEAD'], capture_output=True, timeout=10)
         expected = (ROOT / 'ricy-kit/contributions/app-icon-reordering/noctalia-ricy.patch').read_bytes()
         if head.returncode or head.stdout.strip() != '6ef43e2bf2f3d5b4205ec72a72e34a2ab76ce3b4' or diff.returncode or diff.stdout != expected:
-            not_run('ações Noctalia: cache não corresponde exatamente ao commit/patch esperado')
+            not_run('Noctalia actions: cache does not exactly match the expected commit/patch')
             return
     except (OSError, subprocess.TimeoutExpired) as error:
-        not_run(f'ações Noctalia: origem não verificável: {error}')
+        not_run(f'Noctalia actions: unverifiable origin: {error}')
         return
-    qt_test('ações Noctalia em QJSEngine isolado', test, ['--fonte', str(source)])
+    qt_test('Noctalia actions in isolated QJSEngine', test, ['--fonte', str(source)])
 
 
 def qt_test(label, path, args=()):
     if not path.is_file():
-        report('FAIL', f'validador ausente: {path.relative_to(ROOT)}')
+        report('FAIL', f'Missing validator: {path.relative_to(ROOT)}')
         return
     probe = subprocess.run([sys.executable, '-B', '-c', 'from PyQt6.QtQml import QJSEngine'], capture_output=True, timeout=15)
     if probe.returncode:
-        not_run(f'{label}: PyQt6.QtQml indisponível neste Python')
+        not_run(f'{label}: PyQt6.QtQml not available in this Python')
         return
     env = dict(os.environ, PYTHONDONTWRITEBYTECODE='1', QT_QPA_PLATFORM='offscreen', PYTHONOPTIMIZE='')
     run(label, [sys.executable, '-B', str(path), *args], env=env)
 
 
 def recovery():
-    path = ROOT / 'ricy-kit/contributions/plasma-noctalia-switching/verificar.py'
+    path = ROOT / 'ricy-kit/contributions/plasma-noctalia-switching/verify.py'
     env = dict(os.environ, PYTHONDONTWRITEBYTECODE='1', PYTHONOPTIMIZE='')
-    run('capture/merge de painéis e preservação de dados (offline)', [sys.executable, '-B', str(path)], env=env)
-    qt_test('efeito de janelas (offline)', ROOT / 'ricy-kit/contributions/window-fade-expand/validar.py')
-    print('NOT RUN Recovery live: alternância, falha persistente, login e Dolphin não exercitados')
+    run('capture/merge panels and data preservation (offline)', [sys.executable, '-B', str(path)], env=env)
+    qt_test('window effect (offline)', ROOT / 'ricy-kit/contributions/window-fade-expand/validate.py')
+    print('NOT RUN live recovery: switching, persistent failure, login, and Dolphin not exercised')
 
 
 def main():
     if len(sys.argv) != 2 or sys.argv[1] not in {'architecture', 'shell', 'recovery', 'all'}:
-        print('Uso: scripts/verify {architecture|shell|recovery|all}', file=sys.stderr)
+        print('Usage: scripts/verify {architecture|shell|recovery|all}', file=sys.stderr)
         return 2
     scopes = {'architecture': architecture, 'shell': shell, 'recovery': recovery}
     for name, check in scopes.items():
@@ -237,7 +237,7 @@ def main():
                 check()
             except Exception as error:
                 report('FAIL', f'{name}: {type(error).__name__}: {error}')
-    print(f'Resultado offline: {failed} falha(s), {skipped} check(s) indisponível(is). Não certifica sessão real.')
+    print(f'Offline result: {failed} failure(s), {skipped} unavailable check(s). This does not certify a live session.')
     return 1 if failed else 2 if skipped else 0
 
 

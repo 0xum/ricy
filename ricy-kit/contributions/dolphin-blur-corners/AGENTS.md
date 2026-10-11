@@ -1,7 +1,7 @@
 # dolphin-blur-corners
 
-Helper Qt e efeito KWin são distintos; manter Dolphin utilizável sem presumir ABI compatível. Ler também as regras de integrações para launcher/defaults.
+The Qt helper and KWin effect are distinct; keep Dolphin usable without assuming ABI compatibility. Also read integration rules for launcher/defaults.
 
-Leia [regras do subsistema](../../../compositor/AGENTS.md)
-e o trecho pertinente do [README local](README.md). Consulte
-[COMPONENTS](../../../docs/COMPONENTS.md) para localizar ownership/fronteiras.
+Read the [subsystem rules](../../../compositor/AGENTS.md)
+and the relevant [local README](README.md) section. Consult
+[COMPONENTS](../../../docs/COMPONENTS.md) to locate ownership/boundaries.

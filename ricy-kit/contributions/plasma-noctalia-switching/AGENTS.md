@@ -1,7 +1,7 @@
 # plasma-noctalia-switching
 
-Preservar wallpaper/widgets e remapeamento de IDs. Não voltar à restauração integral antiga. validar/verificar offline não prova alternância de sessão.
+Preserve wallpaper/widgets and ID remapping. Do not return to the old full restoration. Offline validar/verificar does not prove session switching.
 
-Leia [regras do subsistema](../../../recovery/AGENTS.md)
-e o trecho pertinente do [README local](README.md). Consulte
-[COMPONENTS](../../../docs/COMPONENTS.md) para localizar ownership/fronteiras.
+Read the [subsystem rules](../../../recovery/AGENTS.md)
+and the relevant [local README](README.md) section. Consult
+[COMPONENTS](../../../docs/COMPONENTS.md) to locate ownership/boundaries.

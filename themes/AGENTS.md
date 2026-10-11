@@ -1,7 +1,9 @@
 # themes
 
-A fonte visual permanece nos tokens existentes. Não duplicar paleta, raio, movimento ou tipografia. Distinguir shell, KDE e adaptações Dolphin e preservar licenças de temas.
+The visual source remains in existing tokens. Do not duplicate palette, radii,
+motion, or typography. Distinguish shell, KDE, and Dolphin adaptations and
+preserve theme licenses.
 
-Visual/UI: [DESIGN-SYSTEM](../docs/DESIGN-SYSTEM.md); adaptações entre componentes
-ou estados/materiais: [visual-development](../.agents/skills/visual-development/SKILL.md).
-Se afetar login, bloqueio ou usabilidade do fallback, leia [RECOVERY](../docs/RECOVERY.md).
+Visual/UI: [DESIGN-SYSTEM](../docs/DESIGN-SYSTEM.md); adaptations between components
+or states/materials: [visual-development](../.agents/skills/visual-development/SKILL.md).
+If login, locking, or fallback usability is affected, read [RECOVERY](../docs/RECOVERY.md).

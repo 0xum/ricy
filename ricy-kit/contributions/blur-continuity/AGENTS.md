@@ -1,7 +1,7 @@
 # blur-continuity
 
-Blur derivado de KWin 6.7.5, separado do compositor. Conferir headers/ABI; não ampliar classes afetadas nem mudar instalação do plugin sem avaliar Plasma.
+Blur derived from KWin 6.7.5, separate from the compositor. Check headers/ABI; do not broaden affected classes or change plugin installation without assessing Plasma.
 
-Leia [regras do subsistema](../../../compositor/AGENTS.md)
-e o trecho pertinente do [README local](README.md). Consulte
-[COMPONENTS](../../../docs/COMPONENTS.md) para localizar ownership/fronteiras.
+Read the [subsystem rules](../../../compositor/AGENTS.md)
+and the relevant [local README](README.md) section. Consult
+[COMPONENTS](../../../docs/COMPONENTS.md) to locate ownership/boundaries.

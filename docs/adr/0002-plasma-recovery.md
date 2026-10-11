@@ -4,18 +4,18 @@ Status: Accepted
 
 ## Context
 
-A shell personalizada e patches podem falhar. O kit atual já depende de Plasma para desktop/wallpaper e usa scripts Ricy para restaurar painéis, portanto ainda existe acoplamento de recuperação.
+The custom shell and patches may fail. The current kit already depends on Plasma for desktop/wallpaper and uses Ricy scripts to restore panels, so recovery remains coupled.
 
 ## Decision
 
-Adotar RICY-004: manter Plasma, Dolphin, System Settings e ferramentas KDE funcionais. Recovery deve ter tão poucas dependências Ricy quanto razoavelmente possível.
+Adopt RICY-004: keep Plasma, Dolphin, System Settings, and KDE tools functional. Recovery should have as few Ricy dependencies as reasonably possible.
 
 ## Consequences
 
-Qualquer alteração em login, unidades, atalhos, compositor ou defaults precisa considerar a rota de retorno. O mecanismo atual continua preservado, enquanto uma sessão independente permanece PLANNED.
+Changes to login, units, shortcuts, compositor, or defaults must account for the return path. Preserve the current mechanism while an independent session remains PLANNED.
 
 ## Constraints
 
-Não remover pacotes ou desativar mecanismos necessários ao fallback. Testes offline não comprovam login/recovery real; não inventar watchdog ou gerenciador de sessão nesta etapa.
+Do not remove packages or disable mechanisms required for fallback. Offline tests do not prove real login/recovery; do not invent a watchdog or session manager at this stage.
 
-Referências: [INVARIANTS](../INVARIANTS.md), [ARCHITECTURE](../ARCHITECTURE.md).
+References: [INVARIANTS](../INVARIANTS.md), [ARCHITECTURE](../ARCHITECTURE.md).

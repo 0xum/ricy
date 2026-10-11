@@ -6,7 +6,7 @@ QToolButton:pressed, QToolButton:checked { background-color: #977dba; color: #00
 QToolButton:disabled { color: #a6adc8; }
 QLineEdit { background-color: #313244; color: #cdd6f4; border: 1px solid #46485c; border-radius: 8px; padding: 5px 8px; selection-background-color: #977dba; selection-color: #000000; }
 QLineEdit:focus { border-color: #cba6f7; }
-/* Abas como botões Noctalia: neutro, hover e ativo. */
+/* Tabs like Noctalia buttons: neutral, hover and active. */
 QTabBar { background: transparent; border: none; }
 QTabBar::tab { background-color: #313244; color: #cdd6f4; border: 1px solid #46485c; border-radius: 12px; padding: 6px 14px; margin: 3px; }
 QTabBar::tab:selected { background-color: #cba6f7; color: #11111b; border-color: #cba6f7; }
@@ -19,7 +19,7 @@ QTabWidget::pane { border: none; background: transparent; }
 QDockWidget { color: #a6adc8; }
 QStatusBar { color: #a6adc8; }
 
-/* Painel principal e painel em L: #313244; shell externa mantém vidro. */
+/* Main panel and L panel: #313244; outer shell keeps glass. */
 KItemListContainer { background-color: #313244; border: 1px solid #46485c; border-radius: 12px; padding: 8px; margin: 8px; }
 KItemListContainerViewport, KItemListContainerViewport > QWidget { background: transparent; border: none; }
 QToolBar { background: transparent; border: none; spacing: 4px; padding: 4px 8px; }
@@ -33,5 +33,5 @@ QHeaderView, QHeaderView::section { background: transparent; color: #a6adc8; bor
 
 DolphinStatusBar { background: transparent; border: none; }
 
-/* Recuo de todo o viewport: títulos, ícones, chips e capacidade juntos. */
+/* Back from all viewport: titles, icons, chips and capability together. */
 KFilePlacesView { padding-left: 12px; padding-right: 12px; color: #cdd6f4; selection-background-color: #cba6f7; selection-color: #11111b; }

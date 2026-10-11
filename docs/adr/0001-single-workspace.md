@@ -4,18 +4,18 @@ Status: Accepted
 
 ## Context
 
-O produto quer uma experiência direta de aplicativos e janelas; a organização herdada do compositor por desktops não deve ditar o modelo mental do Ricy.
+The product seeks a direct experience centered on applications and windows; the compositor's inherited organization into desktops must not dictate Ricy's mental model.
 
 ## Decision
 
-Adotar RICY-001: um único espaço de trabalho na experiência Ricy, sem indicadores, switchers, ações move-to-workspace, gestos ou navegação multi-desktop.
+Adopt RICY-001: a single workspace in the Ricy experience, without indicators, switchers, move-to-workspace actions, gestures, or navigation across desktops.
 
 ## Consequences
 
-Novos componentes não podem depender de múltiplos desktops. A exposição legada precisa de auditoria separada; preservar APIs KWin necessárias ao funcionamento não implica expô-las.
+New components cannot depend on multiple desktops. Legacy exposure requires a separate audit; preserving KWin APIs needed for operation does not imply exposing them.
 
 ## Constraints
 
-Não refatorar upstream indiscriminadamente, não tratar toda ocorrência de `workspace` como violação e não quebrar Plasma Recovery. A conformidade runtime ainda é UNKNOWN.
+Do not indiscriminately refactor upstream, treat every occurrence of `workspace` as a violation, or break Plasma Recovery. Runtime compliance remains UNKNOWN.
 
-Referências: [INVARIANTS](../INVARIANTS.md), [ARCHITECTURE](../ARCHITECTURE.md).
+References: [INVARIANTS](../INVARIANTS.md), [ARCHITECTURE](../ARCHITECTURE.md).

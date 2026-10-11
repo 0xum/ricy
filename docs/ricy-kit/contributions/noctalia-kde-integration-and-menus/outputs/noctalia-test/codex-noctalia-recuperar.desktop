@@ -1,6 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=Recuperar integração Noctalia no login
-Exec=PREPARAR_NO_DESTINO/recuperar-no-login.sh
-OnlyShowIn=KDE;
-X-KDE-autostart-phase=2

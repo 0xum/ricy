@@ -1,198 +1,97 @@
-# Reorganizar ícones de aplicativos
+# Reorganize application icons
 
-O usuário confirmou “Passou” na sessão real. Pressione com o botão esquerdo,
-arraste para a posição desejada e solte. O ícone acompanha o cursor; um espaço
-indica o destino e os vizinhos mudam de posição. O gesto começa ao ultrapassar
-o limiar nativo de arraste; um clique parado continua restaurando/minimizando.
-Arraste consumido não dispara abertura, foco ou minimização ao soltar.
-Botão direito e middle-click mantêm as ações anteriores.
+The user confirmed “Passed” in the real session. Left-click, drag to the desired position and drop. The icon accompanies the cursor; a space indicates the destination and the neighbors change position. The gesture starts when overtaking the native drag threshold; one stopped click continues to restore/minimize. The consumed drag does not trigger opening, focus or minimization when dropping. Right button and middle-click keep the previous actions.
 
-O mecanismo upstream era limitado à lista de fixados. Agora funciona em toda
-a faixa plana de aplicativos, incluindo abertos não fixados e lançadores.
-Busca é outro widget e conserva sua posição. Tray, controles e agrupamento
-por workspace ficam fora desta reordenação. Faixas horizontais/verticais usam
-o eixo correspondente, com destino limitado aos slots existentes. Largura
-dos títulos, escala e espaçamento entram no pitch real dos tiles.
+The upstream mechanism was limited to the fixed list. It now works across the entire flat range of applications, including unfixed open and launchers. Search is another widget and saves its position. Tray, controls and workspace grouping stay out of this reordering. Horizontal/vertical tracks use the corresponding axis, bounded to existing slots. Width of titles, scale and spacing enter the actual pitch of the tiles.
 
-A preferência `widget.taskbar.app_order` é gravada pelo ConfigService no
-settings.toml do perfil ativo e reaplicada ao montar a barra. Ela ordena os
-apps independentemente da fixação; arrastar nunca fixa um aplicativo. A lista
-preserva slots de apps fechados ou filtrados em outro monitor/workspace.
-Apps novos sem posição salva entram ao final. Monitores usando o mesmo widget
-compartilham a preferência. Não se publica o settings.toml privado no kit.
+The preference `widget.taskbar.app_order` is saved by ConfigService in settings.toml from the active and re-applied profile when mounting the bar. It orders apps regardless of attachment; drag never fixes an application. The list preserves closed or filtered apps slots on another monitor/workspace. New unsaved apps enter at the end. Monitors using the same widget share the preference. settings.toml private in the kit.
 
-As chaves usam identidade do app e número de ocorrência, sem títulos nem UUIDs
-persistidos. Janelas duplicadas mantêm suas chaves durante atualizações;
-instâncias novas podem reutilizar um slot livre. Após reiniciar, a ordem das
-instâncias de um mesmo app corresponde à ordem natural de descoberta; não
-identifica um documento específico entre reinícios. Guardas de geração
-impedem salvar índices de um modelo que mudou durante o gesto. Cancelamento
-restaura o layout. A gravação é adiada até terminar o evento, protegendo a
-InputArea durante recarga; ao soltar, o ícone aguarda no slot de destino.
+Keys use app identity and occurrence number, no titles or persisted UUIDs. Duplicate windows keep your keys during updates; new instances can reuse a free slot. After restarting, the order of instances of the same app matches the natural discovery order; does not identify a specific document between restarts. Generation guards prevent saving indexes from a model that changed during the gesture. Cancellation restores the layout. The recording is postponed until the event is finished, protecting InputArea while reloading; the icon waits on the destination slot.
 
-## Reproduzir a versão atual
+## Play current version
 
 ```bash
 cd "$HOME/ricy-kit/contributions/app-icon-reordering"
-bash compilar.sh
-python ../notification-continuity/ativar.py
-# Necessário ao instalar os efeitos KWin pela primeira vez:
-python ../window-fade-expand/aplicar-animacoes.py
+bash build.sh
+python ../notification-continuity/enable.py
+# Required when installing KWin effects for the first time:
+python ../window-fade-expand/apply-animations.py
 ```
 
-Fonte Noctalia 5.2.1, commit 6ef43e2bf2f3d5b4205ec72a72e34a2ab76ce3b4.
-O patch é cumulativo e inclui notificações, wallpaper, menus, hover,
-ações, indicador e animações. Compilador recusa cache com diff diferente;
-para outra variante, preserve o cache e recrie a fonte limpa antes de aplicar.
-Instalação preserva aplicativos abertos e não reinicia o compositor.
-Reveja/recompile ao atualizar Noctalia/KWin; dependências em BUILDING.md
-upstream e ../notification-continuity/README.md.
+Font Noctalia 5.2.1, commit 6ef43e2bf2f3d5b4205ec72a72e34a2ab76ce3b4. The patch is cumulative and includes notifications, wallpaper, menus, hover, actions, indicator and animations. Compiler refuses cache with different diff; for another variant, preserve cache and recreate clean font before applying. Installation preserves open applications and does not restart compositor. Review/recompile when updating Noctalia/KWin; dependencies on BUILDING.md upstream and ../notification-continuity/README.md.
 
-## Verificações
+## Checks
 
 ```bash
-python validar-ordem.py
-# Requer build-ricy pronto; usa objetos realmente compilados do Noctalia:
-python validar-arraste-nativo.py
-python validar-motion.py
-python validar-acoes.py
-python validar-indicador.py
+python validate-order.py
+# Requires built-ricy ready; uses really compiled Noctalia objects:
+python validate-native-drag.py
+python validate-motion.py
+python validate-actions.py
+python validate-indicator.py
 ```
 
-22 cenários de ordem, incluindo 24 permutações, passaram. 11 cenários nativos
-instanciam TaskbarWidget/ConfigService em perfil temporário, sem conectar ao
-compositor: permitem apps não fixados, movimentam o tile, cancelam, invalidam
-modelo antigo, suprimem clique consumido, gravam e decodificam a ordem em
-nova instância. 20 cenários de animação, 17 das ações e 15 do indicador/efeito
-passaram. Compilação, reprodução, config validate, bash -n, git diff --check
-e aplicação sobre fonte limpa passaram; todos os 17 archives do patch
-coincidem com a fonte ativa. Comparado à variante de animações dos ícones,
-só TaskbarWidget (.cpp/.h), sua definição e o novo taskbar_order.h mudaram.
+22 order scenarios, including 24 permutations, they've passed. 11 native scenarios instantiate TaskbarWidget/ConfigService in temporary profile, without connecting to the compositor: allow unfixed apps, move the tile, cancel, invalidate old model, delete consumed click, record and decode the order in new instance. 20 animation scenarios, 17 the shares and 15 indicator/effect passed. Compilation, reproduction, config validation, bash-n, git diff --check and application on clean source passed; all 17 patch files match the active source. Compared to the animation variant of icons, only TaskbarWidget (.cpp/.h), its definition and the new taskbar_order.h changed.
 
-Confirmação do usuário após ativar; preferência real com dois slots distintos
-foi encontrada e validada. Não houve automação física de arraste: os testes
-nativos cobrem a lógica e a validação visual foi feita pelo usuário. Captura
-privada confirmou ícones sem fundo preto. Demais escalas, barras verticais e
-mudanças de modelo durante um arraste real não foram validadas visualmente.
+User confirmation after activation; real preference with two different slots was found and validated. There was no physical automation of drag: native tests cover logic and visual validation was made by the user. Private capture confirmed icons without black background. Further scales, vertical bars and model changes during a real drag have not been visually validated.
 
-## Reversão
+## Reversion
 
-Backup antes desta ativação:
-`$HOME/.local/state/ricy-notificacoes-backups/20261010-204423-864447`,
-que retorna às animações dos ícones com o fundo preto já corrigido:
+Backup before this activation: `$HOME/.local/state/ricy-notificacoes-backups/20261010-204423-864447`, which returns to the animations of icons with black background already fixed:
 
 ```bash
-python ../notification-continuity/ativar.py --restaurar "$HOME/.local/state/ricy-notificacoes-backups/20261010-204423-864447"
+python ../notification-continuity/enable.py --restaurar "$HOME/.local/state/ricy-notificacoes-backups/20261010-204423-864447"
 ```
 
-A ordem salva permanece no perfil; removê-la restaura a ordem padrão.
-Efeitos KWin não mudaram nesta etapa. Para voltar também aos efeitos anteriores,
-use aplicar-animacoes.py --restaurar com o backup das chaves/efeito registrado
-na contribuição indicador-apps-animacoes. Para voltar antes das animações dos
-ícones, o backup correto é 20261010-203450-476691; 203558-299413 contém a
-implementação intermediária com Box preto e não é recomendado.
+The saved order remains in the profile; removing it restores the default order. KWin effects have not changed in this step. To return also to previous effects, use apply-animations.py  --restaurar with the backup of the keys/effect registered in the indicator-apps-animacoes contribution. To get back before the animations of the icons, the correct backup is 20261010-203450-476691; 203558-299413 contains the intermediate implementation with Black Box and is not recommended.
 
-Noctalia/patch sob MIT (LICENSE). Efeito KDE sob GPL-2.0-or-later, créditos
-preservados e licença separada. Kit sem binários, screenshots, clipboard,
-contas, preferências privadas, bytecode ou backups.
+Nottalia/patch under MIT (LICENSE). KDE effect under GPL-2.0-or-later, preserved credits and separate license. Kit without binaries, screenshots, clipboard, accounts, private preferences, bytecode or backups.
 
-## Resposta do ícone
+## Icon response
 
-Cada mudança real de estado dispara uma animação curta, sem loops:
+Each real state change triggers a short animation without loops:
 
-| Ação | Movimento | Duração base |
+| Action | Motion | Basic duration |
 |---|---|---:|
-| Abrir | Dois saltos amortecidos e pulso leve | 420 ms |
-| Restaurar | Dois saltos amortecidos menores | 360 ms |
-| Ganhar foco | Pulso sem deslocamento | 260 ms |
-| Minimizar | Compressão vertical em direção à barra | 220 ms |
-| Perder foco | Redução/esmaecimento discretos | 200 ms |
-| Fechar app fixado | Contração/esmaecimento, voltando ao lançador | 240 ms |
-| Fechar app não fixado | Dissolver o ícone removido, escala 1→0,72 | 220 ms |
+| Open | Two cushioned heels and a light pulse. |  420 ms |
+| Restore | Two smaller cushioned jumps |  360 ms |
+| Gain Focus | Pulse without displacement |  260 ms |
+| Minimize | Vertical compression towards the bar |  220 ms |
+| Lose focus | Discreet reduction/decrease |  200 ms |
+| Close fixed app | Contraction/decease, returning to launcher |  240 ms |
+| Close unfixed app | Dissolve removed icon, scale 1→0,72  |  220 ms |
 
-AnimationManager/MotionService nativos respeitam movimento e velocidade da
-shell. Estado estável permanece parado; primeira montagem não anima todos
-os apps. Reconstruções e interrupções preservam o progresso visual atual.
-Hover continua no ícone filho, separado das transformações por estado.
-Slot e área de clique ficam estáveis. Deslocamento acompanha a orientação da
-barra. Busca mantém apenas seu hover; tray, volume, relógio, network e botão
-Noctalia mantêm sua interação anterior.
+AnimationManager/MotionService natives respect the motion and speed of the shell. Stable state remains still; first assembly does not animates all apps. Reconstructions and interruptions preserve the current visual progress. Hover remains in the child icon, separated from state transformations. Slot and click area remain stable. Displacement follows the orientation of the bar. Search keeps only your hover; trace, volume, clock, network and Noctalia button keep their previous interaction.
 
-O slot usa Node sem pintura. A primeira implementação com Box deixou um
-retângulo preto atrás do ícone, relatado pelo usuário. Corrigido usando Node;
-capturas privadas da sessão confirmaram a remoção. O fantasma de fechamento
-é não interativo, ignorado pelo layout e removido com guardas de vida útil.
-Só aparece quando a identidade exata da janela saiu do compositor; mudança
-de monitor, filtro ou fixação não produz falso fechamento.
+The slot uses Node without painting. The first implementation with Box left a black rectangle behind the icon, reported by the user. Fixed using Node; private session captures confirmed removal. The closing ghost is non-interactive, ignored by layout and removed with lifeguards. It only appears when the exact identity of the window came out of the compositor; changing monitor, filter or fixing does not produce false closing.
 
-20 cenários C++ verificam estados, pulso/bounce, limites, interrupção,
-cancelamento por proprietário e movimento desabilitado, usando o header e o
-AnimationManager reais. Execute `python validar-motion.py`. Os validadores
-anteriores das ações e do indicador continuam incluídos. Uma janela Qt
-descartável real confirmou restaurar/minimizar/restaurar/fechar e efeitos
-KWin. Capturas verificaram bounce e compressão; não há captura conclusiva do
-fantasma de fechamento nem teste de todas as escalas/grupos.
+20 C++ scenarios check states, pulse/bounce, limits, interruption, cancellation by owner and disabled movement, using the real header and AnimationManager. `python validate-motion.py`. Previous validators of actions and indicator remain included. A real disposable Qt window confirmed restore/minimize/restaurate/close and KWin effects. Captures verified bounce and compression; there is no conclusive capture of the closing ghost or test of all scales/groups.
 
-## Bolinha roxa da taskbar
+## Taskbar purple ball
 
-O indicador mantém a cor configurada no Noctalia:
+The indicator keeps the color set in Noctalia:
 
-| Estado | Opacidade | Escala visual |
+| Status | Opacity | Visual scale |
 |---|---:|---:|
-| Janela ativa | 1,00 | 1,00 |
-| Aberta em segundo plano | 0,55 | 0,82 |
-| Minimizada | 0,28 | 0,65 |
-| Ícone fixado sem janela | 0,00 | 0,55 |
+| Active Window |  1,00  |  1,00  |
+| Opened in the background |  0,55  |  0,82  |
+| minimized |  0,28  |  0,65  |
+| Icon fixed without window |  0,00  |  0,55  |
 
-Transição de 160 ms, EaseOutCubic, no AnimationManager nativo, respeitando
-movimento/velocidade da shell. A animação parte do valor visual atual ao ser
-interrompida. Os valores são preservados quando os tiles são reconstruídos,
-permitindo também apagar suavemente o indicador de um app fixado fechado.
-Ícone não fixado é removido quando sua última janela fecha. Não muda área de
-clique, layout, hover dos ícones nem opções do tray. A opção show_active_indicator
-continua sendo respeitada. Quando há títulos visíveis, a linha indicadora usa
-os mesmos estados. Os pontos do resumo de workspaces mantêm sua composição.
+Transition from 160 ms, EaseOutCubic, in the Native AnimationManager, respecting the motion/speed of the shell. The animation starts from the current visual value when interrupted. The values are preserved when tiles are reconstructed, allowing also to gently delete the indicator of a fixed closed app. Unfixed icon is removed when your last window closes. Do not change the area of click, layout, hover icons or trace options. The show_active_indicator option continues to be respected. When there are visible titles, the indicator line uses the same states. Workspaces summary points maintain its composition.
 
-O script KDE envia agora o estado de minimização de cada UUID e conecta
-minimizedChanged. Uma janela minimizada não permanece ativa por foco antigo
-retido sobre uma superfície da shell. Seleção ativa prioriza UUID, evitando
-acender outra janela de mesmo título. Nos fixados agrupados, o estado minimizado
-significa que todas as janelas estão minimizadas; nos grupos de workspace,
-a representação prioriza uma janela ativa ou visível. A estrutura ToplevelInfo
-também preserva o estado anunciado por wlr, quando disponível.
+The KDE script now sends the minimization status of each UUID and connects minimalizedChanged. A minimized window does not remain active by ancient focus retained on a shell surface. Active selection prioritizes UUID, avoiding lighting another window of the same title. In grouped fixed, the minimized state means that all windows are minimized; in the workspace groups, the representation prioritizes an active or visible window. The ToplevelInfo structure also preserves the state announced by wlr when available.
 
-## Animações no KWin
+## Animations in KWin
 
-ricywindowactions deriva do efeito Squash do KDE: comprime/desloca/esmaece
-para minimizar e inverte para restaurar, com duração base 240 ms, InCubic/OutCubic.
-Reversões rápidas reutilizam a animação; se não for possível, ela é cancelada
-antes da nova. Mantém blur forçado durante a transição e o libera ao terminar.
+ricywindowactions derives from KDE's squash effect: compresses/displaces/smears to minimize and reverses to restore, with base duration 240 ms, InCubic/OutCubic. Fast reversals reuse the animation; if not possible, it is cancelled before the new one. Keeps blur forced during the transition and releases it when finished.
 
-O efeito nativo Squash não anima sem iconGeometry. Noctalia não publica essa
-geometria de ícone Plasma. Esta variante usa a geometria quando fornecida;
-na ausência dela, usa um destino de 18×18 no mesmo monitor, centrado na
-horizontal da janela e a 22 px da borda inferior, referência da taskbar de 44 px.
-Esse destino é aproximado: não é a posição exata do ícone. Não desloca a
-janela de um monitor para outro. Para barra em outra posição/altura, revise
-o destino de fallback. Anima somente janelas normais que aparecem na taskbar;
-painéis, busca, tray e efeitos de tela cheia não recebem essa animação.
+The native effect Squash does not animates without iconGeometry. Noctalia does not publish this Plasma icon geometry. This variant uses geometry when provided; in the absence of it, it uses a Plasma destination 18×18 on the same monitor, centered on the horizontal of the window and 22 bottom edge px, Taskbar reference 44 px. This destination is approximate: it is not the exact position of the icon. It does not move the window from one monitor to another. For bar in another position/height, review the fallback destination. It only animates normal windows that appear in the taskbar; panels, search, track and full screen effects do not receive this animation.
 
-Abertura/fechamento usam o efeito nativo Scale, duração base 180 ms,
-escala 0,92↔1 e fade. Fechamento ocorre após o aplicativo aceitar o pedido,
-respeitando diálogos de salvar. Scale também pode animar diálogos conforme
-sua implementação nativa. Desativados Squash/Magic Lamp e Fade para evitar
-sobreposição com os efeitos escolhidos. Smooth Window Geometry permanece.
+Opening/closing use the native effect Scale, base duration 180 ms, scale 0,92↔1 and fade. Closure occurs after the application accepts the request, respecting save dialogues. Scale can also animate dialogues according to its native implementation. Disabled squash/magic lamp and fade to avoid overlapping with the chosen effects. Smooth Window Geometry remains.
 
-animationTime respeita a velocidade global do KDE. Na sessão validada,
-AnimationDurationFactor=0,25 reduz 240 ms para cerca de 60 ms e 180 ms para
-cerca de 45 ms. A preferência global foi preservada. Noctalia e KWin têm
-preferências de movimento independentes; os tempos citados são de referência,
-não medidas de latência real. Composições anteriores e ricyblur permanecem.
+animationTime respects the global speed of KDE. In the validated session, AnimationDurationFactor=0,25 reduce 240 ms for about 60 ms and 180 ms for about 45 ms. Global preference has been preserved. Noctalia and KWin have independent movement preferences; the mentioned times are of reference, not real latency measures. Previous compositions and ricyblur remain.
 
-## Atualização das animações das janelas
+## Updating of window animations
 
-O Noctalia continua usando esta fonte/binário. Para o efeito atual de fade e
-expansão nas quatro ações, use ../window-fade-expand/aplicar-animacoes.py
-após compilar/ativar esta contribuição. O aplicador KWin desta pasta registra
-a etapa anterior; a referência abaixo descreve os efeitos daquela etapa.
-Leia ../window-fade-expand/README.md para valores atuais e reversão.
+Noctalia continues to use this source/binary. For the current fade effect and expansion in all four actions, use ../window-fade-expand/apply-animations.py after compiling/activating this contribution. The KWin applicator of this folder records the previous step; the reference below describes the effects of that step. Read ../window-fade-expand/README.md for current values and reversal.

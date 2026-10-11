@@ -1,53 +1,35 @@
-# Correções verificadas na implementação do destino
+# Corrections in the implementation of the destination
 
-Esta contribuição complementa os archives históricos sem substituir suas cópias
-no kit distribuído. Foi aplicada à cópia ativa em `$HOME/ricy-kit`.
+This contribution complements the historical archives without replacing their copies in the distributed kit. It was applied to the active copy in `$HOME/ricy-kit`.
 
-## Aplicar antes de preparar outro destino
+## Apply before preparing another destination
 
-Na raiz do kit, confira os hashes e então aplique as correções:
+At the root of the kit, check the hashes and then apply the corrections:
 
 ```bash
 sha256sum -c SHA256SUMS
-python contributions/target-implementation-fixes/aplicar-correcoes.py
+python contributions/target-implementation-fixes/apply-fixes.py
 ```
 
-O aplicador valida todos os archives antes de escrever. Aceita somente a versão
-original ou a versão corrigida; repetir a aplicação é permitido. Depois de
-aplicar, os hashes originais dos dois archives alterados deixam de corresponder
-ao pacote, como já acontece com os `.desktop` após preparar o destino.
+The applicator validates all files before writing. Only accepts the original version or the corrected version; repeat the application is allowed. After applying, the original hashes of the two changed files cease to match the package, as already happens with the files. `.desktop` after preparing the destination.
 
-Continue pelo README de `noctalia-kde-integration-and-menus` e pelo README de
-`dolphin-deb-rpm-installer`. Use somente a contribuição Noctalia indicada:
-a cópia antiga em `outputs/` da raiz não recebe estas correções.
+Continue with the README of `noctalia-kde-integration-and-menus` and the README of `dolphin-deb-rpm-installer`. Use only the given Noctalia contribution: the old copy in `outputs/` from the root does not receive these corrections.
 
-## Mudanças
+## Changes
 
-- `configurar-super.py`: chama `doRegister` e `setShortcut` antes de
-  `setForeignShortcut`. No destino, a chamada estrangeira sozinha não registrava
-  Super. Foram verificados os registros de Super e Super+Espaço, a abertura do
-  launcher e o ciclo de restauração/reinício.
-- `debtap`: gera `.MTREE` com UID/GID zero, inclui `.INSTALL` somente quando
-  existe, interrompe em erro de geração e grava o arquivo final com ownership
-  numérico zero. Exclui `namcap-*` e `pkgbuildinstallations*` do pacote, do mtree
-  e do cálculo de tamanho. DEB e RPM de teste foram convertidos, instalados,
-  conferidos por `pacman -Qkk` (zero archives alterados) e removidos.
-- `atualizar-indices.sh`: wrapper para executar o Debtap instalado com IPv4,
-  limites de conexão/tempo, retries, TLS verificado e URLs HTTPS dos índices
-  Debian/Ubuntu. Verifica que todos os índices necessários são não vazios após
-  o comando. Não altera `/usr/bin/debtap`.
+- `configure-super.py`: flame `doRegister` and `setShortcut` before
+`setForeignShortcut`In the destination, the foreign call alone did not register Super. Super and Super Space records, the opening of the launcher and the restoration/restart cycle were checked.
+- `debtap`: generates `.MTREE` with UID/GID zero, includes `.INSTALL` only when
+exists, interrupts in generation error and saves the final file with zero numerical ownership. Delete `namcap-*` and `pkgbuildinstallations*` package, mtree and size calculation. DEB and RPM of test were converted, installed, checked by `pacman -Qkk` (zero files changed) and removed.
+- `update-indexes.sh`: wrapper to run Debtap installed with IPv4,
+connection/time limits, returns, verified TLS and HTTPS URLs of Debian/Ubuntu indexes. Checks that all required indexes are not empty after command. Do not change `/usr/bin/debtap`.
 
-Depois de instalar o pacote AUR Debtap, atualize os índices:
+After installing the AUR Debtap package, update the indexes:
 
 ```bash
-sudo bash contributions/target-implementation-fixes/atualizar-indices.sh
+sudo bash contributions/target-implementation-fixes/update-indexes.sh
 ```
 
-O teste de interface chegou ao botão **Instalar** com `SHELL=fish` e `TERM`
-ausente, sem clicar no botão. RPM com scriptlet foi recusado. Isso não demonstra
-compatibilidade universal de pacotes externos. Não foi instalado Parsec nesta
-implementação; seu binário não faz parte do kit.
+The interface test has reached the button **Install** with `SHELL=fish` and `TERM` absent, without clicking the button. RPM with scriptlet has been refused. This does not demonstrate universal compatibility of external packages. Parsec has not been installed in this implementation; its binary is not part of the kit.
 
-As cópias completas corrigidas e seus diffs estão nesta pasta. Código Debtap de
-George Savvidis, GPL-2.0 ou posterior, licença preservada. O conteúdo das bases
-continua dependendo dos servidores externos e da heurística do upstream.
+The completed corrected copies and their diffs are in this folder. George Savvidis Debtap Code, GPL-2.0 or later, preserved license. The contents of the bases continue depending on the external servers and the upstream heuristic.

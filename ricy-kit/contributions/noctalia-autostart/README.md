@@ -1,69 +1,47 @@
-# Noctalia iniciado automaticamente no KDE
+# Nottalia started automatically in KDE
 
-Os nomes `noctalia-teste.service` e `iniciar-teste.sh` são históricos: depois deste instalador, o Noctalia é permanente e inicia no login. As entradas de menu e mensagens não usam mais o rótulo de teste.
+Names `noctalia-teste.service` and `start-test.sh` are historical: after this installer, Noctalia is permanent and starts on login. Menu entries and messages no longer use the test label.
 
-Esta contribuição substitui o modo de início manual pelo início no login,
-conforme o pedido posterior à reinicialização. O Plasma continua ativo para
-desktop/wallpaper; a integração inicia Noctalia, adaptador e atalhos e recolhe
-os painéis somente após o IPC estar pronto.
+This contribution replaces manual start mode by login, as requested after restart. Plasma remains active for desktop/wallpaper; integration starts Noctalia, adapter and shortcuts and collects panels only after IPC is ready.
 
-## Instalar
+## Install
 
-Prepare primeiro `noctalia-kde-integration-and-menus` e aplique as correções da
-contribuição `target-implementation-fixes`. Nesta cópia preparada do kit:
+Prepare it first. `noctalia-kde-integration-and-menus` and apply the corrections of the contribution `target-implementation-fixes`. In this prepared copy of the kit:
 
 ```bash
-python contributions/noctalia-autostart/instalar-inicio-automatico.py
+python contributions/noctalia-autostart/install-autostart.py
 ```
 
-Execute como usuário do desktop em Plasma Wayland. O instalador guarda os
-archives anteriores em `$HOME/.local/state/ricy-inicio-automatico-backups/`,
-instala três unidades em `.config/systemd/user`, atualiza cinco scripts da
-integração, valida as unidades e habilita/inicia a integração.
+Run as a desktop user in Plasma Wayland. The installer stores the previous files in `$HOME/.local/state/ricy-inicio-automatico-backups/`, installs three units in `.config/systemd/user`, updates five integration scripts, validates the units and enables/starts integration.
 
-- `ricy-noctalia-integracao.service` é habilitada em `plasma-workspace.target`.
-  Aguarda plasmashell e KGlobalAccel e executa a integração, com recuperação
-  do Plasma em caso de erro durante a execução.
-- `noctalia-teste.service` passa a ser permanente, usando o perfil isolado
-  preparado. Reinicia em falha e inicia também o adaptador.
-- `noctalia-busca-desktop.service` é permanente e acompanha a shell. Usa
-  `Type=exec` e verifica a propriedade efetiva de `org.kde.krunner`; não
-  declara `BusName`, evitando conflito com a unidade nativa do KRunner.
+- `ricy-noctalia-integracao.service` is enabled on `plasma-workspace.target`.
+Waits for plasmashell and KGlobalAccel and performs integration, with recovery of Plasma in case of error during execution.
+- `noctalia-teste.service` becomes permanent, using the isolated profile
+Ready. Restarts failure and also initiates the adapter.
+- `noctalia-busca-desktop.service` is permanent and follows the shell.
+`Type=exec` and verifies the effective ownership of `org.kde.krunner`; does not declare `BusName`, avoiding conflict with KRunner's native unit.
 
-As unidades acompanham `graphical-session.target`. O adaptador reinicia ao
-reiniciar a shell. A recuperação antiga de login não restaura o Plasma
-enquanto o início automático estiver habilitado.
+The units follow `graphical-session.target`. The adapter restarts when restarting the shell. Old login recovery does not restore Plasma while the autostart is enabled.
 
-O registro de Super aguarda até dois segundos pela criação efetiva da ação
-no KGlobalAccel. Isso cobre a criação dos desktop entries no login. Os JSON
-de atalhos e backups originais continuam sendo os capturados no destino.
+The Super log waits up to two seconds for the effective creation of the action in KGlobalAccel. This covers the creation of desktop entries in the login. Original shortcuts and backups JSONs continue to be captured in the destination.
 
-## Voltar ao Plasma
+## Back to Plasma
 
 ```bash
-contributions/noctalia-kde-integration-and-menus/outputs/noctalia-test/voltar-ao-plasma.sh
+contributions/noctalia-kde-integration-and-menus/outputs/noctalia-test/return-to-plasma.sh
 ```
 
-Essa operação também desabilita o início automático para os próximos logins.
-Para voltar ao Noctalia e reativar a preferência:
+This operation also disables the autostart for the next logins. To return to Noctalia and reactivate preference:
 
 ```bash
 systemctl --user enable ricy-noctalia-integracao.service
 systemctl --user restart ricy-noctalia-integracao.service
 ```
 
-Nesta instalação, `$HOME/Projects/ricy/voltar.sh` e `$HOME/Projects/ricy/iniciar.sh` oferecem
-essas operações. O backup de estilo e o de layout existentes foram mantidos.
+In this facility, `$HOME/Projects/ricy/return.sh` and `$HOME/Projects/ricy/start.sh` offer these operations. Existing style backup and layout backup have been maintained.
 
-## Verificação executada
+## Verification carried out
 
-Unidades verificadas por `systemd-analyze --user verify`; integração habilitada
-com symlink no target KDE; início pela unidade terminou com sucesso. Ciclo de
-volta ao Plasma (dois painéis, autostart desabilitado) e reinício automático
-testado. Reinício da shell reiniciou também o adaptador; o PID do dono D-Bus
-coincidiu com o adaptador e a consulta Query abriu a busca. Configuração TOML
-inválida foi introduzida temporariamente: a integração restaurou os dois
-painéis/KRunner, e o perfil original foi reposto e iniciado com sucesso.
+Units checked by `systemd-analyze --user verify`; integration enabled with symlink in KDE target; start by unit ended successfully. Cycle back to Plasma (two panels, autostart disabled) and autostart tested. Restart of shell also restarted the adapter; D-Bus owner PID coincided with the adapter and Query query opened the search. Invalid TOML configuration was temporarily entered: integration restored the two panels/KRunner, and the original profile was restored and successfully started.
 
-A habilitação no login foi conferida. Uma nova reinicialização completa após
-esta alteração não foi executada pelo agente durante a sessão do usuário.
+The login enable was checked. A complete reboot after this change was not executed by the agent during the user session.

@@ -1,7 +1,8 @@
 # compositor
 
-KWin é infraestrutura compartilhada com Plasma. Preservar ABI, licenças e separação patch/upstream; nenhuma feature pode exigir desativar fallback.
+KWin is infrastructure shared with Plasma. Preserve ABI, licenses, and the
+patch/upstream distinction; no feature may require disabling fallback.
 
-Efeitos/scripts/patches: [kwin-development](../.agents/skills/kwin-development/SKILL.md)
-e [RECOVERY](../docs/RECOVERY.md). Localização/ownership:
+Effects/scripts/patches: [kwin-development](../.agents/skills/kwin-development/SKILL.md)
+and [RECOVERY](../docs/RECOVERY.md). Location/ownership:
 [COMPONENTS](../docs/COMPONENTS.md).

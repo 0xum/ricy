@@ -1,55 +1,55 @@
-# Datas em inglês e localização Cosmópolis/SP no Noctalia
+# English dates and Cosmópolis/SP location in Noctalia
 
-A integração usa `shell.lang = "en"`, `LC_TIME=en_US.UTF-8` e
-`TZ=America/Sao_Paulo` apenas na unidade Noctalia. A região do desktop e as
-regras de composição do teclado continuam nas configurações existentes.
-`LC_ALL` é removida do ambiente dessa unidade para não sobrepor LC_TIME.
-A locale en_US.UTF-8 precisa estar gerada no destino.
+The integration uses `shell.lang = "en"`, `LC_TIME=en_US.UTF-8`, and
+`TZ=America/Sao_Paulo` only in the Noctalia unit. The desktop region and keyboard
+composition rules retain their existing settings. `LC_ALL` is removed from that
+unit's environment so it cannot override LC_TIME. The en_US.UTF-8 locale must be
+generated on the destination.
 
-Localização fixa com `auto_locate = false` e
-`address = "Cosmopolis, Sao Paulo, Brazil"`. O endereço completo evita a
-cidade homônima nos Estados Unidos. A API nativa resolveu o destino como
-Cosmópolis, Brazil, latitude -22.64583, longitude -47.19611.
+Location is fixed with `auto_locate = false` and
+`address = "Cosmopolis, Sao Paulo, Brazil"`. The full address avoids the city
+with the same name in the United States. The native API resolved the destination
+as Cosmópolis, Brazil, latitude -22.64583, longitude -47.19611.
 
-Clima habilitado em unidades métricas (°C); Noctalia consulta Open-Meteo.
-O calendário/eventos fica habilitado, sem adicionar conta, fontes de eventos
-ou feriados. Eventos pessoais exigem conectar Google, CalDAV, ICS ou vdir
-posteriormente nas configurações Noctalia. A localização é usada pelo clima;
-o calendário utiliza o fuso da sessão e os eventos de suas fontes.
+Weather is enabled in metric units (°C); Noctalia queries Open-Meteo.
+Calendar/events are enabled without adding accounts, event sources, or holidays.
+Personal events require connecting Google, CalDAV, ICS, or vdir later through
+Noctalia settings. Location is used for weather; the calendar uses the session's
+time zone and events from its sources.
 
-## Aplicar
+## Apply
 
-Depois de preparar a integração permanente e a contribuição de notificações:
+After preparing the permanent integration and notification contribution:
 
 ```bash
-cd "$HOME/ricy-kit"
-python contributions/noctalia-language-and-localization/aplicar.py
+cd "$HOME/Projects/ricy/ricy-kit"
+python contributions/noctalia-language-and-localization/apply.py
 ```
 
-O script ajusta somente as chaves listadas em PREFERENCES no perfil e em seu
-settings.toml privado (as preferências da interface podem sobrepor o template).
-Preserva contas e outras opções, valida a configuração e instala
-`60-ricy-idioma-localizacao.conf` na unidade noctalia-teste.service.
-Reinicia apenas shell/adaptador com o helper existente de preservação de
-aplicativos. Não instala pacotes nem altera a locale global do sistema.
-Os templates públicos do kit já incluem idioma, localização, clima e calendário;
-o aplicador adiciona o ambiente necessário às datas e corrige overrides locais.
+The script changes only the keys listed in PREFERENCES in the profile and its
+private settings.toml (interface preferences may override the template).
+It preserves accounts and other options, validates the configuration, and installs
+`60-ricy-idioma-localizacao.conf` in the noctalia-teste.service unit.
+It restarts only shell/adapter through the existing application-preservation helper.
+It does not install packages or change the global system locale.
+Public kit templates already include language, location, weather, and calendar;
+the applicator adds the date environment and corrects local overrides.
 
-## Verificação e reversão
+## Verification and reversal
 
-Nesta instalação: configuração validada; calendário exibiu Saturday/October;
-geocodificação confirmou Brasil; clima recebeu dados e sete dias de previsão,
-com timezone America/Sao_Paulo. Não foi sincronizada conta de calendário,
-conforme escolha do usuário. Não foi feita instalação em outra máquina.
+In the original installation: configuration validated; the calendar displayed
+Saturday/October; geocoding confirmed Brazil; weather received data and a seven-day
+forecast with the America/Sao_Paulo time zone. No calendar account was synchronized,
+as requested by the user. Installation on another machine was not performed.
 
-Backups anteriores do perfil, settings e drop-in ficam em
-`$HOME/.local/state/ricy-idioma-localizacao-backups/DATA-HORA/`, com manifest
-indicando archives que não existiam. Para restaurar, revise esse manifest,
-restaure somente os archives desejados e remova o drop-in se antes era ausente.
-Restaurar settings.toml inteiro também reverte outras preferências posteriores.
-Recarregue systemd e reinicie shell/adaptador pelo helper com preservação de
-aplicativos usado por aplicar.py; não use um restart comum da shell se houver
-aplicativos filhos que deseja manter. Os templates são independentes do estado
-local; ajuste suas chaves também se quiser manter a reversão em reinstalações.
+Previous profile, settings, and drop-in backups are stored in
+`$HOME/.local/state/ricy-idioma-localizacao-backups/DATA-HORA/`, with a manifest
+indicating files that did not exist. To restore, review the manifest, restore only
+the desired files, and remove the drop-in if previously absent.
+Restoring the entire settings.toml also reverses later preference changes.
+Reload systemd and restart shell/adapter using the application-preservation helper
+used by apply.py; avoid an ordinary shell restart if child applications must
+remain open. Templates are independent of local state; also adjust their keys if
+the reversal should persist through reinstallation.
 
-Fonte da localização: [geocodificação usada pelo Noctalia](https://api.noctalia.dev/geocode?city=Cosmopolis%2C%20Sao%20Paulo%2C%20Brazil).
+Location source: [geocoding used by Noctalia](https://api.noctalia.dev/geocode?city=Cosmopolis%2C%20Sao%20Paulo%2C%20Brazil).

@@ -1,8 +1,8 @@
 # Architecture Decision Records
 
-Decisões aceitas para o destino não significam implementação concluída.
-Numere novos ADRs sequencialmente; preserve decisões superadas com referência à
-substituta. Formato: Status, Context, Decision, Consequences, Constraints.
+Accepted decisions about the target design do not imply completed implementation.
+Number new ADRs sequentially; preserve superseded decisions with a reference to
+their replacement. Format: Status, Context, Decision, Consequences, Constraints.
 
 - [0001 — Single Workspace](0001-single-workspace.md)
 - [0002 — Plasma Recovery](0002-plasma-recovery.md)

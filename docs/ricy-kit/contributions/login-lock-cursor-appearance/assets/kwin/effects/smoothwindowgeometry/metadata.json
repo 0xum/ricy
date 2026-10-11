@@ -2,8 +2,8 @@
   "KPackageStructure": "KWin/Effect",
   "KPlugin": {
     "Id": "smoothwindowgeometry",
-    "Name": "Transições suaves de janelas",
-    "Description": "Anima encaixes, mudanças de posição e redimensionamentos não interativos",
+    "Name": "Smooth Window Transitions",
+    "Description": "Animates fittings, position changes and non-interactive resizings",
     "Version": "1.0",
     "License": "MIT"
   },

@@ -1,70 +1,35 @@
-# Ícones menores e animação de hover para aplicativos e busca
+# Smaller icons and hover animation for apps and search
 
-Na barra, os ícones dos aplicativos e a lupa de busca ficam 12% menores em
-repouso. Ao passar o mouse, crescem suavemente até o tamanho visual anterior;
-ao sair, retornam ao tamanho reduzido. Entrada e saída duram 140 ms, com
-EaseOutCubic, respeitando a configuração de movimento/velocidade do Noctalia.
-Reentrar durante a animação continua a partir do progresso atual.
+In the bar, the application icons and the search magnifying glass stay 12Smaller % at rest. When passing the mouse, they grow smoothly to the previous visual size; when leaving, they return to the reduced size. Input and output last. 140 ms, with EaseOutCubic, respecting the movement/speed configuration of Noctalia. Reenter during animation continues from the current progress.
 
-O efeito transforma somente o desenho do ícone: área de clique, espaçamento,
-layout da barra, títulos e indicadores permanecem fixos. Aplica-se a imagens,
-ícones de fallback dos aplicativos e à imagem/glyph do launcher de busca.
-Não modifica tray ou seus menus, volume, relógio, network, control-center/
-botão do Noctalia, nem o efeito dos rótulos/badges de workspaces.
-O destaque de fundo já existente dos apps acompanha o hover de 140 ms.
+The effect transforms only the icon design: click area, spacing, layout of the bar, titles and indicators remain fixed. It applies to images, application fallback icons, and the search launcher image/glyph. It does not modify track or its menus, volume, clock, network, control-center/ Noctalia button, nor does the effect of workspace labels/badges. The existing background highlight of the apps accompanies the hover of 140 Ms.
 
-Implementação em TaskbarWidget e LauncherWidget. Constantes de escala em ambos
-os archives devem ser mantidas coerentes: kAppIconRestScale=0.88 e
-kAppIconHoverDurationMs=140. Usa AnimationManager nativo e cancela a animação
-anterior ao mudar o destino; os owners da cena cancelam animações ao destruir
-os nós. Transformações marcam apenas repintura, sem recalcular o layout.
+Implementation in TaskbarWidget and LauncherWidget. Scale constants on both archives should be kept consistent: kAppIconRestScale=0.88 and kAppIconHoverDurationMs=140. Use Native AnimationManager and cancel the previous animation by changing the destination; scene owners cancel animations by destroying the nodes. Transformations mark only repainting, without recalculating the layout.
 
-## Reproduzir
+## Reproduce
 
-Noctalia 5.2.1, commit
-`6ef43e2bf2f3d5b4205ec72a72e34a2ab76ce3b4`. O patch completo preserva também
-notificações, wallpaper Home, menu da taskbar, menu/retorno do tray e seu
-alinhamento horizontal. Este é o compilador de referência da variante atual.
+Noctalia 5.2.1, commit `6ef43e2bf2f3d5b4205ec72a72e34a2ab76ce3b4`. The complete patch also preserves notifications, Home wallpaper, Taskbar menu, Tray menu/return and its horizontal alignment. This is the reference compiler of the current variant.
 
 ```bash
 cd "$HOME/ricy-kit/contributions/app-icon-interactions"
-bash compilar.sh
-python ../notification-continuity/ativar.py
+bash build.sh
+python ../notification-continuity/enable.py
 ```
 
-O compilador aceita fonte limpa ou exatamente este patch. Para migrar de uma
-variante anterior, preserve seu cache num caminho ainda inexistente e compile
-em fonte limpa, conforme taskbar-menu-composition/README.md. Ajuste o caminho
-se XDG_CACHE_HOME estiver configurado. Dependências: BUILDING.md upstream e
-contribuição notificacoes-continuidade. O ativador preserva aplicativos, cria
-backup de binário/drop-in e não substitui `/usr/bin/noctalia`.
-Reveja e recompile ao atualizar o Noctalia; o blur compartilhado continua
-vinculado à contribuição blur-continuity para o KWin instalado.
+The compiler accepts clean font or exactly this patch. To migrate from a previous variant, preserve your cache in a still non-existent path and compile it into a clean font as per taskbar-menu-composition/README.md. Adjust the path if XDG_CACHE_HOME is set. Dependencies: BUILDING.md upstream and contribution notifications-continuity. The activator preserves applications, creates binary/drop-in backup and does not replace `/usr/bin/noctalia`. Review and reward when updating Noctalia; the shared blur remains linked to the blur-continuity contribution to the installed KWin.
 
-## Validação e restauração
+## Validation and restoration
 
-Compilação, reprodução pelo script, validação do perfil e git diff --check
-passaram. O patch foi comparado ao anterior: somente os archives dos widgets
-de taskbar e launcher mudaram; correções anteriores e demais widgets foram
-preservados. A confirmação visual e testes de clicar/arrastar aplicativos,
-hover rápido, diferentes escalas e movimento desabilitado ainda não foram
-registrados nesta revisão.
+Compilation, script playback, profile validation and git diff --check The patch was compared to the previous one: only the files of the taskbar and launcher widgets changed; previous fixes and other widgets were preserved. Visual confirmation and tests of click/scramming applications, fast hover, different scales and disabled movement have not yet been recorded in this review.
 
-Passe o mouse sobre apps e lupa para conferir redução e ampliação suave,
-sem mover a barra. Verifique também clicar, alternar janelas e arrastar um app
-fixado. Compare tray, volume, relógio, network e control-center com o estado
-anterior. Para restaurar, use o backup impresso pelo ativador:
+Pass the mouse over apps and magnifying glass to check for smooth zoom and reduction without moving the bar. Also check to click, switch windows and drag a fixed app. Compare trace, volume, clock, network and control-center with the previous state. To restore, use the backup printed by the activator:
 
 ```bash
-python ../notification-continuity/ativar.py --restaurar "$HOME/.local/state/ricy-notificacoes-backups/DATA-HORA"
+python ../notification-continuity/enable.py --restaurar "$HOME/.local/state/ricy-notificacoes-backups/DATA-HORA"
 ```
 
-Código upstream MIT, licença incluída. Sem binários, capturas, clipboard,
-contas, backups ou estado privado no kit.
+Upstream MIT code, license included. No binaries, captures, clipboard, accounts, backups or private state in the kit.
 
-## Variante atual: ações dos ícones
+## Current variable: icon actions
 
-A variante posterior mantém estes ícones/hover e acrescenta restaurar/minimizar
-pelo clique esquerdo no KDE/KWin, com fechamento exato pelo botão do meio.
-Para reconstruir o estado completo atual, use ../taskbar-app-actions/compilar.sh.
-Este compilador anterior permanece histórico e recusa cache com diff diferente.
+The later variant keeps these icons/hover and adds restore/minimize by left click in KDE/KWin, with exact middle button closure. To rebuild the current full state, use ../taskbar-app-actions/build.sh. This previous compiler remains historical and refuses cache with different diff.

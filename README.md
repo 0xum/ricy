@@ -1,49 +1,53 @@
 # Ricy
 
-Desktop opinativo para CachyOS, baseado em KWin/Wayland, com Noctalia como
-shell principal e Plasma/Dolphin como fallback e recovery.
+An opinionated desktop for CachyOS, built on KWin/Wayland, with Noctalia as the
+primary shell and Plasma/Dolphin for fallback and recovery.
 
-**Estado atual:** Noctalia está integrado à sessão Plasma, que ainda fornece
-wallpaper/desktop. Sessão independente e Ricy Files são planejados; esta fundação
-não migrou o runtime nem implementou novas aplicações.
+**Current state:** Noctalia is integrated into the Plasma session, which still
+provides the wallpaper/desktop. An independent session and Ricy Files are planned;
+this foundation has not migrated the runtime or implemented new applications.
 
-**Arquitetura:** KWin permanece infraestrutura; a experiência Ricy usa um único
-espaço de trabalho. Preservar acesso ao Plasma e ao Dolphin é um requisito.
-As divergências legadas e limites de recuperação estão documentados.
+**Architecture:** KWin remains infrastructure; Ricy uses a single workspace.
+Preserving access to Plasma and Dolphin is a requirement. Legacy discrepancies
+and recovery limits are documented.
 
-**Desenvolvimento:** orientado por agentes, com evidência e mudanças incrementais.
-Comece em [AGENTS.md](AGENTS.md); [CLAUDE.md](CLAUDE.md) reutiliza as mesmas regras.
+**Development:** agent-first, with evidence and incremental changes.
+Start with [AGENTS.md](AGENTS.md); [CLAUDE.md](CLAUDE.md) reuses the same rules.
 
-- [Arquitetura](docs/ARCHITECTURE.md), [invariantes](docs/INVARIANTS.md) e [ADRs](docs/adr/README.md).
-- [Componentes](docs/COMPONENTS.md) e [design system](docs/DESIGN-SYSTEM.md).
-- [Desenvolvimento e validação](docs/DEVELOPMENT.md), [recovery](docs/RECOVERY.md) e [migração](docs/MIGRATION-PLAN.md).
+**Project language:** [Always use en-US as the language.] Project files,
+documentation, and public-facing interfaces use US English. Chats may use pt-BR.
+See the complete [language policy](AGENTS.md#project-language).
 
-`./scripts/verify all` executa checks offline; `./scripts/doctor` diagnostica sem
-alterar configurações. Isso não certifica o funcionamento da sessão inteira.
+- [Architecture](docs/ARCHITECTURE.md), [invariants](docs/INVARIANTS.md), and [ADRs](docs/adr/README.md).
+- [Components](docs/COMPONENTS.md) and [design system](docs/DESIGN-SYSTEM.md).
+- [Development and validation](docs/DEVELOPMENT.md), [recovery](docs/RECOVERY.md), and [migration](docs/MIGRATION-PLAN.md).
 
-## Organização e registro existentes
+`./scripts/verify all` runs offline checks; `./scripts/doctor` diagnoses without
+changing settings. This does not certify that the entire session works.
 
-Projeto organizado em 11/10/2026.
+## Existing organization and records
 
-- `iniciar.sh`: seleciona Noctalia para a sessão e próximos logins.
-- `voltar.sh`: volta ao Plasma.
-- `alternar.sh`: alterna entre Plasma e Noctalia.
-- `ricy-kit/`: kit ativo desta máquina, com perfil, estado e backups locais.
-- `docs/`: registro, identidade visual, instruções de reinstalação e kit transportável preservado.
-- `archives/ricy.zip`: arquivo original de transporte, preservado.
+Project organized on October 11, 2026.
 
-Os comandos `ricy`, `voltar-ao-noctalia` e `voltar-ao-plasma` continuam disponíveis em `~/.local/bin`.
-Os atalhos e serviços foram atualizados para os caminhos deste projeto.
-Para levar o Ricy para outro computador, use a documentação e o kit transportável;
-o kit ativo contém estado e backups privados desta instalação.
+- `start.sh`: selects Noctalia for the session and subsequent logins.
+- `return.sh`: returns to Plasma.
+- `switch.sh`: switches between Plasma and Noctalia.
+- `ricy-kit/`: this machine's active kit, with local profile, state, and backups.
+- `docs/`: records, visual identity, reinstallation instructions, and preserved transport kit.
+- `archives/ricy.zip`: preserved original transport archive.
 
-O registro histórico conserva os caminhos usados nas sessões anteriores.
-Registro da organização e cópias dos archives alterados:
+The `ricy`, `voltar-ao-noctalia`, and `voltar-ao-plasma` commands remain available in
+`~/.local/bin`. Shortcuts and services were updated to this project's paths.
+To move Ricy to another computer, use the documentation and transport kit;
+the active kit contains private state and backups from this installation.
+
+The historical record preserves paths used in previous sessions.
+The organization record and copies of modified files are in
 `~/.local/state/profile-organization/2026-10-11/`.
 
-Correção dos atalhos em 11/10/2026: as entradas de menu e clipboard foram recarregadas
-no cache da sessão KDE (locale en_US.UTF-8), preservando Super e Super+Espaço.
-O serviço Noctalia usa `KillMode=process`, para manter os aplicativos que ele abriu
-quando a shell é encerrada. A proteção também consta nos modelos dos dois kits.
-Durante essa correção o Noctalia e o adaptador de busca permaneceram em execução.
-Registro: `~/.local/state/profile-organization/2026-10-11/shortcut-repair/`.
+Shortcut repair on October 11, 2026: menu and clipboard entries were reloaded
+in the KDE session cache (locale en_US.UTF-8), preserving Super and Super+Space.
+The Noctalia service uses `KillMode=process` to preserve applications it launched
+when the shell stops. This protection is also in both kits' templates.
+Noctalia and the search adapter remained running during this repair.
+Record: `~/.local/state/profile-organization/2026-10-11/shortcut-repair/`.

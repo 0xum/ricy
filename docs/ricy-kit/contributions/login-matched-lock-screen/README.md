@@ -1,46 +1,25 @@
-# Bloqueio com a apresentação do login
+# Lock with login display
 
-Contribuição para Plasma 6.7 e o login local `mocha-limine`. Usa o wallpaper
-configurado no SDDM, relógio, usuário e campo de senha dos mesmos componentes
-Breeze. O formulário aparece imediatamente e permanece visível por um minuto,
-como no login. Controles de mídia ficam desativados e o campo de senha não
-exibe o botão de revelar senha, seguindo o tema de login.
+Contribution to Plasma 6.7 and local login `mocha-limine`. Uses the wallpaper configured in SDDM, clock, user and password field of the same Breeze components. The form appears immediately and remains visible for a minute as in login. Media controls are disabled and the password field does not display the password reveal button, following the login theme.
 
 ```bash
-python aplicar.py
+python apply.py
 ```
 
-A adaptação copia somente o bloqueio do KDE instalado para um pacote local de
-mesmo ID. Os demais componentes do shell apontam para os archives do sistema.
-Autenticação, sincronização da senha, biometria, teclado virtual e tratamento
-de erros continuam usando a implementação nativa. O SDDM não é modificado.
-O script interrompe antes de escrever caso exista outro shell local ou o QML
-tenha mudado. Após atualizar o Plasma, reaplique para usar seu bloqueio novo.
+The adaptation only copies the KDE lock installed for a local package of the same ID. The other shell components point to the system files. Authentication, password synchronization, biometrics, virtual keyboard, and bug handling continue using native implementation. SDDM is not modified. The script interrupts before writing if there is another local shell or QML has changed. After updating Plasma, reapply to use your new lock.
 
-O backup privado fica em `~/.local/state/ricy-lockscreen-backups/`. Para voltar:
+Private backup stays in `~/.local/state/ricy-lockscreen-backups/`To come back:
 
 ```bash
-python restaurar.py /caminho/do/backup/informado
+python restore.py /caminho/do/backup/informado
 ```
 
-Prévia sem bloquear a sessão: `/usr/lib/kscreenlocker_greet --testing`.
-Na sessão normal, a mudança vale no próximo bloqueio. Botões de sessão
-permanecem apropriados para uma sessão já aberta; não se oferece desligamento
-ou escolha de sessão do SDDM dentro do bloqueio.
+Preview without blocking the session: `/usr/lib/kscreenlocker_greet --testing`. In the normal session, the change is worth the next lock. Session buttons remain appropriate for an already open session; there is no disengagement or choice of SDDM session within the lock.
 
-Scripts desta contribuição: MIT. Os QML gerados mantêm seus avisos de licença
-originais do KDE (GPL-2.0-or-later / LGPL-2.0-or-later).
+Scripts from this contribution: MIT. Generated QMLs keep their original KDE license notices (GPL-2.0-or-later / LGPL-2.0- or-later).
 
-## Correção da inicialização da autenticação (08/10/2026)
+## Authentication startup correction (08/10/2026)
 
-O campo fica visível por uma transição de `uiVisible` após a montagem do QML
-(`Qt.callLater`), preservando o estado inicial `false` do KDE. Inicializar
-diretamente com `true` impedia o disparo de `onUiVisibleChanged`, que inicia
-a autenticação; o formulário aparecia, mas a senha não era processada.
+The field is visible through a transition of `uiVisible` after mounting the QML (`Qt.callLater`), preserving the initial state `false` KDE. Start directly with `true` It prevented the shooting of `onUiVisibleChanged`, which initiates authentication; the form appeared, but the password was not processed.
 
-A regressão foi reproduzida em cópia temporária da versão anterior: nenhum
-início de autenticação e timeout. A versão corrigida passou pelo formulário
-nativo até o PAM real (`kde`): resultado 0 / Success e saída do greeter.
-Foram exercitados os modos imediato e com tolerância de 1200 ms, em
-`--testing`, com renderização offscreen, sem bloquear a sessão. A senha
-foi fornecida apenas por um descritor em memória, sem entrar no kit ou logs.
+The regression was reproduced in a temporary copy of the previous version: no login and timeout. The corrected version passed through the native form to the actual PAM (`kde`): result 0 / Success and output of the greeter. The modes were exercised immediately and with tolerance of 1200 ms, in `--testing`, with offscreen rendering, without blocking the session. The password was provided only by a memory descriptor without entering the kit or logs.

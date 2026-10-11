@@ -1,87 +1,51 @@
-# Alternar Plasma e Noctalia preservando o Ricy
+# Toggle Plasma and Noctalia Preserving Ricy
 
-Esta contribuição substitui a restauração integral do backup antigo usada
-pelos scripts anteriores. O wallpaper, os widgets do desktop e as configurações
-gerais continuam compartilhados no Plasma. Cada entrada no Noctalia salva os
-painéis Plasma mais recentes e seus grupos de geometria; o retorno repõe
-somente esses grupos, sem restaurar archives completos de uma instalação antiga.
-O perfil privado, binário personalizado, estado e drop-ins Noctalia existentes
-continuam em uso. Não restaura cores, fontes, efeitos ou aparência de aplicativos.
+This contribution replaces the integral restoration of the old backup used by previous scripts. The wallpaper, desktop widgets and general settings remain shared in Plasma. Each entry in Noctalia saves the latest Plasma panels and their geometry groups; the return restores only these groups without restoring complete files from an old installation. The existing private, custom binary, state and Noctalia drop-ins remain in use. It does not restore colors, fonts, effects, or app appearance.
 
-## Instalar em um destino preparado
+## Install in a prepared destination
 
-Depois de preparar Noctalia/KDE e instalar `noctalia-autostart`:
+After preparing Noctalia/KDE and installing `noctalia-autostart`:
 
 ```bash
-python "$HOME/ricy-kit/contributions/plasma-noctalia-switching/instalar.py"
+python "$HOME/ricy-kit/contributions/plasma-noctalia-switching/install.py"
 ```
 
-Requer a sessão Plasma Wayland, suas três unidades já instaladas, Python/PyGObject,
-qdbus6, systemctl, flock e kbuildsycoca6. O instalador não troca o ambiente atual.
-Executar novamente após reinstalar os scripts antigos de início automático.
-Os caminhos são calculados a partir da localização do kit e do usuário de destino.
+Requires the Plasma Wayland session, its three units already installed, Python/PyGObject, qdbus6, systemctl, flock and kbuildsycoca6. The installer does not change the current environment. Run again after reinstalling the old autostart scripts. The paths are calculated from the location of the kit and the target user.
 
-## Usar
+## Use
 
 ```bash
-ricy noctalia   # selecionar Noctalia e habilitar no próximo login
-ricy plasma     # selecionar Plasma e desabilitar início automático Noctalia
-ricy alternar   # trocar para o outro; também é a ação padrão de `ricy`
+ricy noctalia   # select Noctalia and enable it for the next login
+ricy plasma     # select Plasma and disable Noctalia autostart
+ricy alternar   # switch to the other shell; also the default action of `ricy`
 ricy status     # mostrar Plasma ou Noctalia
 ```
 
-Os comandos ficam em `$HOME/.local/bin`; se esse diretório não estiver no PATH,
-use o caminho completo. Também existem `voltar-ao-noctalia`, `voltar-ao-plasma`,
-`$HOME/ricy/iniciar.sh`, `voltar.sh`, `alternar.sh` e três entradas no menu:
-**Voltar ao Noctalia**, **Voltar ao Plasma**, **Alternar Plasma e Noctalia**.
+The commands are in `$HOME/.local/bin`; if this directory is not in PATH, use the full path. Also exist `voltar-ao-noctalia`, `voltar-ao-plasma`, `$HOME/ricy/start.sh`, `return.sh`, `switch.sh` and three entries in the menu: **Back to Noctalia**, **Back to Plasma**, **Toggle Plasma and Noctalia**.
 
-Os wrappers antigos do kit ativo passam a encaminhar para esta implementação.
-Cada troca roda numa unidade transitória separada da shell, para continuar
-mesmo quando o comando foi aberto pelo menu do Noctalia e a shell é encerrada.
-Os nomes de serviços e perfil permanecem os mesmos. Plasmashell reinicia
-brevemente para sincronizar o KConfig e repor painéis; KWin e aplicativos
-continuam abertos. Só recolhe painéis depois de confirmar shell, busca e atalhos.
-Falha durante essa etapa recupera Plasma; falha pelo comando também desabilita
-a preferência Noctalia no login. Os atalhos Super, Super+Espaço e Super+V são
-capturados antes da transferência e devolvidos no retorno, a cada ciclo.
+The old wrappers of the active kit start forwarding for this implementation. Each change runs in a separate transitory unit from the shell, to continue even when the command was opened by the Noctalia menu and the shell is closed. The service and profile names remain the same. Plasmashell briefly restarts to sync KConfig and restore panels; KWin and applications remain open. Only collects panels after confirming shell, searching and shortcuts. Failure during this step recovers Plasma; failure by the command also disables the Noctalia preference in the login. Super, Super+Space and Super+V shortcuts are captured before the transfer and returned at every cycle.
 
-Backups privados, atalhos e grupos de painéis ficam em
-`${XDG_STATE_HOME:-$HOME/.local/state}/ricy-alternancia/`; não distribua essa
-pasta. O snapshot de painéis se atualiza quando existem painéis vivos; entrar
-novamente numa sessão já Noctalia não o substitui por um layout vazio.
-Colisões com IDs de widgets/desktops criados posteriormente são remapeadas.
-O backup original `plasma-antes.tar.gz` nunca é modificado; só serve de seed
-de painéis quando a migração começa numa sessão antiga já sem painéis.
+Private backups, shortcuts and panel groups stay in `${XDG_STATE_HOME:-$HOME/.local/state}/ricy-alternancia/`; do not distribute this folder. The panel snapshot updates when there are live panels; entering a session again already Noctalia does not replace it with an empty layout. Collapses with widget/desktop IDs created later are remapped. The original backup `plasma-antes.tar.gz` it is never modified; it only serves as panels seed when migration starts in an old session already without panels.
 
-## Verificar
+## Verify
 
 ```bash
-python "$HOME/ricy-kit/contributions/plasma-noctalia-switching/verificar.py"
+python "$HOME/ricy-kit/contributions/plasma-noctalia-switching/verify.py"
 ricy status
 systemctl --user is-active plasma-plasmashell.service
 ```
 
-Noctalia deve ter shell/adaptador ativos e zero painéis Plasma; Plasma deve
-ter seus painéis e KRunner. O wallpaper deve permanecer nos dois sentidos.
-O instalador imprime o backup; erros da integração aparecem em
-`journalctl --user -u ricy-noctalia-integracao.service`.
+Noctalia must have active shell/adapter and zero Plasma panels; Plasma must have its panels and KRunner. The wallpaper must remain in both directions. The installer prints the backup; integration errors appear in `journalctl --user -u ricy-noctalia-integracao.service`.
 
-## Desfazer a instalação da alternância
+## Undo alternation installation
 
-Primeiro execute `ricy plasma`. Depois use o caminho do backup emitido:
+First run `ricy plasma`. Then use the backup path issued:
 
 ```bash
-python "$HOME/ricy-kit/contributions/plasma-noctalia-switching/restaurar-instalacao.py" \
+python "$HOME/ricy-kit/contributions/plasma-noctalia-switching/restore-installation.py" \
   "$HOME/.local/state/ricy-alternancia/backups/DATA-HORA"
 ```
 
-O restaurador só repõe wrappers/entradas de comando e o estado da alternância.
-Não repõe appletsrc/plasmashellrc capturados para diagnóstico, preservando o
-desktop atual. Não apaga o perfil Noctalia, efeitos, aparência nem os backups.
-Os scripts antigos recolocados voltam a ter a limitação original: podem
-restaurar um wallpaper/layout antigo. Para continuar alternando, mantenha
-esta contribuição instalada.
+The restorer only restores wrappers/command entries and the alternation state. It does not replace captured appletsrc/plasmashellrc for diagnosis, preserving the current desktop. It does not delete the Noctalia profile, effects, appearance or backups. The old replaced scripts again have the original limitation: they can restore an old wallpaper/layout. To keep alternating, keep this contribution installed.
 
-Não é uma troca de sessão/compositor: Noctalia segue integrado ao KDE/KWin.
-Alterações no próprio desktop são compartilhadas. Aparência de login/bloqueio
-permanece independente; seus restauradores continuam em outras contribuições.
+It is not a session/compositor exchange: Noctalia is integrated to KDE/KWin. Desktop changes themselves are shared. login/block appearance remains independent; its restorers remain in other contributions.

@@ -1,7 +1,7 @@
 # app-icon-reordering
 
-Variante cumulativa de referência do kit. Conferir commit e diff antes do build; preservar testes de ações/ordenação e não aplicar patch histórico sobre esta variante.
+Cumulative reference variant of the kit. Check the commit and diff before building; preserve action/ordering tests and do not apply a historical patch over this variant.
 
-Leia [regras do subsistema](../../../shell/AGENTS.md)
-e o trecho pertinente do [README local](README.md). Consulte
-[COMPONENTS](../../../docs/COMPONENTS.md) para localizar ownership/fronteiras.
+Read the [subsystem rules](../../../shell/AGENTS.md)
+and the relevant [local README](README.md) section. Consult
+[COMPONENTS](../../../docs/COMPONENTS.md) to locate ownership/boundaries.

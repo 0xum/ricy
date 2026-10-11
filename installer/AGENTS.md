@@ -1,7 +1,9 @@
 # installer
 
-PLANNED: organizar aplicadores já existentes. Manter código público separado de backups/perfis/estado privados; não executar instalação no kit ativo como validação. Preservar rollback e licenças.
+PLANNED: organize existing applicators. Keep public code separate from private
+backups/profiles/state; do not install into the active kit for validation.
+Preserve rollback and licenses.
 
-Aplicadores com impacto na sessão/fallback exigem [RECOVERY](../docs/RECOVERY.md).
-Migração/contratos/dependências: [COMPONENTS](../docs/COMPONENTS.md) e
+Applicators affecting session/fallback require [RECOVERY](../docs/RECOVERY.md).
+Migration/contracts/dependencies: [COMPONENTS](../docs/COMPONENTS.md) and
 [component-development](../.agents/skills/component-development/SKILL.md).

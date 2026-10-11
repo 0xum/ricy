@@ -1,18 +1,18 @@
-# Invariantes arquiteturais
+# Architectural Invariants
 
-Status: Accepted, decisão do projeto em 2026-10-11. São contratos normativos;
-conformidade atual parcial documentada em [ARCHITECTURE](ARCHITECTURE.md).
+Status: Accepted, project decision on 2026-10-11. These are normative contracts;
+partial current compliance is documented in [ARCHITECTURE](ARCHITECTURE.md).
 
-| ID | Contrato | Limite de implementação |
+| ID | Contract | Implementation limit |
 |---|---|---|
-| RICY-001 — Single Workspace | Experiência em um único espaço; proibir switchers, indicadores, move-to-workspace, gestos e navegação entre desktops. | KWin pode possuir APIs internas; não confundir seu objeto `workspace` com autorização de UI. Auditar legado sem apagar fallback. |
-| RICY-002 — KWin é infraestrutura | KWin/Wayland compõe e gerencia janelas; Ricy não o substitui. | Patches conservadores, compatíveis com a versão instalada. |
-| RICY-003 — Noctalia principal | Noctalia é a shell visual Ricy, com patches próprios identificáveis. | Não presumir APIs upstream nem transformar Plasma na experiência principal do destino. |
-| RICY-004 — Plasma Recovery | Plasma deve continuar instalado, utilizável e acessível quando Ricy/Noctalia falhar. | Não remover dependências, ferramentas KDE, login ou rotas de retorno. Isolamento atual é incompleto. |
-| RICY-005 — Dolphin Recovery | Ricy Files será padrão da futura sessão; Dolphin permanece para recovery. | Não implementar Files agora nem retirar o gerenciador atualmente funcional. Reserva: `apps/file-manager/`. |
-| RICY-006 — Design centralizado | Uma fonte de verdade para identidade; reutilizar cores, raios, espaços, movimento, transparência, blur e fontes. | Preservar valores existentes; não criar design paralelo nem migrar todos os consumidores agora. |
+| RICY-001 — Single Workspace | A single-space experience; prohibit switchers, indicators, move-to-workspace actions, gestures, and navigation between desktops. | KWin may have internal APIs; its `workspace` object does not authorize UI. Audit legacy behavior without deleting fallback. |
+| RICY-002 — KWin is infrastructure | KWin/Wayland composites and manages windows; Ricy does not replace it. | Conservative patches compatible with the installed version. |
+| RICY-003 — Primary Noctalia | Noctalia is Ricy's visual shell, with identifiable custom patches. | Do not assume upstream APIs or make Plasma the primary experience of the target design. |
+| RICY-004 — Plasma Recovery | Plasma must remain installed, usable, and accessible when Ricy/Noctalia fails. | Do not remove dependencies, KDE tools, login, or return paths. Current isolation is incomplete. |
+| RICY-005 — Dolphin Recovery | Ricy Files will be the default in the future session; Dolphin remains for recovery. | Do not implement Files now or remove the currently working file manager. Reserved location: `apps/file-manager/`. |
+| RICY-006 — Centralized design | One source of truth for identity; reuse colors, radii, spacing, motion, transparency, blur, and fonts. | Preserve existing values; do not create a parallel design or migrate all consumers now. |
 
-Mudanças nos contratos exigem [architecture-change](../.agents/skills/architecture-change/SKILL.md)
-e decisão explícita do usuário, seguida de ADR. Conhecer a divergência não
-concede permissão para enfraquecer o contrato. Veja [RECOVERY](RECOVERY.md) e
-[DESIGN-SYSTEM](DESIGN-SYSTEM.md) para sua aplicação.
+Contract changes require [architecture-change](../.agents/skills/architecture-change/SKILL.md)
+and an explicit user decision, followed by an ADR. Knowing about a discrepancy
+does not grant permission to weaken the contract. See [RECOVERY](RECOVERY.md) and
+[DESIGN-SYSTEM](DESIGN-SYSTEM.md) for how these contracts apply.

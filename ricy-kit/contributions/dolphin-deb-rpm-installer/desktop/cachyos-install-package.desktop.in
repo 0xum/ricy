@@ -5,6 +5,6 @@ Actions=installPackage;
 X-KDE-Priority=TopLevel
 
 [Desktop Action installPackage]
-Name=Instalar no CachyOS…
+Name=Install on CachyOS…
 Icon=system-software-install
 Exec=/usr/bin/python @INSTALLER@ %f

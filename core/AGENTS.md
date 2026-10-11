@@ -1,7 +1,9 @@
 # core
 
-PLANNED: limite de lógica comum, sem runtime novo nesta etapa. Não criar IPC, daemon ou session manager. Antes de abstrair, localizar os wrappers e helpers reais no mapa.
+PLANNED: boundary for common logic, without a new runtime at this stage. Do not
+create IPC, a daemon, or a session manager. Before abstracting, locate the actual
+wrappers and helpers in the map.
 
-Consulte [COMPONENTS](../docs/COMPONENTS.md) para abstrações/fronteiras;
-[RECOVERY](../docs/RECOVERY.md) se afetar sessão/fallback.
-Use [component-development](../.agents/skills/component-development/SKILL.md) para componentes/contratos.
+Consult [COMPONENTS](../docs/COMPONENTS.md) for abstractions/boundaries;
+[RECOVERY](../docs/RECOVERY.md) if session/fallback is affected.
+Use [component-development](../.agents/skills/component-development/SKILL.md) for components/contracts.

@@ -1,7 +1,7 @@
 # noctalia-kde-integration-and-menus
 
-Não executar kits duplicados: nomes de unidades e IDs D-Bus/desktop são compartilhados. Perfil de destino e work podem conter dados privados.
+Do not run duplicate kits: unit names and D-Bus/desktop IDs are shared. The destination profile and work may contain private data.
 
-Leia [regras do subsistema](../../../integrations/AGENTS.md)
-e o trecho pertinente do [README local](README.md). Consulte
-[COMPONENTS](../../../docs/COMPONENTS.md) para localizar ownership/fronteiras.
+Read the [subsystem rules](../../../integrations/AGENTS.md)
+and the relevant [local README](README.md) section. Consult
+[COMPONENTS](../../../docs/COMPONENTS.md) to locate ownership/boundaries.

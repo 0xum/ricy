@@ -1,161 +1,94 @@
-# Login, bloqueio, cursor e aparência — captura de 09/10/2026
+# Login, blocking, cursor and appearance — capture of 09/10/2026
 
-Esta contribuição exporta a aparência efetiva deste computador para outra
-instalação CachyOS/KDE Plasma Wayland. O guia consolidado está em
-`REINSTALAR.md`, junto de `ricy.md`. Nenhum destes instaladores foi aplicado à
-sessão de origem durante a exportação.
+This contribution exports the effective appearance of this computer to another installation CachyOS/KDE Plasma Wayland. The consolidated guide is in `REINSTALL.md`, together with `ricy.md`. None of these installers were applied to the original session during export.
 
-## Configurações incluídas
+## Settings included
 
-| Componente | Estado capturado |
+| Component | Catched State |
 |---|---|
-| Tela de iniciar sessão | SDDM, tema local `mocha-limine`, baseado no Breeze Qt 6 |
-| Fundo do login | `limine-splash.png`, imagem incluída no kit, preenchimento com recorte proporcional |
-| Login: relógio/formulário | Relógio ligado, formulário imediato, ocultação após 60 s de inatividade, logo oculto |
-| Login: cores | Grupos `Colors:*`/`ColorEffects:*` da conta SDDM: Catppuccin Mocha Mauve; seleção `#cba6f7` |
-| Login: fonte/ícones/estilo | JetBrainsMono Nerd Font 10 pt; Breeze Dark; widgetStyle Breeze |
-| Ponteiro do mouse (extra) | Bibata Modern Classic 2.0.6, tamanho 16, KDE/GTK/SDDM e XCURSOR |
-| Bloqueio | Fundo Limine, relógio sempre visível, formulário imediato/60 s, mídia e revelar senha ocultos |
-| Autenticação do bloqueio | Adaptação existente preserva `uiVisible: false` e usa `Qt.callLater` após a montagem |
-| Fontes KDE | JetBrainsMono Nerd Font 10 pt: geral, mono, menus, barras, menores e títulos |
-| Ícones KDE/GTK | `breeze-dark`, preferência efetiva herdada dos defaults KDE |
-| Aplicativos Qt | Kvantum `KDE-Noctalia`, paleta `KDE-Noctalia` já distribuída no kit |
-| Aparência Plasma | Tema local `mocha-blur`; pacote global `Catppuccin-Mocha-Mauve` e seu splash |
-| Decoração de janelas | Breeze, BorderSize None, BorderSizeAuto false, NoPlugin false |
-| Aplicativos GTK | `adw-gtk3-dark`, preferência escura, fonte/cursor/ícones acima, som `ocean`, DPI 96 |
-| Fontconfig | Hinting ligado, hintslight e antialiasing; arquivo visual capturado |
-| Blur KWin | Ativo, força 5, ruído 2 |
-| Extensões opcionais | adaptivepanelwidth, smoothwindowgeometry e windowsarrows, fontes e atalhos selecionados incluídos |
+| Sign-in screen | SDDM, local theme `mocha-limine`based on Breeze Qt 6  |
+| Login Background |  `limine-splash.png`, image included in the kit, filling with proportional cutout |
+| Login: watch/form | Clock on, immediate form, concealment after 60 s of inactivity, soon hidden |
+| Login: colors | Groups `Colors:*`/`ColorEffects:*` SDDM account: Catppuccin Mocha Mauve; selection `#cba6f7`  |
+| Login: source/icons/style | JetBrainsMono Nerd Font 10 en; Breeze Dark; widget |
+| Mouse pointer (extra) | Modern Classic Bibat 2.0.6, size 16, KDE/GTK/SDDM and XCURSOR |
+| Lock | Limine background, watch always visible, immediate form/60 s, media and reveal hidden password |
+| Lock Authentication | Existing adaptation preserves `uiVisible: false` and use `Qt.callLater` after mounting |
+| KDE Fonts | JetBrainsMono Nerd Font 10 en: general, mono, menus, bars, minors and titles |
+| KDE/GTK Icons |  `breeze-dark`, effective preference inherited from KDE defaults |
+| Qt Applications | Kvantum `KDE-Noctalia`, palette `KDE-Noctalia` already distributed in the kit |
+| Plasma Appearance | Local theme `mocha-blur`; global package `Catppuccin-Mocha-Mauve` and its splash screen |
+| Window decoration | Breeze, BorderSize None, BorderSizeAuto false, NoPlugin false |
+| GTK applications |  `adw-gtk3-dark`, dark preference, source/cursor/icons above, sound `ocean`, DPI 96  |
+| Fontconfig | Hinting on, hintslight and antialiasing; captured visual file |
+| Blur KWin | Active, strong. 5, noise 2  |
+| Optional extensions | adaptivepanelwidth, smoothwindowgeometry and windowsarrows, selected fonts and shortcuts included |
 
-`preferencias.json` contém somente chaves de aparência da conta do desktop.
-`greeter-preferencias.json` contém os grupos visuais realmente lidos de
-`/var/lib/sddm/.config/kdeglobals` por leitura privilegiada. A paleta do login é
-diferente da paleta KDE-Noctalia dos aplicativos; ambas foram preservadas.
-`preferencias-kwin.json` contém apenas os atalhos necessários às setas.
+`preferences.json` contains only desktop account appearance keys. `greeter-preferences.json` contains the visual groups actually read from `/var/lib/sddm/.config/kdeglobals` by privileged reading. The login palette is different from the KDE-Noctalia palette of applications; both have been preserved. `kwin-preferences.json` contains only the shortcuts required for arrows.
 
-O cursor solicitado pelo usuário é o cursor de texto animado do Konsole.
-Seu perfil/paleta e aplicador ficam na contribuição irmã
-`konsole-animated-cursor/`, incluída no guia de reinstalação. Bibata é uma
-preferência adicional do ponteiro do mouse, capturada nesta contribuição.
+The cursor requested by the user is Konsole's animated text cursor. Its profile/palette and applicator stay in the sister contribution `konsole-animated-cursor/`, included in the reset tab. Bibat is an additional mouse pointer preference, captured in this contribution.
 
-Assets incluídos: QML/metadata do login, Bibata completo, wallpaper Limine,
-quatro faces JetBrainsMono Nerd Font (Regular/Bold/Italic/BoldItalic), temas
-locais Plasma/splash e fontes das extensões KWin. Kvantum e esquema KDE são
-reutilizados da contribuição `noctalia-kde-integration-and-menus` do mesmo kit.
-GTK, ícones Breeze, componentes Qt/KDE e sons Ocean vêm dos pacotes do destino.
+Included Assets: Login QML/metadata, Full Bibat, Limine wallpaper, Four Faces JetBrainsMono Nerd Font (Regular/Bold/Italic/BoldItalic), Local Plasma/splash themes and sources of KWin extensions. Kvantum and KDE scheme are reused from contribution `noctalia-kde-integration-and-menus` from the same kit. GTK, Breeze icons, Qt/KDE components and Ocean sounds come from the destination packages.
 
-Não foram transportados avatar pessoal, senha, histórico de usuário do SDDM,
-PAM, autologin com nome de usuário, IDs de monitores/desktops, aceleração
-específica do mouse, backups da origem, caches ou histórico de clipboard.
-As pastas de sessões personalizadas de SDDM desta máquina não são importadas:
-selecione a sessão Plasma Wayland oferecida pela nova instalação.
+No personal avatar, password, SDDM user history, PAM, autologin with user name, monitor/desktop IDs, mouse specific acceleration, source backups, caches, or clipboard history. The custom SDDM session folders of this machine are not imported: select the Plasma Wayland session offered by the new installation.
 
-## Instalar no destino
+## Install in destination
 
-Use o roteiro consolidado de `REINSTALAR.md`. Para apenas esta contribuição,
-instale primeiro as dependências do KDE/GTK em uma sessão Plasma Wayland:
+Use the consolidated roadmap of `REINSTALL.md`. For only this contribution, first install KDE/GTK dependencies in a Plasma Wayland session:
 
 ```bash
 sudo pacman -S --needed sddm plasma-workspace breeze breeze-icons kvantum qt6-5compat qt6-svg python fontconfig adw-gtk-theme ocean-sound-theme
 cd "$HOME/ricy-kit/contributions/login-lock-cursor-appearance"
-sudo python sistema.py
-python usuario.py
-python ../login-matched-lock-screen/aplicar.py
+sudo python system.py
+python user.py
+python ../login-matched-lock-screen/apply.py
 ```
 
-`sistema.py` instala o tema SDDM/cursor/fonte/wallpaper e mescla as preferências
-visuais em `/etc/sddm.conf`, `/etc/sddm.conf.d/95-mocha-limine.conf` e na conta
-SDDM. Resolve UID/GID de `sddm` no destino, sem importar IDs numéricos desta
-máquina. O fundo passa a `/usr/local/share/ricy/limine-splash.png` e a fonte a
-`/usr/local/share/fonts/ricy/`. Não reinicia o gerenciador de login.
+`system.py` installs SDDM/cursor/source/wallpaper theme and merges visual preferences into `/etc/sddm.conf`, `/etc/sddm.conf.d/95-mocha-limine.conf` and the SDDM account. Solves UID/GID of `sddm` in the destination, no matter numerical IDs of this machine. The background passes to `/usr/local/share/ricy/limine-splash.png` and the source `/usr/local/share/fonts/ricy/`. Do not restart the login manager.
 
-`usuario.py`, executado sem sudo, guarda os archives afetados antes de
-instalar os temas e mesclar as chaves KDE/GTK. Define cursor em kcminputrc,
-GTK 2/3/4, environment.d e herança de cursor em icons/default. Mantém outras
-chaves dos archives existentes. Não aplica os defaults completos do tema
-global: os defaults antigos ainda citam Aurorae/outro cursor, mas o estado
-efetivo capturado usa Breeze e Bibata. Se aplicar posteriormente um tema
-global pelo KDE, execute novamente `usuario.py` para voltar a este estado.
+`user.py`, run without sudo, save the affected files before installing the themes and merge the KDE/GTK keys. Define cursor in kcminputrc, GTK 2/3/4, environment.d and cursor inheritance in icons/default. Keeps other keys from existing files. Do not apply the full defaults of the global theme: the old defaults still quote Aurorae/another cursor, but the captured effective state uses Breeze and Bibata. If later apply a global theme by KDE, run again `user.py` to return to this state.
 
-O bloqueio é instalado pelo aplicador existente. Ele lê o tema de login
-instalado, gera o QML a partir do KDE do destino e interrompe antes de escrever
-se os trechos esperados mudarem. Reaplique depois de atualizar o Plasma. Não
-copie a pasta de shell local gerada nesta máquina para outra versão do KDE.
+The lock is installed by the existing applicator. It reads the installed login theme, generates QML from the destination KDE and interrupts before typing if the expected snippets change. Reapply after updating Plasma. Do not copy the local shell folder generated on this host to another KDE version.
 
-Faça uma nova sessão para carregar cursor, fonte, splash, ícones e estilo.
-Não use `systemctl restart sddm` de dentro de uma sessão que deseja preservar.
+Do a new session to load cursor, font, splash, icons and style. Do not use `systemctl restart sddm` from within a session you wish to preserve.
 
-## Extensões de janelas (opcional)
+## Window Extensions (optional)
 
-Para levar também os efeitos e o comportamento das setas Super atuais:
+To also take the effects and behavior of the current Super Arrows:
 
 ```bash
 sudo pacman -S --needed gcc pkgconf qt6-base qt6-declarative kwin kconfig
-python usuario.py --extensoes-kwin
+python user.py --extensoes-kwin
 ```
 
-O script recompila windowsarrows em uma pasta temporária, usando headers e
-bibliotecas do destino, antes de alterar as preferências. Não distribui o
-`.so` antigo. Também instala adaptivepanelwidth/smoothwindowgeometry, aplica
-seus flags e desabilita o efeito maximize concorrente. Define Super+setas
-para o script e libera as mesmas combinações do quick tile nativo. Preserva
-maximizar Super+PgUp, minimizar Super+PgDown e restaurar Super+Backspace.
-Faça nova sessão para carregar o módulo e os atalhos. Mudanças da API/ABI
-KWin podem exigir adaptação; o código-fonte está incluído.
+The script recompiles windowsarrows in a temporary folder, using headers and destination libraries, before changing preferences. Do not distribute `.so` Antique. Also installs adaptivepanelwidth/smoothwindowgeometry, applies its flags and disables the concurrent maximize effect. Sets Super+arrows for the script and releases the same combinations of native quick Tile. Preserves maximize Super+PgUp, minimize Super+PgDown and restore Super+Backspace. Resume to load module and shortcuts. API/ABI KWin changes may require adaptation; source code is included.
 
-## Wallpaper do desktop (opcional)
+## Desktop Wallpaper (optional)
 
-O Noctalia continua deixando o wallpaper a cargo do Plasma. Para escolher
-Limine nos desktops da nova instalação, antes de preparar a integração:
+Noctalia continues to leave the wallpaper in charge of Plasma. To choose Limine on the desktops of the new installation, before preparing integration:
 
 ```bash
-bash aplicar-wallpaper.sh
+bash apply-wallpaper.sh
 ```
 
-O script enumera os desktops locais pela API Plasma. Ele muda a imagem nos
-desktops presentes; o wallpaper anterior pode ser escolhido novamente pelas
-Configurações do Sistema. Não cria um backup próprio do layout. Se preferir
-preservar a imagem da nova instalação, não execute este passo. A integração
-Noctalia deve ser preparada depois dessa escolha para registrar a imagem
-correta em seu script local de preservação do wallpaper.
+The script lists the local desktops by the Plasma API. It changes the image on the desktops present; the previous wallpaper can be chosen again by the System Settings. It does not create a layout backup of its own. If you prefer to preserve the image of the new installation, do not perform this step. The Noctalia integration should be prepared after that choice to register the correct image in your local wallpaper preservation script.
 
-## Desfazer no destino
+## Undo in destination
 
-Use os caminhos de backup impressos pelos instaladores; cada execução gera
-um backup novo. Se aplicou as extensões em uma execução posterior, desfaça
-primeiro essa execução, depois a execução anterior da aparência:
+Use the backup paths printed by the installers; each execution generates a new backup. If you applied the extensions to a later execution, first undo this execution, then the previous execution of the appearance:
 
 ```bash
-python ../login-matched-lock-screen/restaurar.py "$HOME/.local/state/ricy-lockscreen-backups/DATA-HORA"
-python usuario.py --restaurar "$HOME/.local/state/ricy-appearance-backups/DATA-HORA"
-sudo python sistema.py --restaurar /var/lib/ricy-appearance-backups/DATA-HORA
+python ../login-matched-lock-screen/restore.py "$HOME/.local/state/ricy-lockscreen-backups/DATA-HORA"
+python user.py --restaurar "$HOME/.local/state/ricy-appearance-backups/DATA-HORA"
+sudo python system.py --restaurar /var/lib/ricy-appearance-backups/DATA-HORA
 ```
 
-Os restauradores repõem os archives/temas afetados e removem os que antes
-não existiam. A restauração é integral para cada arquivo guardado e pode
-substituir edições posteriores nesses arquivos. No backup de sistema, UID/GID
-originais também são guardados. Pacotes instalados não são removidos.
-Os backups são privados, com pasta 0700; mantenha-os na instalação que os gerou.
+Restorers replace the affected files/themes and remove those that did not exist before. Restore is integral to each stored file and can replace later edits in those files. In the system backup, original UID/GID are also saved. Installed packages are not removed. Backups are private, with folder 0700; keep them in the facility that generated them.
 
-## Verificação e limites
+## Verification and limits
 
-Foram conferidas configurações locais efetivas, equivalência das cópias
-Bibata de usuário/sistema e dependências do tema. Aplicação e restauração dos
-scripts foram exercitadas em raízes/home descartáveis, incluindo paleta do
-greeter, preservação de outras chaves, GTK com chave duplicada, existência e
-ausência prévias. A geração/restauração do bloqueio foi exercitada em HOME
-descartável; `uiVisible: false`, Qt.callLater e 60 s foram conferidos.
-O módulo windowsarrows foi recompilado em pasta temporária com o KWin local.
+Effective local settings, equivalence of user/system bibata copies and theme dependencies were checked. Application and restoration of scripts were exercised in disposable roots/home, including greeter palette, preservation of other keys, GTK with duplicate key, existence and absence. The generation/restoration of the block was exercised in disposable HOME; `uiVisible: false`, Qt.callLater and 60 s checked. The windowsarrows module was recompiled in temporary folder with the local KWin.
 
-Não houve reaplicação visual na sessão real, reinício SDDM, novo bloqueio ou
-teste de senha nesta exportação. O teste PAM anterior permanece descrito em
-ricy.md. Uma instalação nova completa e o comportamento das extensões em
-outra versão não foram testados. Os números em `versoes-observadas.txt` são
-referências de captura, não garantia de compatibilidade futura.
+There was no visual reapplication in the actual session, resumption SDDM, new blockage or password test in this export. ricy.md. A complete new installation and the behavior of extensions in another version have not been tested. `observed-versions.txt` are catch references, not guarantee of future compatibility.
 
-Licenças/avisos originais foram mantidos. Bibata: GPL-3.0, fonte upstream
-https://github.com/ful1e5/Bibata_Cursor/tree/v2.0.6 ; Catppuccin KDE: MIT,
-https://github.com/catppuccin/kde ; QML Breeze/tema Plasma: avisos KDE LGPL;
-metadata SDDM declara CC-BY-SA. Textos complementares ficam em `licenses/`.
-As fontes incluem OFL. Wallpaper Limine foi copiado do pacote local
-cachyos-wallpapers; mantenha sua atribuição ao transportar este backup pessoal.
+Original licenses/notices were kept. Bibata: GPL-3.0, upstream font https://github.com/ful1e5/Bibata_Cursor/tree/v2.0.6 ; Catppuccin KDE: MIT, https://github.com/catppuccin/kde ; QML Breeze/Plasma theme: KDE LGPL warnings; SDDM metadata declares CC-BY-SA. Complementary texts stay in `licenses/`. Fonts include OFL. Limine Wallpaper has been copied from the local cachyos-wallpapers package; keep your assignment while transporting this personal backup.

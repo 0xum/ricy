@@ -1,10 +1,10 @@
-# Kit de transporte preservado
+# Preserved transport kit
 
-Consulte [COMPONENTS](../COMPONENTS.md) para ownership/fronteiras e
-[MIGRATION-PLAN](../MIGRATION-PLAN.md) antes de realocar conteúdo.
-Esta árvore não é o kit ativo. Preserve história e manifests; não trazer work,
-backups, clipboard ou perfis privados do kit ativo para cá. A presença de um
-arquivo nesta árvore não demonstra que ele é publicável. Siga o roteamento
-correspondente em [ricy-kit/AGENTS](../../ricy-kit/AGENTS.md), resolvendo fontes
-e testes nesta cópia quando ela for o objeto da alteração; não editar a outra
-árvore por engano. O alvo de execução deve constar do relatório.
+Consult [COMPONENTS](../COMPONENTS.md) for ownership/boundaries and
+[MIGRATION-PLAN](../MIGRATION-PLAN.md) before relocating content.
+This tree is not the active kit. Preserve history and manifests; do not bring
+work, backups, clipboard, or private profiles from the active kit here.
+A file's presence in this tree does not establish that it is publishable.
+Follow the corresponding routing in [ricy-kit/AGENTS](../../ricy-kit/AGENTS.md),
+resolving sources and tests in this copy when it is the object of the change;
+do not edit the other tree by mistake. Include the execution target in the report.

@@ -1,6 +1,3 @@
 # Ricy Files
 
-PLANNED: endereço arquitetural reservado, sem migração de runtime.
-Localizações atuais e dependências: [COMPONENTS](../../docs/COMPONENTS.md).
-Leia as [regras locais](../AGENTS.md) e o [plano de migração](../../docs/MIGRATION-PLAN.md).
-Ricy Files ainda não foi implementado. Dolphin permanece disponível.
+PLANNED: booked architectural address, no runtime migration. Current locations and dependencies: [COMPONENTS](../../docs/COMPONENTS.md)Read them. [local rules](../AGENTS.md) and [migration plan](../../docs/MIGRATION-PLAN.md). Ricy Files has not yet been implemented. Dolphin remains available.

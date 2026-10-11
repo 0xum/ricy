@@ -68,7 +68,7 @@ enabled = false
 [theme]
 mode = "dark"
 source = "custom"
-custom_palette = "KDE-Atual"
+custom_palette = "KDE-Current"
 builtin = "Noctalia"
 
 [theme.templates]

@@ -1,231 +1,126 @@
-# Identidade visual do Ricy — referência Noctalia
+# Ricy’s visual identity — Noctalia reference
 
-Referência vigente capturada em 10/10/2026. Use este guia antes de harmonizar
-outras partes do sistema. O Noctalia define a linguagem da shell; KWin é o
-compositor da sessão Plasma Wayland. Este documento registra a aparência e
-orienta mudanças futuras. Não instala temas nem aplica preferências.
+Existing reference caught in 10/10/2026. Use this guide before harmonizing other parts of the system. Noctalia defines the shell language; KWin is the compositor of the Plasma Wayland session. This document records the appearance and guides future changes. It does not install themes or applies preferences.
 
-A assinatura visual é escura, azulada e discreta, com destaque Mauve, cartões
-arredondados, ícones claros e continuidade entre painéis encaixados e barras.
-A profundidade vem da diferença entre superfícies e do blur do fundo.
+The visual signature is dark, bluish and discreet, featuring Mauve, rounded cards, light icons and continuity between embedded panels and bars. The depth comes from the difference between surfaces and the background blur.
 
-## Paleta e estados
+## Palette and states
 
-Paleta ativa: `KDE-Atual`, modo dark, fonte custom. Os valores abaixo foram
-conferidos no arquivo ativo e no template público da integração.
+Active palette: `KDE-Current`, dark mode, custom source. The values below were checked in the active file and in the public integration template.
 
-| Uso | Cor | Papel Noctalia |
+| Use | Color | Noctalia role |
 |---|---|---|
-| Fundo da shell | `#181825` | mSurface |
-| Cartões e controles neutros | `#313244` | mSurfaceVariant |
-| Texto e ícones principais | `#cdd6f4` | mOnSurface |
-| Texto e ícones secundários | `#a6adc8` | mOnSurfaceVariant |
-| Acento Mauve, ativo, progresso normal | `#cba6f7` | mPrimary / mSecondary |
-| Texto sobre acento | `#11111b` | mOnPrimary / mOnSecondary |
-| Hover e seleção | `#977dba` | mHover |
-| Texto sobre hover/seleção | `#000000` | mOnHover |
-| Contorno sutil | `#46485c` | mOutline |
-| Sucesso | `#a6e3a1` | mTertiary / terminal.green |
-| Erro/urgência crítica | `#f38ba8` | mError |
-| Aviso | `#f9e2af` | terminal.yellow |
-| Informação | `#89b4fa` | terminal.blue |
+| Shell background |  `#181825`  | mSurface |
+| Neutral cards and controls |  `#313244`  | mSurfaceVariant |
+| Main text and icons |  `#cdd6f4`  | mOnSurface |
+| Text and secondary icons |  `#a6adc8`  | mOnSurfaceVariant |
+| Ace Mauve, active, normal progress |  `#cba6f7`  | mPrimary / mSecondary |
+| Text on accent |  `#11111b`  | mOnPrimary / mOnSecondary |
+| Hover and selection |  `#977dba`  | mHover |
+| Hover/selection text |  `#000000`  | mOnHover |
+| Subtle contour |  `#46485c`  | mOutline |
+| Success |  `#a6e3a1`  | mTertiary / terminal.green |
+| Critical error/urgency |  `#f38ba8`  | mError |
+| Warning |  `#f9e2af`  | terminal.yellow |
+| Information |  `#89b4fa`  | terminal.blue |
 
-Use o acento para seleção, ação principal, foco e progresso. Textos extensos
-usam a cor principal; legendas usam a secundária. Preserve as cores semânticas
-para erro, aviso e sucesso. A seleção KDE atual e o hover nativo usam a cor
-mais escura de seleção, enquanto toggles ativos do Noctalia usam Mauve claro.
-Essa diferença faz parte da referência capturada.
+Use the accent for selection, main action, focus and progress. Extensive texts use the main color; subtitles use the secondary. Preserve semantic colors for error, warning and success. The current KDE selection and native hover use the darkest selection color, while active Noctalia toggles use clear Mauve. This difference is part of the captured reference.
 
-## Materiais, contornos e blur
+## Materials, contours and blur
 
-| Superfície | Tratamento vigente |
+| Area | Existing treatment |
 |---|---|
-| Taskbar, apoio da busca e painéis que herdam a barra | Fundo `#181825`, opacidade 0,70, blur do compositor |
-| Notificações | Fundo 0,70, blur, sem contorno, junto à taskbar |
-| Cartões internos | `#313244`, opacidade 1,00, contorno sutil quando habilitado |
-| Painéis flutuantes/desanexados | Opacidade 1,00 no modo `shell.panel.transparency_mode=solid` |
-| Menus Kvantum | Compactos, opacos, sem sombra de menu nem popup_blurring |
+| Taskbar, search support and panels that inherit the bar | Background `#181825`, opacity 0,70, compositor's blur |
+| Notifications | Background 0,70, blur, without contour, next to the taskbar |
+| Internal cards |  `#313244`, opacity 1,00, subtle contour when enabled |
+| Floating/disapplying panels | Opacity 1,00 in mode `shell.panel.transparency_mode=solid`  |
+| Kvantum Menus | Compact, opaque, no menu shadow or popup_blurring |
 
-Opacidade 0,70 é a cor de preenchimento da superfície, não a opacidade de
-textos, ícones ou da janela inteira. A cor percebida varia com o conteúdo sob
-ela. `transparency_mode=solid` mantém os cartões sólidos; um painel encaixado
-que herda a barra continua com fundo 0,70. Evite interpretar essa opção como
-uma ordem de tornar todos os elementos translúcidos.
+Opacity 0,70 is the fill color of the surface, not the opacity of texts, icons or the whole window. The color perceived varies with the content under it. `transparency_mode=solid` keeps the cards solid; an embedded panel that inherits the slider continues with background 0,70. Avoid interpreting this option as an order to make all elements translucent.
 
-O `ricyblur`, derivado do KWin 6.7.5, fornece uma amostragem comum por monitor
-para as superfícies Noctalia quando um painel/aviso aparece. As junções usam
-`panel_overlap=0` para evitar um pixel com duas camadas de preenchimento.
-Mesma cor/opacidade em duas janelas, por si só, não garante blur contínuo.
-O efeito trata a classe Noctalia; **não estende automaticamente esse fundo
-compartilhado a aplicativos novos ou de terceiros**. A adaptação exige análise
-do componente e do compositor. Consulte a contribuição blur-continuidade.
+The `ricyblur`, derived from KWin 6.7.5, provides a common monitor sampling for Noctalia surfaces when a panel/warning appears. Junctions use `panel_overlap=0` to avoid a pixel with two fill layers. Same color/opacity in two windows, by itself, does not guarantee continuous blur. The effect treats the Noctalia class; **does not automatically extend this shared background to new or third party applications**. Adaptation requires analysis of the component and compositor. Consult the Blur-Continuity contribution.
 
-Sombra é dependente do componente: o apoio superior não tem sombra; menus
-Kvantum não têm sombra de popup; painéis nativos mantêm suas regras próprias.
-Não considerar todas as sombras desligadas como estado vigente.
+Shadow is dependent on the component: the upper support has no shadow; Kvantum menus have no popup shadow; native panels keep their own rules. Do not consider all shadows turned off as current state.
 
-## Geometria e escala
+## Geometry and scale
 
-Os valores são pixels lógicos, não pixels físicos de captura. Base atual:
-`accessibility.ui_scale=1`, `shell.corner_radius_scale=1.3`.
+Values are logical pixels, not physical capture pixels. Current base: `accessibility.ui_scale=1`, `shell.corner_radius_scale=1.3`.
 
-| Elemento | Regra vigente |
+| Element | Existing rule |
 |---|---|
-| Taskbar | Inferior, 44 px, reserva 44 px, sempre visível |
-| Cantos da taskbar | Superiores 6 px; inferiores retos |
-| Busca pela lupa | Encaixada junto ao clique na barra |
-| Controle Noctalia | Encaixado junto ao ícone à direita |
-| Busca por Super/digitação | Launcher de 560 px e apoio superior de 640 × 16 px |
-| Apoio superior | Cantos 8 px, distância 8 px do topo; somente no monitor da busca |
-| Notificação | Canto inferior direito, offsets zero; canto inferior esquerdo côncavo para fora e direito reto |
-| Menu da aplicação por botão direito | Painel Noctalia encaixado junto ao ícone; tamanho por conteúdo, sem rolagem |
-| Opções de item do tray | Painel Noctalia encaixado; dimensões por conteúdo; setinha e gaveta compartilham o mesmo eixo horizontal ao retornar, no mesmo monitor |
-| Clipboard | Painel flutuante no centro |
+| Taskbar | Lower, 44 px, reserve 44 px, always visible |
+| Corners of the Taskbar | Superiors 6 px; lower straight |
+| Search for the magnifying glass | Fitted next to the click on the bar |
+| Noctalia Control | Fitted next to icon on the right |
+| Search by Super/digitation | Launcher of 560 px and upper support of 640 × 16 px |
+| Upper support | Corners 8 px, distance 8 top px; search monitor only |
+| Notification | Bottom right corner, zero offsets; bottom left concave corner out and right right |
+| Right-click application menu | Noctalia panel attached to the icon; size by content, no scrolling |
+| Tray Item Options | Fitting Noctalia panel; dimensions by content; set and drawer share the same horizontal axis when returning on the same monitor |
+| Clipboard | Floating panel in the center |
 
-Raios nativos do Style: 3 / 6 / 9 / 12 px, multiplicados por escala local e
-corner_radius_scale; a UI de escala 1 usa 3,9 / 7,8 / 11,7 / 15,6 px.
-Barras têm raios explícitos próprios de 6 e 8 px, sem substituir esses valores
-pelo raio geral dos cartões. A escala de conteúdo da barra é 1,5 e a escala
-de fonte da barra 0,85; são parâmetros diferentes da escala geral da UI.
+Style's native radii: 3 / 6 / 9 / 12 px, multiplied by local scale and corner_radius_scale; scale IU 1 uses 3,9 / 7,8 / 11,7 / 15,6 px. Bars have explicit radii of 6 and 8 px, without replacing these values with the overall radius of the cards. The content scale of the bar is 1,5 and the font scale of the bar 0,85; are parameters different from the general UI scale.
 
-Espaçamentos nativos: 4 / 8 / 12 / 16 px; padding de cartão/painel de 14 px.
-Use essa cadência para novos componentes e adapte o tamanho ao conteúdo.
-Os monitores de referência têm 1920 px lógicos de largura. A margem de apoio
-640 resulta em largura 640; em outro monitor use `(largura lógica - 640) / 2`,
-limitada a zero, e revise o launcher se alterar a escala.
+Native spacings: 4 / 8 / 12 / 16 px; card padding/boarding 14 px. Use this cadence for new components and adapt the size to the content. Reference monitors have 1920 px logical width. The support margin 640 results in width 640; on another monitor use `(largura lógica - 640) / 2`, limited to zero, and review the launcher if you change the scale.
 
-A continuidade é geométrica: bordas em contato têm uma junção única, sem
-fresta escura, sobreposição dupla ou canto que recorta a conexão para dentro.
-A notificação é uma assimetria intencional; não generalize quatro cantos
-arredondados para componentes conectados à barra.
+Continuity is geometric: contact edges have a single junction, without dark milling, double overlap or corner that cut the connection inside. Notification is an intentional asymmetry; do not generalize four rounded corners for components connected to the bar.
 
-## Tipografia, ícones e movimento
+## Typography, icons and movement
 
-Noctalia: **Noto Sans**. Tamanhos base nativos antes da escala: mini 11,
-caption 13, corpo 14, título 16 e cabeçalho 20 px. Não converter esses valores
-em pontos sem considerar a implementação/escala do toolkit.
+Noctalia: **Noto Sans**. Native base sizes before scale: mini 11, caption 13, body 14, title 16 and header 20 px. Do not convert these values into points without considering the implementation/scale of toolkit.
 
-KDE e menus: **JetBrainsMono Nerd Font, 10 pt**; GTK registra a mesma família
-e tamanho 10. São preferências atuais, preservadas nesta contribuição.
-Para os próximos ajustes, Noto Sans é a referência de UI da shell; a fonte
-monoespaçada continua adequada ao terminal e deve ser tratada conscientemente
-nos aplicativos. Alterar fontes globais ou de conteúdo exige um ajuste próprio.
+KDE and menus: **JetBrainsMono Nerd Font, 10 pt**; GTK records the same family and size 10. They are current preferences, preserved in this contribution. For the next settings, Noto Sans is the shell UI reference; the single-spaced font remains suitable for the terminal and should be handled consciously in the applications. Changing global or content sources requires a self-adjustment.
 
-Ícones de controles Noctalia usam desenho simples e legível, com destaque de
-estado. Tema de ícones do sistema: Breeze Dark; ícones coloridos de aplicativos
-mantêm sua identidade. Evite redefinir o ícone de cada aplicativo como Mauve.
+Noctalia Control Icons use simple, readable drawing, with state highlight. System icon theme: Breeze Dark; colorful application icons maintain your identity. Avoid redefining the icon of each application as Mauve.
 
-Ícones dos aplicativos da taskbar e a lupa de busca usam escala visual **0,88
-em repouso e 1,0 no hover**, com transição de **140 ms / EaseOutCubic** para
-entrar e sair. Mantêm área de clique, espaçamento e indicadores fixos. O efeito
-é restrito a esses ícones: tray/menus, volume, hora, network, botão do Noctalia
-e badges de workspaces mantêm o comportamento anterior. A escala do hover
-respeita o movimento/velocidade global da shell.
+Icons from the taskbar applications and the search magnifying glass use visual scale **0,88 at rest and 1,0 no hover**, with transition from **140 ms / EaseOutCubic** to get in and out. They maintain click area, spacing and fixed indicators. The effect is restricted to these icons: tray/menus, volume, time, network, Noctalia button and workspace badges maintain previous behavior. The hover scale respects the global movement/speed of the shell.
 
-Constantes nativas de animação: 100 / 200 / 400 ms, com velocidade base 1.
-São referências de transição, não medidas de latência real. Mantenha o indicador
-ativo, o foco e a barra de tempo de notificação legíveis em cada estado.
-O temporizador e a pausa por hover permanecem nativos.
+Native animation constants: 100 / 200 / 400 ms, with base speed 1. They are transition references, not real latency measures. Keep the indicator active, focus and the notification time bar readable in each state. The timer and hover pause remain native.
 
-## Interação dos aplicativos na taskbar
+## Application interaction in the taskbar
 
-No KDE/KWin, clique esquerdo restaura/foca a janela minimizada, minimiza a
-janela visível em foco e traz à frente a janela visível que está atrás de outra.
-Ícone fixado sem janela inicia o aplicativo. Em grupos, prioriza a janela
-ativa para minimizar; sem ativa, preserva seleção/ciclo para restaurar/focar.
-Botão do meio solicita fechar uma janela, respeitando diálogos de salvar;
-clique direito abre o menu composto e arraste ordena os fixados. A seleção
-usa UUID exato quando disponível. Busca e outros chamadores de ativação
-continuam apenas restaurando/focando. Reproduza com a contribuição
-taskbar-app-actions, que preserva a composição e o hover aprovados.
+In KDE/KWin, left click restores/focuss the minimized window, minimizes the visible window in focus and brings forward the visible window that is behind another window. Fixed icon without window starts the application. In groups, prioritizes the active window to minimize; without active, preserves selection/cycle to restore/focus. Middle button asks to close a window, respecting save dialogs; right click opens the composite menu and drag orders fixed. The selection uses exact UUID when available. Search and other activation callers continue only restoring/focusing. Play with the taskbar-app-actions contribution, which preserves the approved composition and hover.
 
-O indicador roxo reage ao estado: **ativa 1/1, aberta inativa 0,55/0,82,
-minimizada 0,28/0,65**, em opacidade/escala; sem janela, opacidade zero.
-Transição **160 ms / EaseOutCubic**, preservada em reconstruções dos tiles.
-Janelas usam **fade e expansão centrados**, escala **0,85→1** ao abrir/restaurar
-ou **1→0,85** ao fechar/minimizar, OutCubic/InCubic. Duração base **320 ms**,
-seguindo a velocidade KDE; fator global 0,25 preservado corresponde a cerca de
-80 ms. Abrir/fechar usa Scale nativo; minimizar/restaurar usa ricywindowactions
-com reversão e continuidade de blur por trilha. Geometria real preservada.
-Referência atual dos efeitos: **window-fade-expand**; fonte Noctalia:
-**app-icon-reordering**.
+The purple indicator reacts to the state: **active 1/1, open inactive 0,55/0,82, minimized 0,28/0,65**, in opacity/scale; no window, zero opacity. Transition **160 ms / EaseOutCubic**, preserved in reconstructions of the tiles. Windows use **fade and expansion centered**, scale **0,85→1** when opening/restoring or **1→0,85** Close/minimize, OutCubic/InCubic. Base duration **320 ms**, following KDE speed; global factor 0,25 Preserved corresponds to about 80 ms. Open/close uses native Scale; minimize/restaure uses ricywindowactions with reversal and continuity of blur per track. Real geometry preserved. Current reference of effects: **window-fade-expand**; source Noctalia: **app-icon-reordering**.
 
-Ícones de aplicativos também respondem com movimentos finitos por ação:
-**abrir 420 ms / bounce; restaurar 360 ms / bounce; foco 260 ms / pulso;
-minimizar 220 ms / compressão; segundo plano 200 ms / redução; fechar fixado
-240 ms / contração; remover não fixado 220 ms / dissolve**. Tempos base seguem
-preferências da shell. Hover permanece separado, sem alterar área de clique;
-slots usam Node sem pintura, evitando fundo preto. Nenhum loop em repouso.
+Application icons also respond with finite motions per action: **open 420 ms / bounce; restore 360 ms / bounce; focus 260 ms / pulse; minimize 220 ms / compression; background 200 ms / reduction; close fixed 240 ms / contraction; remove not fixed 220 ms / dissolve**. Base times follow shell preferences. Hover remains separate without changing click area; slots use Node without painting, avoiding black background. No loop at rest.
 
-Aplicativos podem ser reorganizados com botão esquerdo e arraste na faixa
-plana. Um espaço indica o destino; o ícone acompanha o cursor. Ordem salva
-no perfil e preservada entre recargas, independentemente da fixação. Gestos
-consumidos não ativam/minimizam ao soltar. Busca/tray/controles mantêm posição.
-Usuário confirmou o arraste na sessão real. Referência cumulativa atual:
-**app-icon-reordering**; detalhes/testes/limitações em seu README.
+Applications can be rearranged with left button and drag on the flat track. A space indicates the destination; the icon accompanies the cursor. Order saves in the profile and preserved between reloads, regardless of attachment. Gestures consumed do not activate/minimize when dropping. Search/tray/controls maintain position. User confirmed drag in the actual session. Current cumulative reference: **app-icon-reordering**; details/tests/limitations in your README.
 
-## Aplicação nas próximas partes do sistema
+## Application in the next parts of the system
 
-Use os papéis de cor, a hierarquia entre superfície/cartão, o acento e a
-geometria como referência para cada implementação. Registre o que foi aplicado
-e o que continua dependente do toolkit; mantenha o layout e comportamentos
-já aprovados ao mudar sua aparência.
+Use the color papers, the hierarchy between surface/card, accent and geometry as a reference for each implementation. Register what has been applied and what remains dependent on toolkit; keep the layout and behaviors already approved by changing their appearance.
 
-| Área | Estado observado / direção dos próximos ajustes |
+| Area | Observed status / direction of next adjustments |
 |---|---|
-| Shell Noctalia | Referência principal; preservar barra, busca, notificações e continuidade |
-| Qt/KDE | KDE-Noctalia + Kvantum KDE-Noctalia ativos; avaliar decoração, diálogos e controles em aplicativos reais |
-| GTK | adw-gtk3-dark ativo; harmonização completa de cores e componentes ainda não demonstrada |
-| Plasma | mocha-blur ativo; revisar elementos remanescentes por componente |
-| Terminal | Preferências próprias Catppuccin/blur/cursor registradas nas contribuições existentes; manter legibilidade monoespaçada |
-| Login e bloqueio | Aparência já documentada nas contribuições próprias; não revalidada nesta captura |
-| OSD | Noctalia OSD desativado; escolher a implementação a adequar em um ajuste posterior |
-| Navegadores/aplicativos de terceiros | Tema e conteúdo dependem de cada app; não presumir que seguir o tema KDE os torna integralmente harmonizados |
+| Shell Noctalia | Main reference; preserve bar, search, notifications and continuity |
+| Qt/KDE | KDE-Noctalia + Kvantum KDE-Noctalia active; evaluate decoration, dialogues and controls in real applications |
+| GTK | active adw-gtk3-dark; complete color and component harmonisation not yet demonstrated |
+| Plasma | active mocha-blur; review remaining elements by component |
+| Terminal | Catppuccin/blur/cursor own preferences recorded in existing contributions; maintain monospaced legibility |
+| Login and blocking | Appearance already documented in own contributions; not revalidated in this catch |
+| OSD | Nottalia OSD disabled; choose implementation to suit in a later setting |
+| Navigators/applications of third parties | Theme and content depend on each app; do not assume following KDE theme makes them fully harmonized |
 
-Para validar um ajuste, observe estados normal/hover/foco/seleção/desabilitado,
-texto e ícones sobre fundos claros/escuros e as junções enquanto o conteúdo
-sob o painel muda. Confira abertura/fechamento, monitor ativo e escala. Uma
-captura com fundo uniforme não demonstra sozinha a continuidade do blur.
+To validate an adjustment, observe normal/hover/focus/selection/disabled, text and icons on light/dark backgrounds and junctions as the contents under the panel change. Check opening/closing, active monitor and scale. A capture with a uniform background does not alone demonstrate the continuity of the blur.
 
-Região preservada: datas/UI Noctalia em inglês, fuso America/Sao_Paulo,
-Cosmópolis/SP-BR, clima métrico e eventos habilitados sem conta conectada.
-Essas preferências acompanham a referência, sem definir a paleta.
+Preserved region: Noctalia dates/UI in English, America/Sao_Paulo zone, Cosmópolis/SP-BR, metric weather and events enabled without connected account. These preferences follow the reference, without defining the palette.
 
-## Arquivos, fontes e uso no Ricy
+## Files, fonts and use in Ricy
 
-- `tokens.json`: valores estruturados, papéis e regras para futuros agentes/ferramentas. É referência, não um config.toml substituto.
-- `referencia.svg`: prancha vetorial com paleta e uma junção esquemática. Não é uma captura da sessão nem uma reprodução do blur OpenGL.
-- `README.md`: este guia, também publicado como `Documents/ricy/IDENTIDADE-VISUAL.md`.
+- `tokens.json`: structured values, roles and rules for future agents/tools. It is reference, not a config.toml Substitute.
+- `reference.svg`: Vector board with palette and a schematic junction. It is neither a session capture nor an OpenGL blur playback.
+- `README.md`: this guide, also published as `Documents/ricy/VISUAL-IDENTITY.md`.
 
-Fontes conferidas: config.toml e KDE-Atual.json da integração ativa/pública;
-settings.toml privado apenas para conferir overrides pertinentes, sem copiá-lo;
-style.h/style.cpp, config_types.cpp e regras de painel/barra da fonte Noctalia
-5.2.1; kdeglobals, Kvantum e preferências GTK/Plasma atuais; contribuições de
-notificações, blur, wallpaper e idioma/localização. Os tamanhos nativos são
-constantes de código, não medições pixel a pixel de todos os componentes.
+Sources checked: config.toml and KDE-Current.json active/public integration; settings.toml private only to check relevant overrides without copying it; style.h/style.cpp, config_types.cpp and panel/bar rules of the Noctalia 5.2.1 source; kdeglobals, Kvantum and current GTK/Plasma preferences; notification contributions, blur, wallpaper and language/location. Native sizes are code constants, not pixel-to-pixel measurements of all components.
 
-Esta contribuição não muda serviços, temas, fontes, configurações ou aplicativos.
-Para retirar a referência, remova seu vínculo documental e seus archives do
-kit, atualizando o manifesto. Mudanças futuras devem registrar sua própria
-reversão e os backups do componente alterado. Preserve o histórico do Ricy.
+This contribution does not change services, themes, fonts, settings or applications. To remove the reference, remove your document link and your archive from the kit by updating the manifest. Future changes should register your own reversal and the backups of the changed component. Preserve the Ricy history.
 
 
-## Adaptação aplicada ao Dolphin — 10/10/2026
+## Adaptation applied to Dolphin — 10/10/2026
 
-Ricy-Dolphin/Kvantum é exclusivo do aplicativo: Noto Sans 10 pt, superfície
-#181825 alfa 178/255, blur existente ricyblur, área de archives #313244 alfa
-40/255 com contorno #46485c e raio 12 px. O helper Qt habilita a superfície
-translúcida antes de criá-la. Não reduz opacidade dos textos/ícones.
+Ricy-Dolphin/Kvantum is unique to the application: Noto Sans 10 pt, surface #181825 alpha 178/255, existing blur ricyblur, area of archives #313244 alpha 40/255 with contour #46485c and radius 12 px. Qt helper enables the translucent surface before creating it. It does not reduce opacity of texts/icons.
 
-A lateral envolve ícone + nome numa chip de largura pelo conteúdo: destaque
-#977dba (alfa 95 hover, 170 seleção, 195 ambos). Linhas têm fundo #313244
-alfa 90, raio até 10 px e margens 3 px horizontais/2 px verticais. Hover,
-seleção e foco arredondados cobrem também o ícone; foco usa #cba6f7 sólido.
-Header tem cápsula comum #313244 alfa 155, contorno #46485c alfa 150 e Noto
-Sans, preservando labels/seta nativos. São adaptações aos widgets do Dolphin,
-não mudanças de tokens da shell. Breeze mantém título e botões nativos.
+The side involves icon + name on a chip wide by content: highlight #977dba (alpha 95 hover, 170 selection, 195 Both). Lines have bottom #313244 alpha 90, radius 10 px and margins 3 horizontal px/2 vertical px. Hover, selection and rounded focus also cover the icon; focus uses solid #cba6f7. Header has common capsule #313244 alpha 155, contour #46485c alpha 150 and Noto Sans, preserving native labels/arrow. They are adaptations to Dolphin widgets, not token changes from shell. Breeze keeps title and native buttons.
 
-Efeito ricydolphinrounding usa o raio nativo KWin 16 px só no Dolphin; raio zero
-maximizado/fullscreen/tiling. Recompile ao atualizar KWin 6.7.5. Detalhes e
-reversão: contribuições dolphin-noctalia-identity e dolphin-blur-cantos.
-Chips iniciais aprovadas pelo usuário; ícones/header ainda sem aprovação final.
+Ricydolphinrounding effect uses KWin native radius 16 px only in Dolphin; maximized zero-ray/fullscreen/tiling. Recompile when updating KWin 6.7.5. Details and reversal: dolphin-nottalia-identity and dolphin-blur-canto contributions. User-approved initial chips; icons/header still without final approval.

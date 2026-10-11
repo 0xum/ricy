@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=Restore Plasma after Noctalia test
+Exec="/home/delta/ricy-kit/outputs/noctalia-test/recover-at-login.sh"
+OnlyShowIn=KDE;
+X-KDE-autostart-phase=2

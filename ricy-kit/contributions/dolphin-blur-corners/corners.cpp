@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// Ricy: usa o recorte nativo KWin 6.7.5; não cria passes de renderização.
+// Ricy: uses KWin 6.7.5 native clipping; does not create rendering passes.
 #include <effect/effect.h>
 #include <effect/effecthandler.h>
 #include <effect/effectwindow.h>

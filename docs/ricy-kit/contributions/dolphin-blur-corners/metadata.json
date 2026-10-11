@@ -1,1 +1,1 @@
-{"KPlugin": {"Name": "Ricy Dolphin Corners", "Description": "Cantos nativos de 16 px somente para Dolphin", "License": "MIT", "Version": "1.0"}, "X-KDE-Ordering": 1, "X-KDE-ConfigModule": "", "X-KWin-EnabledByDefault": false}
+{"KPlugin": {"Name": "Ricy Dolphin Corners", "Description": "16 px native corners only for Dolphin", "License": "MIT", "Version": "1.0"}, "X-KDE-Ordering": 1, "X-KDE-ConfigModule": "", "X-KWin-EnabledByDefault": false}

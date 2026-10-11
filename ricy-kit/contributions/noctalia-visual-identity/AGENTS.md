@@ -1,7 +1,7 @@
 # noctalia-visual-identity
 
-Tokens existentes são referência canônica de valores, não config executável. Não atualizar a cópia de transporte automaticamente nem legitimar UI de workspaces citada no histórico.
+Existing tokens are the canonical value reference, not executable config. Do not automatically update the transport copy or legitimize workspace UI mentioned in historical records.
 
-Leia [regras do subsistema](../../../themes/AGENTS.md)
-e o trecho pertinente do [README local](README.md). Consulte
-[COMPONENTS](../../../docs/COMPONENTS.md) para localizar ownership/fronteiras.
+Read the [subsystem rules](../../../themes/AGENTS.md)
+and the relevant [local README](README.md) section. Consult
+[COMPONENTS](../../../docs/COMPONENTS.md) to locate ownership/boundaries.

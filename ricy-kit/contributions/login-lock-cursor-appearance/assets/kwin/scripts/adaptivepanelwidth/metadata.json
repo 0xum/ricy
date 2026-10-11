@@ -4,8 +4,8 @@
     "X-Plasma-MainScript": "code/main.js",
     "KPlugin": {
         "Id": "adaptivepanelwidth",
-        "Name": "Largura adaptativa do painel",
-        "Description": "Expande o painel inferior quando uma janela se aproxima dele",
+        "Name": "Adaptive Panel Width",
+        "Description": "Expand the bottom panel when a window approaches it",
         "Version": "1.0",
         "License": "MIT"
     }

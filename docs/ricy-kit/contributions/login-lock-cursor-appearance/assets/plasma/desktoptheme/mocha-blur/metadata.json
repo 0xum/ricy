@@ -2,7 +2,7 @@
     "KPlugin": {
         "Id": "mocha-blur",
         "Name": "Mocha Blur",
-        "Description": "Breeze com blur e di\u00e1logos transl\u00facidos para Catppuccin Mocha",
+        "Description": "Breeze with blur and translucent dialogues for Catppuccin Mocha",
         "Version": "1.0",
         "License": "LGPL",
         "EnabledByDefault": true

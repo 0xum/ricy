@@ -1,53 +1,51 @@
-# Cedilha no teclado US internacional
+# Cedilla on the international US keyboard
 
-O destino usa `us(alt-intl)` e interface em inglês. A composição inglesa
-original interpreta acento agudo seguido de c/C como ć/Ć. Este aplicador
-configura `$HOME/.XCompose` para produzir ç/Ç, mantendo o layout, o idioma
-e as demais composições. Em arquivo novo inclui `"%L"`; em arquivo existente
-preserva as regras do usuário e acrescenta o bloco Ricy ao final.
+The destination uses `us(alt-intl)` and an English interface. The original English
+composition interprets an acute accent followed by c/C as ć/Ć. This applicator
+configures `$HOME/.XCompose` to produce ç/Ç, preserving the layout, language, and
+other compositions. In a new file, it includes `"%L"`; in an existing file, it
+preserves user rules and appends the Ricy block.
 
 ```bash
-cd "$HOME/ricy-kit"
-python contributions/keyboard-cedilla/aplicar.py
-python contributions/keyboard-cedilla/aplicar-brave.py
+cd "$HOME/Projects/ricy/ricy-kit"
+python contributions/keyboard-cedilla/apply.py
+python contributions/keyboard-cedilla/apply-brave.py
 ```
 
-Execute sem sudo. Reabra completamente Konsole e Brave: processos existentes
-podem manter a tabela anterior. No Brave, feche também o processo em segundo
-plano; sair e entrar na sessão é outra forma de recarregar os aplicativos.
-Teste a tecla de acento agudo seguida de `c` e de `Shift+C`: `ç`, `Ç`.
+Run without sudo. Fully reopen Konsole and Brave: existing processes may retain
+the previous table. In Brave, also stop the background process; logging out and
+back in is another way to reload applications. Test the acute accent key followed
+by `c` and `Shift+C`: `ç`, `Ç`.
 
-O aplicador é idempotente e guarda o arquivo anterior (ou marcador de ausência)
-em `$XDG_STATE_HOME/ricy-teclado-backups/DATA-HORA`, com padrão
-`$HOME/.local/state`. Para desfazer, restaure `XCompose` do backup em
-`$HOME/.XCompose`; se houver `XCompose.ausente`, remova o arquivo criado.
-Reabra os aplicativos depois. Se houver alterações posteriores, remova somente
-o bloco delimitado `BEGIN/END Ricy` para preservar essas alterações.
+The applicator is idempotent and saves the previous file (or an absence marker) in
+`$XDG_STATE_HOME/ricy-teclado-backups/DATA-HORA`, defaulting to `$HOME/.local/state`.
+To undo, restore the backup's `XCompose` into `$HOME/.XCompose`; if
+`XCompose.ausente` exists, remove the created file. Reopen applications afterward.
+For later changes, remove only the block delimited by `BEGIN/END Ricy` to preserve them.
 
-Isso corrige a composição da sessão gráfica; o teclado do console virtual e
-a conta separada do SDDM continuam usando suas próprias configurações.
-O layout físico ABNT2 exige a configuração `br`, não este ajuste de US.
+This fixes graphical-session composition; the virtual console keyboard and
+separate SDDM account retain their own settings. An ABNT2 physical layout requires
+`br` configuration, not this US adjustment.
 
-Referência: [libxkbcommon — Compose e dead keys](https://xkbcommon.org/doc/current/group__compose.html).
+Reference: [libxkbcommon — Compose and dead keys](https://xkbcommon.org/doc/current/group__compose.html).
 
-## Brave no KDE Wayland
+## Brave in KDE Wayland
 
-O usuário confirmou a cedilha no Konsole, mas o Brave nativo Wayland ainda
-produziu ć. O compositor interno de caracteres do Chromium usa uma tabela
-própria para os eventos que não foram consumidos por um IME. Não basta reabrir
-o navegador para fazê-lo usar .XCompose nessa rota.
+The user confirmed the cedilla in Konsole, but native Wayland Brave still produced ć.
+Chromium's internal character composer uses its own table for events not consumed
+by an IME. Reopening the browser alone does not make that path use .XCompose.
 
-`aplicar-brave.py` seleciona `--ozone-platform=x11` em
-`$XDG_CONFIG_HOME/brave-flags.conf` (padrão `$HOME/.config`). O launcher do
-pacote CachyOS/Arch lê esse arquivo; a seleção usa XWayland dentro da sessão
-KDE Wayland. O script preserva outras flags e guarda o estado anterior em
-`ricy-teclado-backups`. Reabra completamente o Brave após aplicar.
-Esta rota pode mudar a escala/renderização do navegador em telas HiDPI.
+`apply-brave.py` selects `--ozone-platform=x11` in
+`$XDG_CONFIG_HOME/brave-flags.conf` (default `$HOME/.config`). The CachyOS/Arch
+package launcher reads this file; the selection uses XWayland within KDE Wayland.
+The script preserves other flags and saves the previous state in
+`ricy-teclado-backups`. Fully reopen Brave after applying. This path may change
+browser scaling/rendering on HiDPI screens.
 
-Para desfazer, restaure `brave-flags.conf` do backup; se houver o marcador
-`brave-flags.conf.ausente`, remova o arquivo criado. Para preservar alterações
-posteriores, remova apenas a linha `--ozone-platform=x11`. Reabra o Brave.
+To undo, restore the backup's `brave-flags.conf`; if
+`brave-flags.conf.ausente` exists, remove the created file. To preserve later changes,
+remove only the `--ozone-platform=x11` line. Reopen Brave.
 
-Referências primárias Chromium:
-[rota de entrada Wayland](https://chromium.googlesource.com/chromium/src/+/HEAD/ui/ozone/platform/wayland/host/wayland_input_method_context.cc) e
-[compositor de caracteres](https://chromium.googlesource.com/chromium/src/+/HEAD/ui/base/ime/character_composer.cc).
+Primary Chromium references:
+[Wayland input path](https://chromium.googlesource.com/chromium/src/+/HEAD/ui/ozone/platform/wayland/host/wayland_input_method_context.cc) and
+[character composer](https://chromium.googlesource.com/chromium/src/+/HEAD/ui/base/ime/character_composer.cc).

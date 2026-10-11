@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=Return to Plasma
+Exec=PREPARAR_NO_DESTINO/return-to-plasma.sh
+Icon=noctalia
+Categories=Utility;

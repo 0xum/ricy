@@ -1,18 +1,18 @@
-# Kit ativo
+# Active kit
 
-Consulte [COMPONENTS](../docs/COMPONENTS.md) se precisar localizar ownership/fronteiras e
-[DEVELOPMENT](../docs/DEVELOPMENT.md) se precisar escolher checks. Siga apenas as regras
-abaixo pertinentes aos arquivos/impactos da tarefa. Não mover outputs, contributions
-ou templates sem mapear units, wrappers, paths absolutos e backups.
+Consult [COMPONENTS](../docs/COMPONENTS.md) to locate ownership/boundaries and
+[DEVELOPMENT](../docs/DEVELOPMENT.md) to select checks. Follow only the rules below
+relevant to the task's files/impact. Do not move outputs, contributions, or
+templates without mapping units, wrappers, absolute paths, and backups.
 
-- Shell/perfil/patch Noctalia: [regras shell](../shell/AGENTS.md).
-- Efeitos/blur/ABI: [regras compositor](../compositor/AGENTS.md).
-- Busca, atalhos, Dolphin e KDE: [integrações](../integrations/AGENTS.md).
-- Tokens/temas/QSS: [temas](../themes/AGENTS.md).
-- Alternância/painéis: [recovery](../recovery/AGENTS.md).
-- Preparação de destino/aplicadores: [installer](../installer/AGENTS.md).
+- Noctalia shell/profile/patch: [shell rules](../shell/AGENTS.md).
+- Effects/blur/ABI: [compositor rules](../compositor/AGENTS.md).
+- Search, shortcuts, Dolphin, and KDE: [integrations](../integrations/AGENTS.md).
+- Tokens/themes/QSS: [themes](../themes/AGENTS.md).
+- Switching/panels: [recovery](../recovery/AGENTS.md).
+- Destination preparation/applicators: [installer](../installer/AGENTS.md).
 
-Cumulativos Noctalia não formam uma sequência de patches aplicáveis juntos.
-Perfil, work, backups e estado do kit ativo não são material de publicação.
-SHA256SUMS é histórico: não regenerar só para esconder diferenças da instalação.
-Novos AGENTS são metadados de desenvolvimento, não parte do manifesto original.
+Cumulative Noctalia variants do not form a sequence of patches to apply together.
+The active kit's profile, work, backups, and state are not publication material.
+SHA256SUMS is historical: do not regenerate it merely to hide installation changes.
+New AGENTS files are development metadata, outside the original manifest.

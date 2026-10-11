@@ -1,52 +1,47 @@
-# Componentes
+# Components
 
-KNOWN significa presença e responsabilidade verificadas nos arquivos citados; não
-certificação runtime nesta tarefa. Todos os destinos são PLANNED. Ownership indica
-manutenção, preservando licenças upstream. Cada link atual leva ao README local.
+KNOWN means presence and responsibility verified in the cited files; not Runtime certification in this task. All destinations are PLANNED. Ownership indicates maintenance, preserving upstream licenses. Each current link leads to local README.
 
-A raiz `ricy-kit/` é ativa; `docs/ricy-kit/` conserva a variante de transporte.
-Leia [regras do kit](../ricy-kit/AGENTS.md) antes de editar. Réplicas não são
-fontes intercambiáveis. O ciclo de patches Noctalia é cumulativo: a referência
-registrada mais recente é app-icon-reordering, com window-fade-expand para janelas.
+The root `ricy-kit/` is active; `docs/ricy-kit/` preserves the transport variant. Read [kit rules](../ricy-kit/AGENTS.md) before editing. Replicas are not interchangeable sources. Noctalia patch cycle is cumulative: the most recent registered reference is app-icon-reordering, with window-fade-expand for windows.
 
-| Componente / localização atual | Responsabilidade | Destino futuro | Dependências | Status / ownership | Impacto em recovery |
+| Current component/location | Responsibility | Future destination | Dependencies | Status / ownership | Impact on recovery |
 |---|---|---|---|---|---|
-| [noctalia-kde-integration-and-menus](../ricy-kit/contributions/noctalia-kde-integration-and-menus/README.md) | Adaptador de busca, perfil, atalhos e menus Qt | `integrations/kde/ + services/ + themes/` | Noctalia, PyGObject, D-Bus, KGlobalAccel, Kvantum | KNOWN / RICY-OWNED + assets derivados | Alta: atalhos, wallpaper e estilo compartilhados |
-| [noctalia-autostart](../ricy-kit/contributions/noctalia-autostart/README.md) | Unidades de shell, busca e integração no login | `services/ + installer/` | systemd usuário, Plasma, integração | KNOWN / RICY-OWNED | Alta: iniciar somente após prontidão; retorno Plasma |
-| [plasma-noctalia-switching](../ricy-kit/contributions/plasma-noctalia-switching/README.md) | Comando ricy, snapshots e restauração de painéis | `recovery/plasma/ + integrations/kde/` | systemd, Python/PyGObject, qdbus6, flock, KGlobalAccel | KNOWN / RICY-OWNED | Crítica: caminho de retorno atual |
-| [notification-continuity](../ricy-kit/contributions/notification-continuity/README.md) | Patch de notificações e ativador do binário local | `shell/noctalia/` | Noctalia fixado, integração, blur | KNOWN / PATCHES + RICY-OWNED | Preservar /usr/bin/noctalia, backup e apps |
-| [taskbar-menu-composition](../ricy-kit/contributions/taskbar-menu-composition/README.md) | Menu de app encaixado; variante histórica cumulativa | `shell/noctalia/` | Noctalia e patches anteriores | KNOWN / PATCHES | Risco de crash de shell; manter ativador/reversão |
-| [tray-menu-composition](../ricy-kit/contributions/tray-menu-composition/README.md) | Menus DBusMenu encaixados; variante histórica | `shell/noctalia/` | Noctalia, DBusMenu | KNOWN / PATCHES | Ações pertencem aos aplicativos; não mudar sem validação |
-| [app-icon-interactions](../ricy-kit/contributions/app-icon-interactions/README.md) | Hover/escala de ícones; variante histórica | `shell/noctalia/` | Noctalia Style | KNOWN / PATCHES | Não alterar hit area nem controle da sessão |
-| [taskbar-app-actions](../ricy-kit/contributions/taskbar-app-actions/README.md) | Foco/minimização/fechamento por UUID; histórico | `shell/noctalia/ + integrations/kde/` | API KWin e Noctalia | KNOWN / PATCHES | Testes não devem fechar trabalho do usuário |
-| [app-indicator-animations](../ricy-kit/contributions/app-indicator-animations/README.md) | Indicadores e animação anterior de janelas | `shell/noctalia/ + compositor/kwin/` | Noctalia e KWin | KNOWN / PATCHES + derivado KDE | Variante anterior; não aplicar sobre a atual |
-| [app-icon-states](../ricy-kit/contributions/app-icon-states/README.md) | Movimento de ícones por ação; histórico | `shell/noctalia/` | Noctalia, efeitos KDE | KNOWN / PATCHES | Não substituir variante cumulativa atual por acidente |
-| [app-icon-reordering](../ricy-kit/contributions/app-icon-reordering/README.md) | Variante cumulativa de referência: ordenação/ícones/ações | `shell/noctalia/` | Noctalia 5.2.1 fixado, Meson/Ninja/C++, KWin | KNOWN / PATCHES | Rebuild e ativação separados; preservar rollback |
-| [window-fade-expand](../ricy-kit/contributions/window-fade-expand/README.md) | Animação atual ricywindowactions e Scale | `compositor/kwin/` | API script KWin, PyQt6 para testes | KNOWN / RICY-OWNED derivado KDE | Altera efeitos compartilhados com Plasma |
-| [blur-continuity](../ricy-kit/contributions/blur-continuity/README.md) | ricyblur derivado do blur upstream | `compositor/kwin/` | KWin 6.7.5/headers, Qt/KF6, C++ | KNOWN / PATCHES | ABI crítica; não substituir o compositor |
-| [dolphin-noctalia-identity](../ricy-kit/contributions/dolphin-noctalia-identity/README.md) | Tema/QSS e launcher Dolphin, FileManager1 | `integrations/kde/ + themes/` | Dolphin, Kvantum, helper Qt | KNOWN / RICY-OWNED + temas derivados | Alta: acesso aos arquivos no recovery |
-| [dolphin-blur-corners](../ricy-kit/contributions/dolphin-blur-corners/README.md) | Helper Qt e efeito de cantos Dolphin | `integrations/kde/ + compositor/kwin/` | Qt, Kvantum, ABI KWin | KNOWN / RICY-OWNED + derivado KDE | Plugin incompatível pode afetar Dolphin |
-| [dolphin-deb-rpm-installer](../ricy-kit/contributions/dolphin-deb-rpm-installer/README.md) | Integração local DEB/RPM com conversão e UI | `integrations/kde/ + installer/` | Dolphin, PyQt6, debtap, pkexec/pacman | KNOWN / RICY-OWNED + dependências upstream | Não executar instalação para testar docs |
-| [target-implementation-fixes](../ricy-kit/contributions/target-implementation-fixes/README.md) | Correções versionadas para preparação do destino | `installer/` | Scripts do kit, debtap | KNOWN / PATCHES + RICY-OWNED | Aplicar só após conferir kit de destino |
-| [login-lock-cursor-appearance](../ricy-kit/contributions/login-lock-cursor-appearance/README.md) | Assets e aplicadores de SDDM/Plasma/Qt/GTK | `themes/ + integrations/kde/` | SDDM, Plasma, Kvantum, fontes e temas | KNOWN / UPSTREAM assets + RICY-OWNED | Alta: login/bloqueio e configurações globais |
-| [login-matched-lock-screen](../ricy-kit/contributions/login-matched-lock-screen/README.md) | Adaptação do bloqueio ao login | `themes/ + integrations/kde/` | KDE/Breeze instalado, SDDM | KNOWN / PATCHES / assets derivados | Alta: manter desbloqueio utilizável |
-| [konsole-animated-cursor](../ricy-kit/contributions/konsole-animated-cursor/README.md) | Perfil e paleta de terminal | `themes/ + integrations/kde/` | Konsole, Kvantum | KNOWN / RICY-OWNED configuração | Terminal deve continuar disponível para diagnóstico |
-| [keyboard-cedilla](../ricy-kit/contributions/keyboard-cedilla/README.md) | Composição XCompose e ajuste Brave | `integrations/` | Layout/XCompose, Brave opcional | KNOWN / RICY-OWNED | Preservar entrada de texto e preferências |
-| [noctalia-language-and-localization](../ricy-kit/contributions/noctalia-language-and-localization/README.md) | Idioma/região/clima da shell | `shell/noctalia/ + integrations/` | Noctalia, locale, unidades systemd | KNOWN / RICY-OWNED | Não globalizar preferências de uma instalação |
-| [noctalia-visual-identity](../ricy-kit/contributions/noctalia-visual-identity/README.md) | Tokens e prancha da identidade existente | `themes/tokens/` | Config/paleta/Style Noctalia e contribuições visuais | KNOWN / RICY-OWNED referência | Sem instalação; divergências visuais precisam ser registradas |
-| [driver-aic8800](../ricy-kit/contributions/driver-aic8800/README.md) | Driver USB Wi-Fi/Bluetooth e pacote DKMS | `integrations/hardware/` | Kernel/headers, DKMS, fonte Radxa fixada | KNOWN / UPSTREAM + patches + empacotamento Ricy | Risco de perder rede; dependência de hardware, não de toda sessão |
+|  [noctalia-kde-integration-and-menus](../ricy-kit/contributions/noctalia-kde-integration-and-menus/README.md)  | Qt search, profile, shortcuts and menus adapter |  `integrations/kde/ + services/ + themes/`  | Noctalia, PyGObject, D-Bus, KGlobalAccel, Kvantum | KNOWN / RICY-OWNED + derivative assets | High: shortcuts, wallpaper and shared style |
+|  [noctalia-autostart](../ricy-kit/contributions/noctalia-autostart/README.md)  | Shell units, search and integration in login |  `services/ + installer/`  | user systemd, Plasma, integration | KNOWN / RICY-OWNED | High: start only after readiness; Plasma return |
+|  [plasma-noctalia-switching](../ricy-kit/contributions/plasma-noctalia-switching/README.md)  | Ricy command, snapshots and panel restoration |  `recovery/plasma/ + integrations/kde/`  | systemd, Python/PyGObject, qdbus6, flock, KGlobalAccel | KNOWN / RICY-OWNED | Critical: current return path |
+|  [notification-continuity](../ricy-kit/contributions/notification-continuity/README.md)  | Local binary notification patch and activator |  `shell/noctalia/`  | Pinned Noctalia, integration, blur | KNOWN / PATCHES + RICY-OWNED | Preserve /usr/bin/noctalia, backup and apps |
+|  [taskbar-menu-composition](../ricy-kit/contributions/taskbar-menu-composition/README.md)  | Fitted app menu; cumulative historical variant |  `shell/noctalia/`  | Noctalia and previous patches | KNOWN / PATCHES | Shell crash risk; maintain activator/reversion |
+|  [tray-menu-composition](../ricy-kit/contributions/tray-menu-composition/README.md)  | DBusMenu Menus Fitted; Historical Variation |  `shell/noctalia/`  | Noctalia, DBusMenu | KNOWN / PATCHES | Actions belong to the applications; do not change without validation |
+|  [app-icon-interactions](../ricy-kit/contributions/app-icon-interactions/README.md)  | Hover/Icon scale; historical variant |  `shell/noctalia/`  | Noctalia Style | KNOWN / PATCHES | Do not change hit area or session control |
+|  [taskbar-app-actions](../ricy-kit/contributions/taskbar-app-actions/README.md)  | Focus/minimization/closing by UUID; historical |  `shell/noctalia/ + integrations/kde/`  | KWin and Noctalia API | KNOWN / PATCHES | Tests should not close user work |
+|  [app-indicator-animations](../ricy-kit/contributions/app-indicator-animations/README.md)  | Indicators and previous window animation |  `shell/noctalia/ + compositor/kwin/`  | Noctalia and KWin | KNOWN / PATCHES + KDE derivative | Previous variant; do not apply on the current |
+|  [app-icon-states](../ricy-kit/contributions/app-icon-states/README.md)  | Icon movement by action; history |  `shell/noctalia/`  | Noctalia, KDE effects | KNOWN / PATCHES | Do not replace current cumulative variant by accident |
+|  [app-icon-reordering](../ricy-kit/contributions/app-icon-reordering/README.md)  | Cumulative reference variant: ordering/icons/actions |  `shell/noctalia/`  | Pinned Noctalia 5.2.1, Meson/Ninja/C++, KWin | KNOWN / PATCHES | Rebuild and separate activation; preserve rollback |
+|  [window-fade-expand](../ricy-kit/contributions/window-fade-expand/README.md)  | Current animation ricywindowactions and Scale |  `compositor/kwin/`  | KWin script API, PyQt6 for testing | KNOWN / RICY-OWNED derivative KDE | Change shared effects with Plasma |
+|  [blur-continuity](../ricy-kit/contributions/blur-continuity/README.md)  | ricyblur derived from upstream blur |  `compositor/kwin/`  | KWin 6.7.5/headers, Qt/KF6, C++ | KNOWN / PATCHES | Critical ABI; do not replace compositor |
+|  [dolphin-noctalia-identity](../ricy-kit/contributions/dolphin-noctalia-identity/README.md)  | Theme/QSS and Launcher Dolphin, FileManager1 |  `integrations/kde/ + themes/`  | Dolphin, Kvantum, helper Qt | KNOWN / RICY-OWNED + derived themes | High: access to files in recovery |
+|  [dolphin-blur-corners](../ricy-kit/contributions/dolphin-blur-corners/README.md)  | Helper Qt and Dolphin Corner Effect |  `integrations/kde/ + compositor/kwin/`  | Qt, Kvantum, ABI KWin | KNOWN / RICY-OWNED + KDE derivative | Incompatible plugin may affect Dolphin |
+|  [dolphin-deb-rpm-installer](../ricy-kit/contributions/dolphin-deb-rpm-installer/README.md)  | Local DEB/RPM integration with conversion and UI |  `integrations/kde/ + installer/`  | Dolphin, PyQt6, debtap, pkexec/pacman | KNOWN / RICY-OWNED + upstream dependencies | Do not run installation to test docs |
+|  [target-implementation-fixes](../ricy-kit/contributions/target-implementation-fixes/README.md)  | Versioned corrections for preparation of destination |  `installer/`  | Kit Scripts, debtap | KNOWN / PATCHES + RICY-OWNED | Apply only after checking destination kit |
+|  [login-lock-cursor-appearance](../ricy-kit/contributions/login-lock-cursor-appearance/README.md)  | Assets and applicators for SDDM/Plasma/Qt/GTK |  `themes/ + integrations/kde/`  | SDDM, Plasma, Kvantum, fonts and themes | KNOWN / UPSTREAM assets + RICY-OWNED | High: login/blocking and global settings |
+|  [login-matched-lock-screen](../ricy-kit/contributions/login-matched-lock-screen/README.md)  | Log-in lock adaptation |  `themes/ + integrations/kde/`  | KDE/Breeze installed, SDDM | KNOWN / PATCHES / derivative assets | High: keep usable unlocking |
+|  [konsole-animated-cursor](../ricy-kit/contributions/konsole-animated-cursor/README.md)  | Terminal profile and palette |  `themes/ + integrations/kde/`  | Konsole, Kvantum | KNOWN / RICY-OWNED configuration | Terminal should remain available for diagnosis |
+|  [keyboard-cedilla](../ricy-kit/contributions/keyboard-cedilla/README.md)  | XCompose composition and Brave adaptation |  `integrations/`  | Layout/XCompose, optional Brave | KNOWN / RICY-OWNED | Preserve text entry and preferences |
+|  [noctalia-language-and-localization](../ricy-kit/contributions/noctalia-language-and-localization/README.md)  | Shell language/region/weather |  `shell/noctalia/ + integrations/`  | Noctalia, locale, systemd units | KNOWN / RICY-OWNED | Do not globalize installation preferences |
+|  [noctalia-visual-identity](../ricy-kit/contributions/noctalia-visual-identity/README.md)  | Tokens and board of existing identity |  `themes/tokens/`  | Config/palette/Style Noctalia and visual contributions | KNOWN / RICY-OWNED reference | No installation; visual differences need to be recorded |
+|  [driver-aic8800](../ricy-kit/contributions/driver-aic8800/README.md)  | USB Wi-Fi/Bluetooth Driver and DKMS package |  `integrations/hardware/`  | Kernel/headers, DKMS, Radxa source fixed | KNOWN / UPSTREAM + patches + Ricy packaging | Risk of losing network; hardware dependency, not every session |
 
-## Entradas e componentes transversais
+## Entry points and cross-cutting components
 
-| Componente / localização atual | Responsabilidade | Destino | Dependências | Status | Recovery |
+| Current component/location | Responsibility | Destination | Dependencies | Status | Recovery |
 |---|---|---|---|---|---|
-| [Wrappers raiz](../iniciar.sh), [voltar](../voltar.sh), [alternar](../alternar.sh) | Entradas desta instalação | core/ (a avaliar) | Caminho absoluto do kit | KNOWN / RICY-OWNED | Não mover sem revisar chamadores |
-| [preparar-ambiente.py](../ricy-kit/preparar-ambiente.py), outputs/ | Preparação e seeds/templates; pode criar backups privados | installer/ + integrations/ | Python e configurações do destino | KNOWN / RICY-OWNED | Não executar no kit ativo para validar estrutura |
-| [gerar-variante-kvantum.py](../ricy-kit/gerar-variante-kvantum.py) | Variante de estilo Qt | themes/ | Kvantum/tema existente | KNOWN | Estilo compartilhado com recovery |
-| [Kit de transporte](ricy-kit/AGENTS.md) e archives/ | Reprodução/histórico | installer/ e arquivo histórico, após auditoria | Manifests, scripts e licenças | KNOWN: presença; UNKNOWN: publicação segura integral | Não copiar estado da instalação ativa |
-| KWin / Plasma / Dolphin | Compositor, desktop compartilhado e arquivos | compositor/kwin/ + recovery/plasma/ | Pacotes do sistema | KNOWN: dependência no código; upstream externo | Não removíveis |
-| [Ricy Files](../apps/file-manager/README.md) | Futuro gerenciador padrão Ricy | apps/file-manager/ | UNKNOWN: toolkit/contratos | PLANNED / RICY-OWNED | Dolphin permanece disponível |
-| [Core](../core/AGENTS.md) / [Services](../services/AGENTS.md) | Futuros limites comuns; serviços atuais estão nas contribuições | core/ + services/ | UNKNOWN: novos contratos | PLANNED | Não criar novo daemon/IPC por suposição |
+|  [Root wrappers](../start.sh), [come back](../return.sh), [switch](../switch.sh)  | Entry points for this installation | core/ (to be evaluated) | Absolute path of the kit | KNOWN / RICY-OWNED | Do not move without revising callers |
+|  [prepare-environment.py](../ricy-kit/prepare-environment.py), outputs/ | Preparation and seeds/templates; you can create private backups | installer/ + integrations/ | Python and destination settings | KNOWN / RICY-OWNED | Do not execute on active kit to validate structure |
+|  [generate-kvantum-variant.py](../ricy-kit/generate-kvantum-variant.py)  | Qt style variant | themes/ | Kvantum/existing theme | KNOWN | Shared style with recovery |
+|  [Transport kit](ricy-kit/AGENTS.md) and archives/ | Reproduction/historical | installer/ and historical file after audit | Manifests, scripts and licenses | KNOWN: presence; UNKNOWN: full secure publication | Do not copy active installation status |
+| KWin / Plasma / Dolphin | Compositor, shared desktop, and files | compositor/kwin/ + recovery/plasma/ | System Packages | KNOWN: code dependency; external upstream | Unremovable |
+|  [Ricy Files](../apps/file-manager/README.md)  | Future Ricy Standard Manager | apps/file-manager/ | UNKNOWN: toolkit/contracts | PLANNED / RICY-OWNED | Dolphin remains available |
+|  [Core](../core/AGENTS.md) / [Services](../services/AGENTS.md)  | Future common limits; current services are in the contributions | core/ + services/ | UNKNOWN: new contracts | PLANNED | Do not create new daemon/IPC by assumption |
 
-Leia [migração](MIGRATION-PLAN.md) antes de realocar qualquer componente. Leia
-[RECOVERY](RECOVERY.md) para operações que afetam sessão, login ou arquivos.
+Read it. [migration](MIGRATION-PLAN.md) before relocating any component. Read
+[RECOVERY](RECOVERY.md) for operations that affect session, login or files.

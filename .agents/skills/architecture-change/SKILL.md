@@ -1,23 +1,23 @@
 ---
 name: architecture-change
-description: Avaliar mudanças em fronteiras, contratos, dependências críticas ou invariantes do Ricy; exigir decisão explícita para arquitetura nova.
+description: Assess changes to Ricy boundaries, contracts, critical dependencies, or invariants; require an explicit decision for new architecture.
 ---
 
 # architecture-change
 
-1. Identifique a mudança solicitada e a autorização já existente no pedido.
-2. Leia [ARCHITECTURE](../../../docs/ARCHITECTURE.md),
-   [INVARIANTS](../../../docs/INVARIANTS.md) e os [ADRs](../../../docs/adr/README.md) relevantes.
-3. Mapeie os componentes afetados em [COMPONENTS](../../../docs/COMPONENTS.md),
-   leia regras locais e procure abstrações/convenções existentes.
-4. Determine se a mudança modifica arquitetura ou apenas implementa um contrato
-   já aprovado. Agentes não possuem autorização automática para criar arquiteturas.
-5. Se houver decisão arquitetural nova, registre o bloco abaixo, explique impacto,
-   PARE essa parte e solicite aprovação explícita antes de implementar. Continue
-   partes independentes seguras. Não peça novamente aprovação já concedida para
-   a mesma proposta; a aprovação não se estende a decisões adicionais.
-6. Depois da aprovação: implemente incrementalmente, valide os níveis relevantes,
-   crie/atualize ADR, componentes, recovery e changelog. Registre limites dos testes.
+1. Identify the requested change and authorization already provided by the request.
+2. Read [ARCHITECTURE](../../../docs/ARCHITECTURE.md),
+   [INVARIANTS](../../../docs/INVARIANTS.md), and relevant [ADRs](../../../docs/adr/README.md).
+3. Map affected components in [COMPONENTS](../../../docs/COMPONENTS.md),
+   read local rules, and look for existing abstractions and conventions.
+4. Determine whether the change modifies architecture or implements an already
+   approved contract. Agents have no automatic authorization to create architectures.
+5. If a new architectural decision is needed, record the block below, explain impact,
+   STOP that part, and request explicit approval before implementation. Continue safe,
+   independent work. Do not request approval already granted for the same proposal;
+   that approval does not extend to additional decisions.
+6. After approval: implement incrementally, validate relevant levels, create/update
+   the ADR, components, recovery, and changelog. Record the limits of the tests.
 
 ```text
 ARCHITECTURE DECISION REQUIRED
@@ -25,8 +25,8 @@ Problem: ...
 Evidence: ...
 Options: A ... / B ...
 Recommended: ...
-Impact: componentes, dependências, compatibilidade e recovery
+Impact: components, dependencies, compatibility, and recovery
 ```
 
-Não resolva conflitos docs/código silenciosamente. A estrutura futura por si só
-não aprova um novo daemon, protocolo IPC ou migração de caminhos.
+Do not silently resolve docs/code conflicts. The future structure alone does not
+approve a new daemon, IPC protocol, or path migration.

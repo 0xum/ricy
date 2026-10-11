@@ -8,10 +8,10 @@ case "$mode" in
   if systemctl --user is-active --quiet noctalia-teste.service; then echo Noctalia; else echo Plasma; fi
   exit 0 ;;
  alternar|plasma|noctalia) ;;
- *) printf 'Uso: ricy [alternar|plasma|noctalia|status]\n' >&2; exit 2 ;;
+ *) printf 'Usage: ricy [alternar|plasma|noctalia|status]\n' >&2; exit 2 ;;
 esac
 base_dir="$(dirname -- "$(readlink -f -- "${BASH_SOURCE[0]}")")"
-# Launchers podem ser filhos da shell. O worker deve sobreviver à parada dela.
+# Launchers may be shell children. The worker must survive the shell stopping.
 if [[ "$worker" != true ]]; then
  exec systemd-run --user --unit="ricy-alternancia-$$-$(date +%s%N)" \
   --wait --collect --pipe --property=Type=exec --property=PartOf=graphical-session.target \
@@ -28,11 +28,11 @@ if [[ "$mode" == noctalia ]]; then
  systemctl --user enable ricy-noctalia-integracao.service
  if ! systemctl --user restart ricy-noctalia-integracao.service; then
   systemctl --user disable ricy-noctalia-integracao.service
-  printf 'Noctalia falhou; preferência de login voltou ao Plasma. Consulte journalctl --user -u ricy-noctalia-integracao.service.\n' >&2
+  printf 'Noctalia failed; login preference returned to Plasma. See journalctl --user -u ricy-noctalia-integracao.service.\n' >&2
   exit 1
  fi
- printf 'Noctalia selecionado nesta sessão e nos próximos logins.\n'
+ printf 'Noctalia selected in this session and next logins.\n'
 else
  systemctl --user disable --now ricy-noctalia-integracao.service
- python "$base_dir/integracao.py" restaurar
+ python "$base_dir/integration.py" restaurar
 fi

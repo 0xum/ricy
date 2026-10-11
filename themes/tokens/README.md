@@ -1,6 +1,5 @@
-# Tokens — endereço futuro
+# Tokens — Future Address
 
-PLANNED: ponto central de consumo. KNOWN: a fonte estruturada continua em
-[tokens existentes](../../ricy-kit/contributions/noctalia-visual-identity/tokens.json).
-Leia [DESIGN-SYSTEM](../../docs/DESIGN-SYSTEM.md). Não copie a paleta para cá
-nem mude consumidores sem migração revisada. Nenhum gerador foi implementado.
+PLANNED: central point of consumption. KNOWN: the structured source continues in
+[existing tokens](../../ricy-kit/contributions/noctalia-visual-identity/tokens.json).
+Read it. [DESIGN-SYSTEM](../../docs/DESIGN-SYSTEM.md). Do not copy the palette here or change consumers without revised migration. No generator has been implemented.

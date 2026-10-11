@@ -1,86 +1,43 @@
-# Opções dos itens do tray na composição Noctalia
+# Tray Item Options in Noctalia Composition
 
-Menus DBusMenu de itens do tray usam o painel nativo encaixado
-`ricy:tray-menu`, com fundo/opacidade da barra, blur contínuo, junção, animação
-e fechamento externo do PanelManager. A apresentação substitui o popup
-independente; ações e estados continuam fornecidos pelo aplicativo.
+DBusMenu menus of tray items use the native panel embedded `ricy:tray-menu`, with bottom/opacity of the bar, continuous blur, junction, animation and external closure of PanelManager. The presentation replaces the independent popup; actions and states continue provided by the application.
 
-Na barra inferior há uma **setinha para baixo na base do menu**, junto à barra.
-Ela volta diretamente à gaveta do tray, mantendo monitor, barra e âncora.
-A referência horizontal é o centro da gaveta, independente do ícone clicado.
-Menu e retorno usam o mesmo eixo; a setinha acompanha esse eixo mesmo quando
-um menu mais largo precisa ser deslocado pelo limite do monitor.
-O botão usa o estilo Ghost nativo: fundo transparente e destaque ao passar
-o mouse. Está presente também dentro de submenus quando a gaveta está habilitada.
+In the bottom bar there is a **set down at the base of the menu**, next to the bar. It goes straight back to the tray drawer, keeping monitor, bar and anchor. The horizontal reference is the center of the drawer, regardless of the icon clicked. Menu and return use the same axis; the arrow attached this axis even when a wider menu needs to be moved by the monitor limit. The button uses the native Ghost style: transparent background and highlight when passing the mouse. It is also present inside submenus when the drawer is enabled.
 
-Pin/Unpin, separadores, entradas desabilitadas, marcas de seleção e opções de
-rádio são preservados. Submenus navegam dentro da mesma composição, com
-`← Back`, esquerda/Escape para subir um nível; Escape na raiz e clique externo
-fecham. Setas percorrem ações habilitadas; Enter/Espaço ativam, direita entra
-em submenu. O botão de retorno também participa da navegação por Tab.
-Ações são adiadas até o fim do evento e verificam a linha atual antes do
-acionamento. Eventos opened/closed continuam sendo enviados ao provedor.
+Pin/Unpin, separators, disabled inputs, selection marks and radio options are preserved. Submenus navigate within the same composition, with `← Back`, left/scape to climb a level; Escape at the root and external click close. Arrows run enabled actions; Enter/Space activate, right enters submenu. The return button also participates in Tab navigation. Actions are postponed until the end of the event and check the current line before the drive. Opened/closed events continue to be sent to the provider.
 
-A largura considera o maior texto e tem mínimo de conteúdo de 240 px à escala
-1. A altura inclui todas as linhas, separadores, padding nativo e o botão de
-retorno, sem repetir o padding já descontado pelo PanelManager. Não há
-rolagem quando a lista cabe no monitor; ScrollView permite acessar listas
-maiores que a área disponível. Carregamento sob demanda e atualizações
-DBusMenu mantêm o retry limitado e redimensionam a composição conforme as
-linhas mudam. Ao remover o item do tray, o menu fecha.
+The width considers the largest text and has minimum content of 240 px at scale
+1. Height includes all lines, separators, native padding and button
+return, without repeating the padding already discounted by PanelManager. There is no scrolling when the list fits on the monitor; ScrollView allows you to access larger lists than the available area. Loading on demand and updates DBusMenu keep the retry limited and resize the composition as the lines change. When removing the track item, the menu closes.
 
-Itens sem DBusMenu continuam entregando seu menu ao próprio aplicativo.
-As ações, incluindo atualizar pacotes ou sair, mantêm o significado original.
+Items without DBusMenu continue to deliver their menu to the app itself. Actions, including updating packages or leaving, keep the original meaning.
 
-## Reproduzir
+## Reproduce
 
-Compatível com Noctalia 5.2.1, commit
-`6ef43e2bf2f3d5b4205ec72a72e34a2ab76ce3b4`. Este patch composto reúne
-notificações, wallpaper do Home, menu da taskbar e menu dos itens do tray.
+Compatible with Noctalia 5.2.1, commit `6ef43e2bf2f3d5b4205ec72a72e34a2ab76ce3b4`. This composite patch brings together notifications, Home wallpaper, Taskbar menu and Tray items menu.
 
 ```bash
 cd "$HOME/ricy-kit/contributions/tray-menu-composition"
-bash compilar.sh
-python ../notification-continuity/ativar.py
+bash build.sh
+python ../notification-continuity/enable.py
 ```
 
-Dependências: BUILDING.md upstream e contribuição notificacoes-continuidade.
-O compilador aceita fonte limpa ou exatamente este patch; não sobrescreve
-alterações desconhecidas. Para migrar de variante, preserve o cache anterior
-num nome ainda inexistente antes de recompilar em fonte limpa, conforme
-taskbar-menu-composition/README.md. Ajuste o caminho se XDG_CACHE_HOME estiver
-configurado. O ativador cria backup e preserva os aplicativos durante a troca.
-Não substitui `/usr/bin/noctalia`. O blur compartilhado requer a contribuição
-blur-continuity correspondente ao KWin instalado.
+Dependencies: BUILDING.md upstream and contribution notification-continuity. The compiler accepts clean font or exactly this patch; does not overwrite unknown changes. To migrate from variant, preserve the previous cache in a name that is still missing before recompiling in clean font, as per taskbar-menu-composition/README.md. Adjust the path if XDG_CACHE_HOME is configured. The activator creates backup and preserves applications during the exchange. It does not replace `/usr/bin/noctalia`. Shared blur requires Blur-Continuity contribution corresponding to the installed KWin.
 
-## Validação e retorno
+## Validation and return
 
-A compilação e validação do perfil passaram. O usuário confirmou visualmente
-a composição do menu do tray e, depois, a setinha de retorno à gaveta.
-O usuário também confirmou o ajuste posterior do alinhamento horizontal
-entre menu, setinha e gaveta. Conferidos 45 cenários geométricos de larguras
-e bordas, além da compilação/validação do perfil.
-Testes completos de submenus, estados de seleção, ações de cada aplicativo,
-listas extensas e outras posições de barra ainda não foram registrados. Um provedor temporário de teste foi registrado e removido; a
-tentativa de automatizar o clique não abriu seu menu, portanto não confirma
-as ações nem submenus. Dispositivos e scripts temporários foram encerrados.
+Compilation and validation of the profile passed. The user visually confirmed the composition of the track menu and then the set of return to the drawer. The user also confirmed the subsequent adjustment of the horizontal alignment between menu, set and drawer. 45 Geometric scenarios of widths and borders, in addition to profile compilation/validation. Complete tests of submenus, selection states, actions of each application, extensive lists and other bar positions have not yet been registered. A temporary test provider has been registered and removed; the attempt to automate the click did not open its menu, so it does not confirm the actions or submenus. Temporary devices and scripts have been closed.
 
-Para conferir, abra a gaveta e o menu de um item, clique na setinha inferior
-e verifique o retorno à gaveta no mesmo monitor. Confira também Escape,
-submenus e uma ação segura antes de usar ações como fechar ou atualizar.
+To check, open the drawer and menu of an item, click the lower arrow and check the return to the drawer on the same monitor. Also check Escape, submenus and a safe action before using actions like closing or updating.
 
-Para restaurar o binário anterior, use o backup impresso pelo ativador:
+To restore the previous binary, use the backup printed by the activator:
 
 ```bash
-python ../notification-continuity/ativar.py --restaurar "$HOME/.local/state/ricy-notificacoes-backups/DATA-HORA"
+python ../notification-continuity/enable.py --restaurar "$HOME/.local/state/ricy-notificacoes-backups/DATA-HORA"
 ```
 
-Código upstream MIT; licença incluída. O kit contém apenas código e documentação
-públicos; sem binários, capturas, clipboard, contas ou estado privado.
+Upstream MIT code; license included. The kit contains only public code and documentation; no binaries, captures, clipboard, accounts or private status.
 
-## Variante atual: ícones e hover
+## Current variant: icons and hover
 
-A variante posterior mantém este menu/alinhamento e acrescenta ícones de apps
-e busca menores, com zoom suave ao passar o mouse. Para reconstruir o estado
-completo atual, use ../app-icon-interactions/compilar.sh. Este compilador
-anterior permanece histórico e recusa cache com alterações diferentes.
+The later variant maintains this menu/alignment and adds smaller app icons and search with smooth zoom when passing the mouse. To rebuild the current full state, use ../app-icon-interactions/build.sh. This previous compiler remains historical and refuses cache with different changes.

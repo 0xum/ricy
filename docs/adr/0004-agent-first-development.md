@@ -4,18 +4,18 @@ Status: Accepted
 
 ## Context
 
-O projeto acumulou kits, variantes cumulativas e registros de sessões. Inferir intenção somente pelo código tende a perpetuar caminhos históricos e a apresentar planos como capacidades já prontas.
+The project has accumulated kits, cumulative variants, and session records. Inferring intent solely from code tends to perpetuate historical paths and present plans as completed capabilities.
 
 ## Decision
 
-Usar AGENTS.md como mapa conciso e constituição única; CLAUDE.md apenas o referencia. Autoridade: invariantes, ADRs, arquitetura/componentes, regras locais, implementação. Skills oferecem procedimentos progressivos; validar e registrar evidência.
+Use AGENTS.md as a concise map and single constitution; CLAUDE.md only references it. Authority: invariants, ADRs, architecture/components, local rules, implementation. Skills provide progressive procedures; validate and record evidence.
 
 ## Consequences
 
-Agentes carregam contexto por componente, procuram abstrações existentes, documentam conflitos e relatam limites dos testes. Mudança significativa registra Model/Agent, Date, Purpose e Validation performed no changelog.
+Agents load context by component, look for existing abstractions, document conflicts, and report test limits. Significant changes record Model/Agent, Date, Purpose, and Validation performed in the changelog.
 
 ## Constraints
 
-Nenhuma autorização automática para criar arquitetura. Novo caminho exige proposta, impacto e aprovação explícita antes de implementar; autorizações já dadas no pedido são respeitadas. Não criar burocracia para edições compatíveis nem poluir código com assinaturas.
+No automatic permission to create architecture. A new path requires a proposal, impact assessment, and explicit approval before implementation; respect authorization already granted in the request. Do not create bureaucracy for compatible edits or clutter code with signatures.
 
-Referências: [INVARIANTS](../INVARIANTS.md), [ARCHITECTURE](../ARCHITECTURE.md).
+References: [INVARIANTS](../INVARIANTS.md), [ARCHITECTURE](../ARCHITECTURE.md).

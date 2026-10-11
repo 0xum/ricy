@@ -1,146 +1,143 @@
-# Ricy — reprodução do KDE Plasma com Noctalia no CachyOS
+# Ricy — KDE Plasma playback with Noctalia in CachyOS
 
-> **Organização em 11/10/2026:** projeto em `$HOME/Projects/ricy`; kit ativo em `$HOME/Projects/ricy/ricy-kit`; scripts `iniciar.sh`, `voltar.sh` e `alternar.sh` na raiz do projeto. Documentação e kit transportável em `docs/`; arquivo original em `archives/ricy.zip`. Os caminhos antigos no registro abaixo são históricos. O lock atual é `$HOME/.local/state/ricy/documentacao.lock`.
+> **organization 11/10/2026:** project in `$HOME/Projects/ricy`; active kit in `$HOME/Projects/ricy/ricy-kit`; scripts `start.sh`, `return.sh` and `switch.sh` at the project root. Documentation and transportable kit in `docs/`; original file in `archives/ricy.zip`. The old paths in the record below are historical. The current lock is `$HOME/.local/state/ricy/documentacao.lock`.
 
 
-> **Estado vigente neste destino (10/10/2026):** Noctalia permanente no login, kit ativo em `$HOME/ricy-kit`, aparência completa e SDDM selecionado para o próximo reinício. Use `REINSTALAR.md` e a contribuição final deste registro. Os trechos anteriores sobre modo de teste são históricos.
+> **Status in force in this destination (10/10/2026):** Permanent noctalia on login, active kit in `$HOME/ricy-kit`, full appearance and selected SDDM for the next restart. Use `REINSTALL.md` and the final contribution of this record. Previous excerpts on test mode are historical.
 
-> **Referência dos próximos ajustes visuais:** consulte [IDENTIDADE-VISUAL.md](IDENTIDADE-VISUAL.md). O guia e os tokens capturam a linguagem do Noctalia para harmonizar outros componentes, com distinção entre aparência já aplicada e trabalho futuro.
+> **Reference of the next visual adjustments:** consult [IDENTITY-VISUAL.md](VISUAL-IDENTITY.md). The guide and tokens capture the language of Noctalia to harmonize other components, with distinction between already applied appearance and future work.
 
-Registro de 8 de outubro de 2026. Documento do estado final desta sessão, com explicação das decisões e roteiro de migração. O kit de archives fica em `~/ricy-kit`, ao lado deste documento. **Transfira o documento e o kit juntos.**
+Log 8 of October 2026. Document of the final status of this session, with explanation of the decisions and migration script. The archive kit is in `~/ricy-kit`, next to this document. **Transfer the document and kit together.**
 
-## Instruções para os demais chats desta sessão
+## Instructions for the other chats of this session
 
-Este arquivo é o registro compartilhado das mudanças feitas neste CachyOS. Cada chat deve documentar as alterações que efetivamente realizou, para que outro agente ou usuário consiga reproduzi-las em outra instalação. O kit complementar está em `/home/delta/ricy-kit`.
+This file is the shared record of changes made in this CachyOS. Each chat must document the changes it has effectively made, so that another agent or user can play them in another installation. `/home/delta/ricy-kit`.
 
-Para ampliar a aparência do sistema, leia primeiro `IDENTIDADE-VISUAL.md` e
-`ricy-kit/contributions/noctalia-visual-identity/tokens.json`. Use a linguagem
-visual ali registrada como referência para os próximos componentes; preserve
-os comportamentos aprovados e registre as adaptações realmente aplicadas.
+To enlarge the appearance of the system, read first `VISUAL-IDENTITY.md` and `ricy-kit/contributions/noctalia-visual-identity/tokens.json`. Use the visual language registered there as a reference for the next components; preserve approved behaviors and record the really applied adaptations.
 
-### Como contribuir
+### How to contribute
 
-1. Leia o documento antes de escrever e confira seus próprios archives, comandos e configurações atuais. Não apresente intenção, tentativa abandonada ou hipótese como mudança aplicada.
-2. Preserve o conteúdo existente. Adicione sua contribuição ao final, sob `## Contribuição — <tema> — <data e hora>`. Identifique o chat pelo título, se conhecido; caso contrário, use uma descrição do trabalho, sem inventar um identificador.
-3. Explique o objetivo, o estado anterior e o resultado final. Separe alterações concluídas, tentativas descartadas e trabalho pendente. Registre também mudanças de outros temas além do Noctalia.
-4. Inclua caminhos, pacotes e versões observadas, configurações finais, comandos em ordem de execução, dependências, serviços, autostart e efeitos sobre o restante do sistema. Explique como testar e como desfazer cada alteração.
-5. Distingua os caminhos desta máquina dos caminhos portáveis. Use `$HOME` nos comandos destinados à outra instalação. IDs de desktop, monitor, usuário, atalhos e backups precisam ser capturados no destino, não reutilizados cegamente.
-6. Se depender de scripts, temas ou archives binários, copie somente os materiais necessários para `/home/delta/ricy-kit/contributions/<tema>/` e descreva como instalá-los. Preserve a licença dos archives de terceiros. Não mova os archives ativos nem altere serviços para preparar a documentação.
-7. Não sobrescreva archives de outro chat no kit. Não inclua senhas, tokens, chaves, histórico de clipboard, conversas privadas ou backups pessoais completos. Informe a localização de backups existentes e forneça um procedimento para gerar novos no destino.
-8. Se sua alteração substitui uma configuração documentada, registre explicitamente o que foi substituído e qual é o estado final. Corrija apenas o trecho necessário com evidência; não reescreva o relato de outro chat por suposição.
-9. Registre os testes realmente executados e suas limitações. Se não houver evidência suficiente no contexto disponível, indique a lacuna; não invente comandos ou resultados. A migração documentada não significa que já foi testada em outro computador.
-10. Ao terminar, informe o tópico acrescentado e os archives incluídos no kit. Não execute novamente as mudanças no sistema: esta contribuição é de documentação.
+1. Read the document before writing and check out your own current files, commands, and settings. Do not present intent, abandoned attempt or hypothesis as applied change.
+2. Preserve existing content. Add your contribution to the end, under `## Contribuição — <tema> — <data e hora>`. Identify chat by title, if known; otherwise use a job description without inventing an identifier.
+3. Explain the goal, the previous state and the final result. Separate completed changes, discarded attempts and pending work. Also register changes from other themes besides Noctalia.
+4. Include paths, packages and observed versions, final settings, running order commands, dependencies, services, autostart and effects on the rest of the system. Explain how to test and undo each change.
+5. Distinguish the paths of this portable path machine. `$HOME` in commands intended for another installation. Desktop IDs, monitor, user, shortcuts and backups need to be captured in the destination, not reused blindly.
+6. If you depend on binary scripts, themes or archives, copy only the necessary materials for `/home/delta/ricy-kit/contributions/<tema>/` and describe how to install them. Preserve the license of third party files. Do not move active archives or change services to prepare documentation.
+7. Do not overwrite files from another chat in the kit. Do not include passwords, tokens, keys, clipboard history, private conversations or complete personal backups. Inform the location of existing backups and provide a procedure to generate new ones in the destination.
+8. If your change replaces a documented configuration, explicitly record what has been replaced and what is the final state. Fix only the required snippet with evidence; do not rewrite the report of another chat by assumption.
+9. Register the tests actually executed and their limitations. If there is not enough evidence in the context available, enter the gap; do not invent commands or results. The documented migration does not mean that it has already been tested on another computer.
+10. When finished, please inform the topic added and the files included in the kit. Do not run the system changes again: this contribution is documentation.
 
-### Evitar conflito entre chats
+### Avoid Chat Conflict
 
-Prepare sua seção em um arquivo temporário e acrescente-a sem regravar todo o documento. Use o mesmo bloqueio para qualquer escrita no registro:
+Prepare your section in a temporary file and add it without rerecording the entire document. Use the same lock for any writing in the record:
 
 ```bash
-# Substitua pelo caminho real do arquivo com sua contribuição pronta:
+# Replace by the actual path of the file with your ready contribution:
 contribuicao="/tmp/ricy-contribuicao-TEMA.md"
 flock "$HOME/.ricy-documentacao.lock" bash -c 'cat -- "$1" >> "$2"' _ "$contribuicao" "$HOME/ricy.md"
 ```
 
-O bloqueio coordena apenas os chats que seguirem esta instrução. Para uma correção pontual, releia o arquivo dentro do bloqueio antes de gravar. Use subpastas distintas no kit. Se incluir novos archives, atualize `SHA256SUMS` sob o mesmo bloqueio, mantendo as entradas existentes; verifique os hashes antes de considerar os materiais prontos. O preparador de migração muda os caminhos dos `.desktop`, portanto seus hashes devem ser conferidos antes de executar a preparação.
+The lock coordinates only the chats that follow this instruction. For a punctual fix, reread the file inside the lock before saving. Use distinct subfolders in the kit. If you include new files, update `SHA256SUMS` under the same lock, keeping the existing inputs; check the hashes before considering the materials ready. The migration preparer changes the paths of the `.desktop`, therefore its hashes must be checked before performing the preparation.
 
-### Estrutura sugerida da contribuição
+### Suggested structure of the contribution
 
 ```markdown
-## Contribuição — TEMA — DATA E HORA
+## Contribution — THEME — DATE AND TIME
 
-Chat/trabalho: ...
-Objetivo e resultado final: ...
+Chat/work: ...
+Objective and final result: ...
 
-### Mudanças aplicadas
-- Arquivo/serviço/pacote: estado anterior, mudança e motivo.
+### Applied changes
+- File/service/package: previous status, change and motive.
 
-### Reproduzir em outro CachyOS
-Pré-requisitos, versões observadas, backups locais e comandos em ordem.
-Configurações finais e materiais em ricy-kit/contributions/TEMA/.
+### Play in another CachyOS
+Prerequisites, observed versions, local backups and commands in order.
+Final settings and materials in ricy-kit/contributions/TEMA/.
 
-### Verificação
-Testes executados, resultados e limitações.
+### Verification
+Tests performed, results and limitations.
 
-### Restaurar
-Comandos e archives necessários; o que a restauração cobre.
+### Restore
+Commands and necessary archives; what restoration covers.
 
-### Tentativas descartadas e pendências
-Somente quando relevantes para evitar repetir um erro ou assumir algo incompleto.
+### Attempts discarded and pending
+Only when relevant to avoid repeating a mistake or assuming something incomplete.
 ```
 
 ---
 
-## 1. Resultado e escopo
+## 1. Result and scope
 
-Mantivemos a sessão KDE Plasma/Wayland e o KWin. O Noctalia substitui os painéis, o menu e a busca, enquanto o Plasma continua responsável pelo desktop e wallpaper. O objetivo foi continuidade visual, sobriedade, ícones legíveis e controles acessíveis, sem recompilar nem alterar o código-fonte do Noctalia.
+We have maintained the KDE Plasma/Wayland session and KWin. Noctalia replaces the panels, menu and search while Plasma remains responsible for the desktop and wallpaper. The goal was visual continuity, sobriety, readable icons and accessible controls without recompiling or changing the Noctalia source code.
 
-| Elemento | Estado final |
+| Element | Final State |
 |---|---|
-| Taskbar | Inferior, 44 px, zona reservada; janelas maximizadas respeitam sua altura |
-| Visibilidade | Sempre visível; auto-hide e smart-auto-hide desligados |
-| Aplicativos | Ícones à esquerda, indicador ativo, somente workspace atual, sem títulos |
-| Tray | À direita; gaveta com 3 colunas e ícones de 24 px |
-| Rede e volume | Somente ícones; sem SSID e sem porcentagem |
-| Busca | Super, Super+Espaço e digitação no desktop; topo central, encaixada na borda |
-| Apoio da busca | Barra superior vazia de 10 px, sem reserva de espaço; só aparece com busca por atalho/adaptador |
-| Ponteiro no topo | Não revela a barra de apoio |
-| Área de transferência | Super+V abre/fecha histórico do Noctalia no centro |
-| Cores | Paleta KDE/Catppuccin Mocha com acento Mauve |
-| Blur | KWin no fundo escuro da barra e painéis compatíveis, opacidade 0,70 |
-| Menus Qt/KDE | Variante Kvantum KDE-Noctalia, compacta, arredondada, opaca |
-| Wallpaper | Preservado pelo Plasma; wallpaper do Noctalia desativado |
+| Taskbar | Lower, 44 px, reserved area; maximized windows respect their height |
+| Visibility | Always visible; auto-hide and smart-auto-hide off |
+| Applications | Left icons, active indicator, current workspace only, no titles |
+| Tray | To the right; drawer with 3 columns and icons of 24 px |
+| Network and volume | Icons only; no SSID and no percentage |
+| Search | Super, Super+space and desktop typing; central top, embedded on the edge |
+| Search support | Empty top bar 10 px, without space reserve; only appears with shortcut search/adapter |
+| Pointer on top | Does not reveal the support bar |
+| Clipboard | Super+V Opens/Historical Close of Noctalia in the Center |
+| colors | KDE/Catppuccin Mocha palette with Mauve accent |
+| Blur | KWin at the dark background of the compatible bar and panels, opacity 0,70  |
+| Qt/KDE Menus | Variant Kvantum KDE-Noctalia, compact, rounded, opaque |
+| Wallpaper | Preserved by Plasma; Noctalia wallpaper disabled |
 
-A solicitação inicial de barra adaptativa foi testada, mas o estado aprovado mantém a barra inferior fixa com área reservada. Não descrever este estado como ocultação inteligente. O botão launcher da barra ainda pode usar sua própria âncora inferior; a abertura no topo é garantida pelos atalhos e pelo adaptador de digitação.
+The initial request for an adaptive bar has been tested, but the approved state keeps the lower bar fixed with a reserved area. Do not describe this state as smart concealment. The launcher button of the bar can still use its own bottom anchor; the opening at the top is guaranteed by the shortcuts and the typing adapter.
 
-## 2. Ambiente de referência
+## 2. Reference environment
 
-Versões observadas neste computador: `noctalia 5.2.1-1.1`, `plasma-desktop 6.7.5-1.1`, `kwin 6.7.5-3.1`, `kvantum 1.1.8-1.1`, `python-gobject 3.58.0-1`, `qt6-tools 6.12.0-1.1`. São versões de referência, não uma promessa de compatibilidade com versões futuras. O Noctalia usado aqui é o binário do pacote CachyOS; configurações de versões antigas baseadas em QML não devem ser misturadas com este TOML.
+Versions observed on this computer: `noctalia 5.2.1-1.1`, `plasma-desktop 6.7.5-1.1`, `kwin 6.7.5-3.1`, `kvantum 1.1.8-1.1`, `python-gobject 3.58.0-1`, `qt6-tools 6.12.0-1.1`. They are reference versions, not a promise of compatibility with future versions. The Noctalia used here is the binary of the CachyOS package; old QML-based versions settings should not be mixed with this TOML.
 
-O pacote `qt6-tools` fornece `qdbus6`; `glib2` fornece `gdbus`; Python com PyGObject fornece `Gio` e `GLib`. `wl-clipboard` é opcional para o método do adaptador que lê o texto já copiado; o histórico normal é do próprio Noctalia. Noto Sans é a fonte do Noctalia; JetBrainsMono Nerd Font de 10 pt era a fonte do KDE, Papirus-Dark o tema de ícones e Breeze a decoração das janelas. Esses três últimos eram a base visual existente, não mudanças necessárias à integração.
+The package `qt6-tools` provides `qdbus6`; `glib2` provides `gdbus`; Python with PyGObject provides `Gio` and `GLib`. `wl-clipboard` is optional for the adapter method that reads the text already copied; the normal history is from Noctalia itself. Noto Sans is the source of Noctalia; JetBrainsMono Nerd Font de 10 pt was the source of KDE, Papirus-Dark the icon theme and Breeze the decoration of windows. These last three were the existing visual base, no changes required for integration.
 
-## 3. Instalação e preparação no novo CachyOS
+## 3. Installation and preparation in the new CachyOS
 
-Use uma sessão KDE Plasma **Wayland**. Copie `ricy-kit` para a home do usuário de destino. Não copie o backup de restauração da máquina antiga, IDs de monitores, IDs de desktops ou os JSON de atalhos antigos para o destino. O kit entregue não inclui esses archives pessoais.
+Use a KDE Plasma session **Wayland**. Copy `ricy-kit` for the home of the destination user. Do not copy the restore backup of the old machine, monitor IDs, desktop IDs or JSONs from old shortcuts to the destination. The delivered kit does not include these personal files.
 
-Instale os componentes disponíveis nos repositórios do seu CachyOS:
+Install the available components in your CachyOS repositories:
 
 ```bash
 sudo pacman -Syu
 sudo pacman -S --needed noctalia kvantum python python-gobject qt6-tools glib2 noto-fonts papirus-icon-theme
-# Opcional para displayWithClipboardContents:
+# Optional for displayWithClipboardContents:
 sudo pacman -S --needed wl-clipboard
 ```
 
-Se o repositório não oferecer `noctalia`, resolva a disponibilidade do pacote correspondente à versão documentada antes de continuar. Não substitua automaticamente por outra implementação da shell.
+If the repository does not offer `noctalia`, resolve the availability of the package corresponding to the documented version before continuing. Do not automatically replace with another shell implementation.
 
-Prepare o kit **antes de alterar o estilo ou iniciar o teste**:
+Prepare the kit **before changing the style or starting the test**:
 
 ```bash
 cd "$HOME/ricy-kit"
-python preparar-ambiente.py
+python prepare-environment.py
 ```
 
-O preparador cria um backup do DESTINO, registra hashes, gera a restauração do wallpaper com IDs locais, copia o perfil isolado, guarda o estilo anterior e recalcula `Exec=` dos atalhos para o usuário atual. Ele se recusa a sobrescrever um backup já existente. Após começar o teste, use `iniciar-teste.sh` para repeti-lo.
+The preparer creates a backup of DESTINO, registers hashes, generates wallpaper restoration with local IDs, copies the isolated profile, saves the previous style and recalculates `Exec=` from shortcuts to the current user. It refuses to overwrite an existing backup. After starting the test, use `start-test.sh` to repeat it.
 
-Se o wallpaper do destino já é o desejado, ele será preservado. Para reproduzir a imagem deste computador, escolha previamente no Plasma `/usr/share/wallpapers/cachyos-wallpapers/limine-splash.png`, caso essa imagem exista na instalação. O desktop inicial também tinha uma referência antiga a `north.png`; ela não deve ser aplicada indiscriminadamente a todos os monitores.
+If the destination wallpaper is already desired, it will be preserved. To play the image of this computer, choose previously on Plasma `/usr/share/wallpapers/cachyos-wallpapers/limine-splash.png`, if this image exists in the installation. The initial desktop also had an old reference to `north.png`; it should not be applied indiscriminately to all monitors.
 
-## 4. Cores, estilo KDE e menus
+## 4. Colors, KDE style and menus
 
-A paleta do Noctalia foi extraída das cores ativas do KDE. Principais valores:
+The Noctalia palette was extracted from the active KDE colors. Main values:
 
-| Papel | Cor |
+| Role | Color |
 |---|---|
-| Fundo escuro | `#181825` |
-| Texto | `#cdd6f4` |
-| Cards/menus | `#313244` |
-| Texto secundário | `#a6adc8` |
-| Acento | `#cba6f7` |
-| Seleção/hover | `#977dba`, texto preto |
-| Contorno | `#46485c` |
-| Sucesso | `#a6e3a1` |
-| Erro | `#f38ba8` |
+| Dark background |  `#181825`  |
+| Text |  `#cdd6f4`  |
+| Cards/menus |  `#313244`  |
+| Secondary text |  `#a6adc8`  |
+| I'll do it. |  `#cba6f7`  |
+| Selection/hover |  `#977dba`, black text |
+| Outline |  `#46485c`  |
+| Success |  `#a6e3a1`  |
+| Error |  `#f38ba8`  |
 
-O kit contém `KDE-Noctalia.colors`, exportado somente dos grupos de cores efetivamente ativos, e a variante Kvantum completa. Assim não é necessário importar todo o `kdeglobals` antigo com preferências pessoais.
+Kit contains `KDE-Noctalia.colors`, exported only from the effective active color groups, and the Kvantum variant completes. So it is not necessary to import the whole `kdeglobals` old with personal preferences.
 
 ```bash
 mkdir -p "$HOME/.local/share/color-schemes" "$HOME/.config/Kvantum"
@@ -151,33 +148,33 @@ printf '[General]\ntheme=KDE-Noctalia\n' > "$HOME/.config/Kvantum/kvantum.kvconf
 kwriteconfig6 --file kdeglobals --group KDE --key widgetStyle kvantum
 ```
 
-Reabra os aplicativos Qt para atualizar o estilo; uma nova sessão também aplica a alteração. A variante parte de [Catppuccin Kvantum](https://github.com/catppuccin/kvantum), com licença MIT incluída. Modificamos o SVG de `menu-normal` para cantos de 12 px, fundo `#313244` e borda `#46485c`; `menuitem-normal` ganhou cantos de 6 px e preenchimento `#977dba`. No `.kvconfig`, margens verticais de texto são zero, moldura vertical dos itens 4 px, laterais 6 px, margem lateral do texto 2 px, altura mínima 24 e separador 5 px. `popup_blurring=false`, `reduce_menu_opacity=0` e `shadowless_popup=true` evitam o retângulo de blur fora dos cantos.
+Reopen Qt applications to update style; a new session also applies the change. The variant starts from [Catppuccin Kvantum](https://github.com/catppuccin/kvantum), with MIT license included. We modified SVG from `menu-normal` for corners of 12 px, background `#313244` and border `#46485c`; `menuitem-normal` It won corners of 6 px and fill `#977dba`No. No. `.kvconfig`, vertical margins of text are zero, vertical frame of items 4 px, lateral 6 px, side margin of the text 2 px, minimum height 24 and separator 5 px. `popup_blurring=false`, `reduce_menu_opacity=0` and `shadowless_popup=true` avoid the blur rectangle out of the corners.
 
-A fonte dos menus foi mantida/restaurada para 10 pt. Se quiser a mesma fonte, instale JetBrainsMono Nerd Font e selecione-a no KDE; não force uma fonte ausente. Os menus Qt renderizados pelo aplicativo e os menus próprios do Noctalia são componentes distintos. O Kvantum ajusta os primeiros; não reduz por si só menus desenhados internamente pelo Noctalia.
+The source of the menus was maintained/restored for 10 If you want the same font, install JetBrainsMono Nerd Font and select it in KDE; do not force a missing font. Qt menus rendered by the application and Noctalia's own menus are distinct components. Kvantum adjusts the first ones; does not itself reduce menus designed internally by Noctalia.
 
-O script `gerar-variante-kvantum.py` registra como a variante foi construída. Para regenerá-la, coloque o checkout Catppuccin em `work/catppuccin-kvantum`, execute o script na raiz do kit e confira o resultado. Ele também instala a variante local; não é necessário executá-lo para usar os archives prontos.
+The script `generate-kvantum-variant.py` records how the variant was built. To regenerate it, place the Catppuccin checkout in `work/catppuccin-kvantum`, run the script in the kit root and check out the result. It also installs the local variant; it is not necessary to run it to use the ready files.
 
-## 5. Perfil isolado do Noctalia
+## 5. Isolated profile of Noctalia
 
-Estrutura do kit:
+Kit structure:
 
 ```text
 ~/ricy-kit/
-  preparar-ambiente.py
-  gerar-variante-kvantum.py
-  outputs/noctalia-test/     scripts, TOML, paleta, atalhos e backup do destino
-  outputs/kde-outlines/     SVG, Kvantum, paleta KDE e restauração de estilo
+  prepare-environment.py
+  generate-kvantum-variant.py
+  outputs/nottalia-test/ scripts, TOML, palette, shortcuts and destination backup
+  outputs/kde-outlines/ SVG, Kvantum, KDE palette and style restoration
   work/noctalia-profile/
     config/noctalia/config.toml
-    config/noctalia/palettes/KDE-Atual.json
-    state/                   estado isolado gerado no destino
+    config/noctalia/palettes/KDE-Current.json
+    state/ isolated state generated at destination
 ```
 
-`NOCTALIA_CONFIG_HOME` aponta para `work/noctalia-profile/config`; `NOCTALIA_STATE_HOME` aponta para `work/noctalia-profile/state`. Usar o item padrão “Noctalia” do pacote pode abrir outro perfil. Use o script do kit.
+`NOCTALIA_CONFIG_HOME` points to `work/noctalia-profile/config`; `NOCTALIA_STATE_HOME` points to `work/noctalia-profile/state`. Using the default item “Noctalia” of the package can open another profile. Use the kit script.
 
-A paleta JSON precisa conter também o objeto `terminal`, exigido pelo validador da versão usada, mesmo com templates de terminal desativados.
+The JSON palette must also contain the object `terminal`, required by the validator of the version used, even with terminal templates disabled.
 
-### Configuração TOML final completa
+### Complete Final TOML Configuration
 
 ```toml
 [shell]
@@ -250,7 +247,7 @@ enabled = false
 [theme]
 mode = "dark"
 source = "custom"
-custom_palette = "KDE-Atual"
+custom_palette = "KDE-Current"
 builtin = "Noctalia"
 
 [theme.templates]
@@ -311,19 +308,19 @@ center = []
 end = []
 ```
 
-## 6. Explicação dos ajustes e problemas resolvidos
+## 6. Explanation of adjustments and problems solved
 
-**Barra sobre as janelas:** ativamos `reserve_space=true` e mantivemos `layer="top"` na barra principal. A camada overlay anterior a colocava acima de overlays como captura de tela; a zona reservada faz o KWin descontar 44 px de janelas maximizadas. A faixa superior de apoio é overlay para o launcher, mas não reserva espaço.
+**Bar on windows:** We're doing it. `reserve_space=true` And we kept it `layer="top"` in the main bar. The previous overlay layer placed it above overlays as screenshot; the reserved area makes KWin discount 44 px of maximized windows. The upper support range is overlay for the launcher, but does not reserve space.
 
-**Ícones e menu de contexto dos apps:** escala global da barra 1,5 melhorou legibilidade, mas também ampliou o menu de contexto. `widget.taskbar.scale=0.666667` compensa a escala do menu, e `icon_scale=1.725` mantém os ícones por volta de 28 px. `corner_radius_scale=1.3` deixou o retângulo da seleção arredondado. A largura mínima ficou aproximadamente 240 px; o menu pode crescer conforme o texto.
+**App icons and context menu:** global bar scale 1,5 improved readability, but also expanded the context menu. `widget.taskbar.scale=0.666667` compensates for the menu scale, and `icon_scale=1.725` keeps the icons around 28 px. `corner_radius_scale=1.3` left the rectangle of the rounded selection. The minimum width was approximately 240 px; the menu can grow according to the text.
 
-**Tray e textos excessivos:** `network.show_label=false` oculta SSID; `volume.show_label=false` oculta a porcentagem. A gaveta do tray usa três colunas e ícones de 24 px, oferecendo uma apresentação mais compacta para os itens. Não prometemos uniformidade de menus de aplicativos que usam renderização própria.
+**Tray and excessive texts:**  `network.show_label=false` hidden SSID; `volume.show_label=false` hides the percentage. Tray drawer uses three columns and icons 24 px, offering a more compact presentation for the items. We do not promise uniformity of application menus that use own rendering.
 
-**Continuidade da central:** `control_center_placement="attached"`, posição `auto` e `open_near_click_control_center=true` fazem a central seguir a barra/âncora de abertura e desenhar a união nativa.
+**Continuity of the plant:**  `control_center_placement="attached"`, position `auto` and `open_near_click_control_center=true` make the center follow the opening bar/anchore and draw the native union.
 
-**Blur só no fundo escuro:** `background_opacity=0.70`, `compositor_blur=true` e `shell.panel.transparency_mode="solid"`. O KWin aplica blur atrás da superfície; não é desfoque do texto. Cards e botões permanecem opacos. Os menus de contexto da taskbar usam opacidade interna fixa e não expõem o mesmo blur nativo nesta versão. Decidimos não modificar/recompilar o Noctalia para mudar isso.
+**Blur only in the dark background:**  `background_opacity=0.70`, `compositor_blur=true` and `shell.panel.transparency_mode="solid"`. KWin applies blur behind the surface; it is not text blur. Cards and buttons remain opaque. Taskbar context menus use fixed internal opacity and do not expose the same native blur in this version. We decided not to modify/recompile Noctalia to change that.
 
-Configuração do KWin utilizada:
+KWin settings used:
 
 ```bash
 kwriteconfig6 --file kwinrc --group Plugins --key blurEnabled true
@@ -332,38 +329,38 @@ kwriteconfig6 --file kwinrc --group Effect-blur --key NoiseStrength 2
 qdbus6 org.kde.KWin /KWin org.kde.KWin.reconfigure
 ```
 
-Neste ambiente o protocolo Wayland de efeitos de fundo estava disponível. Se o blur não aparecer no destino, confira primeiro o efeito do KWin e o suporte entre compositor e versão do Noctalia; não suponha que apenas transparência equivale a blur.
+In this environment the Wayland protocol of background effects was available. If the blur does not appear in the destination, check first the effect of KWin and support between compositor and version of Noctalia; do not assume that only transparency equals blur.
 
-**Digitação no desktop:** só trocar o atalho de busca não intercepta a ação do Plasma. Paramamos `plasma-krunner.service` e um adaptador assume `org.kde.krunner` no D-Bus da sessão. Ele atende `/App` (`org.kde.krunner.App`) e `/org/kde/krunner` (`org.freedesktop.Application`). A segunda interface, especialmente `ActivateAction("Query", ...)`, foi necessária para o Plasma 6.7. As consultas são encaminhadas para `noctalia msg panel-open launcher <texto>`; não são gravadas em log pelo adaptador. O adaptador está ligado ao ciclo de vida do serviço do teste.
+**Desktop typing:** just swap the search shortcut doesn't intercept Plasma's action. `plasma-krunner.service` and an adapter assumes `org.kde.krunner` in the session D-Bus. `/App` (`org.kde.krunner.App`) and `/org/kde/krunner` (`org.freedesktop.Application`). The second interface, especially `ActivateAction("Query", ...)`, it was necessary for Plasma 6.7. Consultations are forwarded to `noctalia msg panel-open launcher <texto>`; are not recorded in log by the adapter. The adapter is connected to the life cycle of the test service.
 
-**Super sozinha:** uma tentativa com `kwinrc/ModifierOnlyShortcuts` não funcionou neste Plasma. Usamos KGlobalAccel e transferimos Meta da ação `plasmashell / activate application launcher` para `codex-noctalia-menu.desktop / _launch`. `setForeignShortcut` é necessário para alterar uma ação pertencente a outro componente. Os códigos Qt usados são Meta `16777250`, Meta+Espaço `268435488` e Meta+V `268435542`. No atalho novo de clipboard registramos a ação e usamos também `setShortcut` antes de `setForeignShortcut`. Os JSON originais são criados no destino antes de transferir os atalhos.
+**Super alone:** an attempt with `kwinrc/ModifierOnlyShortcuts` did not work on this Plasma. We use KGlobalAccel and transfer Meta from the action `plasmashell / activate application launcher` for `codex-noctalia-menu.desktop / _launch`. `setForeignShortcut` is required to change an action belonging to another component. The Qt codes used are Meta `16777250`, Meta+Space `268435488` and Meta+V `268435542`. In the new clipboard shortcut we record the action and use also `setShortcut` before `setForeignShortcut`. The original JSONs are created in the destination before transferring the shortcuts.
 
-**Busca no topo e união visual:** o modo floating/top_center deixava o aspecto de uma janela solta. Mudamos para attached/auto e criamos a barra vazia `search_edge` como primeira barra na ordem. Ela fornece a âncora superior sem deslocar as janelas. Inicialmente usava auto-hide e reaparecia ao tocar o topo com o ponteiro. A solução final desativa auto-hide, oculta a barra por `bar-hide search_edge`, mostra-a antes de abrir a busca e volta a ocultá-la após o fechamento. Assim a superfície oculta não recebe entrada do ponteiro. O wrapper espera 250 ms pela revelação antes da abertura; o adaptador verifica o estado a cada 250 ms para recolher a barra após Escape, clique externo ou abertura de app.
+**Search at the top and visual union:** the floating/top_center mode left the aspect of a window loose. We switched to attached/auto and created the empty bar `search_edge` as the first bar in the order. It provides the top anchor without dislocating the windows. Initially it used auto-hide and reappeared by touching the top with the pointer. The final solution disables auto-hide, hides the bar by `bar-hide search_edge`, show it before opening the search and hide it again after closing. So the hidden surface does not receive pointer entry. The wrapper waits 250 ms by revelation before opening; the adapter checks the state for each 250 ms to collect the bar after Escape, external click or app opening.
 
-**Área de transferência:** `clipboard_enabled=true` e o atalho Super+V chama `panel-toggle clipboard`. O painel é floating/center. O histórico começa a ser retido a partir da ativação; não importamos o histórico antigo do Klipper. O atalho original do Plasma é guardado para restauração.
+**Clipboard:**  `clipboard_enabled=true` and the Super+V shortcut calls `panel-toggle clipboard`. The panel is floating/center. History starts to be retained from activation; we do not matter the old Klipper history. The original Plasma shortcut is saved for restoration.
 
-## 7. Iniciar, testar e retornar
+## 7. Start, test and return
 
-Depois da preparação e dos ajustes visuais:
+After preparation and visual adjustments:
 
 ```bash
 cd "$HOME/ricy-kit"
-./outputs/noctalia-test/iniciar-teste.sh
+./outputs/noctalia-test/start-test.sh
 ```
 
-O script valida o TOML, inicia `noctalia-teste.service` via systemd do usuário, aguarda IPC disponível, oculta o apoio superior, instala os itens do menu, restaura wallpaper e só então remove os painéis Plasma do layout de teste. O processo plasmashell continua ativo. Em seguida inicia o adaptador e configura os atalhos. O backup permite recuperar os painéis removidos.
+Script validates TOML, starts `noctalia-teste.service` via user systemd, waits IPC available, hides the top support, installs the menu items, restores wallpaper and only then removes the Plasma panels from the test layout. The plasmashell process remains active. Then initiates the adapter and configures the shortcuts. The backup allows you to recover the removed panels.
 
-Verifique:
+Check:
 
-1. As janelas maximizadas param acima da barra inferior.
-2. Ícones e tray estão legíveis; Wi-Fi e volume não exibem texto.
-3. Super e Super+Espaço abrem a busca no topo com união visual.
-4. Ao focar o desktop e digitar, a consulta vai ao Noctalia.
-5. Fechar a busca recolhe a faixa de apoio; passar o ponteiro no topo não a revela.
-6. Super+V abre o histórico; copie um texto novo para verificar o registro.
-7. A central continua ligada à barra inferior e o wallpaper foi preservado.
+1. Maximized windows stop above the bottom bar.
+2. Icons and tray are readable; Wi-Fi and volume do not display text.
+3. Super and Super+Space open the search at the top with visual union.
+4. By focusing on the desktop and typing, the query goes to Noctalia.
+5. Close search collects the support track; passing the pointer at the top does not reveal it.
+6. Super+V opens the history; copy a new text to check the record.
+7. The center is still connected to the bottom bar and the wallpaper has been preserved.
 
-Diagnóstico:
+Diagnosis:
 
 ```bash
 systemctl --user status noctalia-teste.service noctalia-busca-desktop.service
@@ -371,48 +368,48 @@ noctalia msg status
 journalctl --user -u noctalia-teste.service -u noctalia-busca-desktop.service -n 80 --no-pager
 ```
 
-Para recarregar depois de editar o perfil efetivo:
+To reload after editing the effective profile:
 
 ```bash
 noctalia msg config-reload
-# Um reload pode recriar a barra superior; mantenha-a oculta quando a busca estiver fechada:
+# A reload can recreate the top bar; keep it hidden when the search is closed:
 noctalia msg bar-hide search_edge
 ```
 
-`outputs/noctalia-test/config.toml` é a cópia distribuída; o serviço lê `work/noctalia-profile/config/noctalia/config.toml`. Ao fazer ajustes permanentes, atualize ambos.
+`outputs/noctalia-test/config.toml` is the distributed copy; the service reads `work/noctalia-profile/config/noctalia/config.toml`. When making permanent adjustments, update both.
 
-Para voltar aos painéis e atalhos Plasma:
-
-```bash
-"$HOME/ricy-kit/outputs/noctalia-test/voltar-ao-plasma.sh"
-```
-
-A restauração rápida repõe apenas `plasma-org.kde.plasma.desktop-appletsrc` e `plasmashellrc` do backup local, encerra o adaptador/Noctalia, reativa KRunner e restaura os atalhos. Ela não desfaz automaticamente paleta, fontes, blur ou Kvantum. Para restaurar o estilo de aplicativos:
+To return to Plasma panels and shortcuts:
 
 ```bash
-"$HOME/ricy-kit/outputs/kde-outlines/restaurar-estilo-kde.sh"
+"$HOME/ricy-kit/outputs/noctalia-test/return-to-plasma.sh"
 ```
 
-Esse segundo script restaura widgetStyle, fonte de menu e seleção Kvantum guardados no destino. Para desfazer também a paleta e o blur, recupere seletivamente `kdeglobals` e `kwinrc` do backup, considerando quaisquer mudanças posteriores; não importe configuração completa de outra máquina.
+Quick restoration only restores `plasma-org.kde.plasma.desktop-appletsrc` and `plasmashellrc` from the local backup, closes the adapter/Noctalia, reactivates KRunner and restores the shortcuts. It does not automatically undo palette, fonts, blur or Kvantum. To restore application style:
 
-O teste usa serviços transitórios, não uma instalação persistente no login. Existe um item de autostart de recuperação: no próximo login, se a marca `teste-ativo` existir e o serviço estiver inativo, restaura o Plasma. Para reproduzir exatamente o teste, não habilite simultaneamente o autostart padrão do Noctalia. Uma configuração definitiva de login permanece fora do que fizemos.
+```bash
+"$HOME/ricy-kit/outputs/kde-outlines/restore-kde-style.sh"
+```
 
-## 8. Arquivos de integração — conteúdo para auditoria e recriação
+This second script restores widgetStyle, menu font and Kvantum selection stored in destination. To also undo palette and blur, recover selectively `kdeglobals` and `kwinrc` backup, considering any subsequent changes; do not import complete configuration of another machine.
 
-Os archives abaixo acompanham o kit. Os `.desktop` devem apontar para a pasta real do destino; `preparar-ambiente.py` faz essa adaptação. Os backups, marcadores e históricos de atalhos não são incluídos no kit porque devem ser gerados localmente.
+The test uses transitory services, not a persistent installation in the login. There is a recovery autostart item: in the next login if the tag `teste-ativo` exist and the service is inactive, restores Plasma. To reproduce exactly the test, do not simultaneously enable the default Noctalia autostart. A definitive login setting remains out of what we did.
 
-### preparar-ambiente.py
+## 8. Integration archives — audit and re-creation content
+
+The archives below accompany the kit. `.desktop` point to the actual destination directory; `prepare-environment.py` The backups, markers and shortcut history are not included in the kit because they should be generated locally.
+
+### prepare-environment.py
 
 ```python
 #!/usr/bin/env python3
-"""Prepare o kit no computador de destino ANTES de iniciar o teste."""
+"""Prepare the kit on the target computer BEFORE you start testing."""
 from pathlib import Path
 import tarfile, shutil, json, configparser, re, hashlib
 kit=Path(__file__).resolve().parent
 home=Path.home(); base=kit/'outputs/noctalia-test'; style=kit/'outputs/kde-outlines'
 backup=base/'plasma-antes.tar.gz'
 if backup.exists():
-    raise SystemExit('Backup já existe. Use iniciar-teste.sh para repetir; não substitua seu backup original.')
+    raise SystemExit('Backup already exists. Use start-test.sh to repeat; do not replace your original backup.')
 paths=['.config/plasma-org.kde.plasma.desktop-appletsrc','.config/plasmashellrc','.config/plasmarc','.config/kdeglobals','.config/kwinrc','.config/kwinoutputconfig.json','.config/kglobalshortcutsrc','.config/kscreenlockerrc','.config/klipperrc','.config/kcminputrc','.config/gtk-3.0/settings.ini','.config/gtk-4.0/settings.ini','.config/autostart','.config/noctalia','.local/state/noctalia','.config/Kvantum']
 manifest={}
 with tarfile.open(backup,'w:gz') as archive:
@@ -425,7 +422,7 @@ with tarfile.open(backup,'w:gz') as archive:
 backup.chmod(0o600)
 (base/'backup-manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
 shutil.copy2(backup,style/'kde-antes-contornos.tar.gz')
-# A restauração do wallpaper é gerada com os IDs e imagens DO DESTINO.
+# The wallpaper restoration is generated with DESTINATION IDs and images.
 cfg=configparser.ConfigParser(interpolation=None,strict=False);cfg.optionxform=str
 cfg.read(home/'.config/plasma-org.kde.plasma.desktop-appletsrc')
 lines=[]
@@ -435,7 +432,7 @@ for section in cfg.sections():
         i=int(match[1]); image=json.dumps(cfg[section]['Image'])
         lines.append(f'var d=desktopById({i}); if(d){{d.currentConfigGroup=["Wallpaper","org.kde.image","General"];d.writeConfig("Image",{image});}}')
 (base/'restaurar-wallpaper.js').write_text('\n'.join(lines)+'\n')
-# Captura o estilo anterior antes de aplicar a variante local.
+# Capture the previous style before applying the local variant.
 kg=configparser.ConfigParser(interpolation=None,strict=False);kg.optionxform=str;kg.read(home/'.config/kdeglobals')
 (style/'menuFont-antes.txt').write_text(kg.get('General','menuFont',fallback=''))
 (style/'widgetStyle-antes.txt').write_text(kg.get('KDE','widgetStyle',fallback=''))
@@ -444,16 +441,16 @@ if kv.exists():shutil.copy2(kv,style/'kvantum-config-antes')
 else:(style/'kvantum-ausente-antes').touch()
 profile=kit/'work/noctalia-profile/config/noctalia';(profile/'palettes').mkdir(parents=True,exist_ok=True)
 shutil.copy2(base/'config.toml',profile/'config.toml')
-shutil.copy2(base/'KDE-Atual.json',profile/'palettes/KDE-Atual.json')
+shutil.copy2(base/'KDE-Current.json',profile/'palettes/KDE-Current.json')
 (kit/'work/noctalia-profile/state').mkdir(parents=True,exist_ok=True)
-for name,script in [('menu','abrir-menu.sh'),('clipboard','abrir-clipboard.sh'),('voltar','voltar-ao-plasma.sh'),('recuperar','recuperar-no-login.sh')]:
+for name,script in [('menu','open-menu.sh'),('clipboard','open-clipboard.sh'),('voltar','return-to-plasma.sh'),('recuperar','recover-at-login.sh')]:
     p=base/f'codex-noctalia-{name}.desktop'
     p.write_text(re.sub(r'^Exec=.*$',f'Exec="{base/script}"',p.read_text(),flags=re.M))
-print('Kit preparado em',kit)
-print('Backup do destino:',backup)
+print('Kit prepared in',kit)
+print('Destination backup:',backup)
 ```
 
-### outputs/noctalia-test/KDE-Atual.json
+### outputs/noctalia-test/KDE-Current.json
 
 ```json
 {
@@ -506,7 +503,7 @@ print('Backup do destino:',backup)
 }
 ```
 
-### outputs/noctalia-test/abrir-menu.sh
+### outputs/noctalia-test/open-menu.sh
 
 ```bash
 #!/usr/bin/env bash
@@ -518,14 +515,14 @@ fi
 exec /usr/bin/noctalia msg panel-toggle launcher
 ```
 
-### outputs/noctalia-test/abrir-clipboard.sh
+### outputs/noctalia-test/open-clipboard.sh
 
 ```bash
 #!/usr/bin/env bash
 exec /usr/bin/noctalia msg panel-toggle clipboard
 ```
 
-### outputs/noctalia-test/ativar-busca-noctalia.sh
+### outputs/noctalia-test/enable-noctalia-search.sh
 
 ```bash
 #!/usr/bin/env bash
@@ -537,18 +534,18 @@ if ! systemctl --user is-active --quiet noctalia-teste.service; then
 fi
 systemctl --user stop plasma-krunner.service
 if ! systemctl --user is-active --quiet noctalia-busca-desktop.service; then
- if ! systemd-run --user --unit=noctalia-busca-desktop --collect --property=Type=dbus --property=BusName=org.kde.krunner --property=BindsTo=noctalia-teste.service --property=After=noctalia-teste.service /usr/bin/python "$base_dir/busca-desktop.py"; then
+ if ! systemd-run --user --unit=noctalia-busca-desktop --collect --property=Type=dbus --property=BusName=org.kde.krunner --property=BindsTo=noctalia-teste.service --property=After=noctalia-teste.service /usr/bin/python "$base_dir/desktop-search.py"; then
   systemctl --user start plasma-krunner.service
   exit 1
  fi
 fi
 ```
 
-### outputs/noctalia-test/busca-desktop.py
+### outputs/noctalia-test/desktop-search.py
 
 ```python
 #!/usr/bin/env python3
-"""Adaptador temporário da interface de ativação KRunner para o Noctalia."""
+"""Temporary KRunner activation interface adapter for Noctalia."""
 import subprocess
 import json
 import time
@@ -590,7 +587,7 @@ def handle(connection, sender, path, interface, method, parameters, invocation):
         subprocess.run(args, capture_output=True, check=True, timeout=5)
         invocation.return_value(GLib.Variant('()', ()))
     except (OSError, subprocess.SubprocessError):
-        invocation.return_dbus_error('org.kde.krunner.NoctaliaUnavailable', 'Noctalia não está disponível')
+        invocation.return_dbus_error('org.kde.krunner.NoctaliaUnavailable', 'Noctalia is not available')
 
 freedesktop_xml = '<node><interface name="org.freedesktop.Application"><method name="ActivateAction"><arg type="s" direction="in"/><arg type="av" direction="in"/><arg type="a{sv}" direction="in"/></method><method name="Activate"><arg type="a{sv}" direction="in"/></method></interface></node>'
 connection = Gio.bus_get_sync(Gio.BusType.SESSION, None)
@@ -600,9 +597,9 @@ freedesktop_info = Gio.DBusNodeInfo.new_for_xml(freedesktop_xml)
 freedesktop_registration = connection.register_object('/org/kde/krunner', freedesktop_info.interfaces[0], handle, None, None)
 result = connection.call_sync('org.freedesktop.DBus', '/org/freedesktop/DBus', 'org.freedesktop.DBus', 'RequestName', GLib.Variant('(su)', ('org.kde.krunner', 4)), GLib.VariantType.new('(u)'), Gio.DBusCallFlags.NONE, 5000, None).unpack()[0]
 if result != 1:
-    raise SystemExit('O nome D-Bus do KRunner já está em uso')
-# A barra de apoio não reage ao ponteiro: só os comandos de abertura a mostram.
-# Ao fechar a busca (Escape, clique externo ou escolha de app), recolhemos a barra.
+    raise SystemExit('KRunner's D-Bus name is already in use')
+# The support bar does not react to the pointer: only the opening commands show it.
+# When closing the search (Escape, external click or app choice), we collect the bar.
 search_was_open = False
 
 def sync_search_edge():
@@ -622,7 +619,7 @@ GLib.timeout_add(250, sync_search_edge)
 GLib.MainLoop().run()
 ```
 
-### outputs/noctalia-test/configurar-super.py
+### outputs/noctalia-test/configure-super.py
 
 ```python
 #!/usr/bin/env python3
@@ -635,7 +632,7 @@ bus=Gio.bus_get_sync(Gio.BusType.SESSION,None)
 def call(method,signature,args):
  return bus.call_sync('org.kde.kglobalaccel','/kglobalaccel','org.kde.KGlobalAccel',method,GLib.Variant(signature,args),None,Gio.DBusCallFlags.NONE,5000,None).unpack()
 meta=16777250
-mine=['codex-noctalia-menu.desktop','_launch','Menu Noctalia (teste)','Menu Noctalia (teste)']
+mine=['codex-noctalia-menu.desktop','_launch','Noctalia Menu (test)','Noctalia Menu (test)']
 if not saved.exists():
  entries=call('getGlobalShortcutsByKey','(i)',(meta,))[0]
  old=[]
@@ -654,11 +651,11 @@ else:
   call('setForeignShortcut','(asai)',(entry['id'],[k for k in entry['keys'] if k!=meta]))
  call('setForeignShortcut','(asai)',(mine,[meta,268435488]))
  entries=call('getGlobalShortcutsByKey','(i)',(meta,))[0]
- if not any(e[2]==mine[0] for e in entries):raise SystemExit('Não foi possível registrar Super para o Noctalia')
-print('Atalho Super restaurado.' if restore else 'Super e Super+Espaço registrados para o Noctalia.')
+ if not any(e[2]==mine[0] for e in entries):raise SystemExit('Unable to register Super for Noctalia')
+print('Super shortcut restored.' if restore else 'Super and Super+ Space registered for Noctalia.')
 ```
 
-### outputs/noctalia-test/configurar-clipboard.py
+### outputs/noctalia-test/configure-clipboard.py
 
 ```python
 #!/usr/bin/env python3
@@ -671,7 +668,7 @@ bus=Gio.bus_get_sync(Gio.BusType.SESSION,None)
 def call(method,signature,args):
  return bus.call_sync('org.kde.kglobalaccel','/kglobalaccel','org.kde.KGlobalAccel',method,GLib.Variant(signature,args),None,Gio.DBusCallFlags.NONE,5000,None).unpack()
 meta=268435542
-mine=['codex-noctalia-clipboard.desktop','_launch','Área de transferência Noctalia (teste)','Área de transferência Noctalia (teste)']
+mine=['codex-noctalia-clipboard.desktop','_launch','Noctalia Clipboard (test)','Noctalia Clipboard (test)']
 call('doRegister','(as)',(mine,))
 if not saved.exists():
  entries=call('getGlobalShortcutsByKey','(i)',(meta,))[0]
@@ -692,11 +689,11 @@ else:
  call('setShortcut','(asaiu)',(mine,[meta],2))
  call('setForeignShortcut','(asai)',(mine,[meta]))
  entries=call('getGlobalShortcutsByKey','(i)',(meta,))[0]
- if not any(e[2]==mine[0] for e in entries):raise SystemExit('Não foi possível registrar Super+V para o Noctalia')
-print('Super+V restaurado.' if restore else 'Super+V registrado para o Noctalia.')
+ if not any(e[2]==mine[0] for e in entries):raise SystemExit('Unable to register Super+V for Noctalia')
+print('Super+V restored.' if restore else 'Super+V registered to Noctalia.')
 ```
 
-### outputs/noctalia-test/iniciar-teste.sh
+### outputs/noctalia-test/start-test.sh
 
 ```bash
 #!/usr/bin/env bash
@@ -717,33 +714,33 @@ for i in {1..30}; do
 done
 if [ "$ready" != true ]; then
  systemctl --user stop noctalia-teste.service || true
- printf 'Noctalia não iniciou; os painéis do Plasma foram preservados.\n' >&2
+ printf 'Noctalia did not start; Plasma panels were preserved.\n' >&2
  exit 1
 fi
 noctalia msg bar-hide search_edge >/dev/null
 mkdir -p "$HOME/.local/share/applications" "$HOME/.config/autostart"
-cp "$base_dir/codex-noctalia-menu.desktop" "$base_dir/codex-noctalia-voltar.desktop" "$base_dir/codex-noctalia-clipboard.desktop" "$HOME/.local/share/applications/"
-cp "$base_dir/codex-noctalia-recuperar.desktop" "$HOME/.config/autostart/"
+cp "$base_dir/codex-noctalia-menu.desktop" "$base_dir/codex-noctalia-return.desktop" "$base_dir/codex-noctalia-clipboard.desktop" "$HOME/.local/share/applications/"
+cp "$base_dir/codex-noctalia-recover.desktop" "$HOME/.config/autostart/"
 kbuildsycoca6 --noincremental >/dev/null 2>&1
-gdbus call --session --dest org.kde.kglobalaccel --object-path /kglobalaccel --method org.kde.KGlobalAccel.doRegister '["codex-noctalia-menu.desktop", "_launch", "Menu Noctalia (teste)", "Menu Noctalia (teste)"]' >/dev/null
-gdbus call --session --dest org.kde.kglobalaccel --object-path /kglobalaccel --method org.kde.KGlobalAccel.setShortcut '["codex-noctalia-menu.desktop", "_launch", "Menu Noctalia (teste)", "Menu Noctalia (teste)"]' '[268435488]' 2 >/dev/null
+gdbus call --session --dest org.kde.kglobalaccel --object-path /kglobalaccel --method org.kde.KGlobalAccel.doRegister '["codex-noctalia-menu.desktop", "_launch", "Noctalia Menu (test)", "Noctalia Menu (test)"]' >/dev/null
+gdbus call --session --dest org.kde.kglobalaccel --object-path /kglobalaccel --method org.kde.KGlobalAccel.setShortcut '["codex-noctalia-menu.desktop", "_launch", "Noctalia Menu (test)", "Noctalia Menu (test)"]' '[268435488]' 2 >/dev/null
 qdbus6 org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "$(cat "$base_dir/restaurar-wallpaper.js")"
 touch "$base_dir/teste-ativo"
-qdbus6 org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript 'panels().forEach(p => p.remove()); print("Painéis do Plasma recolhidos para o teste.")'
-"$base_dir/ativar-busca-noctalia.sh"
-python "$base_dir/configurar-super.py"
-python "$base_dir/configurar-clipboard.py"
-printf 'Teste iniciado. Para voltar, execute voltar-ao-plasma.sh nesta pasta.\n'
+qdbus6 org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript 'panels().forEach(p => p.remove()); print("Plasma panels hidden for the test.")'
+"$base_dir/enable-noctalia-search.sh"
+python "$base_dir/configure-super.py"
+python "$base_dir/configure-clipboard.py"
+printf 'Test started. To return, run return-to-plasma.sh in this folder.\n'
 ```
 
-### outputs/noctalia-test/voltar-ao-plasma.sh
+### outputs/noctalia-test/return-to-plasma.sh
 
 ```bash
 #!/usr/bin/env bash
 set -euo pipefail
 base_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-python "$base_dir/configurar-super.py" restore
-python "$base_dir/configurar-clipboard.py" restore
+python "$base_dir/configure-super.py" restore
+python "$base_dir/configure-clipboard.py" restore
 systemctl --user stop noctalia-busca-desktop.service 2>/dev/null || true
 systemctl --user start plasma-krunner.service
 systemctl --user stop noctalia-teste.service 2>/dev/null || true
@@ -760,20 +757,20 @@ PY
 systemctl --user start plasma-plasmashell.service
 gdbus call --session --dest org.kde.kglobalaccel --object-path /kglobalaccel --method org.kde.KGlobalAccel.unregister codex-noctalia-menu.desktop _launch >/dev/null 2>&1 || true
 gdbus call --session --dest org.kde.kglobalaccel --object-path /kglobalaccel --method org.kde.KGlobalAccel.unregister codex-noctalia-clipboard.desktop _launch >/dev/null 2>&1 || true
-rm -f "$HOME/.local/share/applications/codex-noctalia-clipboard.desktop" "$HOME/.local/share/applications/codex-noctalia-menu.desktop" "$HOME/.local/share/applications/codex-noctalia-voltar.desktop" "$HOME/.config/autostart/codex-noctalia-recuperar.desktop"
+rm -f "$HOME/.local/share/applications/codex-noctalia-clipboard.desktop" "$HOME/.local/share/applications/codex-noctalia-menu.desktop" "$HOME/.local/share/applications/codex-noctalia-return.desktop" "$HOME/.config/autostart/codex-noctalia-recover.desktop"
 kbuildsycoca6 --noincremental >/dev/null 2>&1
 rm -f "$base_dir/teste-ativo"
-printf 'Painéis originais do Plasma restaurados.\n'
+printf 'Original Plasma panels restored.\n'
 ```
 
-### outputs/noctalia-test/recuperar-no-login.sh
+### outputs/noctalia-test/recover-at-login.sh
 
 ```bash
 #!/usr/bin/env bash
 set -euo pipefail
 base_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 if [ -f "$base_dir/teste-ativo" ] && ! systemctl --user is-active --quiet noctalia-teste.service; then
- "$base_dir/voltar-ao-plasma.sh"
+ "$base_dir/return-to-plasma.sh"
 fi
 ```
 
@@ -782,8 +779,8 @@ fi
 ```ini
 [Desktop Entry]
 Type=Application
-Name=Menu Noctalia (teste)
-Exec="/home/delta/ricy-kit/outputs/noctalia-test/abrir-menu.sh"
+Name=Noctalia Menu (test)
+Exec="/home/delta/ricy-kit/outputs/noctalia-test/open-menu.sh"
 Icon=noctalia
 Categories=Utility;
 X-KDE-Shortcuts=Meta+Space
@@ -794,156 +791,156 @@ X-KDE-Shortcuts=Meta+Space
 ```ini
 [Desktop Entry]
 Type=Application
-Name=Área de transferência Noctalia (teste)
-Exec="/home/delta/ricy-kit/outputs/noctalia-test/abrir-clipboard.sh"
+Name=Noctalia Clipboard (test)
+Exec="/home/delta/ricy-kit/outputs/noctalia-test/open-clipboard.sh"
 Icon=edit-paste
 Categories=Utility;
 X-KDE-Shortcuts=Meta+V
 ```
 
-### outputs/noctalia-test/codex-noctalia-voltar.desktop
+### outputs/noctalia-test/codex-noctalia-return.desktop
 
 ```ini
 [Desktop Entry]
 Type=Application
-Name=Voltar ao Plasma
-Exec="/home/delta/ricy-kit/outputs/noctalia-test/voltar-ao-plasma.sh"
+Name=Return to Plasma
+Exec="/home/delta/ricy-kit/outputs/noctalia-test/return-to-plasma.sh"
 Icon=noctalia
 Categories=Utility;
 ```
 
-### outputs/noctalia-test/codex-noctalia-recuperar.desktop
+### outputs/noctalia-test/codex-noctalia-recover.desktop
 
 ```ini
 [Desktop Entry]
 Type=Application
-Name=Restaurar Plasma após teste Noctalia
-Exec="/home/delta/ricy-kit/outputs/noctalia-test/recuperar-no-login.sh"
+Name=Restore Plasma after the Noctalia test
+Exec="/home/delta/ricy-kit/outputs/noctalia-test/recover-at-login.sh"
 OnlyShowIn=KDE;
 X-KDE-autostart-phase=2
 ```
 
-## 9. Origens e registro histórico
+## 9. Origins and historical record
 
-Código consultado para confirmar comportamentos: [Noctalia](https://github.com/noctalia-dev/noctalia), [Kvantum](https://github.com/tsujan/Kvantum), [Catppuccin Kvantum](https://github.com/catppuccin/kvantum), além das interfaces do Plasma/KWin locais. A documentação aqui registra o que foi observado e configurado nesta sessão; os links são as origens dos projetos, não uma verificação da versão mais recente da web.
+Code consulted to confirm behavior: [Noctalia](https://github.com/noctalia-dev/noctalia), [Kvantum](https://github.com/tsujan/Kvantum), [Catppuccin Kvantum](https://github.com/catppuccin/kvantum), in addition to the local Plasma/KWin interfaces. The documentation here records what was observed and configured in this session; the links are the origins of the projects, not a verification of the latest version of the web.
 
-Neste computador, os archives ativos originais estão em `/home/delta/Documents/Codex/2026-10-08/no-x20/outputs/noctalia-test` e o perfil ativo em `work/noctalia-profile` da mesma pasta. Os archives do kit são uma cópia de migração: criá-los não moveu nem reconfigurou a sessão atual.
+On this computer, the original active archives are in `/home/delta/Documents/Codex/2026-10-08/no-x20/outputs/noctalia-test` and the active profile in `work/noctalia-profile` from the same folder. The kit files are a migration copy: creating them did not move or reconfigure the current session.
 
-Etapas percorridas: teste com backup → preservação do wallpaper e Plasma ativo → correção de camada/zona exclusiva → aumento de ícones → paleta KDE → compactação e arredondamento de menus → ocultação de SSID/volume → central attached → blur do fundo → menus Qt/Kvantum → tray com gaveta → substituição da busca do desktop → correção da tecla Super pelo KGlobalAccel → busca no topo com continuidade → apoio sem reação ao ponteiro → Super+V.
+Steps taken: test with backup → wallpaper preservation and active Plasma → layer correction/exclusive zone → icon enlargement → KDE palette → menu compaction and rounding → SSID/volume concealment → central attached → background blur → Qt/Kvantum → tray menus with drawer → desktop search replacement → Super key correction by KGlobalAccel → search at the top with continuity → no pointer reaction support → Super+V.
 
-Os testes intermediários de busca central e floating/top_center foram substituídos pelo arranjo attached descrito aqui. A opacidade final é 0,70, não 0,80. Não modificamos profundamente a shell nem recompilamos o Noctalia. A indisponibilidade inicial dos controles motivou preservar o Plasma ativo e uma barra principal fixa acessível; não depende de encerrar o ambiente desktop inteiro.
+The intermediate tests of central search and floating/top_center were replaced by the attached arrangement described here. The final opacity is 0,70, no 0,80. We did not profoundly modify the shell or recompile Noctalia. The initial unavailability of the controls motivated preserving active Plasma and an accessible fixed main bar; it does not depend on shutting down the entire desktop environment.
 
-## 10. Integridade e transporte
+## 10Integrity and transportation
 
-O arquivo `ricy-kit/SHA256SUMS` identifica os archives distribuídos. Confira antes de preparar no destino:
+The file `ricy-kit/SHA256SUMS` identify the distributed files. Check before preparing at destination:
 
 ```bash
 cd "$HOME/ricy-kit"
 sha256sum -c SHA256SUMS
 ```
 
-Após executar o preparador alguns `.desktop` mudam de caminho, então seus hashes deixam de corresponder ao pacote original. Para transporte, copie a pasta inteira `ricy-kit` e este `ricy.md`; SVG, licença, scripts e TOML devem viajar juntos. O SVG Kvantum completo fica no kit para evitar uma reprodução parcial apenas por descrição.
+After executing the preparer some `.desktop` change path, then your hashes stop matching the original package. For transport, copy the entire folder `ricy-kit` and this `ricy.md`; SVG, license, scripts and TOML must travel together. The full SVG Kvantum stays in the kit to avoid partial playback only by description.
 
-## Contribuição — Integração Noctalia/KDE e menus compactos — 2026-10-08 17:19 (America/Sao_Paulo)
+## Contribution — Integration Noctalia/KDE and compact menus — 2026-10-08  17:19 (America/Sao_Paulo)
 
-Chat/trabalho: teste reversível do Noctalia sobre KDE Plasma, continuidade visual e ajustes dos menus Qt/Kvantum. Título do chat não confirmado. Esta contribuição complementa o roteiro anterior com a conferência dos archives ativos, a correção da atualização do estilo em memória e materiais portáveis separados. Não houve reaplicação de mudanças durante esta etapa de documentação.
+Chat/work: Noctalia's reversible test on KDE Plasma, visual continuity and settings of Qt/Kvantum menus. Unconfirmed chat title. This contribution complements the previous script with the conference of active archives, the correction of the update of memory style and separate portable materials. There was no reapplication of changes during this documentation step.
 
-### Objetivo, mudanças aplicadas e estado conferido
+### Objective, applied changes and status conferred
 
-O KDE inicialmente usava seu menu, taskbar e busca, com paleta Catppuccin Mocha Mauve, fonte JetBrainsMono Nerd Font de 10 pt e decoração Breeze. A solicitação foi experimentar Noctalia com controles acessíveis, wallpaper preservado e possibilidade de voltar, depois aproximar o formato e a compactação dos menus KDE do Noctalia.
+KDE initially used its menu, taskbar and search, with Catppuccin Mocha Mauve palette, JetBrainsMono Nerd Font source 10 Breeze decoration and pt. The request was to try Noctalia with accessible controls, preserved wallpaper and possibility to return, then approximate the format and compaction of the KDE menus of Noctalia.
 
-1. **Noctalia e reversão:** pacote `noctalia 5.2.1-1.1`, perfil isolado sob `work/noctalia-profile`, scripts em `outputs/noctalia-test`, unidade transitória `noctalia-teste.service`. Os painéis Plasma foram removidos do layout do teste após o Noctalia estar pronto; plasmashell permanece ativo. Backup inicial, manifesto e retorno ao Plasma foram preparados. O autostart instalado é de **recuperação**, não de inicialização automática do Noctalia. Não houve recompilação ou alteração de código do Noctalia.
-2. **Área útil:** barra inferior de 44 px, camada top, `reserve_space=true`; as tentativas anteriores com overlay e ocultação inteligente foram substituídas. Estado final sempre visível, sem auto-hide ou smart-auto-hide. Escala 1,5, font_scale 0,85; taskbar scale 0,666667, icon_scale 1,725, item_spacing 6. Esses valores compensam a ampliação dos menus enquanto mantêm os ícones legíveis.
-3. **Tray, painéis e cores:** rede/volume sem textos (`show_label=false`); gaveta do tray 3 colunas/24 px; central attached/auto perto da âncora. Paleta customizada `KDE-Atual.json` com terminal obrigatório no formato da versão usada. Fundo da barra 0,70 com compositor_blur; cards/painéis sólidos. KWin: blurEnabled true, BlurStrength 5, NoiseStrength 2. Wallpaper permanece sob Plasma, com recursos de wallpaper/backdrop/dock/lockscreen/osd/templates do Noctalia desligados nesta integração.
-4. **Busca:** implementado adaptador Python/Gio para `org.kde.krunner`, tanto `/App` quanto `/org/kde/krunner`. Atender `ActivateAction("Query", …)` foi necessário após o usuário relatar que digitar não abria a busca. O teste deste trabalho foi inicialmente floating/center. **Isso foi substituído no estado atual conferido** por launcher attached/auto e apoio superior `search_edge` de 10 px sem reserva de espaço, além de wrappers Super/Super+Espaço e clipboard Super+V. Essa evolução já está descrita no corpo anterior de ricy.md; as cópias desta contribuição refletem os archives atuais, não atribuem uma execução nova durante esta documentação.
-5. **KDE/Kvantum:** instalado `kvantum 1.1.8-1.1` via `pkexec pacman -S --needed --noconfirm kvantum`. Criada variante local Catppuccin MIT, instalada em `$HOME/.config/Kvantum/KDE-Noctalia`, selecionada em `kvantum.kvconfig`; `kdeglobals/KDE/widgetStyle=kvantum`. Antes, a chave direta não existia e Breeze era herdado de kdedefaults. A configuração Kvantum anterior selecionava `Catppuccin-Mocha-Mauve-Glass`; ela foi guardada. Não alteramos a decoração externa Breeze, nem as fontes gerais do KDE.
-6. **Geometria e fonte finais dos menus:** SVG completo com canto externo 12 px, fundo #313244, contorno #46485c e seleção #977dba; SVG da seleção com raio 6 px. Moldura vertical dos itens 4 px/lateral 6 px, margem de texto vertical 0/lateral 2 px, min_height 24, separador 5. `spread_menuitems=false`, `shadowless_popup=true`, `menu_shadow_depth=0`, `popup_blurring=false`, `reduce_window_opacity=0`, `reduce_menu_opacity=0`. Fonte dos menus restaurada a 10 pt. O teste nativo produziu linhas de 26 px; min_height não é uma garantia de altura real de 24 px.
-7. **Atualização efetiva nos aplicativos:** o usuário relatou que a compactação parecia voltar e os cantos ainda tinham um retângulo. Confirmamos que o Dolphin estava aberto desde antes dos últimos ajustes. O código da integração Plasma/Qt só chama `setStyle` se o nome muda; simplesmente emitir StyleChanged com Kvantum já ativo não força reler o tema. Efetuamos a alternância temporária Breeze → Kvantum com sinal `/KGlobalSettings`, `org.kde.KGlobalSettings.notifyChange(2,0)`. Para fontes, o sinal correto é `/KDEPlatformTheme`, `org.kde.KDEPlatformTheme.refreshFonts()`. O envio anterior de notifyChange(0,0) era de paleta, não de fonte. O script portável `recarregar-estilo.py` registra a sequência corrigida, com flush do D-Bus e intervalo de 0,5 s.
+1. **Noctalia and reversal:** package `noctalia 5.2.1-1.1`, isolated profile under `work/noctalia-profile`, scripts in `outputs/noctalia-test`, transitional unit `noctalia-teste.service`. Plasma panels have been removed from the test layout after Noctalia is ready; plasmashell remains active. Initial backup, manifest and return to Plasma have been prepared. The installed autostart is **recovery**, not autostart of Noctalia. There was no recompilation or change of Noctalia code.
+2. **Useful area:** lower bar of 44 px, top layer, `reserve_space=true`; previous attempts with overlay and intelligent concealment have been replaced. Final state always visible, without auto-hide or smart-auto-hide. Scale 1,5, font_scale 0,85; taskbar scale 0,666667, icon_scale 1,725, item_spacing 6. These values compensate for the expansion of menus while keeping the icons readable.
+3. **Tray, panels and colors:** network/volume without text (`show_label=false`); tray drawer 3 columns/24 px; central attached/auto near anchor. Custom palette `KDE-Current.json` with mandatory terminal in the format of the version used. 0,70 with compositor_blur; solid cards/boards. KWin: blurEnabled true, BlurStrength 5, NoiseStrength 2. Wallpaper remains under Plasma, with wallpaper/backdrop/dock/lockscreen/osd/Noctalia templates turned off in this integration.
+4. **Search:** implemented Python/Gio adapter for `org.kde.krunner` on  `/App` and `/org/kde/krunner`. Answer `ActivateAction("Query", …)` it was necessary after the user reported that typing did not open the search. **This has been replaced in the current checked state** by launcher attached/auto and top support `search_edge` of 10 px without space reserve, in addition to Super/Super+space wrappers and Super+V clipboard. This evolution is already described in the anterior body of ricy.md; the copies of this contribution reflect the current archives, do not attribute a new execution during this documentation.
+5. **KDE/Kvantum:** installed `kvantum 1.1.8-1.1` via `pkexec pacman -S --needed --noconfirm kvantum`. Created local variant Catppuccin MIT, installed in `$HOME/.config/Kvantum/KDE-Noctalia`, selected in `kvantum.kvconfig`; `kdeglobals/KDE/widgetStyle=kvantum`. Before, the direct key did not exist and Breeze was inherited from kdedefaults. The previous Kvantum configuration selected `Catppuccin-Mocha-Mauve-Glass`We didn't change Breeze's external decoration, nor KDE's general sources.
+6. **Geometry and final source of menus:** Full SVG with external corner 12 px, background #313244, outline #46485c and selection #977dba; SVG selection with radius 6 px. Vertical frame of items 4 px/lateral 6 px, vertical text margin 0/lateral 2 px, min_right 24, separator 5. `spread_menuitems=false`, `shadowless_popup=true`, `menu_shadow_depth=0`, `popup_blurring=false`, `reduce_window_opacity=0`, `reduce_menu_opacity=0`. Restored menu font to 10 pt. The native test produced lines of 26 px; min_height is not a real height guarantee of 24 px.
+7. **Effective update in applications:** the user reported that the compaction seemed to return and the corners still had a rectangle. We confirmed that the Dolphin was open since before the last adjustments. `setStyle` if the name changes; simply emit StyleChanged with Kvantum already active does not force reread the theme. We perform temporary alternation Breeze → Kvantum with signal `/KGlobalSettings`, `org.kde.KGlobalSettings.notifyChange(2,0)`. For sources, the correct signal is `/KDEPlatformTheme`, `org.kde.KDEPlatformTheme.refreshFonts()`. Previous notifyChange(0,0) was palette, not font. The portable script `reload-style.py` records the corrected sequence, with D-Bus flush and interval of 0,5 s.
 
-Conferência ao documentar: `noctalia-teste.service`, `noctalia-busca-desktop.service` e `plasma-plasmashell.service` ativos; `plasma-krunner.service` inativo; nome `org.kde.krunner` pertence ao processo Python do adaptador; `panels().length=0`. O perfil TOML ativo coincide byte a byte com a cópia em outputs; SVG/kvconfig ativos coincidem com a variante de outputs. `menuFont` é JetBrainsMono Nerd Font, 10 pt; widgetStyle Kvantum; tema KDE-Noctalia. Desktop entries menu/clipboard/voltar presentes em `.local/share/applications`; recuperação presente em `.config/autostart`.
+Conference when documenting: `noctalia-teste.service`, `noctalia-busca-desktop.service` and `plasma-plasmashell.service` assets; `plasma-krunner.service` inactive; name `org.kde.krunner` belongs to the Python process of the adapter; `panels().length=0`. The active TOML profile coincides byte to byte with the copy in outputs; active SVG/kvconfig coincide with the output variant. `menuFont` It's JetBrainsMono Nerd Font, 10 pt; widgetStyle Kvantum; KDE-Noctalia theme. Desktop entries menu/clipboard/back present in `.local/share/applications`; recovery present in `.config/autostart`.
 
-Pacotes conferidos: Plasma Desktop 6.7.5-1.1, KWin 6.7.5-3.1, python-gobject 3.58.0-1, qt6-tools 6.12.0-1.1, python-pyqt6 6.11.0-4, noto-fonts 1:2026.10.01-1. `pacman -Q papirus-icon-theme` não encontrou esse nome de pacote; Papirus-Dark é uma preferência visual previamente existente, não uma instalação comprovada deste chat nem dependência do roteiro. Qt 5 e interfaces próprias de aplicativos não estão cobertos pelo estilo Qt 6 instalado.
+Checked Packages: Plasma Desktop 6.7.5-1.1, KWin 6.7.5-3.1, python-gobject 3.58.0-1, qt6-tools 6.12.0-1.1, python-pyqt6 6.11.0-4, noto-fonts 1:2026.10.01-1. `pacman -Q papirus-icon-theme` did not find this package name; Papirus-Dark is a previously existing visual preference, not a proven installation of this chat or script dependency. 5 and application interfaces are not covered by Qt style 6 installed.
 
-### Materiais e reprodução em outro CachyOS
+### Materials and reproduction in other CachyOS
 
-Pasta independente: `$HOME/ricy-kit/contributions/noctalia-kde-integration-and-menus/`. Seu `README.md` contém a sequência completa. Não execute esta cópia e a cópia da raiz do kit ao mesmo tempo: compartilham unidades e IDs de shortcuts.
+Independent folder: `$HOME/ricy-kit/contributions/noctalia-kde-integration-and-menus/`- Yours. `README.md` contains the full sequence. Do not execute this copy and copy of the kit root at the same time: share shortcut drives and IDs.
 
-Arquivos incluídos: `preparar-destino.py`, `aplicar-estilo.sh`, `recarregar-estilo.py`, `restaurar-estilo-e-blur.py`, `verificar-menu-nativo.py`, README; em `outputs/kde-outlines/`, esquema público de cores, SVG/kvconfig completos e licença MIT; em `outputs/noctalia-test/`, TOML/paleta e scripts de início/volta/recuperação, ativação da busca, adaptador D-Bus, wrappers de abertura, configuração de atalhos e quatro modelos `.desktop`.
+Files included: `prepare-destination.py`, `apply-style.sh`, `reload-style.py`, `restore-style-and-blur.py`, `verify-native-menu.py`, README; `outputs/kde-outlines/`, public color scheme, full SVG/kvconfig and MIT license; `outputs/noctalia-test/`, TOML/palette and start/back/recovery scripts, search activation, D-Bus adapter, open wrappers, shortcut configuration and four models `.desktop`.
 
-Os `.desktop` distribuídos usam placeholders e são recalculados no destino. O preparador captura layout, wallpaper, fonte, estilo, blur e Kvantum **do destino**, gera backup 0600 e recusa sobrescrevê-lo. IDs de desktop são obtidos localmente. Arquivos de atalhos originais são criados ao ativar e protegidos em 0600. Não incluímos backups pessoais, sentinela ativa, estado/clipboard do Noctalia, fotos, conversas, SSID, caches Python ou capturas reais do desktop.
+The `.desktop` distributed use placeholders and are recalculated in the destination. The preparer captures layout, wallpaper, font, style, blur and Kvantum **of destination**, generates backup 0600 and refuses to overwrite it. Desktop IDs are obtained locally. Original shortcut files are created when enabled and protected on 0600. We do not include personal backups, active sentry, Noctalia status/clipboard, photos, conversations, SSID, Python caches or actual desktop captures.
 
-Sequência resumida, após copiar documento e kit e conferir `sha256sum -c SHA256SUMS` na raiz:
+Brief sequence after copying document and kit and checking `sha256sum -c SHA256SUMS` at the root:
 
 ```bash
 sudo pacman -S --needed noctalia kvantum python python-gobject qt6-tools glib2 noto-fonts
 cd "$HOME/ricy-kit/contributions/noctalia-kde-integration-and-menus"
-python preparar-destino.py
-./aplicar-estilo.sh
+python prepare-destination.py
+./apply-style.sh
 kwriteconfig6 --file kwinrc --group Plugins --key blurEnabled true
 kwriteconfig6 --file kwinrc --group Effect-blur --key BlurStrength 5
 kwriteconfig6 --file kwinrc --group Effect-blur --key NoiseStrength 2
 qdbus6 org.kde.KWin /KWin org.kde.KWin.reconfigure
-./outputs/noctalia-test/iniciar-teste.sh
+./outputs/noctalia-test/start-test.sh
 ```
 
-`python-pyqt6` é opcional para o teste nativo; `wl-clipboard` é opcional para o método query que usa texto já copiado. O kit preserva a família de fonte do usuário do destino e ajusta menuFont a 10 pt; não impõe uma família ausente. Aplicar `KDE-Noctalia.colors` via plasma-apply-colorscheme é opção de migração explicada no README, **não** mudança aplicada ao KDE neste chat: a paleta já existia. O TOML atual completo está na cópia, evitando reconstruir somente a partir dos valores resumidos.
+`python-pyqt6` is optional for the native test; `wl-clipboard` is optional for the query method that uses text already copied. The kit preserves the target user font family and adjusts the Font menu 10 pt; does not impose an absent family. Apply `KDE-Noctalia.colors` via plasma-apply-colorscheme is a migration option explained in README, **no** change applied to KDE in this chat: the palette already existed. The current full TOML is in the copy, avoiding rebuilding only from the summarized values.
 
-### Verificação realmente executada e limites
+### Verification actually performed and limits
 
-- Durante a configuração: validação da paleta/TOML e IPC, conferência das zonas reservadas; preservação/retorno do Plasma testados no ciclo inicial; chamadas D-Bus Query verificadas; acompanhamento visual do usuário confirmou tamanho de ícones, paleta e formato arredondado. O usuário também relatou falhas, portanto não tratamos todo ajuste intermediário como aprovado.
-- Menus: prévias Qt offscreen mostraram seleção/contorno e permitiram corrigir lacunas no SVG. A primeira prévia forçava WA_TranslucentBackground; ela **não** comprovava o comportamento automático dos aplicativos.
-- Teste posterior em sessão Wayland: novo QMenu **sem forçar** esse atributo, estilo kvantum, transparência ativada pelo estilo, fonte 10 pt, cinco linhas de 26 px, alfa do canto 0. Também foi conferido alfa 0 nos quatro cantos/255 no centro da prévia. Isso comprova pixels transparentes do widget de teste, não a composição final em todos os programas.
-- Após o último relato de cantos preenchidos/escala antiga: atualização correta de fontes e alternância real Breeze/Kvantum executadas nos aplicativos abertos. Captura posterior mostrava desktop/apps, mas o menu de contexto não estava aberto. **Não houve confirmação visual final do usuário do menu Dolphin após essa recarga.** Assim, o trecho anterior que associa popup_blurring=false a evitar o retângulo deve ser lido como configuração/hipótese técnica aplicada, não como prova final de resolução universal.
-- Nesta documentação: comparação dos archives ativos e serviços sem mudar configuração; validação estática de todos os scripts Python/Bash, TOML e JSON. Preparador executado apenas em cópia descartável com HOME fictícia: verificou backup 0600, wallpaper/IDs locais, `.desktop` portável e recusa de segunda preparação. Não executamos os novos scripts de aplicação/reversão na sessão real. Migração para outro CachyOS não foi testada.
+- During the configuration: palette/TOML and IPC validation, conference of reserved zones; preservation/return of Plasma tested in the initial cycle; verified D-Bus Query calls; visual user monitoring confirmed icon size, palette and rounded format. The user also reported failures, so we did not treat all intermediate adjustment as approved.
+- Menus: Qt offscreen previews showed selection/outcome and allowed correcting SVG gaps. The first preview forced WA_TranslucentBackground; she **no** it proved the automatic behavior of the applications.
+- Later test in Wayland session: new QMenu **without forcing** this attribute, kvantum style, transparency activated by style, font 10 pt, five lines of 26 px, corner alpha 0.Alpha has also been checked 0 in the four corners/255 in the center of the preview. This proves transparent pixels of the test widget, not the final composition in all programs.
+- After the last account of filled corners/old scale: correct update of fonts and real alternation Breeze/Kvantum executed in open applications. Later capture showed desktop/apps, but the context menu was not open. **There was no final visual confirmation of the user of the Dolphin menu after this recharge.** Thus, the previous passage associating popup_blurring=false to avoid the rectangle should be read as applied technical configuration/hypothesis, not as final proof of universal resolution.
+- In this documentation: comparison of active files and services without changing configuration; static validation of all Python/Bash, TOML and JSON scripts. Preacher executed only in disposable copy with fictional HOME: verified backup 0600, local wallpaper/IDs, `.desktop` portable and refusal of second preparation. We did not execute the new application/reversion scripts in the actual session. Migration to another CachyOS has not been tested.
 
-### Desfazer e backups existentes
+### Existing undo and backups
 
-Nesta máquina, os backups pessoais permanecem em `/home/delta/Documents/Codex/2026-10-08/no-x20/outputs/noctalia-test/plasma-antes.tar.gz` e `outputs/kde-outlines/kde-antes-contornos.tar.gz` da mesma pasta; não foram transportados para a contribuição. `menuFont-antes.txt` e `kvantum-config-antes` são os valores históricos locais. Os scripts locais originais são específicos deste estado de origem.
+On this machine, personal backups remain in `/home/delta/Documents/Codex/2026-10-08/no-x20/outputs/noctalia-test/plasma-antes.tar.gz` and `outputs/kde-outlines/kde-antes-contornos.tar.gz` from the same folder; they were not transported to the contribution. `menuFont-antes.txt` and `kvantum-config-antes` The original local scripts are specific to this state of origin.
 
-No destino preparado com esta contribuição:
+at the destination prepared with this contribution:
 
 ```bash
 cd "$HOME/ricy-kit/contributions/noctalia-kde-integration-and-menus"
-./outputs/noctalia-test/voltar-ao-plasma.sh
-python restaurar-estilo-e-blur.py
+./outputs/noctalia-test/return-to-plasma.sh
+python restore-style-and-blur.py
 ```
 
-A primeira operação restaura painéis/plasmashellrc capturados e os atalhos locais, reinicia KRunner e remove os launchers/autostart do teste. A segunda restaura apenas as chaves de fonte, widgetStyle e blur e a configuração/tema Kvantum anterior. Se já usava Kvantum, recarrega o estilo restaurado. Não remove os pacotes. O esquema opcional de cores exige selecionar o esquema anterior ou restaurar kdeglobals do backup local (procedimento no README, com a ressalva de substituir preferências posteriores). O histórico produzido durante o teste no destino não é apagado automaticamente.
+The first operation restores captured panels/plasmashellrc and local shortcuts, restarts KRunner and removes restored launchers/autostart from the test. The second restores only source keys, widgetStyle and blur and the previous Kvantum configuration/theme. If you have already used Kvantum, reloads the restored style. Do not remove packages. The optional color scheme requires selecting the previous scheme or restoring kdeglobals from the local backup (ReadME procedure, with the exception of replacing later preferences). The history produced during the test in the destination is not deleted automatically.
 
-### Tentativas descartadas e pendências
+### Attempts discarded and pending
 
-- Smart-hide/overlay iniciais comprometeram acesso/posição da barra; substituídos por barra principal fixa top com reserva. Não encerrar a sessão Plasma inteira para executar a integração.
-- Menus de taskbar gigantes foram compensados com escala local; menus do tray, colocados na gaveta. Não modificar código do Noctalia para blur no contexto, conforme pedido explícito do usuário.
-- Aumento do menuFont 10 → 11 pt foi interpretação incorreta do pedido e foi revertido. A compactação envolve fonte **e** padding do tema.
-- Primeiros SVGs com borda em stroke deixaram falhas de recorte nos cantos; substituídos por preenchimentos com limites exatos. Ativos do kit contêm a variante corrigida.
-- Desativar popup blur sozinho não demonstrou resolver o relato; foi necessário investigar o cache do estilo e o sinal de fontes. Mantemos como pendência a confirmação final sobre menus reais e a validação no computador de destino.
-- Busca central inicial não é o estado atual: cópia atual attached/top com search_edge já documentada acima. Nenhuma mudança adicional do perfil foi aplicada só para documentar.
+- Early Smart-hide/overlay committed bar access/position; replaced by top fixed main bar with reserve. Do not terminate the entire Plasma session to perform integration.
+- Giant taskbar menus were compensated with local scale; tray menus, placed in the drawer. Do not modify Noctalia code to blur in context, as explicit user request.
+- Increase of the Font menu 10 → 11 pt was incorrect interpretation of the request and was reversed. Compaction involves source **and** theme padding.
+- First SVGs with stroke edge left cut-off faults in the corners; replaced by fills with exact limits. Kit actives contain the corrected variant.
+- Deactivating blue popup alone did not demonstrate solving the report; it was necessary to investigate the style cache and font signal. We keep the final confirmation on actual menus and validation on the target computer pending.
+- Initial central search is not the current state: current copy attached/top with search_edge already documented above. No additional profile change has been applied only to document.
 
-Origem e licença: Catppuccin Kvantum MIT, checkout consultado `71105d224fef95dd023691303477ce3eea487457`. Código de investigação: Kvantum `110aff8b97a221531ef55acc4faeacfd719cdfea`; Plasma Integration `46eddde9d38cf907786e567dd4a942140bb1f797`. São revisões consultadas, não identificação comprovada do código exato dos pacotes instalados. Ativos prontos permitem reproduzir sem compilação.
+Origin and license: Catppuccin Kvantum MIT, checkout consulted `71105d224fef95dd023691303477ce3eea487457`. Code of investigation: Kvantum `110aff8b97a221531ef55acc4faeacfd719cdfea`; Plasma Integration `46eddde9d38cf907786e567dd4a942140bb1f797`They are reviewed, unproven identification of the exact code of the installed packages. Ready actives allow you to play without compilation.
 
-## Contribuição — Instalador DEB/RPM no Dolphin — 2026-10-08 17:31 (America/Sao_Paulo)
+## Contribution — DEB/RPM Installer in Dolphin — 2026-10-08  17:31 (America/Sao_Paulo)
 
-Chat/trabalho: suporte a DEB/RPM no CachyOS, integração de duplo clique com Dolphin e correções da conversão do Parsec. Título do chat não confirmado. Esta etapa apenas documentou, conferiu o estado e preparou materiais; não reinstalou pacotes, alterou associações ativas ou corrigiu pendências do sistema.
+Chat/work: DeB/RPM support in CachyOS, double-click integration with Dolphin and Parsec conversion fixes. Unconfirmed chat title. This step only documented, checked the state and prepared materials; did not reinstall packages, changed active associations or corrected pending system.
 
-### Objetivo, estado anterior e mudanças aplicadas
+### Objective, previous status and applied changes
 
-O pedido era abrir pacotes `.deb` e `.rpm` no Dolphin e instalar no próprio CachyOS. Inicialmente havia pacman e bsdtar; dpkg/rpm/debtap não estavam disponíveis, e ambos os tipos de arquivo abriam com `org.kde.ark.desktop`. A primeira resposta instalou só ferramentas de terminal, o que não atendia ao fluxo gráfico esperado. Depois da correção do escopo, o usuário escolheu instalação no próprio CachyOS quando compatível, sem ambiente Ubuntu/Fedora.
+The request was to open packages `.deb` and `.rpm` in Dolphin and install in CachyOS itself. Initially there was pacman and bsdtar; dpkg/rpm/debtap were not available, and both types of files opened with `org.kde.ark.desktop`. The first response installed only terminal tools, which did not meet the expected graphical flow. After correction of the scope, the user chose installation in CachyOS itself when compatible, without Ubuntu/Fedora environment.
 
-1. **Pacotes instalados por este trabalho, confirmados no pacman.log:** `dpkg 1.23.11-1.1`, `rpm-tools 6.0.1-2.2`; dependências `nettle3 3.10.2-2.1`, `rpm-sequoia 1.10.3-1.1`; `namcap 3.6.0-3` com `python-boolean.py 5.0-2`, `python-license-expression 30.4.4-2`, `python-pyelftools 0.33-1`; `debtap 3.6.3-1` construído do AUR; `python-pyqt6 6.11.0-4`, `python-pyqt6-sip 13.13.0-1.1` para a interface. `binutils 2.47-2`, `fakeroot 1:1.37.2-3.1`, `pkgfile 26-1.1`, Git e base-devel já existiam; não atribuir sua instalação a este chat. O checkout AUR preservado tem revisão `d7c54a59fa0e3ac99a13f5db594de172aca0b1f4`; fontes e debtap.install passaram na verificação SHA-512 de makepkg.
-2. **Bases do conversor:** inicialização com privilégios em `/var/cache/pkgfile` e `/var/cache/debtap`. A primeira tentativa demorou no servidor Ubuntu, foi encerrada e repetida com wrapper curl IPv4, timeout de conexão 15 s e total 180 s. Os índices Debian/Ubuntu, lista AUR, virtual packages e extended-base-packages-list foram criados; sincronização reportou sucesso. Isso não tornou dpkg/rpm instaladores nativos do CachyOS. O upstream ainda usa HTTP/`curl -k`, registrado como limitação.
-3. **Aplicativo local:** `/home/delta/.local/share/cachyos-package-installer/backend.py`, `installer.py`, `normalize_control.py` e cópia executável `debtap`; README local. PyQt6 abre uma janela, converte automaticamente se receber arquivo, confere metadados e transação via `pacman -Qip`/`pacman -Up`; só então oferece **Instalar**. Esse botão executa `pkexec /usr/bin/pacman -U --noconfirm`, exibindo autenticação Polkit. Conversão não usa root, dpkg -i, rpm -i, --nodeps ou --overwrite. `conversion.lock` serializa as conversões desta aplicação; archives intermediários/output ficam em `/home/delta/.cache/cachyos-package-installer/conversion-*`, log em `last-conversion.log`. Caches de testes permanecem na origem; não foram transportados.
-4. **Dolphin e MIME:** criada entrada de aplicativo `/home/delta/.local/share/applications/cachyos-local-package-installer.desktop` (ID `cachyos-local-package-installer.desktop`) e serviço executável `/home/delta/.local/share/kio/servicemenus/cachyos-install-package.desktop` com ação **Instalar no CachyOS…**. O `Exec` ativo é `/usr/bin/python /home/delta/.local/share/cachyos-package-installer/installer.py %f`. Defaults em `.config/mimeapps.list`: `application/vnd.debian.binary-package`, seu alias `application/x-debian-package` e `application/x-rpm` apontam ao novo aplicativo. Outros defaults foram preservados. Caches desktop/KDE atualizados. Não foram criados autostart, serviços, daemons, regras Polkit nem mudanças no shell de login/Fish.
-5. **Correções efetivamente aplicadas à cópia local do Debtap, sem alterar `/usr/bin/debtap`:** reconhece bases pkgfile terminadas em `.files`; tamanho de payload sem assumir diretórios com 4096 bytes no Btrfs; fakeroot com Bash explícito, heredoc sem expansão prematura, `bash -e` e erro se tar/zstd falham; `.INSTALL` só é empacotado se existe. `backend.py` define `LC_ALL=C`, `SHELL=/usr/bin/bash`, `TERM=dumb`. `normalize_control.py` normaliza CRLF e desdobra campos de dependências. Loop numérico evita `cut: invalid decreasing range`. O normalizador resolve bibliotecas comuns pela ABI exata em `/usr/lib` e seus provedores pacman/pkgfile, incluindo alternativas e limites de versão >=/>> com vercmp; demais nomes continuam sujeitos à heurística do Debtap. Isso corrigiu a escolha errada de loongarch64 cross compiler/Proton observada na conversão do Parsec. Não é um resolvedor universal de dependências.
-6. **RPM:** consulta cabeçalho com rpmdb temporária do usuário, captura payload binário de rpm2archive, extração tarfile com filtro data, gera DEB intermediário e converte pelo Debtap. RPMs com scripts de instalação/gatilhos, arquitetura incompatível ou dependências sem mapeamento viável são recusados com explicação. A rpmdb temporária evita tentar criar lock em `/var/lib/rpm`; captura binária evita interpretar gzip como texto. Scriptlets RPM não são ignorados nem executados diretamente.
-7. **Parsec, estado posterior confirmado:** `parsec 150-1` instalado em 12:36:53, junto de `ffmpeg4.4 4.4.8-5.1` e `libmfx 23.2.2-6`, conforme pacman.log e banco atual. O chat preparou e reabriu a janela para conclusão pelo usuário; a documentação confirma que a instalação aconteceu posteriormente, não afirma que executamos uma nova instalação agora. Arquivos incluem `/usr/bin/parsecd`, `/usr/share/applications/parsecd.desktop`, ícone e biblioteca `/usr/share/parsec/skel/parsecd-150-104a.so`. Depends On atual: alsa-lib, curl, ffmpeg4.4, glibc>=2.17, libgcc>=3.0, libglvnd, libjpeg-turbo, libpng, libsm, libstdc++>=5.2, libx11, libxcursor, libxi, openssl e systemd-libs. Optional: libxrandr. O DEB original corresponde ao SHA-256 `c8a4407713d72dcb1c59f082977e81e1b9e8ffd679d0666882cde4c8a0821dd2`; não copiamos esse binário para o kit.
+1. **Packages installed by this work, confirmed in pacman.log:**  `dpkg 1.23.11-1.1`, `rpm-tools 6.0.1-2.2`; dependencies `nettle3 3.10.2-2.1`, `rpm-sequoia 1.10.3-1.1`; `namcap 3.6.0-3` with `python-boolean.py 5.0-2`, `python-license-expression 30.4.4-2`, `python-pyelftools 0.33-1`; `debtap 3.6.3-1` constructed from the AUR; `python-pyqt6 6.11.0-4`, `python-pyqt6-sip 13.13.0-1.1` for the interface. `binutils 2.47-2`, `fakeroot 1:1.37.2-3.1`, `pkgfile 26-1.1`, Git and base-devel already existed; do not assign your installation to this chat. The preserved AUR checkout has revision `d7c54a59fa0e3ac99a13f5db594de172aca0b1f4`; sources and debtap.install passed the SHA-check512 Makepkg.
+2. **Converter bases:** startup with privileges in `/var/cache/pkgfile` and `/var/cache/debtap`. The first attempt took time on Ubuntu server, was closed and repeated with IPv4 wrapper curl, connection timeout 15 s and total 180 s. Debian/Ubuntu indexes, AUR list, virtual packages and extended-base-packages-list have been created; synchronization has reported success. This has not made dpkg/rpm native installers of CachyOS. Upstream still uses HTTP/`curl -k`, registered as a limitation.
+3. **Local application:**  `/home/delta/.local/share/cachyos-package-installer/backend.py`, `installer.py`, `normalize_control.py` and executable copy `debtap`; Local README. PyQt6 opens a window, automatically converts if receiving file, confers metadata and transaction via `pacman -Qip`/`pacman -Up`; only then does it offer **Install**. This button runs `pkexec /usr/bin/pacman -U --noconfirm`, displaying Polkit authentication. Conversion does not use root, dpkg -i, rpm -i, --nodeps or --overwrite. `conversion.lock` serializes the conversions of this application; intermediate/output files remain in `/home/delta/.cache/cachyos-package-installer/conversion-*`, log in `last-conversion.log`. Test caches remain at source; they have not been transported.
+4. **Dolphin and MIME:** created application entry `/home/delta/.local/share/applications/cachyos-local-package-installer.desktop` (ID) `cachyos-local-package-installer.desktop`) and executable service `/home/delta/.local/share/kio/servicemenus/cachyos-install-package.desktop` with action **Install in CachyOS...**. The `Exec` active is `/usr/bin/python /home/delta/.local/share/cachyos-package-installer/installer.py %f`. Defaults in `.config/mimeapps.list`: `application/vnd.debian.binary-package`, your alias `application/x-debian-package` and `application/x-rpm` point to the new application. Other defaults have been preserved. Up-to-date desktop/KDE caches. No autostart, services, daemons, Polkit rules or login/Fish shell changes were created.
+5. **Corrections effectively applied to the local copy of Debtap without changing `/usr/bin/debtap`:** recognizes pkgfile bases completed in `.files`; payload size without taking over directories with 4096 bytes in Btrfs; fakeroot with explicit Bash, heredoc without premature expansion, `bash -e` and error if tar/zstd fail; `.INSTALL` It's only packaged if it exists. `backend.py` sets `LC_ALL=C`, `SHELL=/usr/bin/bash`, `TERM=dumb`. `normalize_control.py` normalizes CRLF and deploys dependencies fields. Numeric Loop avoids `cut: invalid decreasing range`. The normalizer solves common libraries by the exact ABI on `/usr/lib` and its providers pacman/pkgfile, including alternatives and version limits >=/>> with vercmp; other names remain subject to Debtap heuristics. This corrected the wrong choice of looparch64 cross compiler/Proton observed in Parsec conversion. It is not a universal dependency solver.
+6. **RPM:** query header with temporary user rpmdb, binary payload capture of rpm2archive, tarfile extraction with data filter, generates intermediate DEB and converts by Debtap. RPMs with installation / trigger scripts, incompatible architecture or dependencies without viable mapping are rejected with explanation. temporary rpmdb avoids trying to create lock in `/var/lib/rpm`; binary capture avoids interpreting gzip as text. RPM scripts are neither ignored nor executed directly.
+7. **Parsec, later status confirmed:**  `parsec 150-1` installed in 12:36:53, together with `ffmpeg4.4 4.4.8-5.1` and `libmfx 23.2.2-6`, as pacman.log and current bank. Chat has prepared and reopened the window for completion by the user; documentation confirms that the installation happened later, does not claim that we run a new installation now. Files include `/usr/bin/parsecd`, `/usr/share/applications/parsecd.desktop`, icon and library `/usr/share/parsec/skel/parsecd-150-104a.so`. Depends On current: alsa-lib, curl, ffmpeg4.4, glibc>=2.17, libgcc>=3.0, libglvnd, libjpeg-turbo, libpng, libsm, libstdc++>=5.2, libx11, libxcursor, libxi, opensl and systemd-libs. Optional: libxrandr. The original DEB corresponds to SHA-256  `c8a4407713d72dcb1c59f082977e81e1b9e8ffd679d0666882cde4c8a0821dd2`We didn't copy that binary to the kit.
 
-### Materiais e reprodução em outro CachyOS
+### Materials and reproduction in other CachyOS
 
-Pasta independente: `$HOME/ricy-kit/contributions/dolphin-deb-rpm-installer/`. O README contém procedimento completo, comandos de dependências/AUR, atualização de índices, configuração final, diagnóstico e reversão. Copiamos só os scripts necessários, dois modelos `.desktop.in`, licença GPL-2.0 do Debtap, patch contra Debtap 3.6.3 e versões observadas. Não há backups pessoais, mimeapps.list da origem, logs, credenciais, Parsec binário ou caches no kit.
+Independent folder: `$HOME/ricy-kit/contributions/dolphin-deb-rpm-installer/`. README contains complete procedure, dependencies/AUR commands, index update, final configuration, diagnosis and reversal. We copy only the necessary scripts, two models `.desktop.in`, GPL-license2.0 Debtap patch against Debtap 3.6.3 and observed versions. There are no personal backups, mimeapps.list of origin, logs, credentials, binary Parsec or caches in the kit.
 
-A cópia portável mantém backend/GUI/normalizador byte a byte com os ativos. A única adaptação do Debtap para o kit troca o caminho absoluto do normalizador por caminho relativo ao script. Os modelos desktop usam `@INSTALLER@`, calculado e escapado pelo preparador no destino; não dependem de `/home/delta`. O script `instalar-integracao.py` faz backups do DESTINO antes de substituir integração/MIME, em diretório 0700 e manifesto 0600 sob `$HOME/.local/state/cachyos-package-installer-backups/<data-hora>/`. Captura a existência/ausência dos alvos, archives MIME, defaults e lista local de pacotes, sem reutilizar o backup original deste computador. Cada execução gera nova pasta.
+The portable copy keeps backend/GUI/normalizer byte a byte with the assets. The only Debtap adaptation to the kit changes the absolute normalizer path by script path. Desktop templates use `@INSTALLER@`, calculated and escaped by the preparer in the destination; do not depend on `/home/delta`. The script `install-integration.py` backups DESTINO before replacing integration/MIME in directory 0700 and manifest 0600 under `$HOME/.local/state/cachyos-package-installer-backups/<data-hora>/`. Captures the existence/absence of targets, MIME archives, defaults and local list of packages without reusing the original backup of this computer. Each execution generates new folder.
 
-Sequência resumida, **para executar em outro computador**, em Bash:
+Sequence summarized, **to run on another computer**in Bash:
 
 ```bash
 cd "$HOME/ricy-kit"
@@ -962,69 +959,69 @@ makepkg --verifysource
 makepkg -si
 sudo bash -c 'curl() { /usr/bin/curl -4 --connect-timeout 15 --max-time 180 "$@"; }; export -f curl; /usr/bin/debtap -u'
 cd "$HOME/ricy-kit/contributions/dolphin-deb-rpm-installer"
-python instalar-integracao.py
+python install-integration.py
 ```
 
-Pré-requisitos de execução incluem KDE/Dolphin/Polkit, Python/PyQt6, pacman, Bash, binutils, libarchive/bsdtar, fakeroot, pkgfile, namcap, zstd, curl, gawk/grep/sed/coreutils/tar/gzip e desktop-file-utils. Estado de referência: Python 3.14.7-2, libarchive 3.8.9-1.1, Polkit 127-3.1, zstd 1.5.7-2, Dolphin 26.08.1-1.1, desktop-file-utils 0.28-1.1. A lista completa observada está no kit. Índices descompactados ocuparam cerca de 1,1 GiB nesta máquina; não é um limite fixo. AUR e bases podem mudar; a migração não foi executada em outro CachyOS.
+Execution prerequisites include KDE/Dolphin/Polkit, Python/PyQt6, pacman, Bash, binutils, libarchive/bsdtar, fakeroot, pkgfile, namcap, zstd, curl, gawk/grep/sed/coreutils/tar/gzip, and desktop-file-utils. Reference state: Python 3.14.7-2, libarchive 3.8.9-1.1, Polkit 127-3.1, zstd 1.5.7-2, Dolphin 26.08.1-1.1, desktop-file-utils 0.28-1.1. The complete observed list is in the kit. Decompressed indexes occupied about 1.1 GiB on this machine; this is not a fixed limit. AUR and databases may change; migration to another CachyOS was not performed.
 
-### Verificação realizada e limites
+### Verification performed and limits
 
-- Testes anteriores: sintaxe Python/Bash; desktop-file-validate; janela Qt offscreen com capturas; DEB/RPM mínimos chegaram a pacotes Arch sem instalar as fixtures; RPM com scriptlet foi recusado com mensagem explicativa. As primeiras fixtures não cobriram Fish/CRLF/Parsec.
-- Após falha relatada pelo usuário: conversão repetida com o mesmo DEB do Parsec; comparação de hash com o arquivo original; GUI offscreen sob `SHELL=/usr/bin/fish` e TERM removido chegou a **Instalar**, sem avisos tput/cut e sem dependências loongarch/Proton. Pacman -Up resolveu apenas libmfx/ffmpeg4.4/parsec que faltavam. Não houve comprovação de login/streaming ou funcionamento completo do Parsec neste chat.
-- Ao documentar: pacman -Q/Qi/Ql e log confirmaram versões e instalação; gio mime confirmou os defaults; conferidos scripts e entradas ativas. Sintaxe AST Python e bash -n dos materiais portáveis passou; cópias comparadas e ausência de caminhos de usuário da origem verificada. Não executamos aplicação/restauração, GUI, conversão ou instalação novamente durante esta documentação.
-- **Pendência nova da conferência:** `pacman -Qkk parsec` relatou diferenças de UID/GID em todas as 15 entradas, sem outros avisos nessa execução. `stat` de `/usr/bin/parsecd` e da biblioteca instalada mostrou root:root com modos 755/644, respectivamente; isso não comprova consistência do manifesto `.MTREE`. O fluxo atual não normaliza explicitamente ownership em tar/mtree. Não corrigimos por proibição de reaplicar mudanças nesta etapa. Kit preserva a implementação atual e destaca necessidade de auditar metadados de UID/GID antes de ampliar o uso.
+- Previous tests: Python/Bash syntax; desktop-file-validate; Qt window offscreen with captures; minimal DEB/RPM reached Arch packages without installing fixtures; RPM with scriptlet was rejected with explanatory message. The first fixtures did not cover Fish/CRLF/Parsec.
+- After user reported failure: Repeat conversion with the same Parsec DEB; hash comparison with the original file; GUI offscreen under `SHELL=/usr/bin/fish` and TERM removed reached **Install**, no tput/cut notices and no loongarch/Proton dependencies. Pacman -Up solved only libmfx/ffmpeg4.4/parsec missing. There was no proof of login/streaming or full Parsec operation in this chat.
+- By documenting: pacman -Q/Qi/Ql and log confirmed versions and installation; gio mime confirmed defaults; checked scripts and active entries. Syntax AST Python and bash -n of portable materials passed; compared copies and absence of user paths from verified source. We do not perform application/restoration, GUI, conversion or installation again during this documentation.
+- **New presidency of the conference:**  `pacman -Qkk parsec` reported differences in UID/GID in all 15 entries, no other notices in that execution. `stat` of `/usr/bin/parsecd` and the installed library showed root:root with modes 755/644, respectively; this does not prove the consistency of the manifesto `.MTREE`. The current flow does not explicitly normalize ownership in tar/mtree. We do not correct by prohibition of reapplying changes in this step. Kit preserves the current implementation and highlights the need to audit UID/GID metadata before expanding use.
 
-### Restaurar e backups
+### Restore and backups
 
-Backup histórico local de MIME desta máquina: `/home/delta/.local/share/cachyos-package-installer/mimeapps.list.before`. Não foi copiado para o kit, pois contém defaults pessoais. Restaurar esse arquivo completo pode sobrescrever associações alteradas depois; prefira revisar as três entradas. Arquivos de investigação e fontes permanecem em `/home/delta/.cache/package-support`; índices permanecem em `/var/cache/debtap` e `/var/cache/pkgfile`. Transações criaram snapshots Snapper (17–26 durante ferramentas/interface, 27–28 ao instalar Parsec, segundo saídas); não comprovamos sua disponibilidade atual nem incluímos snapshots no kit.
+Local MIME historical backup of this machine: `/home/delta/.local/share/cachyos-package-installer/mimeapps.list.before`. It has not been copied to the kit because it contains personal defaults. Restore this complete file can overwrite changed associations later; prefer to review the three entries. Research files and fonts remain in `/home/delta/.cache/package-support`; Indexes remain in `/var/cache/debtap` and `/var/cache/pkgfile`Transactions created snapshots Snapper (17–26 during tools/interface, 27–28 when installing Parsec, according to outputs; we do not confirm its current availability or include snapshots in the kit.
 
-No destino preparado, feche o instalador depois de concluir a operação e execute:
+In the prepared destination, close the installer after completing the operation and run:
 
 ```bash
 cd "$HOME/ricy-kit/contributions/dolphin-deb-rpm-installer"
-python restaurar-integracao.py "$HOME/.local/state/cachyos-package-installer-backups/<data-hora>"
+python restore-integration.py "$HOME/.local/state/cachyos-package-installer-backups/<data-hora>"
 ```
 
-Restaura archives completos/ausências dos alvos e atualiza caches KDE. Exige confirmação porque pode substituir mudanças posteriores nesses archives; para restauração seletiva, revise o backup. Não remove pacotes, apps instalados, cache nem backup. Sem backup, se Ark existe, `xdg-mime default org.kde.ark.desktop <tipo-MIME>` para os três tipos devolve a abertura no Ark, mas não recria automaticamente preferências anteriores diferentes.
+Restores complete files/absences of targets and updates KDE caches. Requires confirmation because it can replace later changes in those archives; for selective restoration, review backup. Do not remove packages, installed apps, cache or backup. No backup, if Ark exists, `xdg-mime default org.kde.ark.desktop <tipo-MIME>` for the three types returns the opening in Ark, but does not automatically recreate different previous preferences.
 
-Parsec é removível por `sudo pacman -R parsec`. Para remover ferramentas, compare lista anterior/atual, confira dependentes e revise a transação; não remova automaticamente Python/Qt ou ferramentas que já existiam. `sudo pacman -Rns dpkg rpm-tools debtap namcap` só se esses pacotes foram acrescentados e não forem necessários a outros trabalhos. PyQt6 já é citado por outro tema deste documento: sua remoção pode afetá-lo. Cache do usuário pode ser apagado depois de fechar a janela, perdendo output/log; a remoção do pacote Debtap não apaga `/var/cache/debtap`. Índices pkgfile são compartilhados, não apague indiscriminadamente. Apps convertidos e dependências instaladas exigem reversão separada pelo pacman.
+Parsec is removable by `sudo pacman -R parsec`. To remove tools, compare previous/current list, check dependents and review the transaction; do not automatically remove Python/Qt or tools that already existed. `sudo pacman -Rns dpkg rpm-tools debtap namcap` only if these packages have been added and are not required for other jobs. PyQt6 is already quoted by another theme of this document: your removal can affect it. User cache can be deleted after closing the window, losing output/log; removal of Debtap package does not delete `/var/cache/debtap`. Pkgfile indices are shared, do not delete indiscriminately. Converted Apps and installed dependencies require separate reversal by pacman.
 
-### Tentativas descartadas e pendências restantes
+### Discarded attempts and remaining to-dos
 
-Discover/PackageKit, Alien e rpmtoarch foram consultados, não instalados nem usados como solução final. A tentativa de atualizar sem IPv4/timeout foi substituída pela sincronização bem-sucedida. RPM sem rpmdb temporária produziu erro de lock; rpm2archive interpretado como texto produziu bytes gzip: ambos corrigidos. Primeira conversão Parsec sob Fish falhou na compressão e emitiu mensagem enganosa de permissão; corrigido Bash explícito. CRLF/campos dobrados geraram arquitetura inválida e dependências incompletas; corrigidos. A conversão seguinte sugeriu cross compiler/Proton, nunca instalados por essa tentativa; substituídos pelos provedores nativos antes da instalação final.
+Discover/PackageKit, Alien and rpmtoarch were consulted, not installed or used as final solution. The attempt to update without IPv4/timeout was replaced by successful synchronization. RPM without temporary rpmdb produced lock error; rpm2archive interpreted as text produced bytes gzip: both corrected. First Parsec conversion under Fish failed compression and issued misleading permission message; explicit Bash corrected. CRLF/folded fields generated invalid architecture and incomplete dependencies; fixed. The next conversion suggested cross compiler/Proton, never installed by this attempt; replaced by native providers before the final installation.
 
-Não prometer compatibilidade universal ou instalação de qualquer RPM. RPMs com scripts precisam de adaptação; alguns DEBs também exigem ajustes específicos. A checagem pacman -Up não testa funcionamento do app, bibliotecas carregadas dinamicamente nem substitui verificação final de conflitos. Os programas convertidos não recebem atualizações automáticas da distribuição de origem. Permanecem pendentes a divergência UID/GID de metadados, teste em outro computador e validação funcional completa dos aplicativos.
+Do not promise universal compatibility or installation of any RPM. RPMs with scripts need to be adapted; some DEBs also require specific adjustments. The pacman -Up check does not test the operation of the app, libraries dynamically loaded or replaces final verification of conflicts. Converted programs do not receive automatic updates of the source distribution. The UID/GID divergence of metadata, testing on another computer, and complete functional validation of applications remain pending.
 
-Origem de terceiro: Debtap https://github.com/helixarch/debtap, copyright George Savvidis, GPL-2.0 (ou posterior no cabeçalho), licença preservada. AUR https://aur.archlinux.org/packages/debtap. O patch e fontes prontos permitem auditar as mudanças locais sem depender de uma descrição parcial.
+Third Origin: Debtap https://github.com/helixarch/debtap, copyright George Savvidis, GPL-2.0 (or later in the header), preserved license. https://aur.archlinux.org/packages/debtap. Patch and ready fonts allow you to audit local changes without depending on a partial description.
 
-## Contribuição — Implementação no destino e validação — 2026-10-08 19:10 (America/Sao_Paulo)
+## Contribution — Implementation of destination and validation — 2026-10-08  19:10 (America/Sao_Paulo)
 
-Trabalho: execução da migração autorizada pelo usuário a partir de `/home/delta/ricy/ricy.md`. Esta etapa implementou a configuração; a restrição histórica das etapas anteriores a somente documentação não corresponde ao pedido atual. Os relatos anteriores foram preservados. A cópia ativa desta instalação fica em `/home/delta/ricy-kit/contributions/`, e o kit transportável permanece em `/home/delta/ricy/ricy-kit/`. Os antigos caminhos sob Documents/Codex referem-se à origem do documento, não ao perfil ativo desta implementação.
+Work: execution of migration authorized by the user from `/home/delta/ricy/ricy.md`. This step implemented the configuration; the historical restriction of the steps prior to only documentation does not match the current request. Previous reports have been preserved. The active copy of this installation is in `/home/delta/ricy-kit/contributions/`, and the transportable kit remains in `/home/delta/ricy/ricy-kit/`. The old paths under Documents/Codex refer to the origin of the document, not to the active profile of this implementation.
 
-### Estado anterior e resultado
+### Previous state and result
 
-O destino já executava CachyOS/KDE Plasma Wayland, com dois painéis Plasma e KRunner ativo. Noctalia, Debtap, dpkg, rpm-tools, namcap e PyQt6 estavam ausentes; Kvantum estava instalado. A cópia original do kit passou em todos os hashes de SHA256SUMS antes de qualquer preparação. O kit foi copiado para `$HOME/ricy-kit`, preservando o original. Utilizamos a contribuição `noctalia-kde-integration-and-menus`, que acrescenta backups de chaves de estilo/blur; a variante antiga na raiz do kit não foi ativada.
+The destination already executed CachyOS/KDE Plasma Wayland, with two Plasma and KRunner panels active. Noctalia, Debtap, dpkg, rpm-tools, namcap and PyQt6 were missing; Kvantum was installed. The original copy of the kit passed on all SHA256SUMS hashes before any preparation. The kit was copied for `$HOME/ricy-kit`, preserving the original. We use the contribution `noctalia-kde-integration-and-menus`, which adds style/blur key backups; the old variant at the kit root has not been activated.
 
-Resultado: Noctalia e adaptador D-Bus ativos, plasmashell ativo para desktop/wallpaper, KRunner inativo e painéis Plasma recolhidos. Barras inferiores nos dois monitores, 44 px, exclusive_zone=44, camada top, sempre visíveis. Perfil e paleta do kit validados com Noctalia 5.2.1. Launcher por wrappers e Query D-Bus; clipboard central; Kvantum KDE-Noctalia, menuFont 10 pt preservando a família JetBrainsMono Nerd Font existente; esquema KDE-Noctalia aplicado; blur KWin ativado com força 5 e ruído 2. O wallpaper local já apontava para limine-splash.png e foi preservado. O tema de ícones observado no destino é Breeze-Dark; Papirus da origem não foi imposto como dependência da integração.
+Result: Noctalia and active D-Bus adapter, active plasmashell for desktop/wallpaper, inactive KRunner and collected Plasma panels. Lower bars on both monitors, 44 px, exclusive_zone=44, top layer, always visible. Profile and palette of kit validated with Noctalia 5.2.1. Launcher by wrappers and Query D-Bus; central clipboard; Kvantum KDE-Noctalia, Font menu 10 pt preserving the existing JetBrainsMono Nerd Font family; KDE-Noctalia scheme applied; hard activated KWin blur 5 and noise 2. The local wallpaper already pointed to limine-splash.png and was preserved. The icon theme observed in the destination is Breeze-Dark; Origin papirus was not imposed as dependency on integration.
 
-Dolphin: associação dos três MIME ao instalador e ação de contexto aplicadas com backup do destino. Conversão como usuário comum, instalação via botão/pkexec/pacman; bases pkgfile/Debtap inicializadas. A implementação mantém o caráter de teste reversível do roteiro: o autostart é de recuperação, e o Noctalia não inicia automaticamente após novo login. Foram criados `/home/delta/ricy/iniciar.sh`, `/home/delta/ricy/voltar.sh` e `/home/delta/ricy/IMPLEMENTADO.md` para uso local.
+Dolphin: association of the three MIMEs with the installer and context action applied with destination backup. Conversion as common user, installation via button/pkexec/pacman; pkgfile/Debtap databases initialized. Implementation maintains the script's reversible test character: autostart is recovery, and Noctalia does not start automatically after re login. `/home/delta/ricy/start.sh`, `/home/delta/ricy/return.sh` and `/home/delta/ricy/IMPLEMENTADO.md` for local use.
 
-### Pacotes e sequência executada
+### Packages and sequence executed
 
-A atualização completa do roteiro terminou com 190 pacotes atualizados e 15 adicionados. A lista anterior e a lista final estão no diretório privado `/home/delta/ricy/execucao-2026-10-08/`, junto aos logs. Foram adicionados debtap, dpkg, ministream, namcap, nettle3, noctalia, pyalpm, python-boolean.py, python-license-expression, python-pyelftools, python-pyqt6, python-pyqt6-sip, rpm-sequoia, rpm-tools e sdbus-cpp. Alguns são dependências/adições da atualização, não componentes escolhidos isoladamente. O sistema recomendou reiniciar devido à atualização de componentes de base/kernel; a sessão foi mantida.
+The complete script update ended with 190 updated packages and 15 added. Previous list and final list are in the private directory `/home/delta/ricy/execucao-2026-10-08/`They were added debtap, dpkg, ministream, namcap, nettle3, noctalia, pyalpm, python-boolean.py, python-license-expression, python-pyelftools, python-pyqt6, python-pyqt6-sip, rpm-sequoia, rpm-tools and sdbus-cpp. Some are update dependencies/additions, not components chosen separately. The system recommended restarting due to updating of base/kernel components; the session was maintained.
 
-Versões finais conferidas: noctalia 5.2.1-1.1; Plasma Desktop 6.7.5-1.1; Plasma Workspace 6.7.5-3.1; KWin 6.7.5-3.1; Kvantum 1.1.8-1.1; python-gobject 3.58.0-1; qt6-tools 6.12.0-1.1; glib2 2.90.1-1.1; noto-fonts 1:2026.10.01-1; dpkg 1.23.11-1.1; rpm-tools 6.0.1-2.2; debtap 3.6.3-1; namcap 3.6.0-3; python-pyqt6 6.11.0-4.
+Final versions: noctalia 5.2.1-1.1; Plasma Desktop 6.7.5-1.1; Plasma Workspace 6.7.5-3.1; KWin 6.7.5-3.1; Kvantum 1.1.8-1.1; python-gobject 3.58.0-1; qt6-tools 6.12.0-1.1; glib2 2.90.1-1.1; noto-fonts 1:2026.10.01-1; dpkg 1.23.11-1.1; rpm-tools 6.0.1-2.2; debtap 3.6.3-1; namcap 3.6.0-3; python-pyqt6 6.11.0-4.
 
-Sequência aplicada, resumida com caminhos portáveis (a execução local foi em Bash, usando os scripts presentes no kit):
+Applied sequence, summarized with portable paths (local execution was in Bash, using the scripts present in the kit):
 
 ```bash
-# Registre pacotes e confira hashes antes de instalar/preparar.
+# Register packages and check hashes before installing/preparing.
 cd "$HOME/ricy-kit"
 sha256sum -c SHA256SUMS
 sudo pacman -Syu --needed --noconfirm noctalia kvantum python python-gobject qt6-tools glib2 noto-fonts python-pyqt6 wl-clipboard dpkg rpm-tools binutils fakeroot pkgfile namcap desktop-file-utils git base-devel
 cd contributions/noctalia-kde-integration-and-menus
-python preparar-destino.py
-./aplicar-estilo.sh
+python prepare-destination.py
+./apply-style.sh
 mkdir -p "$HOME/.local/share/color-schemes"
 cp outputs/kde-outlines/KDE-Noctalia.colors "$HOME/.local/share/color-schemes/"
 plasma-apply-colorscheme KDE-Noctalia
@@ -1032,1821 +1029,687 @@ kwriteconfig6 --file kwinrc --group Plugins --key blurEnabled true
 kwriteconfig6 --file kwinrc --group Effect-blur --key BlurStrength 5
 kwriteconfig6 --file kwinrc --group Effect-blur --key NoiseStrength 2
 qdbus6 org.kde.KWin /KWin org.kde.KWin.reconfigure
-./outputs/noctalia-test/iniciar-teste.sh
+./outputs/noctalia-test/start-test.sh
 ```
 
-O checkout AUR Debtap foi lido, fontes verificadas por SHA-512, construído com `makepkg` e instalado por `pacman -U`. Foram preservados checkout, pacote e logs em `execucao-2026-10-08/debtap-aur/` (materiais locais, não adicionados ao kit portátil). Os índices foram sincronizados com wrapper de curl IPv4, retries, tempo de conexão 15 s/total 180 s, HTTPS e verificação TLS; todos os índices necessários foram conferidos como não vazios. Depois, `python instalar-integracao.py` da contribuição Dolphin instalou a integração como o usuário do desktop.
+AUR Debtap checkout has been read, sources verified by SHA-512, built with `makepkg` and installed by `pacman -U`. Checkout, package and logs have been preserved in `execucao-2026-10-08/debtap-aur/` (local materials, not added to the portable kit). The indexes were synchronized with IPv4 curl wrapper, retractions, connection time 15 s/total 180 s, HTTPS and TLS check; all required indexes were checked as non-empty. `python install-integration.py` Dolphin contribution installed integration as the desktop user.
 
-### Correções necessárias durante a implantação
+### Corrections required during deployment
 
-1. O primeiro início registrou a shell/adaptador e removeu os painéis, mas falhou ao registrar Super. `setForeignShortcut` sozinho não criou o registro neste destino. Acrescentamos `doRegister` e `setShortcut` antes de `setForeignShortcut` em `configurar-super.py`. Super/Super+Espaço passaram a constar no KGlobalAccel; o novo ciclo completo de início terminou sem erro. O JSON original local foi conservado.
-2. Corrigimos a pendência UID/GID do conversor: `.MTREE` usa UID/GID zero, o tar final usa owner/group numéricos zero, `.INSTALL` só entra quando existe e erro na geração do mtree interrompe a conversão. Esta alteração foi feita na cópia local e na cópia ativa de contribuição, mantendo `/usr/bin/debtap` original para os índices.
-3. As fixtures sem dependências expuseram `namcap-checks`, `namcap-dependencies` e `namcap-libraries` incluídos no pacote final. Excluímos `namcap-*` e `pkgbuildinstallations*` tanto do tar quanto do mtree e do cálculo de tamanho. A nova conversão não contém esses intermediários.
-4. O wrapper de atualização elimina `-k`, converte URLs HTTP dos índices Debian/Ubuntu para HTTPS e valida os archives de índices após o comando. A atualização concluída não depende da senha ficar em arquivo; nenhum segredo foi acrescentado ao kit.
+1. The first start recorded the shell/adapter and removed the panels, but failed to register Super. `setForeignShortcut` alone did not create the record in this destination. `doRegister` and `setShortcut` before `setForeignShortcut` ed `configure-super.py`. Super/Super+Space came to appear on KGlobalAccel; the new complete start cycle ended without error. The original local JSON was conserved.
+2. We fixed the UID/GID to-do of the converter: `.MTREE` uses zero UID/GID, the final tar uses zero owner/number group, `.INSTALL` only enter when there is and error in the generation of mtree interrupts the conversion. This change was made in the local copy and active copy of contribution, keeping `/usr/bin/debtap` original for the indexes.
+3. Fixtures without dependencies exposed `namcap-checks`, `namcap-dependencies` and `namcap-libraries` included in the final package. `namcap-*` and `pkgbuildinstallations*` both tar and mtree and size calculation. The new conversion does not contain these intermediaries.
+4. Update wrapper deletes `-k`, convert HTTP URLs from Debian/Ubuntu indexes to HTTPS and validate index files after command. The completed update does not depend on the password to stay in file; no secret has been added to the kit.
 
-Os archives históricos distribuídos de outros chats foram preservados. A nova pasta `ricy-kit/contributions/target-implementation-fixes/` contém os dois archives corrigidos, seus diffs, manifesto de hashes, aplicador idempotente, wrapper de índices, README e licença Debtap. Para outra migração, execute `aplicar-correcoes.py` **depois da conferência SHA256SUMS e antes da preparação/instalação**. O aplicador aceita somente o arquivo original conhecido ou a versão corrigida; modificações desconhecidas exigem revisão do patch. As correções foram reproduzidas em cópia descartável e comparadas byte a byte com o ativo.
+The distributed historical archives of other chats have been preserved. `ricy-kit/contributions/target-implementation-fixes/` contains the two corrected archives, its diffs, hashe manifest, idempotent applicator, index wrapper, README and Debtap license. For another migration, run `apply-fixes.py`  **after the SHA256SUMS conference and before preparation/installation**. The applicator accepts only the known original file or corrected version; unknown modifications require patch revision. The corrections were reproduced in disposable copy and compared byte to byte with the asset.
 
-### Verificação executada
+### Verification carried out
 
-- `noctalia config validate` aprovou TOML/paleta. Logs registraram reserva inferior de 44 px nos dois monitores e apoio superior sem reserva. KWin confirmou efeito blur carregado.
-- Serviços de Noctalia, adaptador e plasmashell ativos; KRunner inativo; `panels().length=0`. Registros KGlobalAccel conferidos para Meta, Meta+Espaço e Meta+V. Os wrappers abriram launcher/clipboard; chamada `org.freedesktop.Application.ActivateAction("Query", …)` abriu launcher pelo adaptador.
-- Restauração real com `voltar-ao-plasma.sh`: os dois painéis Plasma voltaram. Reinício pelo script corrigido: painéis recolhidos, atalhos configurados e teste ativo. Os IDs/wallpaper conferidos antes/depois permaneceram os do destino.
-- Menu Qt nativo novamente testado sem forçar translucência: Kvantum, fonte 10 pt, cinco linhas 26 px, atributo de translucência ativo e alfa zero no canto. Houve inspeção de captura da sessão, depois removida; não foi registrada confirmação visual do usuário dos menus Dolphin. Não afirmar resolução universal dos menus próprios de aplicativos.
-- DEB e RPM mínimos gerados localmente, convertidos e validados por pacman, arquivo/mtree com UID/GID zero e ausência dos intermediários. Foram instalados temporariamente e `pacman -Qkk` relatou, para cada um, 4 archives e 0 alterados. Ambos removidos ao terminar; não permanecem pacotes de teste instalados.
-- RPM contendo scriptlet foi recusado com explicação. GUI offscreen executada com SHELL=fish/TERM ausente chegou ao botão Instalar, sem clicar nesse botão. A transação de teste foi feita diretamente pelo pacman com privilégios; não foi testada autenticação interativa Polkit.
-- Defaults dos três MIME conferidos. O `.desktop` de aplicativo passou no desktop-file-validate com dica de categoria. Esse validador não aceita Type=Service de menus KDE; sua saída no servicemenu não é prova de erro, pois a estrutura segue a documentação KDE (https://develop.kde.org/docs/apps/dolphin/service-menus/).
-- Sintaxe de scripts Python/Bash do kit corrigido aprovada. Aplicador de correções testado duas vezes na mesma cópia descartável. Hashes do kit de transporte conferidos após acrescentar os novos arquivos.
+- `noctalia config validate` approved TOML/palette. Logs registered lower reservation of 44 px on both monitors and top support without reservation. KWin confirmed blur effect loaded.
+- Active Noctalia, Adapter and Plasmashell Services; KRunner inactive; `panels().length=0`. KGlobalAccel records checked for Meta, Meta+Space and Meta+V. Wrappers opened launcher/clipboard; call `org.freedesktop.Application.ActivateAction("Query", …)` opened launcher by the adapter.
+- Real restoration with `return-to-plasma.sh`: the two Plasma panels returned. Restart by fixed script: collected panels, configured shortcuts and active test. The IDs/wallpaper checked before/after remained the destination ones.
+- Native Qt Menu again tested without forcing translucency: Kvantum, source 10 pt, five lines 26 px, active translucency attribute and alpha zero in the corner. There was session capture inspection, then removed; no visual confirmation of the user of the Dolphin menus was recorded. Do not state universal resolution of the app menus themselves.
+- DEB and minimal RPM generated locally, converted and validated by pacman, file/mtree with UID/GID zero and absence of intermediaries. `pacman -Qkk` reported, for each of them, 4 Archives and 0 changed. Both removed when finished; no test packages remain installed.
+- RPM containing scriptlet was refused with explanation. GUI offscreen executed with SHELL=fish/TERM missing reached the Install button without clicking this button. The test transaction was made directly by the pacman with privileges; no interactive Polkit authentication was tested.
+- Defaults of the three MIMEs checked. `.desktop` application passed on desktop-file-validate with category tooltip. This validator does not accept Type=Service from KDE menus; its output in servicemenu is not error proof because the structure follows KDE documentation (https://develop.kde.org/docs/apps/dolphin/service-menus/).
+- Syntax of Python/Bash scripts of the approved corrected kit. Corrections app tested twice on the same disposable copy. Hashes of the transport kit checked after adding the new files.
 
-### Backups e desfazer
+### Backups and undo
 
-Backups privados locais desta implementação: `plasma-antes.tar.gz`, `backup-manifest.json` e JSON dos atalhos em `$HOME/ricy-kit/contributions/noctalia-kde-integration-and-menus/outputs/noctalia-test/`; `kde-antes-contornos.tar.gz` e `estado-antes.json` em `outputs/kde-outlines/`. Os archives de backup/atalhos conferidos têm modo 0600. Não transportar esses archives para outro computador.
+Local private backups of this implementation: `plasma-antes.tar.gz`, `backup-manifest.json` and JSON of the shortcuts in `$HOME/ricy-kit/contributions/noctalia-kde-integration-and-menus/outputs/noctalia-test/`; `kde-antes-contornos.tar.gz` and `estado-antes.json` ed `outputs/kde-outlines/`. Backup/shortcut files checked have mode 0600Don't transport those files to another computer.
 
 ```bash
-# Layout e atalhos originais; mantém cores/estilo:
-"$HOME/ricy-kit/contributions/noctalia-kde-integration-and-menus/outputs/noctalia-test/voltar-ao-plasma.sh"
-# Chaves de estilo/fonte/blur e Kvantum anteriores:
-python "$HOME/ricy-kit/contributions/noctalia-kde-integration-and-menus/restaurar-estilo-e-blur.py"
+# Layout and original shortcuts; keeps colors/style:
+"$HOME/ricy-kit/contributions/noctalia-kde-integration-and-menus/outputs/noctalia-test/return-to-plasma.sh"
+# Previous style/source/blur and Kvantum keys:
+python "$HOME/ricy-kit/contributions/noctalia-kde-integration-and-menus/restore-style-and-blur.py"
 ```
 
-Para cores, selecione o esquema anterior no KDE ou restaure seletivamente kdeglobals do backup local conforme README, considerando preferências posteriores.
+For colors, select the previous scheme in KDE or selectively restore kdeglobals from the local backup as README, considering later preferences.
 
-Backup da integração Dolphin nesta implementação: `$HOME/.local/state/cachyos-package-installer-backups/20261008-190438-261237/`. Feche a janela e use o restaurador da contribuição com essa pasta. A data/hora é própria deste destino: em outra instalação use o caminho emitido pelo instalador. Não remove pacotes/ferramentas, bases ou programas externos instalados.
+Backup of Dolphin integration in this implementation: `$HOME/.local/state/cachyos-package-installer-backups/20261008-190438-261237/`. Close the window and use the contribution restorer with this folder. The date/time is appropriate for this destination: in another installation use the path emitted by the installer. Do not remove packages/tools, bases or external installed programs.
 
-### Limitações e estado pendente
+### Limitations and pending status
 
-A instalação e migração foram efetivamente executadas neste destino, ao contrário da fase histórica apenas documental. As fixtures validam o fluxo e a correção de metadados; não comprovam compatibilidade de qualquer DEB/RPM. Parsec não acompanha o kit e não foi instalado/reinstalado nesta etapa, nem seus metadados históricos foram alterados. Testes de login/streaming permanecem fora do resultado verificado. O aviso Bluetooth do Noctalia aponta ausência de BlueZ ativo no destino; não foi alterado serviço de Bluetooth para a integração. O reinício recomendado pelo atualizador e a conferência visual pelo usuário permanecem pendentes. Após novo login, executar `iniciar.sh` retoma o teste Noctalia.
+The installation and migration were effectively executed in this destination, unlike the historical documental phase only. Fixtures validate the flow and correction of metadata; they do not prove compatibility of any DEB/RPM. Parsec does not follow the kit and has not been installed/reinstalled at this stage, nor have its historical metadata changed. Log-in/streaming tests remain out of the verified result. Noctalia Bluetooth notice indicates absence of BlueZ active in the destination; Bluetooth service has not been changed for integration. The reset recommended by the updater and the user's visual conference remain pending. After a new login, run `start.sh` resumes the Noctalia test.
 
-## Contribuição — Início automático do Noctalia no KDE — 2026-10-08 19:40 (America/Sao_Paulo)
+## Contribution — Automatic start of Noctalia in KDE 2026-10-08  19:40 (America/Sao_Paulo)
 
-Objetivo: após reiniciar, o usuário relatou que entrou novamente no Plasma e solicitou que o Noctalia viesse por padrão. A implementação anterior seguia o modo de teste do documento e tinha somente recuperação no login. **O estado final de início manual descrito anteriormente foi substituído pelo início automático descrito nesta contribuição.** Plasma/KWin continuam responsáveis pela sessão, desktop e wallpaper.
+Objective: After restarting, the user reported that he entered Plasma again and requested that Noctalia come by default. The previous implementation followed the test mode of the document and had only recovery in the login. **The final manual start state described above was replaced by the automatic start described in this contribution.** Plasma/KWin remain responsible for the session, desktop and wallpaper.
 
-### Mudanças aplicadas
+### Applied changes
 
-- Instalada e habilitada `$HOME/.config/systemd/user/ricy-noctalia-integracao.service`, WantedBy=plasma-workspace.target, depois de plasmashell. Uma unidade oneshot aguarda prontidão real de Plasma/KGlobalAccel, inicia a integração e permanece ativa. Em erro durante sua execução, o wrapper restaura o Plasma. Usa Wants para plasmashell, permitindo que o rollback reinicie plasmashell sem cancelar a própria recuperação.
-- `$HOME/.config/systemd/user/noctalia-teste.service` passou de transitória a permanente. Usa `/usr/bin/noctalia`, o mesmo NOCTALIA_CONFIG_HOME/NOCTALIA_STATE_HOME do perfil isolado sob `$HOME/ricy-kit/contributions/noctalia-kde-integration-and-menus/work/noctalia-profile/`, Restart=on-failure/RestartSec=2, PartOf=graphical-session.target e Wants=noctalia-busca-desktop.service.
-- `$HOME/.config/systemd/user/noctalia-busca-desktop.service` é permanente, com Requires/BindsTo/After da shell e PartOf da shell/sessão. Usa Type=exec, sem BusName no systemd; Python assume `org.kde.krunner` como antes. Declarar permanentemente o mesmo BusName da unidade nativa KRunner causou conflito entre unidades; essa tentativa foi corrigida. A ativação compara o PID do dono D-Bus com o MainPID do adaptador antes de declarar sucesso.
-- Scripts ativos de início e ativação da busca detectam as unidades permanentes e usam `systemctl start` em vez de criar unidades transitórias. KRunner é parado antes da shell iniciar seu adaptador.
-- `recuperar-no-login.sh` não restaura os painéis enquanto a integração automática estiver habilitada. O início automático faz sua própria recuperação. `voltar-ao-plasma.sh` desabilita/para a integração automática antes de restaurar painéis e atalhos; uma recuperação interna evita interromper a própria unidade.
-- `configurar-super.py` aguarda até dois segundos pela criação efetiva da ação no KGlobalAccel. A primeira criação após novo login chegou a falhar na conferência imediata; a espera/repetição do registro foi aplicada. Backups originais dos atalhos permanecem intactos.
-- `$HOME/ricy/iniciar.sh` habilita e reinicia a integração automática. `$HOME/ricy/voltar.sh` mantém o retorno ao Plasma, agora também para os próximos logins. O guia IMPLEMENTADO.md foi atualizado. `noctalia-plasma.service`, preexistente e desabilitada, não foi habilitada; assim não abre outro perfil.
+- Installed and enabled `$HOME/.config/systemd/user/ricy-noctalia-integracao.service`, WantedBy=plasma-workspace.target, after plasmashell. A oneshot unit awaits real readiness of Plasma/KGlobalAccel, initiates integration and remains active. In error during its execution, wrapper restores Plasma. Uses Wants for plasmashell, allowing rollback to restart plasmashell without canceling its own recovery.
+- `$HOME/.config/systemd/user/noctalia-teste.service` from transient to permanent. `/usr/bin/noctalia`, the same NOCTALIA_CONFIG_HOME/NOCTALIA_STATE_HOME of the isolated profile under `$HOME/ricy-kit/contributions/noctalia-kde-integration-and-menus/work/noctalia-profile/`, Restart=on-failure/RestartSec=2, PartOf=graphical-session.target and Wants=noctalia-busca-desktop.service.
+- `$HOME/.config/systemd/user/noctalia-busca-desktop.service` is permanent, with Requirements/BindsTo/After shell and PartOf shell/session. Use Type=exec, no BusName in systemd; Python assumes `org.kde.krunner` As before. Permanently declaring the same BusName of the KRunner native unit caused conflict between units; this attempt was corrected. The activation compares the D-Bus owner's PID with the MainPID of the adapter before declaring success.
+- Active search start and activation Scripts detect permanent units and use `systemctl start` instead of creating transitory units. KRunner is stopped before the shell starts its adapter.
+- `recover-at-login.sh` does not restore the panels while automatic integration is enabled. Autostart makes its own recovery. `return-to-plasma.sh` disables/for automatic integration before restoring panels and shortcuts; an internal recovery prevents interrupting the drive itself.
+- `configure-super.py` waits up to two seconds for the effective creation of the action in KGlobalAccel. The first creation after new login failed at the immediate conference; the wait/repetition of the record was applied. Original shortcut backups remain intact.
+- `$HOME/ricy/start.sh` enables and restarts automatic integration. `$HOME/ricy/return.sh` keeps the return to Plasma, now also for the next logins. IMPLEMENTADO.md It's been updated. `noctalia-plasma.service`, pre-existing and disabled, was not enabled; thus does not open another profile.
 
-### Reprodução e materiais
+### Reproduction and materials
 
-Pasta nova, independente: `ricy-kit/contributions/noctalia-autostart/`. Inclui instalador Python, três modelos de unidade systemd, wrapper automático, cinco scripts atualizados e README. Os archives históricos dos demais chats no kit de transporte foram preservados; o instalador aplica estas atualizações à contribuição preparada no destino.
+New, independent directory: `ricy-kit/contributions/noctalia-autostart/`. Includes Python installer, three systemd unit models, automatic wrapper, five updated scripts and README. The historical archives of the other chats in the transport kit have been preserved; the installer applies these updates to the contribution prepared at the destination.
 
-Depois de conferir SHA256SUMS, aplicar `target-implementation-fixes` e preparar a contribuição `noctalia-kde-integration-and-menus`:
+After checking SHA256SUMS, apply `target-implementation-fixes` and prepare the contribution `noctalia-kde-integration-and-menus`:
 
 ```bash
 cd "$HOME/ricy-kit"
-python contributions/noctalia-autostart/instalar-inicio-automatico.py
+python contributions/noctalia-autostart/install-autostart.py
 ```
 
-O instalador deve ser executado pelo usuário do desktop, sem sudo, em Plasma Wayland. Captura os archives anteriores em `$HOME/.local/state/ricy-inicio-automatico-backups/<data-hora>/`, gera caminhos locais nas unidades, atualiza scripts, valida unidades e habilita/inicia a integração. A execução final teve backup em `20261008-193935-356538`; a primeira execução gerou outro backup anterior, preservado nessa mesma raiz. Cada destino deve usar seu próprio caminho emitido. Não foram refeitos os backups de layout/estilo nem instalados pacotes adicionais nesta etapa.
+The installer must be run by the desktop user, without sudo, in Plasma Wayland. Captures the previous files in `$HOME/.local/state/ricy-inicio-automatico-backups/<data-hora>/`, generates local paths in the units, updates scripts, validates units and enables/starts integration. `20261008-193935-356538`; the first execution generated another previous backup, preserved in that same root. Each destination must use its own emitted path. No layout/style backups were remade or additional packages installed at this stage.
 
-### Testes e resultado final
+### Tests and final result
 
-- Sintaxe Python/Bash e `systemd-analyze --user verify` das três unidades aprovados.
-- Integração habilitada, com symlink real em `plasma-workspace.target.wants`. ExecStart final terminou com 0/SUCCESS. Shell, adaptador e plasmashell ativos; painéis Plasma recolhidos; perfil isolado preservado.
-- Volta explícita ao Plasma desabilitou o início automático e restaurou os dois painéis. Novo início reativou a preferência e os atalhos sem pré-registro manual.
-- Reiniciar a shell reiniciou o adaptador; o PID proprietário de `org.kde.krunner` coincidiu com MainPID do adaptador. ActivateAction Query abriu o launcher.
-- A recuperação antiga de login foi executada com início automático habilitado e preservou a integração.
-- Configuração TOML inválida foi introduzida temporariamente: a unidade falhou e restaurou os dois painéis/KRunner. O conteúdo original foi reposto em finally e a integração iniciou novamente com sucesso. Log local em `execucao-2026-10-08/inicio-automatico-recuperacao.log`.
-- Uma cópia intermediária perdeu a permissão de execução do wrapper ao ser sincronizada; modos dos scripts foram corrigidos para 0755. O instalador final e o ciclo completo foram executados depois da correção.
+- Python/Bash Syntax and `systemd-analyze --user verify` of the three approved units.
+- Enabled integration, with real symlink in `plasma-workspace.target.wants`. ExecStart final finished with 0/SUCCESS. Shell, active adapter and plasmashell; Plasma panels collected; isolated profile preserved.
+- Explicit return to Plasma disabled the automatic start and restored the two panels. New start reactivated preference and shortcuts without manual pre-recording.
+- Restart shell restarted adapter; PID owner of `org.kde.krunner` coincided with MainPID of the adapter. ActivateAction Query opened the launcher.
+- The old login recovery was executed with auto-start enabled and preserved integration.
+- Invalid TOML configuration was temporarily entered: the drive failed and restored the two panels/KRunner. The original content was restored finally and the integration started again successfully. `execucao-2026-10-08/inicio-automatico-recuperacao.log`.
+- An intermediate copy lost the wrapper execution permission when synchronized; script modes were fixed to 0755. The final installer and the full cycle were executed after correction.
 
-Não foi executada outra reinicialização completa pelo agente após estas mudanças. Foram testados os mesmos serviços de início e sua habilitação no target KDE. O estado final já está ativo na sessão atual e configurado para os próximos logins.
+No other full reboot was executed by the agent after these changes. The same starting services and their KDE target enablement were tested. The final state is already active in the current session and configured for the next logins.
 
-### Desfazer
+### Undo
 
-Use a entrada **Voltar ao Plasma**, `$HOME/ricy/voltar.sh`, ou o `voltar-ao-plasma.sh` da contribuição ativa. Isso desabilita o início automático e restaura os painéis/atalhos locais, mantendo as cores e estilo. As unidades permanentes podem permanecer instaladas e inativas; `iniciar.sh` reativa a preferência. Para retornar também aos scripts/unidades anteriores à implantação persistente, revise os archives no backup privado emitido pelo instalador, considerando alterações posteriores. Os restauradores de estilo/blur e da integração Dolphin continuam separados e válidos.
-
-
-## Contribuição — Bloqueio com o visual da tela de login (08/10/2026, 19:51)
-
-Após a implementação, o usuário pediu que a tela de bloqueio tivesse o visual
-da tela de iniciar sessão e esclareceu que a mudança se restringia ao bloqueio.
-Foi acrescentada `contributions/login-matched-lock-screen/` ao kit, sem alterar o SDDM.
-O tema de login local é `mocha-limine`, com fundo Limine e fonte JetBrainsMono.
-O bloqueio usa esse mesmo wallpaper e os componentes visuais Breeze nativos:
-relógio, usuário e formulário. O formulário aparece já na abertura e aguarda
-um minuto de inatividade, como o login; mídia e botão de revelar senha ficam
-ocultos. Os botões de sessão continuam próprios para uma sessão já aberta.
-
-No Plasma 6.7 o bloqueio vem do pacote de shell `org.kde.plasma.desktop`.
-O aplicador gera um pacote local do mesmo ID, adaptando apenas apresentação
-e tempo de exibição no QML nativo; os demais componentes apontam para o KDE
-instalado. Autenticação/PAM, sincronização de senha, biometria e erros continuam
-na implementação do KDE. O aplicador valida os trechos antes de escrever e
-recusa um shell local pré-existente sem seu marcador. Depois de atualizar o
-Plasma, reaplicá-lo regenera os archives a partir do KDE novo.
-
-Verificação: prévia `kscreenlocker_greet --testing`, carregamento local
-confirmado no journal em ambos os monitores e conferência visual da captura.
-O formulário permaneceu visível após 15 segundos, sem os controles de mídia.
-Restauração do estado anterior foi executada, seguida de nova aplicação.
-Não foi feito bloqueio real nem teste de senha nesta etapa. Backups e capturas
-ficam privados no destino, fora do kit. Os serviços Noctalia permanecem ativos
-e o início automático no login está habilitado.
+Use the entry **Back to Plasma**, `$HOME/ricy/return.sh`or the `return-to-plasma.sh` This disables the automatic start and restores the local panels/tails, keeping the colors and style. Permanent units can remain installed and inactive; `start.sh` Reactivate preference. To also return to scripts/units prior to persistent deployment, review files in the private backup issued by the installer, considering later changes. Style/blur restorers and Dolphin integration remain separate and valid.
 
 
-## Correção — Inicialização do desbloqueio (08/10/2026)
+## Contribution — Locking the login screen look (08/10/2026, 19:51)
 
-Após o teste visual da contribuição de bloqueio, o usuário relatou que
-o desbloqueio não processava a senha, embora o SDDM autenticasse.
-A adaptação havia alterado o estado inicial de `uiVisible` de `false` para
-`true`, impedindo a transição cujo handler inicia a autenticação nativa.
-O aplicador foi corrigido para manter o estado inicial do KDE e tornar
-a interface visível depois da montagem via `Qt.callLater`. A aparência e
-a apresentação inicial do formulário continuam como no login.
+After implementation, the user asked the lock screen to have the view of the screen to sign in and clarified that the change was restricted to the lock. It was added `contributions/login-matched-lock-screen/` to the kit without changing SDDM. The local login theme is `mocha-limine`, with Limine background and JetBrainsMono font. The lock uses the same wallpaper and the native Breeze visual components: watch, user and form. The form appears already in the opening and waits a minute of inactivity, such as login; media and password reveal button are hidden. Session buttons remain suitable for an already open session.
 
-Verificação funcional: a cópia da versão anterior reproduziu o problema,
-sem início de autenticação e com timeout. A versão corrigida foi exercitada
-em cópia temporária usando o formulário original (`passwordBox` e
-`startLogin`) até o autenticador real `kde`, com PAM result code 0 / Success
-e encerramento do greeter. Passaram os modos imediato e com tolerância de
-1200 ms em `--testing` e renderização offscreen, sem bloquear a sessão real.
-A senha passou por descritor em memória e não foi salva no kit ou nos logs.
-Cópia ativa, contribuição portátil, README e hashes foram atualizados.
+In Plasma 6.7 the lock comes from the shell package `org.kde.plasma.desktop`. The applicator generates a local package of the same ID, adapting only presentation and display time in the native QML; the other components point to KDE installed. Authentication/PAM, password synchronization, biometrics and errors continue in KDE implementation. The applicator validates the snippets before writing and refuses a pre-existing local shell without its marker. After updating Plasma, reapplying it regenerates the files from the new KDE.
+
+Verification: prior `kscreenlocker_greet --testing`, local loading confirmed on the journal on both monitors and visual conference of the capture. The form remained visible after 15 seconds, without the media controls. Restoration of the previous state was executed, followed by new application. No real lock or password test was done at this stage. Backups and captures are private in the destination, outside the kit. Noctalia services remain active and the auto login start is enabled.
 
 
-## Contribuição — Login, bloqueio, cursor e kit de reinstalação — 2026-10-09 23:39 (America/Sao_Paulo)
+## Correction — Unlock initialisation (08/10/2026)
 
-Trabalho: captura das configurações efetivas solicitada pelo usuário para
-reutilizar a aparência na próxima instalação. Foram exportados assets e
-preferências; os novos instaladores não foram aplicados ao sistema de origem.
-O novo roteiro consolidado está em `REINSTALAR.md`, ao lado deste registro.
+After the visual test of the block contribution, the user reported that the unlocking did not process the password, although the SDDM authenticated. The adaptation had changed the initial state of `uiVisible` of `false` for `true`, preventing the transition whose handler starts native authentication. The applicator has been fixed to keep KDE's initial state and make the interface visible after mounting via `Qt.callLater`. The appearance and initial presentation of the form continue as in the login.
 
-### Estado visual capturado
+Functional verification: the copy of the previous version reproduced the problem, without login and with timeout. The corrected version was exercised in temporary copy using the original form (`passwordBox` and `startLogin`) up to the real authenticator `kde`, with WFP result code 0 / Success and closing of the greeter. They passed the modes immediately and with tolerance of 1200 ms in `--testing` and rendering offscreen, without blocking the actual session. The password passed by descriptor in memory and was not saved in the kit or logs. Active copy, portable contribution, README and hashes have been updated.
 
-- **Login SDDM:** `/etc/sddm.conf.d/95-mocha-limine.conf` seleciona
-  `mocha-limine`, CursorTheme Bibata-Modern-Classic, CursorSize 16 e Font
-  JetBrainsMono Nerd Font. `theme.conf` define showlogo hidden, showClock true,
-  type image, color #1e1e2e, fontSize 10 e fundo Limine. O QML local usa
-  formulário imediato, timeout 60000 ms e recorte proporcional da imagem.
-- **Cores do login:** leitura privilegiada, somente visual, de
-  `/var/lib/sddm/.config/kdeglobals`; ColorScheme CatppuccinMochaMauve,
-  widgetStyle Breeze, Icons breeze-dark e fonte JetBrainsMono Nerd Font 10 pt.
-  Os grupos Colors/ColorEffects foram exportados em `greeter-preferencias.json`.
-  A seleção do login é #cba6f7, distinta da seleção #977dba do KDE-Noctalia.
-- **Bloqueio:** kscreenlockerrc confirma Limine, FillMode 2, relógio sempre
-  visível, sem mídia. O QML ativo conserva uiVisible false e a transição
-  Qt.callLater corrigida; o formulário tem 60 s. Reutilizamos a contribuição
-  `login-matched-lock-screen`, gerada a partir do KDE do destino, sem copiar a shell
-  local desta máquina. Não houve novo bloqueio/teste de senha nesta captura.
+
+## Contribution — Login, blocking, cursor and resettlement kit — 2026-10-09  23:39 (America/Sao_Paulo)
+
+Work: capture of effective settings requested by the user to reuse appearance at the next installation. Assets and preferences have been exported; new installers have not been applied to the source system. `REINSTALL.md`, next to this record.
+
+### Visual status captured
+
+- **SDDM Login:**  `/etc/sddm.conf.d/95-mocha-limine.conf` select
+`mocha-limine`, CursorTheme Bibata-Modern-Classic, Cursor 16 and Font JetBrainsMono Nerd Font. `theme.conf` sets showlogo hidden, showClock true, type image, color #1e1e2e, fontSize 10 and Limine background. The local QML uses immediate form, timeout 60000 ms and proportional clipping of the image.
+- **Login colors:** privileged reading, visual only, of
+`/var/lib/sddm/.config/kdeglobals`; ColorScheme CatppuccinMochaMauve, widgetStyle Breeze, Icons breeze-dark and JetBrains fontMono Nerd Font 10 en. Colors/ColorEffects groups were exported in `greeter-preferences.json`. The login selection is #cba6f7, distinct from the KDE-Noctalia #977dba selection.
+- **Block:** kscreenlockerrc confirms Limine, FillMode 2, watch always
+visible, without media. The active QML preserves uiVisible false and the Qt.callLater transition corrected; the form has 60 s. We reused the contribution `login-matched-lock-screen`, generated from KDE of the destination, without copying the local shell of this machine. There was no new password lock/test in this capture.
 - **Cursor:** kcminputrc Mouse cursorTheme Bibata-Modern-Classic/cursorSize 16;
-  GTK 3/4 e environment.d/20-cursor.conf confirmam o mesmo. As cópias local e
-  do sistema do Bibata 2.0.6 foram comparadas arquivo a arquivo e são idênticas.
-- **Demais preferências:** fontes JetBrainsMono Nerd Font 10 pt em KDE, WM e
-  GTK; ícones Breeze Dark herdados dos kdedefaults; tema Plasma mocha-blur;
-  splash Catppuccin-Mocha-Mauve; decoração efetiva Breeze sem borda,
-  BorderSizeAuto false, NoPlugin false; Qt/Kvantum KDE-Noctalia; GTK
-  adw-gtk3-dark, som Ocean; fontconfig com antialiasing e hintslight; blur 5/2.
-  Os defaults antigos do tema global que citam outro cursor/Aurorae não foram
-  tratados como valores efetivos. A aplicação usa overrides seletivos.
-- **Extensões opcionais:** fontes de adaptivepanelwidth, smoothwindowgeometry
-  e windowsarrows incluídos; flags e atalhos selecionados capturados. O módulo
-  nativo de windowsarrows é recompilado no destino antes de aplicar. Não foi
-  transportado o .so desta máquina nem archives de testes/backups das fontes.
+GTK 3/4 and environment.d/20-cursor.conf The local copies and the Bibata system confirm the same. 2.0.6 file to file were compared and are identical.
+- **Other preferences:** JetBrainsMono Nerd Font 10 en in KDE, WM and
+GTK; icons Breeze Dark inherited from kdedefaults; theme Plasma mocha-blur; splash Catppuccin-Mocha-Mauve; effective decor Breeze without edge, BorderSizeAuto false, NoPlugin false; Qt/Kvantum KDE-Noctalia; GTK adw-gtk3-dark, Ocean sound; fontconfig with antialiasing and hintslight; blur 5/2. The old global theme defaults that cite another cursor/Aurorae were not treated as effective values. The application uses selective overrides.
+- **Optional extensions:** adaptivepanelwidth, smoothwindowgeometry fonts
+and included windowsarrows; captured selected flags and shortcuts. The native windowsarrow module is recompiled in the destination before applying. .so from this machine not even test/backups files from the sources.
 
-### Materiais incluídos e reprodução
+### Materials included and reproduction
 
-Nova pasta portátil:
-`ricy-kit/contributions/login-lock-cursor-appearance/`, contendo README,
-preferencias.json, greeter-preferencias.json, preferencias-kwin.json,
-sistema.py, usuario.py, comum.py, aplicar-wallpaper.sh, versões e licenças.
-Assets: QML/metadata/logo SDDM, Bibata completo, wallpaper Limine, quatro faces
-Regular/Bold/Italic/BoldItalic JetBrainsMono Nerd Font com OFL, temas locais
-Plasma/splash, fontconfig e fontes das extensões KWin. Kvantum e cores KDE
-reutilizam os archives já existentes da contribuição Noctalia. GTK/ícones/sons
-vêm dos pacotes do novo destino.
+New portable folder: `ricy-kit/contributions/login-lock-cursor-appearance/`, containing README, preferences.json, greeter-preferences.json, kwin-preferences.json, system.py, user.py, common.py, apply-wallpaper.sh. Assets: QML/metadata/logo SDDM, Bibata complete, Limine wallpaper, four Regular/Bold/Italic/BoldItalic JetBrainsMono Nerd Font with OFL, local themes Plasma/splash, fontconfig and sources of KWin extensions. Kvantum and KDE colors reuse the existing files of the Noctalia contribution. GTK/icons/sounds come from the packages of the new destination.
 
-Siga `REINSTALAR.md`: hashes do kit original; dependências; aplicar correções;
-instalar assets/preferências visuais; escolher wallpaper; preparar integração
-Noctalia; instalar início automático; gerar bloqueio; extensões/instalador
-Dolphin opcionais; nova sessão e conferência. Todas as contas, IDs e caminhos
-locais de instalação/backups são resolvidos no destino. O wallpaper transportado
-é o público Limine do pacote local, não uma foto pessoal.
+Go on. `REINSTALL.md`: Hashes from the original kit; dependencies; apply fixes; install assets/visual preferences; choose wallpaper; prepare integration Noctalia; install auto start; generate lock; optional Dolphin extensions/installer; new session and conference. All accounts, IDs and local installer/backups paths are resolved at destination. The transported wallpaper is the Limine audience of the local package, not a personal photo.
 
-### Backups e desfazer no destino
+### Backups and undo in destination
 
-Os instaladores criam backups privados novos em
-`/var/lib/ricy-appearance-backups/DATA-HORA/` (sistema) e
-`$HOME/.local/state/ricy-appearance-backups/DATA-HORA/` (usuário), com manifesto,
-existências anteriores e archives/temas afetados. O backup de sistema registra
-UID/GID anteriores; a aplicação resolve a conta sddm do destino. Para desfazer:
+Installers create new private backups on `/var/lib/ricy-appearance-backups/DATA-HORA/` (system) and `$HOME/.local/state/ricy-appearance-backups/DATA-HORA/` (user), with manifesto, previous existences and affected files/themes. System backup records previous UID/GID; the application resolves the destination sddm account. To undo:
 
 ```bash
 cd "$HOME/ricy-kit/contributions/login-lock-cursor-appearance"
-python usuario.py --restaurar "$HOME/.local/state/ricy-appearance-backups/DATA-HORA"
-sudo python sistema.py --restaurar /var/lib/ricy-appearance-backups/DATA-HORA
+python user.py --restaurar "$HOME/.local/state/ricy-appearance-backups/DATA-HORA"
+sudo python system.py --restaurar /var/lib/ricy-appearance-backups/DATA-HORA
 ```
 
-O bloqueio mantém seu próprio restaurador/backup. Reverta execuções múltiplas
-na ordem inversa. As restaurações repõem archives integrais e podem substituir
-edições posteriores; não removem pacotes. O script opcional de wallpaper altera
-a imagem dos desktops locais sem guardar layout; escolha a imagem anterior
-pelo Plasma se quiser desfazer essa escolha.
+The lock keeps your own restorer/backup. Revert multiple plays in reverse order. Restores replace integral files and can replace later edits; do not remove packages. The optional wallpaper script changes the image of local desktops without saving layout; choose the previous image by Plasma if you want to undo this choice.
 
-### Verificação e limites
+### Verification and limits
 
-Scripts Python/Bash e dados JSON foram validados. Aplicação/restauração foram
-exercitadas em raiz/home descartáveis, com valores anteriores, ausência de
-assets e outras chaves preservadas, incluindo GTK com chave duplicada.
-Geração/restauração do bloqueio em HOME descartável confirmou uiVisible false,
-Qt.callLater e timeout 60000 ms. O módulo nativo de setas foi recompilado em
-pasta temporária contra o KWin instalado. O kit/arquivo de transporte possui
-verificação SHA256 atualizada.
+Python/Bash Scripts and JSON data have been validated. Application/restoration have been exercised in disposable root/home, with previous values, absence of assets and other preserved keys, including GTK with duplicate key. Generation/restoration of the block in disposable HOME confirmed uiVisible false, Qt.callLater and timeout 60000 ms. The native arrow module has been recompiled in temporary folder against the installed KWin. The transport kit/file has updated SHA256 verification.
 
-Não foram modificadas as configurações ativas do KDE/SDDM/Noctalia nesta etapa,
-nem reiniciado SDDM ou realizada uma nova instalação completa. A leitura
-privilegiada exportou só preferências visuais, sem dados de login, senha/PAM,
-lista de usuários ou avatar. Não foram copiados backups pessoais, IDs de
-monitores, históricos ou estado Noctalia. Drivers/dispositivos e versões
-futuras de KDE/Noctalia exigem configuração/verificação no destino.
+The active KDE/SDDM/Noctalia settings have not been modified at this stage, nor has SDDM restarted or a complete new installation been performed. Privileged reading has only exported visual preferences without login data, password/PAM, user list or avatar. No personal backups, monitor IDs, historical or Noctalia status have been copied. Drivers/devices and future KDE/Noctalia versions require setting/checking in the destination.
 
 
-## Correção de escopo — Cursor animado do Konsole — 2026-10-09 23:45 (America/Sao_Paulo)
+## Scope correction — Konsole animated cursor — 2026-10-09  23:45 (America/Sao_Paulo)
 
-O usuário esclareceu que o cursor solicitado era o cursor de texto animado
-do Konsole. A captura anterior de Bibata corresponde ao ponteiro do mouse,
-que permanece como preferência adicional; ela não atendia sozinha ao pedido.
+The user clarified that the requested cursor was Konsole's animated text cursor. Bibata's previous capture corresponds to the mouse pointer, which remains as an additional preference; it did not meet the request alone.
 
-O perfil padrão atual em `~/.config/konsolerc` é `PlasmaBlur.profile`. O arquivo
-`~/.local/share/konsole/PlasmaBlur.profile` contém:
+The current default profile in `~/.config/konsolerc` Yeah. `PlasmaBlur.profile`. The file `~/.local/share/konsole/PlasmaBlur.profile` contains:
 
 ```ini
 [Terminal Features]
 AnimatingCursorEnabled=true
 ```
 
-O Konsole 26.08.2-1.1 instalado reconhece essa propriedade nativamente, conforme
-`/usr/bin/konsole --list-profile-properties`. A definição também foi conferida
-no código oficial da versão:
-https://github.com/KDE/konsole/blob/v26.08.2/src/profile/Profile.cpp .
-Não é um tema de ponteiro nem exige modificar o executável Konsole.
+The Konsole 26.08.2-1.1 installed recognizes this property natively, according to `/usr/bin/konsole --list-profile-properties`. The definition was also checked in the official version code: https://github.com/KDE/konsole/blob/v26.08.2/src/profile/Profile.cpp . It is neither a pointer theme nor requires modifying the Konsole executable.
 
-A contribuição nova `ricy-kit/contributions/konsole-animated-cursor/` contém
-perfil/paleta completos, wrapper Qt/Kvantum, entrada de aplicativo, aplicador
-com backup/restauração e README. Foram capturados JetBrainsMono Nerd Font
-10 pt, paleta Catppuccin Mocha, Opacity 0.85, Blur true, MenuBar Disabled e
-DefaultProfile PlasmaBlur.profile. BlinkingCursorEnabled, CursorShape e cores
-específicas do cursor não estão definidos no perfil local: permanecem os
-valores herdados de FALLBACK, sem inventar novas opções.
+The new contribution `ricy-kit/contributions/konsole-animated-cursor/` contains complete profile/palette, Qt/Kvantum wrapper, application input, backup/restoration applicator and README. JetBrainsMono Nerd Font have been captured 10 en, palette Catppuccin Mocha, Opacity 0.85, Blur true, MenuBar Disabled and DefaultProfile PlasmaBlur.profile. BlinkingCursorEnabled, CursorShape and cursor-specific colors are not defined in the local profile: the inherited values of FALLBACK remain, without inventing new options.
 
-O aplicador confere o suporte de animação no destino antes de escrever,
-mescla somente DefaultProfile/MenuBar em konsolerc e guarda archives
-anteriores/ausências sob `$HOME/.local/state/ricy-konsole-backups/DATA-HORA/`.
-Não transporta backups, histórico de terminal, SSH, comandos, diretório
-inicial ou nomes de usuário da origem. O shell é o do usuário do destino.
+The applicator confers animation support on the destination before writing, merges DefaultProfile/MenuBar only into konsolerc and saves previous files/absences under `$HOME/.local/state/ricy-konsole-backups/DATA-HORA/`. It does not carry backups, terminal history, SSH, commands, home directory or source user names. The shell is that of the destination user.
 
 ```bash
 sudo pacman -S --needed konsole kvantum ttf-jetbrains-mono-nerd
 cd "$HOME/ricy-kit/contributions/konsole-animated-cursor"
-python aplicar.py
-# Para desfazer, use o backup impresso no destino:
-python aplicar.py --restaurar "$HOME/.local/state/ricy-konsole-backups/DATA-HORA"
+python apply.py
+# To undo, use the printed backup in the destination:
+python apply.py --restaurar "$HOME/.local/state/ricy-konsole-backups/DATA-HORA"
 ```
 
-O guia REINSTALAR.md foi corrigido para aplicar também esta contribuição.
-Aplicação/restauração foram testadas em HOME descartável, preservando outras
-chaves e restaurando archives anteriores/removendo ausentes. Sintaxe Python,
-wrapper Bash e entrada desktop foram validados. Perfil/paleta distribuídos
-coincidem com os archives ativos; suporte nativo foi conferido sem abrir uma
-nova janela de terminal. Não houve alteração da configuração ativa nem teste
-visual novo da animação. Hashes e pacote portátil foram atualizados.
+The Guide REINSTALL.md was corrected to apply this contribution as well. Application/restoration were tested in disposable HOME, preserving other keys and restoring previous/removing files missing. Python Syntax, Wrapper Bash and desktop input were validated. Distributed profile/palette coincide with active files; native support was checked without opening a new terminal window. There was no change in active configuration or new animation visual test. Hashes and portable package were updated.
 
-## Contribuição — Estado permanente, aparência completa e SDDM no destino — 2026-10-10 18:04 (America/Sao_Paulo)
+## Contribution — Permanent status, complete appearance and SDDM at destination — 2026-10-10  18:04 (America/Sao_Paulo)
 
-Trabalho: validação do pacote atualizado de 09/10 e conclusão da implementação solicitada. O usuário substituiu o pacote anterior e escolheu explicitamente SDDM. Este estado substitui o modo de teste/manual das seções históricas. O roteiro de referência agora é `REINSTALAR.md`; os relatos de outros destinos foram preservados.
+Work: validation of the updated package from 09/10 and completion of the requested implementation. The user replaced the previous package and explicitly chose SDDM. This state replaces the test/manual mode of historical sections. The reference script is now `REINSTALL.md`; the reports of other destinations have been preserved.
 
-### Validação e recuperação do kit
+### Validation and recovery of kit
 
-- O kit recém-extraído em `/home/delta/Documents/ricy/ricy-kit` passou integralmente em SHA256SUMS antes das alterações. Sintaxe dos Python/Bash e conteúdo dos JSON conferidos. A versão atual inclui início automático, aparência completa, bloqueio corrigido e cursor animado do Konsole, ausentes no pacote anterior.
-- A troca do diretório havia levado o kit ativo, seus backups e seu perfil à lixeira. Foram recuperados da pasta local `$HOME/.local/share/Trash/files/ricy/`, sem mover nem apagar a cópia da lixeira. O backup original de layout recuperado foi comparado por SHA256 e é idêntico ao anterior, modo 0600.
-- A instalação ativa agora fica em **`$HOME/ricy-kit`**. Documento e kit de transporte permanecem em `$HOME/Documents/ricy`. Perfil/estado privado, backups e `.desktop` calculados pertencem apenas ao kit ativo. Não transporte a pasta ativa inteira como um kit limpo. O registro da primeira implantação foi preservado em `$HOME/.local/state/ricy-implementacao/ricy-registro-primeira-implantacao.md`.
-- Aplicadas as correções finais de `target-implementation-fixes` ao kit ativo, antes dos instaladores. Atualizada a cópia local do instalador Dolphin: metadados com UID/GID zero e exclusão de `namcap-*`/`pkgbuildinstallations*`. Índices sincronizados pelo wrapper HTTPS/TLS da versão atualizada.
+- The kit freshly extracted in `/home/delta/Documents/ricy/ricy-kit` passed in full SHA256SUMS before changes. Syntax of Python/Bash and contents of the checked JSONs. The current version includes automatic start, complete appearance, fixed lock and animated Konsole cursor, missing from the previous package.
+- The directory change had taken the active kit, its backups and its profile to the trash. They were recovered from the local folder `$HOME/.local/share/Trash/files/ricy/`, without moving or deleting the copy from the trash. The original backup of recovered layout was compared by SHA256 and is identical to the previous, mode 0600.
+- The active installation is now in **`$HOME/ricy-kit`**. Document and transport kit remain in `$HOME/Documents/ricy`. Private profile/state, backups and `.desktop` calculated belong only to the active kit. Do not transport the entire active folder as a clean kit. The record of the first deployment was preserved in `$HOME/.local/state/ricy-implementacao/ricy-registro-primeira-implantacao.md`.
+- The final corrections of `target-implementation-fixes` to the active kit before installers. Updated local copy of the Dolphin installer: metadata with UID/GID zero and deletion of `namcap-*`/`pkgbuildinstallations*`. Indexes synchronized by the updated version of the HTTPS/TLS wrapper.
 
-### Estado aplicado
+### State applied
 
-| Componente | Estado neste destino |
+| Component | State in this destination |
 |---|---|
-| Noctalia | Permanente no login KDE Wayland; integração habilitada em plasma-workspace.target |
-| Shell/adaptador | Unidades em `.config/systemd/user`, reinício em falha e vínculo à sessão; Type=exec sem disputa por BusName |
-| Desktop | Plasma/KWin mantidos; painéis substituídos pelas barras inferiores Noctalia, 44 px e reserva de espaço |
-| Busca e clipboard | Meta/Meta+Espaço e Meta+V, busca superior com apoio oculto fora da abertura |
-| Paleta/menus | KDE-Noctalia, Kvantum KDE-Noctalia, blur KWin 5/2 |
-| Fontes | JetBrainsMono Nerd Font 10 pt em KDE/GTK/WM; quatro faces do kit instaladas no sistema |
-| Ícones | Breeze Dark (`breeze-dark`), conforme a captura final; substitui Papirus-Dark usado na primeira implantação |
-| Aparência Plasma | mocha-blur; pacote global e splash Catppuccin-Mocha-Mauve, com overrides seletivos |
-| Janelas | Breeze sem bordas; WindowsArrows compilado contra KWin local; setas Super registradas; smoothwindowgeometry carregado |
-| Wallpaper | Limine em ambos os desktops locais, `/usr/local/share/ricy/limine-splash.png`, FillMode 2; wallpaper do Noctalia desativado |
-| Ponteiro | Bibata Modern Classic, tamanho 16, em KDE/GTK, SDDM, environment.d e ambiente do systemd do usuário |
-| Konsole | PlasmaBlur.profile padrão, cursor de texto animado, fonte JetBrainsMono 10 pt, paleta Catppuccin, opacidade 0,85 e blur |
-| Login | SDDM instalado/selecionado, mocha-limine, cores/fonte/cursor do kit; passa a controlar o login após reiniciar o computador |
-| Bloqueio | KDE nativo adaptado: Limine, relógio, formulário imediato/60 s, mídia/revelação de senha ocultos; uiVisible false + Qt.callLater preservados |
+| Noctalia | Permanent KDE Wayland login; plasma-workspace.target enabled integration |
+| Shell/adapter | Units in `.config/systemd/user`, restart in failure and session link; Type=exec without Bus disputeName |
+| Desktop | Plasma/KWin maintained; panels replaced by Noctalia lower bars, 44 px and space reserve |
+| Search and Clipboard | Meta/Meta+Space and Meta+V, top search with hidden support outside the opening |
+| Palette/menus | KDE-Noctalia, Kvantum KDE-Noctalia, blur KWin 5/2  |
+| Sources | JetBrainsMono Nerd Font 10 en KDE/GTK/WM; four sides of the kit installed on the system |
+| Icons | Breeze Dark (`breeze-dark`), according to the final capture; replaces Papirus-Dark used in the first deployment |
+| Plasma Appearance | mocha-blur; global package and splash Catppuccin-Mocha-Mauve, with selective overrides |
+| Windows | Breeze without borders; WindowsArrows compiled against local KWin; Super registered arrows; smoothwindowgeometry loaded |
+| Wallpaper | Limine on both local desktops, `/usr/local/share/ricy/limine-splash.png`, FillMode 2; Noctalia wallpaper disabled |
+| Pointer | Modern Classic Bibat, size 16, KDE/GTK, SDDM, environment.d and user systemd environment |
+| Konsole | PlasmaBlur.profile default, animated text cursor, JetBrainsMono font 10 Catppuccin palette, opacity 0,85 and blur |
+| Login | SDDM installed/selected, mocha-limine, color/source/cursor kit; starts to control login after restarting the computer |
+| Lock | Native KDE adapted: Limine, clock, immediate form/60 s, hidden password media/revelation; uiVisible false + Qt.callLater preserved |
 
-Os nomes históricos `noctalia-teste.service`, `iniciar-teste.sh` e `outputs/noctalia-test/` foram mantidos para compatibilidade entre scripts; **não indicam modo de teste**. A unidade agora é permanente. Nomes das entradas de menu e mensagens de início deixaram de exibir “teste”. A recuperação antiga não devolve os painéis enquanto o início automático estiver habilitado. O retorno explícito ao Plasma continua disponível e desabilita a preferência para os próximos logins.
+Historical Names `noctalia-teste.service`, `start-test.sh` and `outputs/noctalia-test/` were kept for compatibility between scripts; **do not indicate test mode**. The drive is now permanent. Names of menu entries and start messages no longer display “test”. Old recovery does not return the panels while autostart is enabled. Explicit return to Plasma remains available and disables the preference for the next logins.
 
-### Sequência realizada e ajustes do destino
+### Accomplished sequence and destination adjustments
 
-1. Kit copiado para `$HOME/ricy-kit`; perfil, estado e backups originais recuperados; caminhos dos quatro `.desktop` recalculados. Não foi executado novamente `preparar-destino.py`, preservando o backup original.
-2. Aplicado `contributions/target-implementation-fixes/aplicar-correcoes.py`.
-3. Instalados via pacman `sddm 0.21.0-8` e `adw-gtk-theme 6.5-1`, com dependências Xorg. Os demais componentes já estavam instalados. Snapshots Snapper 15/16 foram criados pela transação.
-4. Executado `sistema.py` como root e `usuario.py --extensoes-kwin` como usuário. O módulo WindowsArrows foi compilado com os headers/Qt/KWin deste destino; nenhum binário antigo foi importado. Aplicados wallpaper, `konsole-animated-cursor/aplicar.py` e `login-matched-lock-screen/aplicar.py`.
-5. Atualizado apenas o script local de preservação do wallpaper com os IDs locais e a imagem Limine escolhida; o backup original de layout não foi modificado.
-6. Executado `noctalia-autostart/instalar-inicio-automatico.py`. A migração parou as unidades transitórias, instalou as permanentes, validou-as e habilitou/iniciou a integração. Perfil efetivo: `$HOME/ricy-kit/contributions/noctalia-kde-integration-and-menus/work/noctalia-profile/config/noctalia/config.toml`.
-7. Antes de selecionar o SDDM, capturada a preferência anterior do gerenciador de login. Executados `systemctl disable plasmalogin.service` e `systemctl enable sddm.service`, **sem --now**. O link display-manager.service aponta ao SDDM. O processo Plasma Login Manager da sessão atual foi preservado; a troca precisa de reinício do computador.
-8. Reinstalada a integração Dolphin a partir do kit corrigido e executado o wrapper de índices atualizado. Nova fixture passou sem instalar pacotes de teste.
-9. `adaptivepanelwidth` foi instalado pela opção de extensões, mas desativado neste destino: procurava painéis Plasma ausentes e emitia “panel update failed: missing”. WindowsArrows e smoothwindowgeometry foram mantidos; o efeito maximize concorrente foi descarregado. Flags/atalhos foram aplicados também à instância ativa via KWin/KGlobalAccel.
-10. Prévia do SDDM revelou referência `config.logo` indefinida mesmo com logo oculto. Acrescentado `logo=default-logo.svg` ao theme.conf instalado e às duas cópias do asset no kit. O logo permanece oculto. Rótulos/mensagens da integração permanente foram corrigidos nos modelos e scripts ativos.
+1. Kit copied to `$HOME/ricy-kit`; profile, status and original backups recovered; paths of the four `.desktop` recalculated. Not executed again `prepare-destination.py`, preserving the original backup.
+2. Applied `contributions/target-implementation-fixes/apply-fixes.py`.
+3. Installed via pacman `sddm 0.21.0-8` and `adw-gtk-theme 6.5-1`, with Xorg dependencies. The other components were already installed. Snapshots Snapper 15/16 were created by the transaction.
+4. Executed `system.py` as root and `user.py --extensoes-kwin` as user. The WindowsArrows module was compiled with the headers/Qt/KWin of this destination; no old binary was imported. Applied wallpaper, `konsole-animated-cursor/apply.py` and `login-matched-lock-screen/apply.py`.
+5. Updated only the local wallpaper preservation script with local IDs and the chosen Limine image; the original layout backup has not been modified.
+6. Executed `noctalia-autostart/install-autostart.py`. Migration stopped the transit units, installed the permanent units, validated them and enabled/initiated integration. Effective profile: `$HOME/ricy-kit/contributions/noctalia-kde-integration-and-menus/work/noctalia-profile/config/noctalia/config.toml`.
+7. Before selecting SDDM, captured the previous preference of the login manager. Executed `systemctl disable plasmalogin.service` and `systemctl enable sddm.service`, **without --now**. The link display-manager.service points to SDDM. The Plasma Login Manager process of the current session has been preserved; the precise computer reset.
+8. Reinstalled Dolphin integration from the fixed kit and running the updated index wrapper. New fixture passed without installing test packages.
+9. `adaptivepanelwidth` was installed by the extension option, but disabled in this destination: looking for missing Plasma panels and issued “panel update failed: missing”. WindowsArrows and smoothwindowgeometry were maintained; the concurrent maximum effect was downloaded. Flags/tails were also applied to the active instance via KWin/KGlobalAccel.
+10. Prior SDDM revealed reference `config.logo` Undefined even with hidden logo. Added `logo=default-logo.svg` ed theme.conf installed and to the two copies of the asset in the kit. The logo remains hidden. Labels/messages of the permanent integration have been corrected in active templates and scripts.
 
-Para reproduzir em outro destino, use a sequência do `REINSTALAR.md`, preparando backups novos nesse computador. A recuperação a partir da lixeira foi específica desta instalação e não deve ser copiada como etapa de migração.
+To play in another destination, use the sequence of `REINSTALL.md`, preparing new backups on that computer. Recovery from the trash was specific to this installation and should not be copied as migration step.
 
-### Verificação executada e limites
+### Verification carried out and limits
 
-- `systemd-analyze --user verify` das três unidades passou. Integração habilitada, symlink no target KDE, `Result=success`, `ExecMainStatus=0`; shell/adaptador/Plasma ativos. FragmentPath da shell aponta ao arquivo permanente da home. Reinício da integração terminou com sucesso.
-- PID proprietário de `org.kde.krunner` coincide com MainPID do adaptador; consulta Query abre busca após a migração. Atalhos Meta/Meta+Espaço/Meta+V mantidos; Super+setas registrado no script KWin. Painéis Plasma: zero. As duas imagens de desktop apontam ao Limine instalado.
-- Bibata 16 aplicado pela ferramenta KDE; ambiente do systemd atualizado. Fontconfig resolve JetBrainsMono Nerd Font instalada. Menu Qt: Kvantum, JetBrainsMono 10 pt, cinco linhas 26 px e alfa zero no canto.
-- `konsole --list-profile-properties` reconhece AnimatingCursorEnabled; perfil padrão e propriedade true conferidos. O Konsole já aberto não foi encerrado, para preservar o trabalho em andamento; novas janelas carregam o perfil. Não houve teste visual específico da animação.
-- Prévia do bloqueio com `kscreenlocker_greet --testing --shell org.kde.plasma.desktop` carregou o QML local: journal confirmou a mensagem Ricy nas duas saídas. A prévia foi encerrada por timeout; GetActive da sessão permaneceu false. Estado inicial false, Qt.callLater e 60000 ms conferidos. Não foi fornecida senha, nem testado desbloqueio real; o teste funcional PAM da origem continua sendo evidência histórica, não teste novo neste destino.
-- Prévia SDDM offscreen/software executada como a conta sddm: tema/QML foram carregados e uma view foi criada. Avisos de socket/backend gráficos são da prévia sem daemon/tela real; a referência indefinida do logo foi corrigida. Conta sddm tem ownership do seu kdeglobals privado. Não houve login/autenticação real pelo SDDM nem reinício do computador nesta etapa.
-- Fixture DEB com o conversor final passou em pacman, UID/GID zero e ausência dos intermediários namcap no tar/mtree; não foi instalada. Os testes anteriores de RPM/recusa de scriptlets não foram repetidos.
+- `systemd-analyze --user verify` integration enabled, symlink in KDE target, `Result=success`, `ExecMainStatus=0`; shell/adapter/Plasma active. FragmentPath from shell points to the permanent home file. Restart of integration ended successfully.
+- PID owner of `org.kde.krunner` coincides with the Adapter's MainPID; Query query opens search after migration. Meta/Meta+Space/Meta+V shortcuts maintained; Super+arrows registered in the KWin script. Plasma panels: zero. Both desktop images point to Limine installed.
+- Bibat 16 applied by KDE tool; updated systemd environment. Fontconfig solves JetBrainsMono Nerd Font installed. Qt Menu: Kvantum, JetBrainsMono 10 pt, five lines 26 px and alpha zero in the corner.
+- `konsole --list-profile-properties` recognizes AnimatingCursorEnabled; checked default profile and true property. Konsole has not already been opened, to preserve the work in progress; new windows carry the profile. There was no animation specific visual test.
+- Prior to locking with `kscreenlocker_greet --testing --shell org.kde.plasma.desktop` carried the local QML: journal confirmed the Ricy message on both exits. The preview was closed by timeout; GetActive of the session remained false. 60000 no password was provided, no real unlocking was tested; the origin MAP functional test remains historical evidence, no new test in this destination.
+- Previa SDDM offscreen/software executed as the sddm account: theme/QML have been loaded and a view has been created. Socket/backend warnings graphics are from the previous without real daemon/screen; the indefinite logo reference has been corrected. SDdm account has ownership of your private kdeglobals. There was no real login/authentication by SDDM or restart of the computer at this stage.
+- Fixture DEB with the final converter passed in pacman, UID/GID zero and absence of namcap intermediates in tar/mtree; was not installed. Previous RPM/refusal scriptlets tests were not repeated.
 
-### Backups e reversão
+### Backups and reversals
 
-Backups novos deste destino:
+New backups of this destination:
 
-- Sistema/SDDM/assets: `/var/lib/ricy-appearance-backups/20261010-175757-266724/`.
-- Aparência e extensões do usuário: `$HOME/.local/state/ricy-appearance-backups/20261010-175814-614754/`.
+- System/SDDM/assets: `/var/lib/ricy-appearance-backups/20261010-175757-266724/`.
+- Appearance and User Extensions: `$HOME/.local/state/ricy-appearance-backups/20261010-175814-614754/`.
 - Konsole: `$HOME/.local/state/ricy-konsole-backups/20261010-175817-074216/`.
-- Bloqueio: `$HOME/.local/state/ricy-lockscreen-backups/20261010-175817-144082/`.
-- Início automático/scripts: `$HOME/.local/state/ricy-inicio-automatico-backups/20261010-175834-898747/`.
-- Seleção do gerenciador de login: `/var/lib/ricy-display-manager-backups/20261010-xxc6JxxS/`.
-- Integração Dolphin atualizada: `$HOME/.local/state/cachyos-package-installer-backups/20261010-175846-254383/`; backup inicial anterior também preservado.
+- Block: `$HOME/.local/state/ricy-lockscreen-backups/20261010-175817-144082/`.
+- Autostart/scripts: `$HOME/.local/state/ricy-inicio-automatico-backups/20261010-175834-898747/`.
+- login manager selection: `/var/lib/ricy-display-manager-backups/20261010-xxc6JxxS/`.
+- updated Dolphin integration: `$HOME/.local/state/cachyos-package-installer-backups/20261010-175846-254383/`; Previous initial backup also preserved.
 
-Para voltar aos painéis/atalhos e desabilitar Noctalia no próximo login:
+To return to panels/tails and disable Noctalia at the next login:
 
 ```bash
-"$HOME/ricy-kit/contributions/noctalia-kde-integration-and-menus/outputs/noctalia-test/voltar-ao-plasma.sh"
+"$HOME/ricy-kit/contributions/noctalia-kde-integration-and-menus/outputs/noctalia-test/return-to-plasma.sh"
 ```
 
-Para reativar Noctalia:
+To reactivate Noctalia:
 
 ```bash
 systemctl --user enable ricy-noctalia-integracao.service
 systemctl --user restart ricy-noctalia-integracao.service
 ```
 
-Bloqueio, Konsole, aparência e assets de sistema têm os restauradores e backups acima, conforme `REINSTALAR.md`. Restauração integral de um arquivo pode substituir mudanças posteriores. Para devolver Plasma Login Manager no próximo reinício, use `sudo systemctl disable sddm.service` seguido de `sudo systemctl enable plasmalogin.service`, sem --now dentro da sessão atual. Os pacotes continuam instalados. O wallpaper anterior era o padrão north; pode ser selecionado novamente pelo Plasma.
-
-
-## Contribuição — Cedilha no teclado US internacional — 2026-10-10 18:09 (America/Sao_Paulo)
-
-Após o usuário validar a implementação visual, relatou ausência da cedilha
-no Konsole e no Brave. A sessão confirmou um único layout ativo: English
-(US, alt. intl.), `us(alt-intl)`, herdado da configuração do sistema.
-Não havia `$HOME/.XCompose` nem configuração de layout em kxkbrc. A sessão
-Plasma/Konsole usa LANG=en_US.UTF-8. A tabela de composição inglesa foi
-reproduzida localmente: dead_acute+c/C produzia ć/Ć.
-
-Aplicado `$HOME/.XCompose`, incluindo a tabela da locale (`include "%L"`)
-e sobrescrevendo somente dead_acute+c/C para ç/Ç. O layout físico e o idioma
-não foram alterados. Backup de ausência:
-`$HOME/.local/state/ricy-teclado-backups/20261010-180848-912053/`.
-Não foram encerrados os aplicativos do usuário; processos abertos podem
-manter a tabela anterior e precisam ser fechados completamente/reabertos.
-
-Adicionada `contributions/keyboard-cedilla/` aos kits ativo e de transporte,
-com aplicador idempotente, preservação de regras existentes e instruções de
-reversão. REINSTALAR.md agora inclui o passo 3a. Os archives compactados
-originais não foram regenerados; esta correção está nos diretórios atualizados.
-
-Validação: libxkbcommon confirmou ç/Ç em en_US.UTF-8, C.UTF-8 e pt_BR.UTF-8;
-á, ã, ê, apóstrofo e dead_cedilla+c permaneceram corretos. Gtk.IMContextSimple
-confirmou ç/Ç, á e ã em janela offscreen, sem enviar teclas às janelas do usuário.
-Sintaxe do aplicador e segunda execução sem mudanças conferidas. A digitação
-física nas janelas existentes do Konsole/Brave depende do recarregamento pelo
-usuário e não foi apresentada como teste realizado. A conta separada do SDDM
-e o console virtual não foram alterados por este ajuste de usuário.
-
-## Contribuição — Cedilha no Brave por XWayland — 2026-10-10 18:14 (America/Sao_Paulo)
-
-O usuário confirmou ç no Konsole após a contribuição anterior, mas o Brave
-continuou produzindo ć. A primeira correção não cobria a rota nativa Wayland
-do Chromium. Brave local: 155.1.97.56. O código upstream WaylandInputMethodContext
-usa CharacterComposer para eventos não consumidos pelo IME, com tabela própria.
-
-Configurado `$HOME/.config/brave-flags.conf` com `--ozone-platform=x11`.
-O launcher `/usr/bin/brave` do pacote lê esse arquivo. Apenas o navegador
-usa XWayland; a sessão KDE permanece Wayland. Não foram alterados .XCompose,
-layout, idioma, flags de sandbox nem perfil pessoal. Backup de ausência:
-`$HOME/.local/state/ricy-teclado-backups/20261010-181356-714082/`.
-O Brave deve ser completamente reaberto para carregar a opção. Em telas
-HiDPI, a mudança de backend pode alterar escala/renderização.
-
-Adicionado aplicador idempotente `contributions/keyboard-cedilla/aplicar-brave.py`
-a ambos os kits. README, roteiro de reinstalação e SHA256SUMS atualizados.
-Os archives compactados históricos continuam sem esta atualização.
-
-Teste funcional: instância Brave com perfil temporário em servidor XWayland
-aninhado separado, campo HTML local e entrada por XTest somente nesse display.
-A opção X11 sozinha (sem forçar GTK, sem variáveis de IM) produziu `ççÇ`.
-A primeira rodada com GTK explícito também passou; essas opções extras não
-foram incluídas na configuração definitiva. As instâncias isoladas foram
-encerradas; logs/perfis de teste permanecem em /tmp/ricy-brave-validation-*.
-Segunda execução do aplicador não alterou o arquivo. Não foi enviada entrada
-às janelas do usuário nem usado seu perfil no teste.
-
-## Contribuição — Driver USB AIC8800 para Wi-Fi e Bluetooth — 2026-10-10 18:25 (America/Sao_Paulo)
-
-Solicitação do usuário: instalar o driver do adaptador Wi-Fi/Bluetooth AIC8800.
-Identificação local antes da instalação: USB `a69c:8800` (AIC Wlan), porta
-1-14, sem driver/interface de rede. Kernel ativo 7.2.9-2-cachyos com Clang;
-LTS 6.18.55-2-cachyos-lts também instalado, compilado com GCC. Ambos tinham
-headers correspondentes. Secure Boot estava desativado. Ethernet existente
-foi preservada; nenhuma rede/senha foi configurada.
-
-Instalados `dkms 3.4.3-1` e pacote local
-`aic8800-usb-dkms-ricy 5.0.20260123.9-3`. Fonte primária Radxa:
-https://github.com/radxa-pkg/aic8800, commit
-`d13d07963cd15d731e2895e8288a04cca6152ac9`, arquivo de origem verificado por
-SHA256. A preparação normaliza CRLF e aplica a série de patches upstream,
-incluindo compatibilidade dos kernels novos e uso de BlueZ. Foram empacotados
-somente os drivers/firmware USB; nenhuma biblioteca Android foi instalada.
-
-Módulos: `aic_load_fw`, `aic8800_fdrv`, `aic_btusb`. Firmware:
-`/usr/lib/firmware/aic8800_fw/USB`. DKMS escolhe Clang/GCC lendo a configuração
-de cada kernel e recompila nas atualizações com headers disponíveis. A primeira
-compilação DKMS do LTS usava Clang fixo e falhou; corrigida a seleção por kernel.
-Ambos passaram após a correção. A versão final registra o driver Bluetooth
-antes de carregar o firmware e dá prioridade a aic_btusb quando btusb é
-solicitado. Foi removida a referência circular entre aic_load_fw e
-aic8800_fdrv: o último já tem dependência nativa do primeiro. btusb não foi
-bloqueado globalmente.
-
-Após a carga do firmware, o dispositivo passou a `a69c:8801`, com duas
-interfaces Wireless ligadas a aic_btusb e uma Vendor Specific ligada a
-aic8800_fdrv. NetworkManager reconheceu wlan0 e p2p-dev-wlan0. RFKill sem
-bloqueios. Buscas encontraram 9–13 redes Wi-Fi. BlueZ criou hci0,
-Powered=yes; descoberta Bluetooth iniciou sem erro e foi encerrada após o
-teste. Não surgiram dispositivos anunciados nessa janela de busca. Serviço
-bluetooth já estava habilitado antes; foi iniciado e está ativo.
-
-Verificação final: DKMS instalado para 7.2.9-2-cachyos e
-6.18.55-2-cachyos-lts; vermagic correto nos dois. Teste funcional realizado
-somente no kernel ativo 7.2; não houve boot no LTS, conexão Wi-Fi ou pareamento.
-O driver upstream emite avisos de compilação/debug, preservados nos logs; os
-builds terminaram com sucesso. As transações pacman geraram snapshots Snapper
-pelo hook já existente e reconstruíram os initramfs por Limine/mkinitcpio.
-Não houve reinício do computador nem interrupção da Ethernet.
-
-Reprodução: `contributions/driver-aic8800/README.md` no kit ativo e de transporte,
-com PKGBUILD, dkms.conf, build.sh e configuração modprobe. REINSTALAR.md ganhou
-passo opcional 6a. SHA256SUMS atualizado/verificado nas duas cópias. Os archives
-compactados históricos não foram regenerados. Fontes baixadas e compilações
-ficam no cache local, sem credenciais. Logs e inventário anterior:
-`$HOME/.local/state/ricy-aic8800/`.
-
-Reversão: `sudo pacman -R aic8800-usb-dkms-ricy`; DKMS remove módulos em disco.
-Reconecte o adaptador ou reinicie para encerrar módulos ainda carregados.
-DKMS/BlueZ podem ser mantidos para outros dispositivos; o estado anterior do
-serviço Bluetooth era habilitado e inativo.
-
-## Contribuição — Busca junto à lupa da barra — 2026-10-10 18:34 (America/Sao_Paulo)
-
-O usuário pediu que Search Applications aberto pela lupa apareça no canto,
-seguindo o comportamento do controle Noctalia à direita. Ativado
-`shell.panel.open_near_click_launcher = true`. O launcher permanece attached/auto:
-o clique na lupa posiciona a busca junto ao widget, no lado esquerdo da barra.
-A opção equivalente do control-center já estava true. Os wrappers de teclado
-e a barra superior search_edge foram preservados.
-
-Atualizados o perfil ativo e os config.toml de outputs da contribuição
-noctalia-kde-integration-and-menus nos kits ativo e de transporte. Backup:
-`$HOME/.local/state/ricy-busca-backups/20261010-183355-074732/`.
-Executados `noctalia config validate` (válido) e `noctalia msg config-reload`
-(ok). Exportação efetiva confirmou true, attached e auto. A shell permaneceu
-ativa com o mesmo PID 1218, sem reiniciar nem encerrar aplicativos filhos.
-O painel já aberto pode exigir fechar/reabrir pela lupa para reposicionar;
-não houve clique automatizado nem captura visual da nova geometria.
-REINSTALAR.md e hashes dos config.toml foram atualizados.
-
-Referência: [configuração oficial de painéis Noctalia](https://github.com/noctalia-dev/noctalia/blob/main/docs/user/configuration/shell.mdx).
-
-## Contribuição — Barra superior compacta e arredondada da busca — 2026-10-10 18:37 (America/Sao_Paulo)
-
-Após validar a abertura junto à lupa, o usuário pediu uma barra superior
-mais estreita e arredondada para a busca aberta por Super/digitação.
-Alterado somente `[bar.search_edge]`: thickness 16, margin_ends 640,
-margin_edge 8, radius e os quatro raios 8. Permanecem opacity 0,70,
-blur, sem sombra, sem reserva de espaço e sem auto-hide. A revelação e
-ocultação continuam sob o adaptador/wrapper existentes. A lupa inferior
-continua com open_near_click_launcher=true.
-
-Os dois monitores atuais têm largura lógica 1920; a barra resultante mede
-640 px, centralizada, cerca de 40 px além do launcher de 560 px por lado.
-O topo fica a 8 px da borda. Em outras resoluções, recalcule margin_ends
-como `(largura lógica - largura desejada) / 2`; para escalas/resoluções
-distintas, use overrides por monitor. Isso foi registrado em REINSTALAR.md.
-
-Atualizados o perfil ativo e os dois templates de config.toml. Backup:
-`$HOME/.local/state/ricy-busca-backups/20261010-183630-034925/`.
-Validação Noctalia passou e config-reload retornou ok; shell permaneceu
-no PID 1218. Busca reaberta pela interface D-Bus usada pelos atalhos.
-Captura visual conferiu largura reduzida, união com o painel e cantos
-arredondados. O painel de verificação foi fechado ao concluir. Capturas
-locais temporárias não foram incluídas no kit. Manifestos SHA256 atualizados.
-
-## Contribuição — Barra da busca apenas no monitor ativo — 2026-10-10 18:40 (America/Sao_Paulo)
-
-O usuário validou o visual compacto, mas a barra aparecia nas duas telas
-enquanto o launcher abria em uma. O adaptador agora consulta
-`org.kde.KWin.activeOutputName`, a mesma referência usada pelo Noctalia/KDE
-para resolver o monitor da abertura. Antes de revelar o launcher, recolhe
-a barra search_edge em todas as telas e executa `bar-show search_edge NOME`
-para somente o conector ativo. Ao fechar a busca, recolhe a barra como antes.
-
-`abrir-menu.sh` agora chama toggleDisplay do mesmo adaptador D-Bus; isso
-unifica Super/Super+Espaço e a digitação sem duplicar a escolha de monitor.
-Nenhum nome DP/HDMI foi fixado nos scripts. Mantidos a barra de 640 px,
-arredondamento, comportamento da lupa inferior e abertura junto ao clique.
-Falhas de consulta/comando devolvem erro D-Bus e tentam recolher a barra.
-
-Backups dos dois scripts anteriores:
-`$HOME/.local/state/ricy-busca-backups/20261010-183834-044045/`.
-Atualizadas as cópias ativa/de transporte, REINSTALAR.md e SHA256SUMS.
-Reiniciado somente noctalia-busca-desktop.service, preservando a shell e
-seus aplicativos filhos; MainPID da shell continuou 1218.
-
-Verificação: Python/Bash válidos. Abertura por display D-Bus no DP-1
-confirmada visualmente com a barra somente nessa tela. Abertura pelo wrapper
-de Super no HDMI-A-1 também conferida: barra e launcher apenas na tela
-correta. O foco foi alternado pelas ações KWin Switch to Screen para o teste,
-aguardando sua aplicação; ao concluir, painel fechado e foco devolvido a DP-1.
-Não houve clique automatizado na lupa nem alteração de geometria das janelas.
-
-## Contribuição — Notificações contínuas com a taskbar — 2026-10-10 18:55 (America/Sao_Paulo)
-
-Trabalho: notificações no canto inferior direito com barra de tempo e união
-visual com a taskbar. Após a prévia, o usuário pediu explicitamente retirar
-o recorte arredondado da borda inferior direita. O resultado aplicado mantém
-os outros três cantos arredondados e faz essa borda alcançar a taskbar.
-
-No perfil ativo em
-`$HOME/ricy-kit/contributions/noctalia-kde-integration-and-menus/work/noctalia-profile/config/noctalia/config.toml`
-e nos templates `outputs/noctalia-test/config.toml` dos dois kits,
-`[notification]` passou a position="bottom_right", follow_focused_output=true,
-background_opacity=0.70, border=false, offset_x=0 e offset_y=0. A notificação
-segue o monitor ativo e a mesma transparência da taskbar. A barra de progresso
-Mauve e a expiração já são nativas do Noctalia; não foi criado outro daemon.
-Notificações persistentes mantêm o comportamento nativo.
-
-O Noctalia 5.2.1 não oferece preferência de raio individual para esse cartão.
-Aplicado patch em `src/shell/notification/notification_toast.cpp` para usar
-raio zero somente no canto inferior direito quando bottom_right e offset_y=0.
-Fundo e região de blur usam os mesmos quatro raios. Este estado substitui a
-premissa histórica de usar apenas configurações sem recompilar o Noctalia:
-agora há uma adaptação local pequena sobre o commit v5.2.1
-`6ef43e2bf2f3d5b4205ec72a72e34a2ab76ce3b4`.
-
-Instalados neste destino meson 1.12.1-2, ninja 1.13.2-3.1,
-wayland-protocols 1.49-1, nlohmann-json 3.12.0-2 e stb (20260415), além da
-dependência python-tqdm 4.70.1-1. A instalação pelos repositórios foi concluída
-com autenticação local; os hooks criaram snapshots Snapper 41/42.
-Compilação release Meson/C++23 e Ninja concluída sem erros. Fontes/build em
-`$HOME/.cache/ricy-noctalia-src-5.2.1/`, fora dos materiais portáteis.
-
-O binário selecionado pela shell é `$HOME/.local/lib/ricy-noctalia/noctalia`,
-por `~/.config/systemd/user/noctalia-teste.service.d/50-notificacoes-ricy.conf`.
-`/usr/bin/noctalia` e o pacote original permanecem instalados. O prefixo /usr
-da compilação serve para localizar os assets existentes; não foi executado
-meson install. A shell e o adaptador foram reiniciados com KillMode=process
-temporário para preservar os aplicativos lançados pelo menu, incluindo o
-Codex usado neste trabalho; o override temporário foi removido e a unidade
-voltou a KillMode=control-group. Shell e adaptador estão ativos.
-
-Materiais incluídos nos kits ativo e de transporte:
-`contributions/notification-continuity/README.md`, `compilar.sh`, `ativar.py`,
-`notificacao-canto-direito.patch` e licença MIT upstream. `REINSTALAR.md`
-ganhou o passo 4a. Para reproduzir, siga o README: prepare primeiro a integração
-permanente, instale as dependências, execute `bash compilar.sh` e
-`python ativar.py`. O compilador exige versão/commit compatíveis e recusa
-alterações de fonte desconhecidas. O executável local não acompanha sozinho
-atualizações do pacote: revise/rebaseie e recompile o patch ao trocar de versão,
-ou restaure a seleção original antes de usar assets de outro Noctalia.
-
-Verificação executada: sintaxe Python/Bash, git diff --check, compilação nativa
-e nova execução do compilador sobre o build existente passaram. Capturas da
-notificação no HDMI-A-1 confirmaram a união do canto inferior direito e a barra
-de tempo menor entre o início e o meio. Teste D-Bus com prazo de 8000 ms recebeu
-NotificationClosed com reason=1 aos 8,0 segundos; captura posterior confirmou
-seu desaparecimento. O teste visual e de expiração foi nesta instalação,
-não em outro computador. A pausa ao passar o ponteiro foi conferida no código
-nativo, sem teste de interação separado.
-
-Backups locais, não incluídos no kit:
-`$HOME/.local/state/ricy-notificacoes-backups/20261010-184413-289100/config.toml`
-contém a configuração anterior; a ativação guardou seu estado em
-`20261010-185312-672533/manifest.json` no mesmo diretório-base. Para desfazer
-a seleção do binário use `python ativar.py --restaurar CAMINHO_DO_BACKUP`
-conforme o README. Para desfazer as preferências, restaure o config.toml
-anterior ou ajuste somente `[notification]`; a restauração do binário não
-remove pacotes nem essas preferências.
-
-SHA256SUMS atualizado e verificado nas duas cópias preservando suas entradas.
-Arquivos ZIP/tar históricos não foram regenerados. Nenhum histórico de
-clipboard, estado privado ou captura de tela foi incluído nos materiais.
-
-## Contribuição — Junção curva do canto inferior esquerdo da notificação — 2026-10-10 18:59 (America/Sao_Paulo)
-
-O usuário corrigiu o resultado anterior: retirar somente o raio inferior
-direito não resolvia a conexão visual, pois o canto inferior esquerdo ainda
-se arredondava para dentro do cartão. A variante local foi ajustada novamente:
-agora esse canto se abre para fora com uma curva côncava, seguindo a geometria
-nativa dos painéis encaixados, e encontra a borda superior da taskbar.
-O canto inferior direito continua reto; os dois superiores ficam arredondados.
-Esta contribuição substitui a descrição anterior de manter três cantos
-arredondados. As preferências de posição, monitor, opacidade e prazo continuam
-as documentadas na contribuição anterior.
-
-O patch em `src/shell/notification/notification_toast.cpp` agora reserva uma
-extensão à esquerda na superfície e na área de recorte da animação, preservando
-a largura do conteúdo e o alinhamento à direita. Fundo e blur usam
-CornerShape::Concave no canto inferior esquerdo e o mesmo inset lateral.
-A geometria especial se aplica somente em bottom_right com offset_x=0 e
-offset_y=0; outras posições/afastamentos mantêm o formato nativo. Não foi
-alterado o funcionamento do daemon nem da contagem de tempo.
-
-Compilação incremental Ninja concluída sem erros e git diff --check passou.
-Executado novamente `python ativar.py`; a shell usa o binário local corrigido.
-Backup dessa troca em
-`$HOME/.local/state/ricy-notificacoes-backups/20261010-185903-989917/`.
-Este backup restaura a variante anterior, com somente o canto direito reto;
-o backup da primeira ativação restaura a seleção do pacote original.
-A troca usou o override temporário de preservação de aplicativos; ao final,
-shell e adaptador ativos e KillMode=control-group restabelecido.
-
-Captura visual no DP-1 confirmou a extensão curva à esquerda até a taskbar,
-com o cartão alinhado à borda direita. Repetido o teste D-Bus de 8000 ms:
-NotificationClosed reason=1 aos 8,0 segundos, com progresso menor na captura
-intermediária e ausência do cartão na captura posterior. Não houve novo teste
-de hover, de outras posições ou de instalação em outra máquina.
-
-Atualizados o patch e o README em
-`contributions/notification-continuity/` nas cópias ativa e de transporte,
-o passo 4a de REINSTALAR.md e os dois SHA256SUMS (423 entradas verificadas).
-Para reproduzir/reverter, permanecem os comandos dos scripts e as cautelas
-de atualização de versão descritos no README. Capturas e backups permanecem
-locais; os archives compactados históricos não foram alterados.
-
-## Contribuição — Continuidade do blur entre barras e painéis — 2026-10-10 19:20 (America/Sao_Paulo)
-
-Corrigida a continuidade do fundo desfocado entre taskbar, notificações,
-busca junto à lupa, menu do Noctalia e apoio superior da busca por Super ou
-digitação. Igualar opacidade e cantos não eliminava a emenda: o blur nativo
-amostrava um retângulo diferente para cada superfície.
-
-Foi compilado o efeito separado `ricyblur`, baseado no código oficial do
-KWin 6.7.5, commit `ab7df7ccb7c6af20f4b279cd6220f7cd3d2267d7`.
-Enquanto um painel ou aviso Noctalia está visível, as suas superfícies usam
-o mesmo fundo filtrado por monitor, recortado pelas formas de cada janela.
-A cópia do fundo é feita antes de desenhar o Noctalia, sem incluir a própria
-barra. O recorte OpenGL é preservado na composição final e não limita a cópia
-ou o filtro compartilhado. Outros aplicativos seguem o algoritmo nativo.
-Também aplicado `panel_overlap = 0` em `[bar.default]` e `[bar.search_edge]`,
-no perfil ativo e nos dois templates públicos, removendo a faixa de um pixel
-com transparência duplicada na junção. A geometria de cantos e notificações,
-a opacidade 0,70, a barra compacta e a escolha de monitor continuam preservadas.
-
-O novo plugin foi instalado em
-`/usr/lib/qt6/plugins/kwin/effects/plugins/ricyblur.so`, mantendo os archives
-originais do KWin. O helper `$HOME/.local/lib/ricy-blur/iniciar.py` e a unidade
-`ricy-blur-continuidade.service`, habilitada na sessão gráfica, selecionam o
-efeito somente em KWin 6.7.5 quando suportado. O blur nativo permanece
-habilitado na configuração e é mantido/recarregado se a variante não puder
-ser usada. O compositor e a shell principal não foram reiniciados nesta troca.
-
-Materiais públicos em `contributions/blur-continuity/`: README, licença
-GPL-2.0-or-later, patch e scripts `compilar.py`, `integrar.py`, `iniciar.py`.
-O compilador fixa versão e commit, recusa alterações desconhecidas na fonte
-e recompila no destino; não distribuímos o binário desta máquina. Foram
-usados os headers oficiais Vulkan 1.4.363 no cache, commit
-`6802bb4733b63ed5efd3adb308a6c885ef180ea1`, sem instalar novos pacotes neste
-trabalho. O roteiro de reinstalação usa o pacote vulkan-headers do destino.
-Consulte o README e o passo 4b de REINSTALAR.md para reproduzir ou voltar ao
-blur nativo; versões futuras do KWin exigem revisão/recompilação do patch.
-
-Verificação executada: compilação final reproduzida pelo script do kit,
-patch sem erros de whitespace e sintaxe Python conferida. Teste visual em
-KWin/Noctalia isolados com fundo de faixas coloridas verificou a continuidade
-entre menu encaixado e barra; a sessão de teste foi encerrada ao terminar.
-Na sessão principal, efeito ricyblur carregado, unidade ativa/habilitada e
-configuração Noctalia validada/recarregada; aberta a busca superior e
-verificado seu apoio no monitor correspondente. O usuário confirmou:
-“Visualmente já passou”. Não houve novo teste de hover ou de expiração da
-notificação nesta contribuição; os testes de prazo estão no registro anterior.
-O journal do compositor principal não registrou erros de framebuffer desde
-a aplicação da variante final.
-
-Limites: escalas diferentes, reinstalação em outra máquina e consumo com
-vídeo/animações não foram medidos. Com painel/aviso aberto, frames alterados
-repintam o monitor para evitar reutilizar pixels contendo a barra; isso pode
-aumentar o custo de composição. Não há laço de repintura contínuo quando a
-cena está parada, nem gravação do fundo em disco pelo efeito.
-
-Backups privados em `$HOME/.local/state/ricy-blur-backups/`: integrador
-`20261010-191516/` e perfil anterior em `20261010-191527/config.toml`.
-Restaurar o blur nativo não reverte panel_overlap; use o backup ou ajuste
-somente essa preferência. As cópias ativa e portátil foram sincronizadas,
-com todos os hashes conferidos e as entradas anteriores preservadas
-(429 archives em cada SHA256SUMS). Capturas, caches, perfis/clipboard e backups
-não foram incluídos. Os ZIP/tar históricos continuam como retratos anteriores;
-para transportar esta correção, copie a pasta pública atualizada com este
-registro e o roteiro.
-
-## Contribuição — Wallpaper no cartão Home da sessão real — 2026-10-10 19:24 (America/Sao_Paulo)
-
-O usuário apontou que a sessão real não mostrava wallpaper no menu. O teste
-isolado tinha o serviço de wallpaper Noctalia ativo; na sessão principal ele
-está desativado porque o Plasma gerencia o desktop. Sem superfície/texture de
-wallpaper do Noctalia, HomeTab recebia currentPath vazio e mostrava cor sólida.
-
-A variante local Noctalia 5.2.1 agora consulta getDefaultWallpaperPath no cartão
-Home quando currentPath está vazio e o wallpaper Noctalia está desativado.
-A imagem é carregada pelo thumbnail nativo, mantendo o Plasma responsável pelo
-desktop. A alteração está em src/shell/control_center/tabs/home_tab.cpp,
-incluída no patch composto de contributions/notification-continuity;
-a geometria das notificações e o efeito ricyblur permanecem aplicados.
-O cartão exibe a imagem; o restante do menu continua translúcido com blur do
-conteúdo atrás dele, sem aplicar wallpaper artificial ao painel inteiro.
-
-Adicionado sincronizar-wallpaper.py: lê a imagem estática pela API do Plasma,
-valida existência e igualdade entre desktops e registra o caminho via IPC
-wallpaper-set. Nesta máquina, ambos usam
-/usr/local/share/ricy/limine-splash.png. Não habilitamos [wallpaper] no Noctalia.
-O sincronizador não acompanha futuras mudanças automaticamente: execute-o
-novamente após mudar o fundo no Plasma. Fundos diferentes/animados exigem outra
-integração e são recusados sem alteração de preferências pelo script.
-
-Verificação: Ninja compilou o binário; compilar.sh aceitou o patch composto;
-git diff --check e sintaxe Python/Bash passaram. Ativação com preservação de
-aplicativos concluída, KillMode=control-group restabelecido e ricyblur ainda
-carregado. Aberto control-center home na sessão principal; captura confirmou
-a imagem Limine no cartão, comparada ao arquivo do desktop. Menu fechado ao
-fim. Não foi feito novo teste de notificações ou migração para outra máquina.
-
-Backup do binário anterior em
-$HOME/.local/state/ricy-notificacoes-backups/20261010-192258-920118/;
-restaura o executável anterior com notificações corrigidas e cartão sólido.
-O primeiro sincronizador apontou o backup para config/settings.toml em vez
-de state/settings.toml: 20261010-192254-917307 NÃO contém backup do estado
-original e seu manifest foi marcado como inválido para restauração.
-Corrigido o caminho no script distribuído. Backup válido em
-$HOME/.local/state/ricy-menu-wallpaper-backups/20261010-192326-080532/ guarda
-o estado já sincronizado, antes da segunda execução idempotente; não deve
-ser apresentado como cópia anterior à primeira alteração. O caminho padrão
-Noctalia observado antes era /usr/share/noctalia/assets/noctalia-wallpaper.png.
-
-Patch, README e sincronizador atualizados nas duas cópias do kit; passo 4a de
-REINSTALAR.md atualizado e 430 hashes conferidos em cada manifesto, preservando
-as entradas anteriores. Nenhuma captura, imagem pessoal, estado ou backup foi
-incluído; os compactados históricos permanecem inalterados.
-
-## Contribuição — Datas em inglês, clima e eventos em Cosmópolis/SP — 2026-10-10 19:28 (America/Sao_Paulo)
-
-Atendido o pedido de datas em inglês mantendo Cosmópolis/SP-BR como localização.
-O processo Noctalia herdava LC_TIME=pt_BR.UTF-8, apesar da interface em inglês.
-Aplicado shell.lang="en" e drop-in 60-ricy-idioma-localizacao.conf com
-LC_TIME=en_US.UTF-8, TZ=America/Sao_Paulo e UnsetEnvironment=LC_ALL.
-A locale global, unidades regionais e composição do teclado não foram alteradas.
-
-Localização fixa: auto_locate=false e address="Cosmopolis, Sao Paulo, Brazil".
-O endereço completo foi validado na API usada pelo Noctalia: latitude -22.64583,
-longitude -47.19611, nome Cosmópolis, Brazil. Consultar somente Cosmópolis
-retornou uma cidade homônima nos EUA; esse resultado não foi aplicado.
-Clima habilitado em unidades métricas e calendário/eventos habilitado.
-O usuário escolheu apenas habilitar eventos por enquanto: nenhuma conta ou
-fonte de eventos/feriados foi acrescentada. O calendário usa o fuso da sessão;
-a localização por si só não fornece eventos pessoais ou feriados.
-
-Nova contribuição contributions/noctalia-language-and-localization com aplicar.py e
-README. O aplicador ajusta as mesmas chaves no perfil e no settings.toml, pois
-havia um override privado auto_locate=true; preserva outras preferências e
-contas. Instala o drop-in e usa o helper existente de preservação de aplicativos
-para reiniciar shell/adaptador. Não foi alterado o executável local nesta etapa.
-Templates públicos das duas cópias também atualizados; aplicar.py é necessário
-para instalar LC_TIME/TZ na unidade e corrigir overrides do destino.
-
-Verificação executada: Noctalia config validate passou; ambiente do processo
-confirmou LC_TIME=en_US.UTF-8 e TZ=America/Sao_Paulo sem LC_ALL.
-Calendário na sessão real exibiu Saturday e October; cartão de eventos habilitado
-sem contas conectadas. Cache nativo confirmou localização brasileira e previsão
-com timezone America/Sao_Paulo, offset -10800 e sete dias disponíveis.
-Comparação TOML com o backup confirmou que as preferências não relacionadas
-foram preservadas. ricyblur permaneceu carregado; KillMode padrão restabelecido.
-Não foram testadas sincronização de conta ou instalação em outra máquina.
-
-Backup privado anterior em
-$HOME/.local/state/ricy-idioma-localizacao-backups/20261010-192713-914138/.
-O manifest indica presença anterior de config/settings/drop-in. Consulte o
-README para reversão e preservação de alterações posteriores; dados privados
-e capturas não foram incluídos no kit. Registro, passo 4c de REINSTALAR.md e
-ambas as cópias sincronizados, com 432 hashes conferidos em cada manifesto.
-Os compactados históricos permanecem inalterados.
-
-## Contribuição — Identidade visual Noctalia como referência do sistema — 2026-10-10 19:35 (America/Sao_Paulo)
-
-O usuário pediu registrar a identidade visual do Noctalia e incorporá-la ao
-Ricy para orientar a adequação de outras partes do sistema. Criado
-IDENTIDADE-VISUAL.md como guia vigente, com vínculo no início deste registro
-e no roteiro de reinstalação. Os próximos ajustes visuais devem consultar
-essa referência e documentar adaptações e resultados no componente real.
-Esta contribuição registra a base aprovada; não aplica novos temas ao sistema.
-
-A referência captura paleta KDE-Atual/Catppuccin Mocha com acento Mauve,
-fundo #181825, cartões #313244, texto #cdd6f4/#a6adc8, contornos #46485c,
-hover #977dba e cores semânticas. Define materiais com fill alpha 0,70 para
-barras, notificações e painéis que herdam a barra, preservando texto legível
-e cartões sólidos. Diferencia painéis desanexados no modo solid, de alpha 1,
-e menus Kvantum opacos: não foi generalizada transparência para todo o sistema.
-
-Registrados cantos e junções vigentes: taskbar 44 px com superiores 6 px e
-inferiores retos; apoio superior 640 × 16 px, raio 8 px e margem superior 8 px;
-notificação com canto inferior esquerdo côncavo para fora e direito reto;
-bar.panel_overlap=0 e fundo compartilhado ricyblur por monitor. Fonte shell
-Noto Sans; KDE/GTK JetBrainsMono Nerd Font 10, com distinção entre pontos e
-pixels lógicos. Raios, espaçamentos, paddings e durações nativos foram extraídos
-das constantes do código 5.2.1 e marcados como referência, não medição de todos
-os componentes. A escala de cantos 1,3 é distinta dos raios explícitos da barra.
-
-Materiais públicos em contributions/noctalia-visual-identity:
-README.md (guia), tokens.json (valores/papéis estruturados, não executável) e
-referencia.svg (prancha vetorial própria, sem dados pessoais). O README foi
-publicado também em Documents/ricy/IDENTIDADE-VISUAL.md para acesso direto.
-A prancha ilustra cores, cartões, fonte e junção com alpha em uma forma comum;
-não é uma captura real nem simula o filtro OpenGL. Os archives permitem que
-outros agentes usem os mesmos parâmetros nos próximos trabalhos.
-
-Validação executada: paleta ativa e template público comparados byte a byte;
-conferidos overrides visuais pertinentes sem copiar settings privado; lidos
-Style, regras de transparência/radius no código e preferências KDE, Kvantum,
-GTK e Plasma atuais. JSON e SVG analisados; cores do JSON conferidas contra
-a paleta; SVG renderizado e inspecionado visualmente. Efeito ricyblur confirmado
-carregado. Nenhum aplicativo, serviço ou preferência foi alterado/reiniciado.
-
-O guia diferencia referência atual e trabalho futuro: Qt/KDE tem parte da
-integração ativa; GTK e aplicativos de terceiros não são declarados totalmente
-harmonizados; login/bloqueio têm registro próprio e não foram revalidados aqui.
-Datas inglesas, fuso São Paulo e região Cosmópolis permanecem preservados.
-Aplicar a linguagem a novas áreas exigirá mudanças e validação próprias; esta
-contribuição não apresenta essas adaptações como concluídas. Reversão aqui é
-somente documental, preservando o histórico; futuros ajustes devem guardar
-seus backups e registrar reversão por componente.
-
-Sincronizados os três materiais nas cópias ativa e portátil. SHA256SUMS de
-ambas preserva as 432 entradas anteriores e acrescenta três (435 verificadas).
-Os documentos fora do kit não fazem parte desse manifesto, conforme estrutura
-existente. Não incluídos capturas, clipboard, perfis, backups ou fonte/build
-completa; compactados históricos não foram modificados. Para transportar,
-copie também IDENTIDADE-VISUAL.md junto a ricy.md, REINSTALAR.md e kit atual.
-
-## Contribuição — Menu da aplicação como composição Noctalia — 2026-10-10 19:44 (America/Sao_Paulo)
-
-O usuário pediu que as opções do botão direito num aplicativo da taskbar
-aparecessem na composição Noctalia, como o tray. O popup XDG independente foi
-substituído por um Panel nativo encaixado, id ricy:taskbar-menu, gerenciado pelo
-mesmo PanelManager da gaveta do tray. A abertura usa o callback da barra com
-âncora no centro do ícone, mantendo barra/monitor de origem. Herda opacidade,
-blur, junção e animação nativos. Não foram alterados menus internos de apps.
-
-A lista e seus handlers originais foram preservados: Pin/Unpin, ações do
-desktop entry, Close e Close All, conforme a aplicação/janelas disponíveis.
-Callbacks usam weak guard de vida do widget; ativação/abertura adiada até o
-fim do evento. Incluídas setas e Enter/Espaço para navegar/ativar; Escape e
-clique externo ficam a cargo do PanelManager. Removido o popup próprio e sua
-interceptação de eventos na taskbar.
-
-O usuário viu a primeira composição e apontou que a altura gerava rolagem.
-Identificado padding duplicado: PanelManager já descontava a margem nativa.
-Corrigido layout e removida ScrollView; altura calculada por todas as entradas,
-separadores e padding, sem limite de 12 linhas. Largura calculada pelo texto
-mais largo, mínimo de conteúdo 240 px à escala 1, acrescida da margem nativa.
-Isso substitui o popup de largura mínima fixa e a primeira composição rolável.
-
-Nova contribuição contributions/taskbar-menu-composition com README,
-compilar.sh, patch composto noctalia-ricy.patch e licença MIT. O patch aplica
-sobre o commit Noctalia 5.2.1 conhecido e mantém as correções anteriores de
-notificação e wallpaper do Home. O compilador deste diretório é a referência
-para reconstruir o estado completo atual; o anterior recusa esse cache com
-mudanças diferentes. O README orienta preservar a fonte anterior e usar cache
-limpo ao migrar de variante, sem sobrescrever alterações desconhecidas.
-Atualizados o passo 4a, o guia de identidade/tokens e a nota da contribuição
-anterior para apontar ao compilador composto.
-
-Verificação executada: compilação final Ninja pelo script da contribuição,
-git diff --check, bash -n e Noctalia config validate passaram. SHA do executável
-ativo corresponde ao build final: 8fa83842d58d1d1ceedd791defb9a82169f7cfa96ac1065f94ed14a861d24a26.
-Shell/adaptador ativos, KillMode=control-group restabelecido e ricyblur carregado.
-A captura enviada pelo usuário comprovou a composição inicial, ainda com
-scroll. Não foi registrada confirmação visual do ajuste final sem scroll,
-teste das ações em aplicativo descartável, listas muito extensas, barras
-laterais/superiores ou migração para outra máquina. A tentativa de automatizar
-um clique não abriu o menu alvo; nenhum resultado dessa tentativa foi usado
-como validação. O dispositivo de entrada e script temporários foram encerrados.
-
-Backups privados em $HOME/.local/state/ricy-notificacoes-backups/:
-20261010-193948-522126 restaura a variante anterior com popup e correções
-anteriores; 20261010-194151-517805 restaura a primeira composição com scroll.
-Use ativar.py --restaurar conforme README, preservando aplicativos.
-A troca não modifica preferências de idioma, wallpaper ou clima.
-
-Sincronizados quatro archives públicos nas cópias ativa e portátil; ambos os
-manifestos preservam entradas anteriores e têm 439 hashes conferidos.
-Capturas, dispositivos/scripts de teste, binários e estado privado não foram
-incluídos. Os compactados históricos permanecem inalterados.
-
-## Contribuição — Opções do tray na composição Noctalia e retorno à gaveta — 2026-10-10 19:56 (America/Sao_Paulo)
-
-O usuário pediu a mesma composição do menu da aplicação para as opções dos
-itens do tray. Substituído o popup independente por Panel nativo encaixado
-ricy:tray-menu, preservando DBusMenu como fonte das opções e das ações.
-Mantém Pin/Unpin, separadores, entradas desabilitadas, checkmarks, rádio e
-submenus. Herda opacidade da barra, blur compartilhado, desenho de junção,
-animação, monitor/barra e fechamento externo do PanelManager. Itens que não
-expõem DBusMenu continuam apresentando o menu do próprio aplicativo.
-
-A largura acompanha o maior texto (mínimo de conteúdo 240 px à escala 1).
-A altura considera todas as entradas e margens nativas, sem padding duplicado
-nem limite artificial de linhas. ScrollView só apresenta rolagem se a lista
-exceder a área disponível. Submenus navegam dentro da mesma composição, com
-linha de retorno e esquerda/Escape para subir um nível. Na raiz Escape fecha.
-Eventos opened/closed, atualizações e carregamento sob demanda continuam
-ligados ao provedor; retry limitado a 300/900/2000 ms. Ações adiadas verificam
-a linha atual e a geração/vida do menu antes de atuar. Remover o item fecha o
-menu. Uma consulta de retângulo público no PanelManager traduz o clique na
-gaveta para coordenadas do monitor antes de abrir o menu substituto.
-
-O usuário confirmou: “Passou e ficou bom”, pedindo uma setinha entre menu e
-tray para retornar à gaveta. Adicionado botão Ghost nativo na base do menu,
-chevron-down na barra inferior; 32 px e intervalo 4 px à escala 1. Permite
-voltar diretamente à gaveta no mesmo monitor/barra/âncora, inclusive a partir
-de submenus. O botão participa do Tab/Enter nativo. O usuário confirmou
-“Passou” depois da ativação da setinha: ambas as etapas passaram visualmente.
-
-Nova contribuição contributions/tray-menu-composition com README, compilador,
-patch completo e licença MIT. O patch corresponde ao commit Noctalia 5.2.1
-6ef43e2bf2f3d5b4205ec72a72e34a2ab76ce3b4 e inclui as mudanças anteriores de
-notificações, wallpaper do Home e menu da taskbar. Este é o compilador de
-referência para reproduzir a variante atual. Compiladores/patches anteriores
-permanecem históricos e recusam cache com alterações diferentes; preserve
-a fonte anterior e use cache limpo ao migrar, conforme o README.
-Atualizados reinstalação, identidade visual e tokens, notas das contribuições
-anteriores, kit ativo e cópia portátil. Preferências de idioma/clima e contas
-não foram alteradas.
-
-Verificações: compilação final Ninja pelo script da contribuição, git diff
---check, bash -n e validação do perfil passaram. Executável ativo e build
-coincidem, SHA256 cf9ee62d8a0cb359a9a2775eb4ccc5d90d08c3d45833967cc0fd1c8c56b95ada. Shell/adaptador ativos, KillMode=control-group
-restabelecido e efeito ricyblur carregado. Confirmação visual do usuário
-registrada para menu e setinha. Não foi registrado teste completo de ações,
-submenus, listas extensas, barras laterais/superiores ou outra máquina.
-Um provedor DBus temporário foi registrado e removido; a tentativa de clicar
-nele automaticamente não abriu seu menu e não foi usada como validação.
-Dispositivos de entrada, script KWin e preferências do dispositivo temporário
-foram removidos. Nenhuma ação real de atualização/fechamento foi disparada
-como teste.
-
-Backups privados em $HOME/.local/state/ricy-notificacoes-backups/:
-20261010-195150-527306 restaura a variante anterior com menu da taskbar;
-20261010-195539-054921 restaura a composição do tray sem a setinha.
-O ativador/restaurador anterior continua responsável pela troca segura de
-binário/drop-in, preservando aplicativos e o pacote /usr/bin/noctalia.
-
-Ambos os manifestos preservam entradas anteriores e têm 443 hashes
-conferidos. Sem binários, contas, estado privado, capturas ou material do
-clipboard no kit. Compactados históricos permanecem inalterados.
-
-## Ajuste — Alinhamento do menu e retorno à gaveta do tray — 2026-10-10 20:01 (America/Sao_Paulo)
-
-O usuário apontou que a gaveta mudava de posição ao retornar pelo botão inferior
-do menu; queria as setas na mesma posição horizontal. A referência anterior
-era a posição do clique no item (com conversão de coordenadas da superfície).
-Alterado TrayMenu::toggleForItem: ao abrir pela gaveta, a referência é o centro
-real do retângulo da gaveta em coordenadas do monitor, independente do item
-clicado. Menu, seus submenus/redimensionamentos e retorno usam essa referência.
-
-No layout da setinha, a coordenada horizontal é projetada a partir desse eixo
-fixo para o conteúdo do painel, descontando a posição real e o padding nativo.
-Isso preserva o alinhamento também quando um menu mais largo precisa ser
-limitado pela borda do monitor: a seta acompanha o eixo da gaveta, não o centro
-do menu deslocado. O botão permanece dentro do corpo do painel. Não foram
-alterados ações, aparência, duração, monitor ou fonte das opções.
-
-Compilação final Ninja/script de reprodução, git diff --check, bash -n e
-config validate passaram. Conferidos 45 cenários geométricos de gavetas/menus
-com larguras distintas e posições centrais/próximas das bordas: centro do
-retorno e seta mantêm o eixo, tolerância de meio pixel pelo arredondamento.
-Esses cálculos não substituem um teste gráfico automatizado. O usuário confirmou
-“Passou” depois da ativação: alinhamento validado visualmente na sessão real.
-Binário ativo corresponde ao build, SHA256 ad70b2ffdb54dcedef8a23bb9b27cf5a0b9230cc29fed26bfbcf577e2a0ee0c0. Shell/adaptador ativos,
-KillMode=control-group e ricyblur carregado. Não foram ampliados testes de ações,
-listas extensas, barras laterais ou outras máquinas.
-
-Backup privado anterior à troca:
-$HOME/.local/state/ricy-notificacoes-backups/20261010-200022-501476.
-Pode ser restaurado pelo ativador existente; retorna à composição com setinha
-antes da correção de alinhamento, preservando aplicativos. Atualizado o patch
-composto de tray-menu-composition, README, tokens/identidade e reinstalação.
-Kit ativo e portátil sincronizados, 443 hashes conferidos em cada manifesto;
-entradas anteriores preservadas. Nenhuma captura, binário ou estado privado
-foi incluído; compactados históricos permanecem inalterados.
-
-## Contribuição — Ícones menores e hover para apps e busca — 2026-10-10 20:07 (America/Sao_Paulo)
-
-Pedido do usuário: reduzir um pouco os ícones das aplicações e animá-los no
-hover, incluindo search, sem atingir tray/opções, volume, hora, network ou
-botão do Noctalia. Implementado somente em TaskbarWidget e LauncherWidget:
-o desenho fica em escala 0,88 no repouso e cresce até 1,0 no hover, retornando
-a 0,88 ao sair. Entrada/saída 140 ms, EaseOutCubic, com AnimationManager nativo
-e respeito às preferências de movimento/velocidade. A inversão do hover cancela
-a animação anterior e continua do progresso atual.
-
-Transformados apenas nós Image/Glyph do ícone, sem mudar medida de layout ou
-área de clique. Mantidos espaçamento, títulos, indicadores, badges e interação
-original (ativar, alternar, fechar, menu e drag). Inclui imagens, fallback de
-apps e glyph/imagem da lupa. O destaque de fundo já existente dos tiles de apps
-acompanha a transição de 140 ms; outros elementos da taskbar mantêm seu hover
-anterior. Volume, relógio, network, tray, menus do tray e control-center não
-receberam alteração. Não foram modificadas cores, fontes ou preferências
-privadas. Aplicação no código garante reprodução da variante, sem depender
-de um ajuste manual do perfil ativo.
-
-Nova contribuição contributions/app-icon-interactions: README, compilar.sh,
-patch completo noctalia-ricy.patch e licença MIT. O patch do Noctalia 5.2.1
-6ef43e2bf2f3d5b4205ec72a72e34a2ab76ce3b4 mantém correções anteriores de
-notificações, wallpaper do Home, menu da taskbar e menu/retorno/alinhamento do
-tray. Este compilador é a referência atual; os anteriores permanecem históricos
-e recusam cache com diff diferente. Preserve a fonte anterior e use cache
-limpo ao migrar, conforme README. Atualizados reinstalação, guia visual e tokens,
-com exclusões explícitas do efeito. Nenhum binário foi colocado no kit.
-
-Verificações: compilação final Ninja/script de reprodução, git diff --check,
-bash -n e config validate passaram. Comparados os blocos do patch completo
-com a variante anterior: mudanças adicionais restritas aos dois widgets;
-todos os demais blocos anteriores permanecem iguais. Binário ativo e build
-coincidem, SHA256 b30d5efc4461d0eea3e82c2001d05bbc32fe79fc3e5770eee152ce1af4b694fb. Shell/adaptador ativos, KillMode=control-group
-restabelecido e ricyblur carregado. Não registrada confirmação visual do usuário
-neste ajuste, nem testes de clique/arraste, hover rápido, movimento desabilitado,
-escalas variadas ou outra máquina. A verificação de escopo/compilação não
-substitui esses testes visuais e de interação.
-
-Backup privado antes da troca:
-$HOME/.local/state/ricy-notificacoes-backups/20261010-200612-039983.
-Restaurável pelo ativador anterior, retorna à variante com alinhamento do tray
-sem redução/zoom dos ícones, preservando aplicativos. Kit ativo e portátil
-sincronizados: 447 hashes conferidos em cada manifesto, entradas anteriores
-preservadas. Sem clipboard, capturas, contas, estado privado ou backups no kit;
-compactados históricos permanecem inalterados.
-
-## Contribuição — Ações dos ícones: restaurar, minimizar e fechar — 2026-10-10 20:18 (America/Sao_Paulo)
-
-O usuário esclareceu que “abrir minimizadas” significa restaurar a janela pelo
-ícone e confirmou a implementação anterior com “Passou”. Essa variante
-restaurava explicitamente no KDE/KWin, preservava o middle-click existente
-para solicitar fechamento e selecionava a identidade exata por UUID para
-não ativar/fechar outra janela de mesmo título. A confirmação é desse estado
-anterior, cujo binário era SHA256
-1b32307c4bfd041a0eb62f329ff4cab57a70f511798380d8d94ec5e5e9ecaa79.
-
-Novo pedido: comportamento do Windows, restaurando minimizadas e minimizando
-abertas pelo ícone. Implementado clique esquerdo: janela minimizada restaura
-e recebe foco; janela visível em foco minimiza, se minimizável; janela visível
-inativa vem para frente. Aplicativo fixado sem janela continua iniciando.
-Nos grupos, a janela ativa é priorizada para minimizar; sem ativa no grupo,
-a seleção/ciclo existente escolhe a janela para restaurar/focar. Não reproduz
-prévias ou seletor de grupos do Windows. Middle-click solicita fechar uma
-janela ativa/representante, preservando diálogos de salvar; sem janela ignora.
-Clique direito e drag mantêm menus/ordenação anteriores.
-
-Somente o clique esquerdo da taskbar envia toggleMinimize; o script lê o estado
-atual no KWin, sem confiar em flags antigas do tile. Ativação por busca, dock,
-atalhos e outros chamadores restaura/foca, sem minimizar. Implementação da
-alternância específica KDE/KWin; outros compositores mantêm ativação original.
-UUID exato com fallback class/caption apenas sem UUID; UUID obsoleto não
-aciona outra janela. Close chama closeWindow e não usa minimizar como fallback.
-
-Nova contribuição contributions/taskbar-app-actions com README, compilar.sh,
-patch completo noctalia-ricy.patch, LICENSE e validar-acoes.py. Referência
-atual para compilar Noctalia 5.2.1, commit
-6ef43e2bf2f3d5b4205ec72a72e34a2ab76ce3b4. Corrigidos TaskbarWidget,
-CompositorPlatform e KwinActiveWindow, com seus headers; comparados os blocos
-com app-icon-interactions, todos os outros blocos anteriores são iguais.
-Preservados ícones/hover, notificações/wallpaper, menus, junções e tray.
-Atualizados reinstalação, guia e tokens de interação, aviso na variante anterior.
-
-Verificações: 17 testes executam JS real extraído da fonte em QJSEngine,
-incluindo identidade/títulos iguais, UUID obsoleto, restauração, alternância,
-janela inativa/não minimizável, ativação comum e fechamento. Na sessão real,
-janela Qt descartável foi minimizada e scripts corrigidos restauraram/focaram,
-minimizaram, restauraram novamente e preservaram visibilidade na ativação
-comum; depois solicitaram fechamento por UUID. Estados de minimização/foco
-conferidos diretamente no KWin, pois estado Qt do cliente não acompanha de
-forma confiável minimização externa. A sequência síncrona verifica o adaptador,
-sem simular cliques físicos ou cobrir todos os aplicativos/grupos. Tentativas
-iniciais com consultas Qt/timers tiveram medições inconsistentes; a verificação
-final por estado do KWin passou. Nenhuma janela com trabalho foi fechada;
-scripts e objeto DBus temporários removidos. A alternância nova ainda não
-recebeu confirmação do usuário. Compilação/script de reprodução, bash -n,
-git diff --check, aplicação reversa do patch e config validate passaram.
-
-Binário ativo/build coincidem, SHA256 fcfc99017bc29cdf3c93742dfc5463ea62c01e07662666baebbeb610da7a08a6.
-Shell/adaptador ativos, KillMode=control-group restabelecido, ricyblur carregado.
-Backup privado antes desta troca:
-$HOME/.local/state/ricy-notificacoes-backups/20261010-201748-372725;
-retorna à variante restaurar/fechar aprovada, preservando aplicativos.
-Backup privado da implantação anterior:
-$HOME/.local/state/ricy-notificacoes-backups/20261010-201242-075546;
-retorna à variante de ícones/hover sem as correções de ações.
-
-Kit ativo e portátil sincronizados: 452 hashes conferidos em cada manifesto,
-447 entradas anteriores preservadas e cinco novas adicionadas. Sem binários,
-clipboard, capturas, contas, estado privado, bytecode Python ou backups no kit.
-Compactados históricos permanecem inalterados.
-
-## Contribuição — Bolinha roxa por estado e animações das ações — 2026-10-10 20:28 (America/Sao_Paulo)
-
-Usuário confirmou “Está funcionando” para a variante restaurar/minimizar pelo
-ícone e fechar com middle-click. Pediu que a bolinha roxa reagisse e acrescentar
-animações. Implementados quatro estados no indicador: ativa opacidade/escala
-1/1; aberta inativa 0,55/0,82; minimizada 0,28/0,65; fixada sem janela 0/0,55.
-Transição 160 ms EaseOutCubic, AnimationManager nativo, respeitando preferências
-da shell. Parte do valor visual atual e preserva snapshots por identidade
-entre reconstruções; isso permite apagar o indicador de um fixado fechado.
-Ícone não fixado desaparece ao fechar a última janela. Mesma regra na linha
-quando títulos estão visíveis. Layout, área de clique e hover preservados;
-resumo de pontos de workspaces mantém sua composição. Sem mudanças no tray,
-volume, relógio, network ou control-center.
-
-Adaptador KDE conecta minimizedChanged, serializa sexto campo de minimização
-por UUID e inclui mudanças de estado no callback. Estado chega ao modelo;
-janela minimizada não pode permanecer ativa por foco retido da shell. Seleção
-ativa prioriza UUID, sem acender duplicatas de título. Fixados agrupados só
-ficam minimizados se todas as janelas estiverem; representante de grupo de
-workspace prioriza ativa/visível. WaylandToplevels preserva minimized em wlr.
-
-Efeito local ricywindowactions deriva do Squash KDE GPL-2.0-or-later. Minimiza
-com compressão, deslocamento e fade; restaura em sentido inverso; base 240 ms,
-InCubic/OutCubic, com reversão rápida e cleanup do blur. O Squash nativo não
-animava quando Noctalia não publicava iconGeometry. Novo fallback usa destino
-18×18 no mesmo monitor, eixo horizontal do centro da janela e 22 px acima da
-borda inferior (taskbar 44 px). É destino aproximado, não o ícone exato; se
-iconGeometry existir, ela é preferida. Apenas janelas normais da taskbar,
-respeitando efeitos de tela cheia. Se a barra mudar de posição/altura, revisar
-fallback. Nenhum protocolo Plasma de geometria de ícone foi acrescentado.
-
-Scale nativo para abrir/fechar: base 180 ms, escala 0,92 e fade; diálogos também
-podem receber o Scale conforme implementação KDE. Squash, Magic Lamp e Fade
-desativados para evitar sobreposição; Smooth Window Geometry e ricyblur mantidos.
-Velocidade KDE AnimationDurationFactor=0,25 preservada: tempos reais de referência
-aproximadamente 60/45 ms para minimizar/fechar. As preferências de movimento
-Noctalia e KWin são independentes; AnimationManager e animationTime respeitam
-as respectivas preferências. Sem reiniciar compositor nem terminar aplicativos.
-
-Nova referência de compilação contributions/app-indicator-animations inclui
-patch completo Noctalia 5.2.1 no commit
-6ef43e2bf2f3d5b4205ec72a72e34a2ab76ce3b4 e efeito testado em KWin 6.7.5.
-Dez archives públicos: README, compilador, patch, licença MIT, dois validadores,
-aplicador, licença GPL e dois assets do efeito. Comparação dos blocos confirma
-mudanças adicionais somente em TaskbarWidget, KwinActiveWindow e WaylandToplevels
-com respectivos headers. Outros blocos, menus, notificações, wallpaper e
-correções das ações anteriores preservados. Atualizados reinstalação, guia
-visual e tokens; aviso na contribuição anterior aponta para esta variante.
-
-Verificações: 17 testes JS das ações e 15 de sinais/serialização/animações
-passaram; compilação final/reprodução, bash -n, config validate, git diff
---check e aplicação reversa do patch passaram. Compilação ampla apresentou
-avisos -Wmaybe-uninitialized preexistentes em config_service.cpp, sem mudanças
-nesse arquivo. Janela Qt descartável real confirmou restaurar/minimizar/restaurar,
-ativação comum sem minimizar e fechamento; ricywindowactions e Scale apareceram
-ativos durante as transições. A velocidade 0,25 fez uma consulta inicial após
-65 ms perder as animações; observação dentro de 60 ms passou. Capturas privadas
-confirmaram o indicador ativo→minimizado. Não houve simulação física do clique,
-validação de todos os grupos/apps, escalas ou reversões rápidas reais; este
-ajuste ainda não recebeu confirmação visual do usuário. Scripts e DBus de teste
-removidos. Nenhuma janela com trabalho foi fechada.
-
-Shell/adaptador ativos, KillMode=control-group restabelecido; ricyblur,
-ricywindowactions e Scale carregados. Binário ativo/build coincidem,
-SHA256 ac14659d1461da4cb5c86b2b38dfb1757c2526b875f5a729d939cd670bfb28a2.
-Backup da shell: $HOME/.local/state/ricy-notificacoes-backups/20261010-202443-366945,
-retorna ao comportamento das ações aprovado antes deste indicador.
-Backup do efeito/chaves: $HOME/.local/state/ricy-indicador-animacoes-backups/20261010-202354-251513.
-Reversão completa requer restaurar ambos conforme README. Backup das chaves
-limitado às modificadas, sem distribuir estado privado no kit.
-
-Kit ativo/portátil sincronizados: 462 hashes conferidos por manifesto,
-452 entradas anteriores preservadas e dez novas adicionadas. Créditos e
-licenças do KDE preservados. Nenhum binário, screenshot, clipboard, conta,
-bytecode, estado privado ou backup no kit. Compactados históricos inalterados.
-
-## Contribuição — Animações dos ícones, correção do fundo e reorganização — 2026-10-10 20:46 (America/Sao_Paulo)
-
-Usuário pediu pulso/bounce por estado e relatou fundo preto na primeira
-implementação. Slot Box foi substituído por Node sem pintura, mantendo área
-de clique e hover independente. Capturas privadas antes/depois confirmaram
-remoção. Ícones recebem ações finitas: abrir 420 ms (bounce/pulso), restaurar
-360 ms (bounce), foco 260 ms (pulso), minimizar 220 ms (compressão para barra),
-segundo plano 200 ms (redução/esmaecimento), fixado fechado 240 ms (contração).
-Não fixado removido dissolve em 220 ms, escala 1→0,72, sem hit-test/layout,
-com verificação de saída da janela e guardas de vida útil. Movimento/velocidade
-nativos respeitados, sem loops em repouso, sem animação inicial de todos os
-apps, retomando progresso em reconstruções e interrupções. Capturas verificam
-bounce/compressão; não há captura conclusiva do fantasma ao fechar. Janela Qt
-real descartável confirmou estados/efeitos; nenhum trabalho do usuário fechado.
-
-Pedido seguinte: clicar/arrastar para reorganizar aplicativos. Estendido
-mecanismo upstream restrito a fixados para todos os tiles da faixa plana,
-sem alterar fixação. Ícone acompanha cursor, spacer transparente marca alvo,
-vizinhos cedem espaço. Limiar nativo evita confundir clique com arraste; segurar
-sem mover preserva clique. Release de gesto consumido suprime ação da janela.
-Middle-click/contexto preservados. Busca/tray/controles ficam fora da faixa;
-agrupamento por workspace mantém layout original. Eixo horizontal/vertical
-conforme orientação, pitch real considera título/escala/espaçamento.
-
-ConfigService grava widget.taskbar.app_order em settings.toml privado, após
-despachar o evento. Chaves app+ocorrência não contêm títulos/UUIDs. Instâncias
-retêm chave durante atualizações, novas podem reutilizar slot livre; entre
-reinícios não há identidade de documento específico em janelas do mesmo app.
-Lista preserva apps fechados/filtrados e acrescenta novos sem preferência ao
-final. Widget compartilhado aplica ordem em seus monitores. Guardas de geração
-invalidam commit em modelo alterado; cancelamento restaura fluxo; soltura
-aguarda recarga na posição final. Preferência privada não copiada para kit.
-
-Usuário confirmou “Passou” após ativação da reordenação. Ordem real com dois
-slots distintos encontrada e config validate passou após o arraste. Captura
-privada mostra a ordem alterada e ausência do fundo preto. Não houve simulação
-física automatizada; validação visual veio do usuário. Barras verticais,
-outras escalas e alterações de modelo durante arraste real não foram
-validadas visualmente. Testes: 22 de ordem (incluindo 24 permutações), 11
-contra objetos nativos TaskbarWidget/ConfigService em perfil temporário,
-20 de motion, 17 JS das ações e 15 do indicador/efeito passaram. Teste nativo
-confirmou apps não fixados, movimento, cancelamento, geração inválida,
-supressão de clique, escrita sem pin e schema/definição decodificando ordem
-em nova instância; não se conectou ao compositor. Patch sobre fonte limpa,
-17 archives idênticos, compilação/reprodução, bash -n e git diff --check
-passaram. Nova etapa muda só TaskbarWidget, definição e taskbar_order.h;
-patch inclui integralmente os ajustes anteriores, incluindo header de motion.
-
-Contribuições públicas: app-icon-states (12 archives) registra a etapa
-anterior; app-icon-reordering (16 archives) é a referência cumulativa atual.
-Reinstalação, identidade e tokens atualizados. Binário ativo/build coincidem,
-SHA256 da29814a36e2091d3889c1abce94ea046bb89aa27c4df66efb36d3cc18e87d4f. Shell/adaptador ativos, KillMode=control-group restabelecido;
-ricyblur, ricywindowactions e Scale carregados. Sem alteração dos efeitos
-KWin nesta etapa. Backup para desfazer apenas arraste:
-$HOME/.local/state/ricy-notificacoes-backups/20261010-204423-864447,
-retorna às animações com fundo corrigido. Para antes das animações dos ícones,
-use 20261010-203450-476691; 203558-299413 é intermediário com Box preto.
-
-Kit ativo e portátil sincronizados, 490 hashes por manifesto: 462 entradas
-anteriores preservadas, 12 da etapa de estados e 16 da reordenação adicionadas.
-Sem binários, capturas, clipboard, contas, preferências locais, bytecode ou
-backups públicos. Compactados históricos preservados. Licenças MIT e GPL e
-créditos upstream mantidos.
-
-## Contribuição — Fade e expansão das janelas — 2026-10-10 21:00 (America/Sao_Paulo)
-
-Usuário forneceu referência Slick Window Arrangement:
-https://windhawk.net/mods/slick-window-arrangement
-Perguntado o escopo, confirmou “Abrir/restaurar e fechar/minimizar”.
-Consultadas fontes primárias Windhawk e KDE Scale/Squash. O mod fornecido
-implementa sliding/snapping de movimentação; nenhum código Windows foi
-copiado. Aplicado o fade + expansão solicitado usando API nativa KWin.
-
-Abrir/restaurar: escala 0,85→1 e opacidade 0→1, OutCubic. Fechar/minimizar:
-1→0,85 e opacidade 1→0, InCubic. Centro da própria janela, sem translação para
-ícone ou monitor, sem modificar geometria real. Duração base 320 ms; global
-KDE AnimationDurationFactor=0,25 preservado, referência aproximada 80 ms.
-Ricywindowactions passa de compressão/deslocamento para Scale+Opacity;
-Scale nativo abre/fecha com mesmos valores e preserva seus filtros/diálogos.
-
-Reversões usam redirect e, se necessário, cancelamento antes do novo sentido.
-IDs de trilhas acompanhados para liberar blur somente quando ambas acabam;
-IDs antigos/estranhos ignorados. Fechar durante ação cancela transição local;
-blur do Scale de fechamento já ativo não é limpo prematuramente. Filtros
-mantidos para janelas normais da taskbar/efeitos de tela cheia. Fade, Squash
-e Magic Lamp desativados para evitar duplicação. Smooth Window Geometry,
-ricyblur, binário Noctalia, arraste/ordem/hover/pulso/bounce/indicador e painéis
-preservados. Não houve mudança em maximização ou movimentação de janelas.
-
-Nova contribuição window-fade-expand, sete archives: README, aplicador,
-validador, licença GPL e três assets (metadata, JS, schema XML). Aplicador
-salva pacote e dez chaves alteradas, preserva demais chaves de kwinrc,
-reconfigura/recarrega efeitos sem reiniciar KWin/Noctalia nem fechar apps;
-restaura automaticamente o backup se ativação falhar. Backup desta sessão:
-$HOME/.local/state/ricy-fade-expand-backups/20261010-205749-431612.
-Reversão em README; estado/backup local não distribuído. Instalador anterior
-app-icon-reordering permanece histórico para efeitos; reinstalação atual
-combina seu compilador Noctalia com aplicar-animacoes.py da nova contribuição.
-
-28 cenários JS/config/pacote passaram. Janela Qt descartável real confirmou
-abrir, restaurar/minimizar/restaurar, minimizar/restaurar em sequência rápida,
-ativação comum sem minimizar e fechar; Scale ativo na entrada/saída e efeito
-local nas ações. Pacote/chaves conferidos; ricywindowactions, Scale e ricyblur
-carregados, shell/adaptador ativos. Consulta ao journal não trouxe erros de
-script. Testes/objeto DBus removidos, nenhuma janela com trabalho fechada.
-Não há medição quadro a quadro de escala/opacidade nem validação de todos
-os apps/diálogos/monitores/escalas; ainda sem confirmação visual do usuário.
-
-Reinstalação, identidade, tokens e avisos da contribuição anterior atualizados.
-Kit ativo/portátil sincronizados: 497 hashes por manifesto, 490 anteriores
-preservados e sete novos adicionados. Créditos/licença GPL preservados.
-Sem binários, screenshots, clipboard, contas, preferências privadas, bytecode
-ou backups públicos; compactados históricos preservados.
-
-
-## Contribuição — Dolphin com identidade Noctalia — 2026-10-10 21:07 (America/Sao_Paulo)
-
-Pedido: aproximar a aparência do Dolphin da referência Noctalia. Criada
-variante exclusiva Kvantum Ricy-Dolphin, derivada de KDE-Noctalia/Catppuccin
-MIT: superfície #181825, texto #cdd6f4/#a6adc8, contorno #46485c e acento Mauve.
-Folha Qt com Noto Sans 10 pt, toolbuttons/campos/abas com raio 8 px, hover em
-#313244 e seleção #977dba. Fontes de archives nos três modos configuradas em
-dolphinrc (UseSystemFont=false/ViewFont=Noto Sans). Ícones e comportamento de
-archives preservados. Fonte global KDE, Noctalia, MIME e decoração intactos.
-
-Tema atribuído somente ao executável dolphin via Kvantum/Applications. Wrapper
-$HOME/.local/bin/ricy-dolphin injeta -stylesheet. Entrada local de aplicativo,
-serviço D-Bus FileManager1 e drop-in de plasma-dolphin.service usam o wrapper.
-Nenhum arquivo de sistema substituído; daemon não reiniciado. QSS aplicado por
-D-Bus aos processos existentes sem fechar janelas. Janelas antigas podem exigir
-reabertura para carregar a variante e fontes de arquivos. Execução direta de
-/usr/bin/dolphin não injeta a folha; o launcher normal e wrapper a carregam.
-
-Inspecionadas capturas antes/depois de janela nova, com fonte proporcional e
-controles arredondados. Sintaxe Python, XML SVG, atribuição, fontes, caminho
-QSS ativo, desktop-file-validate e systemd-analyze --user verify conferidos.
-Dolphin 26.08.2-1.1, Kvantum 1.1.8-1.1. Somente janelas de conferência do agente
-foram fechadas; janela Home existente preservada. Uma asserção inicial esperava
-QSS literal no D-Bus, mas Qt retorna file:////CAMINHO quando carrega -stylesheet;
-conferidos o caminho e a igualdade do arquivo instalado. Não comprovados todos
-os diálogos/ações, novas sessões, todos os monitores ou migração. Ainda sem
-confirmação visual do usuário. Superfícies opacas para leitura; não estendido
-blur compartilhado da shell. Decoração conserva fonte KDE.
-
-Material portátil: contributions/dolphin-noctalia-identity/aplicar.py,
-dolphin.qss, README.md e licença MIT. Aplicador gera backup privado e oferece
---restaurar BACKUP. Neste trabalho foram duas aplicações: desfazer em ordem
-inversa 20261010-210632-242640 e 20261010-210604-287127, sob
-$HOME/.local/state/ricy-dolphin-backups. Restaurador repõe archives inteiros e
-ausências; reabra Dolphin. Alterações posteriores nesses archives podem ser
-substituídas. Kits ativo/portátil sincronizados e hashes novos conferidos,
-preservando entradas anteriores. Backups/capturas/estado não publicados.
-Compactados históricos preservados.
-
-
-## Contribuição — Dolphin: blur, cantos e chips — 2026-10-10 21:33 (America/Sao_Paulo)
-
-Chat de harmonização Dolphin/Noctalia. O usuário rejeitou a primeira versão
-opaca/quadrada; esta contribuição substitui esse estado final, preservando
-seu registro histórico. Fundo agora #181825 alfa 178/255 (~0,70), cartão
-translúcido de archives #313244 alfa 40/255, raio 12, contorno #46485c. Um
-plugin Qt genérico privado, ativado por -plugin ricydolphinui no launcher,
-marca DolphinMainWindow WA_TranslucentBackground antes da criação da superfície.
-Kvantum Ricy-Dolphin ativa translucent_windows/blurring, reduce_window_opacity=30
-para a superfície, Base/AlternateBase transparentes e transparent_dolphin_view.
-Textos/ícones ficam nítidos; ricyblur fornece blur nativo aos apps externos,
-sem extensão do fundo compartilhado Noctalia. Nenhum reinício do compositor.
-
-Efeito próprio ricydolphinrounding, instalado com Polkit em
-/usr/lib/qt6/plugins/kwin/effects/plugins/ricydolphinrounding.so, atribui raio
-nativo Window::setBorderRadius(16) só a normais/diálogos dolphin/org.kde.dolphin.
-Maximização parcial/completa, fullscreen e tiling usam zero. Guarda/restaura
-raios originais e acompanha mudanças por sinais. Não adiciona shader nem
-passes próprios; usa recorte e blur nativos KWin 6.7.5. Breeze mantém título
-sólido e fonte KDE. Protótipos ricydolphincorners/ricydolphinshape descarregados,
-chaves apagadas e bibliotecas removidas. Somente efeito final instalado.
-
-A pedido posterior, hover lateral virou chip pelo conteúdo e todas as linhas
-de detalhes receberam fundos arredondados. Usuário aprovou, depois pediu
-incluir ícones e ajustar header. Estado final: lateral envolve ícone + nome;
-linhas #313244 alfa 90, raio até 10, insets 3/2; hover/seleção #977dba com
-alfa 95/170/195 e foco sólido #cba6f7 cobrindo ícone e linha. Header único
-#313244 alfa 155, contorno #46485c alfa 150, Noto Sans 10 pt e seta nativa.
-QProxyStyle sobre Kvantum troca primitivas; wrapper preserva delegate KIO para
-seções, dispositivos, capacidade e tooltips. QGraphicsEffect desenha fundos
-antes de drawSource nativo. Sem interceptar mouse/teclado ou mudar arquivos.
-Chips de linha usadas em itens >140 px de largura e <=64 px de altura;
-miniaturas grandes mantêm seu conteúdo. QSS sozinho não corrige fillRect da
-zebra; paleta transparente e backing por item resolvem esse desenho próprio.
-
-Compilação Qt e instalação do helper verificadas; capturas novas mostraram
-chips, seleção com ícone, foco sólido arredondado e header com seta. Captura
-do desktop mostrou blur composto. Captura RGBA anterior mediu alfa 178 no
-fundo (antes 255). Status nativo confirmou raio16; cliente Qt descartável
-confirmou normal16, maximizado0 e restaurado16. Sem crashes observados nos
-logs de teste. ricyblur/ricydolphinrounding carregados e Noctalia/adaptador
-ativos. Usuário aprovou chips antes da inclusão de ícones/header; esta revisão
-final ainda sem confirmação visual dele. Não testados todos os diálogos,
-transferências, drag/drop, reordenação/resize de colunas, monitores/escalas,
-folders gigantes ou desempenho; reinstalação em outro PC não foi testada.
-
-Fontes/compiladores/README/licença MIT próprios na nova contribuição
-contributions/dolphin-blur-cantos. Atualizados aplicar.py, QSS e README de
-dolphin-noctalia-identity; adicionado lancar.py. Qt6 Widgets/headers, g++ e
-pkg-config bastam para helper. Efeito exige headers/dependências KWin 6.7.5;
-compilar.py recusa outra versão. Reusados headers Vulkan oficiais do cache
-Ricy. Nenhum .so, screenshot, cache, backup ou dado privado incluído no kit.
-Fontes externas de cantos consultadas, sem reutilizar código. Créditos do
-tema Catppuccin/MIT preservados. Serviços/desktop mantêm wrapper; daemon não
-reiniciado nem janelas fechadas automaticamente pelo aplicador. Instâncias
-antigas precisam reabrir para plugin/tema, QSS aplicado ao vivo por D-Bus;
-script trata corrida quando usuário fecha uma instância durante aplicação.
-
-Reproduzir/restaurar pelos READMEs e passo 8a atualizado de REINSTALAR.md.
-Backup de cantos: ~/.local/state/ricy-dolphin-corners-backups/20261010-211849-253315.
-Backup antes das chips: ~/.local/state/ricy-dolphin-backups/20261010-212842-374549;
-reversão em ordem inversa 213035-906999, 212959-440141, 212842-374549 (prefixo
-20261010-) retorna à revisão de blur anterior. Para estado anterior ao blur,
-continue 211713-181764, 211458-875287 e 211018-558522. Restaurador de cantos
-preserva chaves/raios sem substituir kwinrc inteiro; não remove biblioteca.
-Backups são privados, use os novos nomes emitidos no destino.
-
-Registro acrescentado sob flock compartilhado. Identidade e tokens atualizados,
-kits ativo e portátil sincronizados; manifestos preservam entradas existentes,
-recalculam só materiais editados e incluem archives novos. Compactados antigos
-preservados. Esta seção supersede a afirmação anterior de superfícies opacas.
-
-
-## Contribuição — Alternância Plasma/Noctalia sem restaurar configurações antigas — 2026-10-10 22:49 (America/Sao_Paulo)
-
-Trabalho: alternância concisa entre as duas shells, preservando o Ricy. O usuário
-relatou ausência de retorno simples ao Noctalia e mudança inesperada do wallpaper
-ao usar o retorno ao Plasma. Este estado substitui o fluxo de troca das
-contribuições noctalia-autostart e integração/KDE anteriores; os registros
-históricos e o backup original foram preservados.
-
-### Causa conferida e resultado aplicado
-
-O retorno antigo sobrescrevia plasma-org.kde.plasma.desktop-appletsrc e
-plasmashellrc inteiros a partir de plasma-antes.tar.gz. O layout restaurado tinha
-um grupo de wallpaper antigo north; os desktops vivos 43/44 ficaram sem Image
-configurada. A entrada antiga também executava restaurar-wallpaper.js, com IDs e
-imagem fixos capturados antes. Os wrappers $HOME/ricy/iniciar.sh e voltar.sh
-citados no histórico não existiam mais no destino. No início deste trabalho,
-Plasma estava ativo, Noctalia/adaptador/integrador inativos e preferência no
-login desabilitada; havia um painel vivo (23, monitor 0).
-
-Instalada contributions/plasma-noctalia-switching com sete archives públicos.
-Comandos em $HOME/.local/bin: ricy noctalia, ricy plasma, ricy alternar (também
-a ação de ricy sem argumento), ricy status, voltar-ao-noctalia, voltar-ao-plasma.
-Entradas persistentes no menu: Voltar ao Noctalia, Voltar ao Plasma, Alternar
-Plasma e Noctalia. Recriados $HOME/ricy/iniciar.sh, voltar.sh e alternar.sh.
-As duas ações explícitas mudam também a preferência de login.
-
-O instalador substituiu iniciar-teste.sh e voltar-ao-plasma.sh em três locais
-do kit ativo (outputs histórico, integração/KDE e modelos inicio-automatico) por
-wrappers que encaminham à nova implementação. No kit público esses scripts
-históricos continuam originais; o novo instalador os substitui no destino.
-Unidades, drop-ins e nomes de perfil continuaram existentes.
-
-Antes de recolher painéis, plasmashell é parado/iniciado brevemente para
-sincronizar KConfig e capturar todos os grupos dos painéis e sua geometria.
-O retorno repõe somente esses grupos; conserva desktops, wallpaper, widgets
-e grupos gerais atuais. Inclui tray externo e remapeia IDs quando entram em
-conflito com desktops/widgets posteriores; nesta máquina o applet aninhado
-43 foi remapeado para 47 no primeiro retorno. Retorno com painéis já existentes
-é inócuo. Snapshot sem painéis não substitui um snapshot válido.
-
-Super, Super+Espaço e Super+V são capturados a cada ciclo, transferidos para
-Noctalia e restaurados para suas ações anteriores. Shell/adaptador devem estar
-prontos antes da remoção dos painéis. Erro nessa etapa tenta recuperar Plasma;
-o comando também desabilita a preferência Noctalia se a unidade falhar.
-Os locks de comando e integração serializam chamadas; o login segue usando
-ricy-noctalia-integracao.service. Cada comando dispara um worker em uma unidade
-transitória separada, para sobreviver ao encerramento da shell chamadora.
-Assim o retorno também pode concluir quando iniciado pelo menu do Noctalia.
-
-Recuperado uma única vez o Limine previamente escolhido,
-/usr/local/share/ricy/limine-splash.png, FillMode 2, nos desktops vivos pelos
-IDs obtidos localmente. O estado privado do Noctalia e o registro anterior
-confirmavam essa imagem. As trocas seguintes não impõem wallpaper algum.
-Desktop e aparência geral são compartilhados; Noctalia segue integrado ao
-KDE/KWin. Não é troca de compositor/sessão nem restauração dos temas antigos.
-
-### Reproduzir e desfazer
-
-Após preparar integração/KDE e instalar noctalia-autostart:
+Blocking, Konsole, appearance and system assets have the restorers and backups above as per `REINSTALL.md`. Full restoration of a file can replace later changes. To return Plasma Login Manager at the next restart, use `sudo systemctl disable sddm.service` followed by `sudo systemctl enable plasmalogin.service`, without --now within the current session. Packages are still installed. The previous wallpaper was the north pattern; it can be selected again by Plasma.
+
+
+## Contribution — Cedilla on the international US keyboard — 2026-10-10  18:09 (America/Sao_Paulo)
+
+After the user validated the visual implementation, he reported that the cedilla was missing in Konsole and Brave. The session confirmed a single active layout: English (US, alt. intl.), `us(alt-intl)`, inherited from the system configuration. `$HOME/.XCompose` nor layout configuration in kxkbrc. The Plasma/Konsole session uses LANG=en_US.UTF-8. The English composition table was reproduced locally: dead_acte+c/C produced ć/Ć.
+
+Applied `$HOME/.XCompose`, including the locale table (`include "%L"`) and overwriting only dead_acute+c/C for ç/Ç. Physical layout and language have not been changed. Absence backup: `$HOME/.local/state/ricy-teclado-backups/20261010-180848-912053/`. User applications have not been closed; open processes can keep the previous table and need to be closed completely/reopened.
+
+Added `contributions/keyboard-cedilla/` active and transport kits, with idempotent applicator, preservation of existing rules and reversal instructions. REINSTALL.md now includes step 3a. Original compressed files have not been regenerated; this correction is in the updated directories.
+
+Validation: libxkbcommon confirmed in en_US.UTF-8, C.UTF-8 and pt_BR.UTF-8; á, ã, ê, apostrophe and dead_cedilla+c remained correct. Gtk.IMContextSimple confirmed ç/Ç, a and a window offscreen, without sending keys to user windows. Applicator syntax and second execution without changes checked. Physical typing in existing Konsole/Brave windows depends on user reloading and was not presented as a test performed. The separate SDDM account and the virtual console were not changed by this user setting.
+
+## Contribution — Cedilla no Brave by XWayland — 2026-10-10  18:14 (America/Sao_Paulo)
+
+The user confirmed ç in Konsole after the previous contribution, but Brave continued producing ć. The first correction did not cover the native Wayland route of Chromium. Local Brave: 155.1.97.56. The upstream code WaylandInputMethodContext uses CharacterComposer for events not consumed by the IME, with its own table.
+
+Configured `$HOME/.config/brave-flags.conf` with `--ozone-platform=x11`. The Launcher `/usr/bin/brave` the package reads this file. Only the browser uses XWayland; the KDE session remains Wayland. .XCompose, layout, language, sandbox flags or personal profile. Absence backup: `$HOME/.local/state/ricy-teclado-backups/20261010-181356-714082/`. Brave must be completely reopened to load the option. On HiDPI screens, changing backend can change scale/rendering.
+
+Added idempotent applicator `contributions/keyboard-cedilla/apply-brave.py` to both kits. README, resettlement script and SHA256SUMS updated. Historical compressed archives continue without this update.
+
+Functional test: Brave instance with temporary profile on separate nested XWayland server, local HTML field and XTest input only on this display. The X11 option alone (without forcing GTK without IM variables) produced `ççÇ`. The first round with explicit GTK also passed; these extra options were not included in the definitive setting. Isolated instances were closed; test logs/files remain in /tmp/ricy-brave-validation-*. Second execution of the applicator did not change the file. No input was sent to the user's windows or used its profile in the test.
+
+## Contribution — USB AIC8800 Driver for Wi-Fi and Bluetooth — 2026-10-10  18:25 (America/Sao_Paulo)
+
+User request: Install the Wi-Fi/Bluetooth AIC8800 adapter driver. Local identification before installation: USB `a69c:8800` (AIC Wlan), door 1-14, no network driver/interface. Kernel active 7.2.9-2-cachyos with Clang; LTS 6.18.55-2-cachyos-lts also installed, compiled with GCC. Both had matching headers. Secure Boot was disabled. Existing Ethernet was preserved; no network/password was configured.
+
+Installed `dkms 3.4.3-1` and local package `aic8800-usb-dkms-ricy 5.0.20260123.9-3`. Radxa primary source: https://github.com/radxa-pkg/aic8800, commit `d13d07963cd15d731e2895e8288a04cca6152ac9`, source file verified by SHA256. The preparation normalizes CRLF and applies the series of upstream patches, including compatibility of new kernels and use of BlueZ. Only USB drivers/firmware were packaged; no Android library was installed.
+
+Modules: `aic_load_fw`, `aic8800_fdrv`, `aic_btusb`. Firmware: `/usr/lib/firmware/aic8800_fw/USB`. DKMS chooses Clang/GCC by reading the configuration of each kernel and recompiles the updates with available headers. The first DKMS compilation of the LTS used fixed Clang and failed; corrected the kernel selection. Both passed after correction. The final version records the Bluetooth driver before loading the firmware and gives priority to aic_btusb when btusb is requested. The circular reference between aic_load_fw and aic8800_fdrv was removed: the latter already has native dependence of the first. btusb was not globally blocked.
+
+After charging the firmware, the device went to `a69c:8801`, with two Wireless interfaces linked to aic_btusb and a Specific Vendor linked to aic8800_fdrv. NetworkManager recognized wlan0 and p2p-dev-wlan0. RFKill without locks. Searches found 9–13 Wi-Fi networks. BlueZ created hci0, Powered=yes; Bluetooth discovery started without error and was closed after the test. No devices have appeared in this search window. Bluetooth service was already enabled before; it has been started and is active.
+
+Final verification: DKMS installed for 7.2.9-2-cachyos and 6.18.55-2-cachyos-lts; correct vermagic on both. Functional test performed only on active kernel 7.2; there was no boot in the LTS, Wi-Fi connection or matching. The upstream driver emits build/debug warnings, preserved in the logs; builds ended successfully. The pacman transactions generated snapshots Snapper by the already existing hook and rebuilt the initramfs by Limine/mkinitcpio. There was no computer restart or Ethernet interruption.
+
+Reproduction: `contributions/driver-aic8800/README.md` in the active and transport kit, with PKGBUILD, dkms.conf, build.sh and modprobe configuration. REINSTALL.md gained optional step 6a. SHA256SUMS updated/verified in both copies. Historical compressed files have not been regenerated. Downloaded fonts and compilations stay in local cache without credentials. Logs and previous inventory: `$HOME/.local/state/ricy-aic8800/`.
+
+Revert: `sudo pacman -R aic8800-usb-dkms-ricy`; DKMS removes modules on disk. Reconnect the adapter or restart to close modules still loaded. DKMS/BlueZ can be maintained for other devices; the previous status of the Bluetooth service was enabled and inactive.
+
+## Contribution — Search by the bar magnifying glass — 2026-10-10  18:34 (America/Sao_Paulo)
+
+The user asked Search Applications opened by the magnifying glass to appear in the corner, following the behavior of the Noctalia control on the right. Activated `shell.panel.open_near_click_launcher = true`. The launcher remains attached/auto: the click on the magnifying glass positions the search next to the widget on the left side of the bar. The equivalent control-center option was already true. The keyboard wrappers and the top search_edge bar have been preserved.
+
+Updated the active profile and the config.toml of noctalia-kde-integration-and-menus contribution outputs in active and transport kits. Backup: `$HOME/.local/state/ricy-busca-backups/20261010-183355-074732/`Executed `noctalia config validate` (valid) and `noctalia msg config-reload` (ok). Effective export confirmed true, attached and auto. The shell remained active with the same PID 1218, without restarting or closing child applications. The already open panel may require closing/reopening by magnifying glass to reposition; there was no automated click or visual capture of the new geometry. REINSTALL.md and hashes of config.toml They've been updated.
+
+Reference: [official configuration of Noctalia panels](https://github.com/noctalia-dev/noctalia/blob/main/docs/user/configuration/shell.mdx).
+
+## Contribution — Compact and rounded search upper bar — 2026-10-10  18:37 (America/Sao_Paulo)
+
+After validating the opening next to the magnifying glass, the user asked for a narrower and rounded top bar for the open search for Super/digitation. `[bar.search_edge]`:Thickness 16, margin_ends 640, margin_edge 8, radius and the four radii 8. Remain opacity 0,70, blur, no shade, no space reserve and no auto-hide. The revelation and concealment continue under the existing adapter/wrapper. The bottom magnifying glass continues with open_near_click_launcher=true.
+
+The two current monitors have logical width 1920; the resulting bar measures 640 px, centralized, about 40 px beyond the launcher of 560 px per side. The top is the 8 px edge. In other resolutions, recalcule margin_ends like `(largura lógica - largura desejada) / 2`; for different scales/resolutions, use overrides per monitor. REINSTALL.md.
+
+Updated active profile and two templates of config.toml. Backup: `$HOME/.local/state/ricy-busca-backups/20261010-183630-034925/`Noctalia validation passed and config-reload returned ok; shell remained in PID 1218. Search reopened by the D-Bus interface used by shortcuts. Visual capture checked reduced width, union with panel and rounded corners. The check panel was closed upon completion. Temporary local captures were not included in the kit. Updated SHA256 Manifestos.
+
+## Contribution — Search bar only on active monitor — 2026-10-10  18:40 (America/Sao_Paulo)
+
+The user validated the compact look, but the bar appeared on both screens while the launcher opened in one. The adapter now query `org.kde.KWin.activeOutputName`, the same reference used by Noctalia/KDE to resolve the opening monitor. Before revealing the launcher, collect the search_edge bar on all screens and run `bar-show search_edge NOME` for only the active connector. When closing the search, collect the bar as before.
+
+`open-menu.sh` now calls toggleDisplay of the same D-Bus adapter; this unifies Super/Super+Space and typing without duplicating the choice of monitor. No DP/HDMI name has been fixed in scripts. 640 px, rounding, lower magnifying glass behavior and opening next to click. Query/command failures return D-Bus error and try to collect the bar.
+
+Backups from the two previous scripts: `$HOME/.local/state/ricy-busca-backups/20261010-183834-044045/`. Updated active/transport copies, REINSTALL.md and SHA256SUMS. Restarted only noctalia-busca-desktop.service, preserving the shell and its children applications; MainPID of shell continued 1218.
+
+Check: Python/Bash valid. D-Bus display opening in DP-1 visually confirmed with the bar only on this screen. Open by Super wrapper on HDMI-A-1 also checked: bar and launcher only on the correct screen. The focus was alternated by the actions KWin Switch to Screen for the test, waiting for its application; on completion, closed panel and focus returned to DP-1. There was no automated click on the magnifying glass or change in window geometry.
+
+## Contribution — Continuous notifications with the taskbar — 2026-10-10  18:55 (America/Sao_Paulo)
+
+Work: notifications in the lower right corner with time bar and visual union with the taskbar. After the previous, the user explicitly asked to remove the rounded cut from the lower right edge. The result applied keeps the other three corners rounded and makes this edge reach the taskbar.
+
+In the active profile in `$HOME/ricy-kit/contributions/noctalia-kde-integration-and-menus/work/noctalia-profile/config/noctalia/config.toml` and in the templates `outputs/noctalia-test/config.toml` of the two kits, `[notification]` passed position="bottom_right", follow_focused_output=true, background_opacity=0.70, border=false, offset_x=0 and offset_y=0. The notification follows the active monitor and the same transparency of the taskbar. Mauve progress bar and expiration are already native to Noctalia; no other daemon has been created. Persistent notifications maintain native behavior.
+
+The Noctalia 5.2.1 does not offer individual radius preference for this card. `src/shell/notification/notification_toast.cpp` to use zero radius only in the bottom right corner when bottom_right and offset_y=0. Background and blur region use the same four radii. This state replaces the historical premise of using only settings without recompiling Noctalia: now there is a small local adaptation on the v5 commit.2.1  `6ef43e2bf2f3d5b4205ec72a72e34a2ab76ce3b4`.
+
+Installed in this meson destination 1.12.1-2, ninja 1.13.2-3.1, wayland-protocols 1.49-1, nlohmann-json 3.12.0-2 and stb (20260415), in addition to python-tqdm dependence 4.70.1-1. Installing by repositories was completed with local authentication; hooks created snapshots Snapper 41/42. Compilation release Meson/C++23 and Ninja completed without errors. Sources/build in `$HOME/.cache/ricy-noctalia-src-5.2.1/`, out of portable materials.
+
+The binary selected by the shell is `$HOME/.local/lib/ricy-noctalia/noctalia`, by `~/.config/systemd/user/noctalia-teste.service.d/50-notificacoes-ricy.conf`. `/usr/bin/noctalia` and the original package remain installed. The prefix /usr from the compilation serves to locate the existing assets; it was not executed meson install. The shell and adapter were restarted with KillMode=temporary process to preserve the applications released by the menu, including the Codex used in this work; the temporary override was removed and the drive returned to KillMode=control-group. Shell and adapter are active.
+
+Materials included in active and transport kits: `contributions/notification-continuity/README.md`, `build.sh`, `enable.py`, `notification-right-corner.patch` and MIT upstream license. `REINSTALL.md` won step 4a. To play, follow README: prepare first the permanent integration, install the dependencies, run `bash build.sh` and `python enable.py`. The compiler requires compatible version/commit and refuses unknown font changes. The local executable does not follow package updates alone: review/rebase and recompile the patch when changing version, or restore the original selection before using other Noctalia asset.
+
+Executed check: Python/Bash syntax, git diff --check, native compilation and new compiler execution on the existing build passed. Notification captures in HDMI-A-1 confirmed the union of the lower right corner and the lower time bar between the beginning and the middle. 8000 ms received NotificationClosed with reaction=1 lon 8,0 seconds; later capture confirmed its disappearance. The visual and expiration test was in this installation, not in another computer. The pause when passing the pointer was checked in the native code, without separate interaction test.
+
+Local backups, not included in the kit: `$HOME/.local/state/ricy-notificacoes-backups/20261010-184413-289100/config.toml` contains the previous configuration; activation kept its state in `20261010-185312-672533/manifest.json` in the same base directory. To undo binary selection use `python enable.py --restaurar CAMINHO_DO_BACKUP` to undo the preferences, restore the config.toml previous or only adjust `[notification]`; binary restoration does not remove packages or those preferences.
+
+SHA256SUMS updated and verified in both copies preserving their entries. Historical ZIP/tar files have not been regenerated. No clipboard history, private status or screenshot has been included in the materials.
+
+## Contribution — Curved joining of the lower left corner of the notification — 2026-10-10  18:59 (America/Sao_Paulo)
+
+The user corrected the previous result: removing only the right lower radius did not solve the visual connection, because the lower left corner was still rounded into the card. The local variant was adjusted again: now this corner opens out with a concave curve, following the native geometry of the embedded panels, and finds the upper edge of the taskbar. The lower right corner continues straight; the top two are rounded. This contribution replaces the previous description of keeping three rounded corners. Position preferences, monitor, opacity and deadline continue those documented in the previous contribution.
+
+The patch in `src/shell/notification/notification_toast.cpp` now reserve a left extension on the surface and in the animation clipping area, preserving the content width and alignment to the right. Background and blur use CornerShape::Concave in the lower left corner and the same side insert. Special geometry applies only in bottom_right with offset_x=0 and offset_y=0; other positions/leaves maintain the native format. The daemon function or time count has not been changed.
+
+Incremental compilation Ninja completed without errors and git diff --check passed. Run again `python enable.py`; the shell uses the corrected local binary. Backup of this exchange in `$HOME/.local/state/ricy-notificacoes-backups/20261010-185903-989917/`. This backup restores the previous variant with just the right corner; the backup of the first activation restores the selection of the original package. The exchange used the temporary application preservation override; at the end, shell and active adapter and KillMode=control-group restored.
+
+Visual capture in PD-1 confirmed the curve extension to the left until the taskbar, with the card aligned to the right edge. Repeated the D-Bus test of 8000 ms: NotificationClosed reaction=1 lon 8,0 seconds, with less progress in intermediate capture and absence of card in later capture. There was no new hover test, other positions or installation on another machine.
+
+Patch and README Updated at `contributions/notification-continuity/` in active and transport copies, step 4a of REINSTALL.md and the two SHA256SUMS (423 verified entries). To play/revert, the script commands and version update precautions described in README remain. Captures and backups remain local; historical compressed files have not been changed.
+
+## Contribution — Continuity of the blur between bars and panels — 2026-10-10  19:20 (America/Sao_Paulo)
+
+Corrected the continuity of the background blurred between taskbar, notifications, search by the magnifying glass, Noctalia menu and top support of the search for Super or typing. Equalizing opacity and corners did not eliminate the amendment: the native blur sampled a different rectangle for each surface.
+
+Separate effect compiled `ricyblur`, based on the official KWin code 6.7.5, commit `ab7df7ccb7c6af20f4b279cd6220f7cd3d2267d7`. While a panel or Noctalia warning is visible, its surfaces use the same filtered background by monitor, cut by the shapes of each window. The background copy is made before drawing Noctalia, without including the bar itself. The OpenGL clipping is preserved in the final composition and does not limit the copy or shared filter. Other applications follow the native algorithm. Also applied `panel_overlap = 0` ed `[bar.default]` and `[bar.search_edge]`, in the active profile and in the two public templates, removing the range of a pixel with duplicated transparency at the junction. 0,70, the compact bar and the choice of monitor remain preserved.
+
+The new plugin has been installed in `/usr/lib/qt6/plugins/kwin/effects/plugins/ricyblur.so`, keeping the original KWin files. Helper `$HOME/.local/lib/ricy-blur/start.py` and the unit `ricy-blur-continuidade.service`, enabled in the graphical session, select the effect only in KWin 6.7.5 when supported. The native blur remains enabled in the configuration and is maintained/reloaded if the variant cannot be used. The compositor and the main shell were not restarted in this exchange.
+
+Public material in Mexico - AmarillasLatinas.net `contributions/blur-continuity/`: README, GPL-license2.0-or-later, patch and scripts `build.py`, `integrate.py`, `start.py`. The compiler fixed version and commit, refuses unknown changes in source and recompiles in destination; we did not distribute the binary of this machine. Official Vulkan headers were used 1.4.363 cache, commit `6802bb4733b63ed5efd3adb308a6c885ef180ea1`, without installing new packages in this work. The reinstallation script uses the target vulkan-headers package. Please refer to README and 4b step of REINSTALL.md to play or return to native blur; future versions of KWin require patch revision/recompilation.
+
+Executed verification: final compilation reproduced by the kit script, patch without whitespace errors and Python syntax checked. Visual test in KWin/Noctalia isolated with color track background checked the continuity between embedded menu and bar; the test session was closed upon completion. In the main session, loaded ricyblur effect, active/habilitated unit and validated/reloaded Noctalia configuration; opened the upper search and verified its support on the corresponding monitor. The user confirmed: “Visually passed”. There was no new hover test or notification expiration in this contribution; the term tests are in the previous record. The main compositor journal did not record framebuffer errors since the application of the final variant.
+
+Limits: different scales, reinstallation on another machine and consumption with video/animations were not measured. With open panel/warning, changed frames repaint the monitor to avoid reusing pixels containing the bar; this can increase the cost of composition. There is no continuous repainting loop when the scene is stopped, nor recording the disk background by effect.
+
+Private backups in `$HOME/.local/state/ricy-blur-backups/`: integrator `20261010-191516/` and previous profile in `20261010-191527/config.toml`. Restore native blur does not reverse panel_overlap; use backup or only adjust this preference. Active and portable copies have been synchronized, with all checked hashes and previous preserved entries (429 archives in each SHA256SUMS). Captures, caches, profiles/clipboard and backups have not been included. Historical ZIP/tars continue as previous portraits; to transport this correction, copy the updated public folder with this record and script.
+
+## Contribution — Wallpaper on the home card of the actual session — 2026-10-10  19:24 (America/Sao_Paulo)
+
+The user pointed out that the actual session did not show wallpaper in the menu. The isolated test had active Noctalia wallpaper service; in the main session it is disabled because Plasma manages the desktop. No surface/texture of Noctalia wallpaper, HomeTab received currentPath empty and showed solid color.
+
+The local variant Noctalia 5.2.1 now query getDefaultWallpaperPath on Home card when currentPath is empty and the Noctalia wallpaper is disabled. The image is loaded by native thumbnail, keeping Plasma responsible for the desktop. The change is in src/shell/control_center/tabs/home_tab.cpp, included in the patch composed of contributions/notification-continuity; the geometry of notifications and the ricyblur effect remain applied. The card displays the image; the rest of the menu remains translucent with blur content behind it, without applying artificial wallpaper to the entire panel.
+
+Added sync-wallpaper.py: reads the static image by Plasma API, validates existence and equality between desktops and records the path via IPC wallpaper-set. On this machine, both use /usr/local/share/ricy/limine-splash.png. We do not enable [wallpaper] in Noctalia. Synchronizer does not follow future changes automatically: run it again after changing the background in Plasma. Different/animate backgrounds require another integration and are refused without changing preferences for the script.
+
+Verification: Ninja compiled binary; build.sh accepted compound patch; git diff --check and syntax Python/Bash passed. Engagement with preservation of completed applications, KillMode=reestablished control-group and ricyblur still loaded. Open home control-center in the main session; capture confirmed the Limine image on the card compared to desktop file. Closed menu at the end. No new notification test or migration to another machine was done.
+
+Backup of previous binary in $HOME/.local/state/ricy-notificacoes-backups/20261010-192258-920118/; restores the previous executable with corrected notifications and solid card. The first syncer pointed the backup to config/settings.toml instead of state/settings.toml: 20261010-192254-917307 DOES NOT contain backup of the original state and its manifest was marked as invalid for restoration. Fixed the path in the distributed script. $HOME/.local/state/ricy-menu-wallpaper-backups/20261010-192326-080532/ saves the already synchronized state before the second idempotent execution; should not be presented as copy prior to the first change. The standard path Noctalia observed before was /usr/share/noctalia/assets/noctalia-wallpaper.png.
+
+Patch, README and synchroniser updated on the two copies of the kit; step 4 of REINSTALL.md updated and 430 hashes checked on each manifest, preserving the previous entries. No capture, personal image, state or backup was included; historical compacted remain unchanged.
+
+## Contribution — English dates, weather and events in Cosmópolis/SP — 2026-10-10  19:28 (America/Sao_Paulo)
+
+Attended the request for dates in English keeping Cosmópolis/SP-BR as location. The Noctalia process inherited LC_TIME=pt_BR.UTF-8, despite the interface in English. Applied shell.lang="en" and drop-in 60-ricy-idioma-localizacao.conf with LC_TIME=en_US.UTF-8, TZ=America/Sao_Paulo and UnsetEnvironment=LC_ALL. Global locale, regional units and keyboard composition have not been changed.
+
+Fixed location: auto_locate=false and address="Cosmopolis, Sao Paulo, Brazil". The full address was validated in the API used by Noctalia: latitude -22.64583, longitude -47.19611, name Cosmópolis, Brazil. Consult only Cosmópolis returned a homonymous city in the USA; this result was not applied. Weather enabled in metric units and calendar/events enabled. The user chose only to enable events for the time being: no account or source of events/seasons has been added. The calendar uses the session time zone; the location itself does not provide personal events or holidays.
+
+New contribution contributions/noctalia-language-and-localization with apply.py and README. The applicator adjusts the same keys in the profile and in settings.toml, because there was a private override auto_locate=true; preserves other preferences and accounts. Install the drop-in and use the existing application preservation helper to restart shell/adapter. The local executable was not changed at this stage. Public templates of the two copies also updated; apply.py is required to install LC_TIME/TZ in the drive and fix destination overrides.
+
+Verification performed: Noctalia config validation passed; process environment confirmed LC_TIME=en_US.UTF-8 and TZ=America/Sao_Paulo without LC_ALL. Calendar in the real session exhibited Saturday and October; event card enabled without connected accounts. Native Cache confirmed Brazilian location and forecast with timezone America/Sao_Paulo, offset -10800 and seven days available. ToML comparison with backup confirmed that unrelated preferences were preserved. ricyblur remained loaded; KillMode pattern restored. No account synchronization or installation on another machine were tested.
+
+Previous private backup in $HOME/.local/state/ricy-idioma-localizacao-backups/20261010-192713-914138/. The manifest indicates previous presence of config/settings/drop-in. Please refer to README for reversal and preservation of subsequent changes; private data and captures were not included in the kit. REINSTALL.md and both synchronized copies, with 432 Hashes conferred on each manifesto. Historical compacted remain unchanged.
+
+## Contribution — Visual identity Noctalia as a system reference — 2026-10-10  19:35 (America/Sao_Paulo)
+
+The user asked to register the visual identity of Noctalia and incorporate it to the Ricy to guide the adequacy of other parts of the system. VISUAL-IDENTITY.md as current guide, with link at the beginning of this record and the resettlement script.The next visual adjustments should consult this reference and document adaptations and results in the actual component.This contribution records the approved basis; it does not apply new themes to the system.
+
+The reference captures KDE-Actual palette/Catppuccin Mocha with Mauve accent, background #181825, cards #313244, text #cdd6f4/#a6adc8, contours #46485c, hover #977dba and semantic colors. Defines materials with fill alpha 0,70 for bars, notifications and panels that inherit the bar, preserving readable text and solid cards. 1, and opaque Kvantum menus: not widespread transparency for the whole system.
+
+Registered current corners and junctions: taskbar 44 px with superiors 6 px and lower rectum; upper support 640 × 16 px, radius 8 px and upper margin 8 px; notification with lower left concave corner out and right; bar.panel_overlap=0 and shared background ricyblur by monitor. Noto Sans shell font; KDE/GTK JetBrainsMono Nerd Font 10, with distinction between points and logical pixels. Rays, spacings, paddings and native durations were extracted from the code constants 5.2.1 and marked as reference, not measuring all components. 1,3 is distinct from the explicit radii of the bar.
+
+Public materials in contributions/noctalia-visual-identity: README.md (guide) tokens.json (structured, non-executable values/papers) and reference.svg (vectorial drawing without personal data). README was also published in Documents/ricy/VISUAL-IDENTITY.md for direct access. The board illustrates colors, cards, source and junction with alpha in a common form; it is not a real capture nor simulates the OpenGL filter. Archives allow other agents to use the same parameters in the next works.
+
+Executed validation: active palette and public template compared byte to byte; verified pertinent visual overrides without copying private settings; Style reads, transparency/radius rules in KDE code and preferences, Kvantum, GTK and Plasma current. JSON and SVG analyzed; JSON colors checked against palette; SVG rendered and inspected visually. Ricyblur effect confirmed loaded. No application, service or preference was changed/restarted.
+
+The guide differentiates current reference and future work: Qt/KDE is part of active integration; GTK and third party applications are not declared fully harmonized; login/blocking have its own record and have not been revalidated here. English dates, São Paulo time zone and Cosmópolis region remain preserved. Applying language to new areas will require changes and validation of their own; this contribution does not present these adaptations as completed. Reversal here is only documentary, preserving the history; future adjustments should save their backups and record reversion by component.
+
+Synchronized the three materials in active and portable copies. SHA256SUMS of both preserves the 432 previous entries and adds three (435 The documents outside the kit are not part of this manifest, as existing structure. Not included captures, clipboard, profiles, backups or source/build complete; historical compressed have not been modified. To transport, copy also VISUAL-IDENTITY.md next to ricy.md, REINSTALL.md and current kit.
+
+## Contribution — Application menu as Noctalia composition — 2026-10-10  19:44 (America/Sao_Paulo)
+
+The user asked for the right button options in a taskbar application to appear in the Noctalia composition, such as tray. The independent XDG popup was replaced by an embedded native Panel, id ricy:taskbar-menu, managed by the same PanelManager from the tray drawer. The opening uses the anchor bar callback at the center of the icon, keeping source bar/monitor. Herda opacity, blur, junction and native animation. Internal apps menus have not been changed.
+
+The list and its original handlers have been preserved: Pin/Unpin, desktop actions entry, Close and Close All, as per the application/windows available. Callbacks use widget life guard weak; activation/opening postponed until the end of the event. Included arrows and Enter/Space to navigate/activate; Escape and external click are in charge of PanelManager. Removed your own popup and your event intercept in the taskbar.
+
+The user saw the first composition and pointed out that the height generated scrolling. Identified duplicate padding: PanelManager already discounted the native margin. Fixed layout and removed ScrollView; height calculated by all inputs, separators and padding, without limit of 12 lines. Width calculated by broader text, minimum content 240 px at scale 1This replaces the fixed minimum width popup and the first rollable composition.
+
+New contribution contributions/taskbar-menu-composition with README, build.sh, patch compound noctalia-ricy.patch and MIT license. Patch applies on commit Noctalia 5.2.1 Known and maintains previous notification and wallpaper corrections of Home. The compiler of this directory is the reference to reconstruct the current full state; the previous refuses this cache with different changes. README guides to preserve the previous source and use clean cache when migrating variant, without overwriting unknown changes. Updated step 4a, identity/tokens guide and note of the previous contribution to point to the composite compiler.
+
+Verification performed: final compilation Ninja by contribution script, git diff --check, bash -n and Noctalia config validate passed. SHA of the active executable corresponds to the final build: 8fa83842d58d1d1ceedd791defb9a82169f7cfa96ac1065f94ed14a861d24a26. Active Shell/adapter, KillMode=reestablished control-group and loaded ricyblur. The user's capture proved the initial composition, still with scroll. No visual confirmation of the final adjustment without scroll was recorded, test of the actions in disposable application, very extensive lists, side/superior bars or migration to another machine. The attempt to automate a click did not open the target menu; no result of this attempt was used as validation. The temporary input and script device was closed.
+
+Private backups in $HOME/.local/state/ricy-notificacoes-backups/: 20261010-193948-522126 restores the previous variant with popup and previous fixes; 20261010-194151-517805 restores the first composition with scroll. Use enable.py  --restaurar according to README, preserving applications. The exchange does not modify language, wallpaper or climate preferences.
+
+Synchronized four public archives on active and portable copies; both manifestos preserve previous entries and have 439 Hashes checked. Captures, test devices/scripts, binaries and private state have not been included. Historical compacted remain unchanged.
+
+## Contribution — Tray options in composition Noctalia and return to drawer — 2026-10-10  19:56 (America/Sao_Paulo)
+
+The user requested the same composition of the application menu for the tray items options. Replaced the independent popup by native embedded panel ricy:tray-menu, preserving DBusMenu as the source of options and actions. Keep Pin/Unpin, separators, disabled entries, checkmarks, radio and submenus. Inherit bar opacity, shared blur, merge drawing, animation, monitor/bar and external closing of PanelManager. Items that do not expose DBusMenu continue to present the application's own menu.
+
+Width follows the largest text (minimum content) 240 px at scale 1). The height considers all native inputs and margins, without duplicate padding or artificial line limit. ScrollView only shows scrolling if the list exceeds the available area. Submenus navigate within the same composition, with return line and left/Escape to rise a level. At the root Escape closes. Opened/closed events, updates and loading on demand remain connected to the provider; retry limited to 300/900/2000 ms. Delayed actions check the current line and the generation/life of the menu before acting. Remove the item closes the menu. A public rectangle query in PanelManager translates the click in the drawer to monitor coordinates before opening the replacement menu.
+
+The user confirmed: “Passed and got good”, asking for a arrow between menu and tray to return to the drawer. Added native Ghost button at the base of the menu, chevron-down in the bottom bar; 32 px and interval 4 px at scale 1. Allows you to return directly to the drawer in the same monitor/bar/anchore, including from submenus. The button participates in the native Tab/Enter. The user confirmed “Passed” after activation of the arrow: both steps passed visually.
+
+New contribution contributions/tray-menu-composition with README, compiler, full patch and MIT license. Patch matches commit Noctalia 5.2.1 6ef43e2bf2f3d5b4205ec72a72e34a2ab76ce3b4 and includes previous notifications changes, Home wallpaper and Taskbar menu. This is the reference compiler to play the current variant. Previous compilers/patches remain historical and refuse cache with different changes; preserve the previous font and use clean cache while migrating as the README. Updated resettlement, visual identity and tokens, previous contributions notes, active kit and portable copy. Language/climate preferences and accounts have not been changed.
+
+Checks: final compilation Ninja by contribution script, git diff --check, bash -n and profile validation passed. Active and build executable coincide, SHA256 cf9ee62d8a0cb359a9a2775eb4ccc5d90d08c3d45833967cc0fd1c8c56b95ada. Active Shell/adapter, KillModel=reestablished control-group and loaded ricyblur effect. Visual confirmation of registered user to menu and set. No full test of actions, submenus, extensive lists, sidebars/superiors or other machine was recorded and removed; attempt to click on it automatically did not open its menu and was not used as validation. Input devices, KWin script and temporary device preferences were removed. No actual update/closure action was triggered as test.
+
+Private backups in $HOME/.local/state/ricy-notificacoes-backups/: 20261010-195150-527306 restores the previous variant with taskbar menu; 20261010-195539-054921 restores the trace composition without the arrow. The previous activator/restaurator remains responsible for the safe binary/drop-in exchange, preserving applications and the package /usr/bin/noctalia.
+
+Both manifestos preserve previous entries and have 443 hashes checked. No binaries, accounts, private status, catches or clipboard material in the kit. Historical compacts remain unchanged.
+
+## Adjustment — Alignment of the menu and return to the tray drawer — 2026-10-10  20:01 (America/Sao_Paulo)
+
+The user pointed out that the drawer changed position when returning by the bottom button of the menu; he wanted the arrows in the same horizontal position. The previous reference was the position of the click on the item (with conversion of coordinates of the surface). Altered TrayMenu::toggleForItem: when opening through the drawer, the reference is the real center of the rectangle of the drawer in coordinates of the monitor, regardless of the item clicked. Menu, its submenus/resizings and return use this reference.
+
+In the arrow layout, the horizontal coordinate is designed from this fixed axis to the panel content, discounting the actual position and native padding. This also preserves alignment when a wider menu needs to be limited by the monitor edge: the arrow accompanies the drawer axis, not the center of the dislocated menu. The button remains inside the panel body. Actions, appearance, duration, monitor or source of options have not been changed.
+
+Final compilation Ninja/play script, git diff --check, bash-n and config validate passed. 45 geometric scenarios of drawers/menus with different widths and central/close positions of the edges: center of return and arrow maintain the axis, tolerance of half pixels by rounding. These calculations do not replace an automated graphical test. The user confirmed “passed” after activation: alignment visually validated in the real session. Active binar corresponds to build, SHA256 ad70b2ffdb54dcedef8a23bb9b27cf5a0b9230cc29fed26bfbcf577e2a0ee0c0. Shell/adapter active, KillMode=control-group and loaded ricyblur. No tests of actions, extensive lists, sidebars or other machines were expanded.
+
+Private backup prior to exchange: $HOME/.local/state/ricy-notificacoes-backups/20261010-200022-501476. It can be restored by the existing activator; it returns to the composition with set before alignment correction, preserving applications. Updated the patch composed of tray-menu-composition, README, tokens/identity and reinstallation. Active and portable kit synchronized, 443 hashes conferred on each manifest; previous entries preserved. No capture, binary or private state was included; historical compacted remain unchanged.
+
+## Contribution — Smaller icons and hover for apps and search — 2026-10-10  20:07 (America/Sao_Paulo)
+
+User request: reduce the application icons a bit and animate them in the hover, including search, without reaching tray/options, volume, time, network or Noctalia button. Implemented only in TaskbarWidget and LauncherWidget: the drawing is scaled 0,88 at rest and grows to 1,0 in the hover, returning to 0,88 on exit. Input/output 140 ms, EaseOutCubic, with native AnimationManager and respect for motion/speed preferences. The hover inversion cancels the previous animation and continues from the current progress.
+
+Transformed only image/glyph nodes from the icon without changing layout measure or click area. Maintained spacing, titles, indicators, badges and original interaction (activate, switch, close, menu and drag). Includes images, apps fallback and glyph/image of the magnifying glass. The existing background highlight of the apps tiles follows the transition from 140 ms; other taskbar elements keep their previous hover. Volume, watch, network, tray, track menus and control-center have not been changed. No color, font or private preferences have been modified. Code application ensures variant reproduction, without depending on a manual adjustment of the active profile.
+
+New contribution contributions/app-icon-interactions: README, build.sh, patch complete noctalia-ricy.patch and MIT license. Noctalia patch 5.2.1 6ef43e2bf2f3d5b4205ec72a72e34a2ab76ce3b4 maintains previous notifications corrections, Home wallpaper, Taskbar menu, and Tray menu/return/alignment. This compiler is the current reference; the previous ones remain historical and refuse cache with different diff. Preserve the previous font and use clean cache while migrating as README. Updated resettlement, visual guide and tokens, with explicit deletions of effect. No binary has been placed in the kit.
+
+Checks: final compilation Ninja/play script, git diff --check, bash -n and config validate passed. Comparing the blocks of the complete patch with the previous variant: additional changes restricted to the two widgets; all other previous blocks remain the same. Active and build binar coincide, SHA256 b30d5efc4461d0eea3e82c2001d05bbc32fe79fc3e5770ee152ce1af4b694fb. Active Shell/adapter, KillModel=reestablished control-group and loaded ricyblur. No visual confirmation of the user recorded in this setting, nor click/screw tests, fast hover, disabled movement, varied scales or other machine. Scope/compilation verification does not replace these visual and interaction tests.
+
+Private backup before exchange: $HOME/.local/state/ricy-notificacoes-backups/20261010-200612-039983. Restoreable by the previous activator, returns to the variant with tray alignment without reduction/boom of icons, preserving applications. Active and portable kit synchronized: 447 hashes checked on each manifest, previous entries preserved. No clipboard, captures, accounts, private status or backups in the kit; historical compressed remain unchanged.
+
+## Contribution — Icon actions: restore, minimize and close — 2026-10-10  20:18 (America/Sao_Paulo)
+
+The user clarified that “opening minimized” means restoring the window by the icon and confirmed the previous implementation with “Passou”. This variant explicitly restored in KDE/KWin, preserved the existing middle-click to request closing and selected the exact identity by UUID to not activate/close another window of the same title. Confirmation is from that previous state, whose binary was SHA256 1b32307c4bfd041a0eb62f329ff4cab57a70f511798380d8d94ec5e9ecaa79.
+
+New request: Windows behavior, restoring minimized and minimizing opened by the icon. Implemented left click: minimized window restores and gets focus; focus visible window minimizes, if minimized; inactive visible window comes forward. Fixed application without window continues to start. In groups, the active window is prioritized to minimize; without active in the group, the existing selection/cycle chooses the window to restore/focus. Do not play previews or selector of Windows groups. Middle-click asks to close an active/representative window, preserving save dialogs; no window ignores. Right-click and drag maintain previous menus/orders.
+
+Only the left-click of the taskbar sends toggleMinimize; the script reads the current state in KWin, without relying on old tile flags. Search activation, dock, shortcuts and other callers restore/focus, without minimizing. Implementation of KDE/KWin specific alternation; other compositors maintain original activation. Exact UUID with fallback class/caption only without UUID; obsolete UUID does not trigger another window. Close callsWindow and does not use minimize as fallback.
+
+New contribution contributions/taskbar-app-actions with README, build.sh, patch complete noctalia-ricy.patch, LICENSE and validate-actions.py. Current reference to compile Noctalia 5.2.1, commit 6ef43e2bf2f3d5b4205ec72a72e34a2ab76ce3b4. Fixed TaskbarWidget, ComposerPlatform and KwinActiveWindow, with their headers; compared the blocks with app-icon-interactions, all other previous blocks are the same. Preserved icons/hover, notifications/wallpaper, menus, junctions and track. Updated reinstallation, guide and interaction tokens, warning in the previous variant.
+
+Checks: 17 tests perform real JS extracted from the source in QJSEngine, including equal identity/titles, obsolete UUID, restoration, alternation, inactive/non-minimizable window, common activation and closing. In the actual session, disposable Qt window was minimized and corrected scripts restored/focused, minimized, restored again and preserved visibility in the common activation; then requested UUID closure. Minimization/focus states conferred directly on KWin, as client Qt state does not follow up reliably external minimization. Synchronous sequence checks the adapter, without simulating physical clicks or covering all applications/groups. Initial attempts with Qt/timers queries had inconsistent measurements; final KWin state verification passed. No working window was closed; temporary DBus scripts and object removed. The new alternation has not yet received user confirmation. --check, reverse patch application and config validate passed.
+
+Active binary/build match, SHA256 fcfc99017bc29cdf3c93742dfc5463ea62c01e07666666baebbeb610da7a08a6. Active Shell/adapter, KillMode=reestablished control-group, ricyblur loaded. Private backup before this exchange: $HOME/.local/state/ricy-notificacoes-backups/20261010-201748-372725; returns to the approved restore/close variant, preserving applications. Private backup of the previous deployment: $HOME/.local/state/ricy-notificacoes-backups/20261010-201242-075546; returns to the icon/hover variant without action corrections.
+
+Synchronized active and portable kit: 452 hashes conferred on each manifest, 447 Preserved entries and five new ones added. No binaries, clipboard, captures, accounts, private status, Python bytecode or backups in the kit. Historical compacts remain unchanged.
+
+## Contribution — Purple ball by state and animation of shares — 2026-10-10  20:28 (America/Sao_Paulo)
+
+User confirmed “It’s working” for the variant restore/minimize by icon and close with middle-click. He asked the purple ball to react and add animations. Implemented four states in the indicator: activate opacity/scale 1/1; open inactive 0,55/0,82; minimized 0,28/0,65; fixed without window 0/0,55. Transition 160 ms EaseOutCubic, Native AnimationManager, respecting shell preferences. Part of the current visual value and preserves snapshots by identity between reconstructions; this allows erasing the indicator of a closed fix. Unfixed icon disappears when closing the last window. Same rule in line when titles are visible. Layout, click area and hover preserved; summary of workspace points maintains its composition. No changes in track, volume, clock, network or control-center.
+
+KDE adapter connects minimalizedChanged, serializes sixth minimization field by UUID and includes state changes in callback. Status reaches model; minimized window cannot remain active by retained focus of shell. Active selection prioritizes UUID, without lighting title duplicates. Fixed grouped are only minimized if all windows are; workspace group representative prioritizes active/visible. WaylandToplevels preserves minimalized in wlr.
+
+Local effect ricywindowactions derives from the KDE Squash GPL-2.0-or-later. Minimizes with compression, displacement and fade; restores in reverse; base 240 ms, InCubic/OutCubic, with fast reversal and blur cleanup. Native squash did not animate when Noctalia did not publish iconGeometry. New fallback uses destination 18×18 on the same monitor, horizontal axis of the center of the window and 22 px above the bottom edge (taskbar 44 px). It is approximate destination, not the exact icon; if iconGeometry exists, it is preferred. Only normal taskbar windows, respecting full screen effects. If the bar changes position/height, review fallback. No Plasma protocol of icon geometry has been added.
+
+Native Scale to Open/Close: Base 180 ms, scale 0,92 and fade; dialogues can also receive the Scale as KDE implementation. Squash, Magic Lamp and Fade disabled to avoid overlap; Smooth Window Geometry and ricyblur maintained.0,25 preserved: real reference times approximately 60/45 ms to minimize/close. Noctalia and KWin move preferences are independent; AnimationManager and animationTime respect their preferences. No rebooting compositor or finishing apps.
+
+New compilation reference contributions/app-indicator-animations includes full patch Noctalia 5.2.1 no commit 6ef43e2bf2f3d5b4205ec72a72e34a2ab76ce3b4 and effect tested in KWin 6.7.5. Ten public archives: README, compiler, patch, MIT license, two validators, applicator, GPL license and two asset effects. Comparison of the blocks confirms additional changes only in TaskbarWidget, KwinActiveWindow and WaylandToplevels with respective headers. Other blocks, menus, notifications, wallpaper and corrections of previous preserved actions. Updated resettlement, visual guide and tokens; warning in the previous contribution points to this variant.
+
+Checks: 17 JS tests of shares and 15 signal/serialization/animations passed; final compilation/reproduction, bash-n, config validate, git diff --check and reverse application of patch passed. Wide compilation presented warnings -Wmaybe-uninitialized pre-existing in config_service.cppNo changes in this file. Real disposable Qt window confirmed restore/minimize/restaurate, common activation without minimizing and closing; ricywindowations and Scale appeared active during transitions. Speed 0,25 did an initial consultation after 65 ms miss animations; observation within 60 ms passed. Private captures confirmed the active indicator→minimized. There was no physical simulation of click, validation of all groups/apps, scales or real quick reversals; this adjustment has not yet received visual confirmation from the user. Test Scripts and DBus removed. No working window has been closed.
+
+Active Shell/adapter, KillMode=reestablished control-group; ricyblur, ricywindowations and Scale loaded. Active/build binary match, SHA256 ac14659d1461da4cb5c86b2b38dfb1757c25b875a729d939cd670bfbb28a2. Shell backup: $HOME/.local/state/ricy-notificacoes-backups/20261010-202443-366945, returns to the behavior of the approved actions before this indicator. Backup effect/keys: $HOME/.local/state/ricy-indicador-animacoes-backups/20261010-202354-251513. Full reversal requires restoring both as README. Backup of keys limited to modified ones, without distributing private state in the kit.
+
+Synchronized active/portable kit: 462 hashes checked by manifesto, 452 preserved previous entries and ten new ones added. Preserved KDE credits and licenses. No binary, screenshot, clipboard, account, bytecode, private state or backup in the kit. Unchanged historical compacts.
+
+## Contribution — Animations of icons, correction of background and reorganization — 2026-10-10  20:46 (America/Sao_Paulo)
+
+User requested pulse/bounce by state and reported black background in the first implementation. Slot Box was replaced by Node without painting, keeping click area and independent hover. Private captures before/after confirmed removal. Icons receive finite actions: open 420 ms (bounce/pulse), restore 360 ms (bounce), focus 260 ms (pulse), minimize 220 ms (compression to bar), background 200 ms (decrease/decrease), closed 240 unfixed removed dissolves in 220 ms, scale 1→0,72, no hit-test/layout, with window exit check and lifeguards. Respected native movement/speed, no loops at rest, no initial animation of all apps, resuming progress in reconstructions and interruptions. Captures check boom/compression; no conclusive capture of the ghost upon closing. Real disposable Qt window confirmed states/effects; no closed user work.
+
+Next request: click/scramble to reorganize applications. Extended upstream mechanism restricted to fixed for all strips of the plane, without changing fixing. Icon accompanies cursor, transparent spacer target mark, neighbors yield space. Native threshold avoids confusing click with drag; hold without moving preserves click. Release of gesture consumed suppresses window action. Medium-click/context preserved. Search/tray/controls stay out of the range; grouping by workspace maintains original layout. Horizontal/vertical axis as orientation, real pitch considers title/scale/spagging.
+
+ConfigService saves widget.taskbar.app_order in settings.toml private, after dispatching the event. App+occurrence keys do not contain titles/UUIDs. Instances retain key during updates, new ones can reuse free slot; between restarts there is no specific document identity in windows of the same app. List preserves closed/filtered apps and adds new ones without preference at the end. Shared Widget applies order on your monitors. Generation guards invalidate commit in changed model; cancellation restores flow; release waits to recharge in final position. Private preference not copied to kit.
+
+User confirmed “Passed” after activation of reordering. Real order with two different slots found and config validate passed after drag. Private capture shows the altered order and absence of black background. There was no automated physical simulation; visual validation came from the user. Vertical bars, other scales and model changes during real drag were not visually validated. Tests: 22 Order No (including 24 permutations), 11 against native TaskbarWidget/ConfigService objects in temporary profile, 20 of motion, 17 JS of shares and 15 the indicator/effect passed. Native test confirmed unfixed apps, movement, cancellation, invalid generation, click suppression, writing without pin and schema/definition decoding order in new instance; did not connect to the compositor. Patch on clean font, 17 identical files, compilation/reproduction, bash-n and git diff --check passed. New stage changes only TaskbarWidget, definition and taskbar_order.h; patch fully includes the previous adjustments, including motion header.
+
+Public contributions: app-icon-states (12 archives) records the previous step; app-icon-reordering (16 Archives) is the current cumulative reference. Reinstallation, identity and updated tokens. Active/build binary match, SHA256 of 29814a36e2091d3889c1abce94ea046bb89aa27c4df66efb36d3cc18e87d4f. Active Shell/adapter, KillModel=reestablished control-group; ricyblur, ricywindowations and Scale loaded. No change in KWin effects at this stage. Backup to undo only drag: $HOME/.local/state/ricy-notificacoes-backups/20261010-204423-864447, returns to the animations with corrected background. For before the animations of icons, use 20261010-203450-476691; 203558-299413 He's a middleman with a black box.
+
+Active and portable kit synchronized, 490 hashes per manifesto: 462 previous preserved entries, 12 of the state stage and 16 added reordering. No binaries, captures, clipboard, accounts, local preferences, bytecode or public backups. Preserved historical compacted. MIT and GPL licenses and upstream credits maintained.
+
+## Contribution — Fade and window expansion — 2026-10-10  21:00 (America/Sao_Paulo)
+
+User provided reference Slick Window Arrangement: https://windhawk.net/mods/slick-window-arrangement Asked for the scope, it confirmed “Open/restorate and close/minimize”. Checked primary sources Windhawk and KDE Scale/Squash. The provided mod implements scrolling/snapping drive; no Windows code was copied. Fade + expansion applied requested using native KWin API.
+
+Open/restor: scale 0,85→1 and opacity 0→1, OutCubic. Close/minimize: 1→0,85 and opacity 1→0, InCubic. Center of the window itself, without translation to icon or monitor, without modifying real geometry. 320 ms; global KDE AnimationDurationFactor=0,25 preserved, approximate reference 80 ms. Ricywindowactions passes from compression/displacement to Scale+Opacity; Native Scale opens/closes with the same values and preserves its filters/dialogues.
+
+Reversions use redirect and, if necessary, cancel before the new direction. Track IDs accompanied to release blur only when both end; old/strange IDs ignored. Close during action cancels local transition; Closure Scale blur is already active is not cleaned prematurely. Filters kept for normal taskbar windows/full screen effects. Fade, squash and Magic Lamp disabled to prevent duplication. Smooth Window Geometry, ricyblur, Noctalia binary, drag/order/hover/pulse/bounce/indicator and preserved panels. There was no change in maximization or window drive.
+
+New contribution window-fade-expand, seven files: README, applicator, validator, GPL license and three asset(metadata, JS, schema XML). Applicator saves package and ten changed keys, preserves too many kwinrc keys, reconfigures/reloads effects without restarting KWin/Noctalia or closing apps; automatically restores backup if activation fails. Backup of this session: $HOME/.local/state/ricy-fade-expand-backups/20261010-205749-431612. REversion to README; undistributed local status/backup. Previous app-icon-reordering installer remains historical for effects; current reinstallation combines your Noctalia compiler with apply-animations.py of the new contribution.
+
+28 JS/config/package scenarios passed. Real disposable Qt window confirmed open, restore/minimize/restaurate, minimize/restaurate in quick sequence, common activation without minimizing and closing; active scale in input/output and local effect on actions. checked package/keys; loaded ricywindowations, Scale and ricyblur, shell/active adapter. Refer to the journal did not bring script errors. Removed DBus test/object, no closed working window. There is no frame measurement to scale/opacity frame or validation of all apps/dialogues/monitors/scales; still no visual user confirmation.
+
+Reinstallation, identity, tokens and previous updated contribution notices. Synchronized active/portable kit: 497 Hashes per manifesto, 490 previous preserved and seven new added. Preserved GPL credits/license. No binaries, screenshots, clipboard, accounts, private preferences, bytecode or public backups; preserved historical compressed.
+
+
+## Contribution — Dolphin with Noctalia identity — 2026-10-10  21:07 (America/Sao_Paulo)
+
+Request: Bring Dolphin's appearance closer to the Noctalia reference. Created exclusive variant Kvantum Ricy-Dolphin, derived from KDE-Noctalia/Catppuccin MIT: surface #181825, text #cdd6f4/#a6adc8, contour #46485c and Mauve accent. Sheet Qt with Noto Sans 10 pt, toolbuttons/fields/beds with lightning 8 px, hover in #313244 and selection #977dba. Sources of archives in the three modes configured in dolphinrc (UseSystemFont=false/ViewFont=Noto Sans). Icons and file behavior preserved. KDE Global Source, Noctalia, MIME and intact decoration.
+
+Theme assigned only to dolphin executable via Kvantum/Applications. Wrapper $HOME/.local/bin/ricy-dolphin Inject -stylesheet. Local app input, D-Bus FileManager1 service and drop-in plasma-dolphin.service use wrapper. No system file replaced; daemon not restarted. QSS applied by D-Bus to existing processes without closing windows. Old windows may require reopening to load variant and file sources. /usr/bin/dolphin do not inject the sheet; the normal launcher and wrapper carry it.
+
+Inspected captures before/after new window, with proportional source and rounded controls. Syntax Python, XML SVG, assignment, fonts, active QSS path, desktop-file-validate and systemd-analyze --user Verify checked. Dolphin 26.08.2-1.1, Kvantum 1.1.8-1.1. Only agent conference windows were closed; preserved existing Home window. An initial assertion expected literal QSS in D-Bus, but Qt returns file:////CAMINHO when you load -stylesheet; check the path and equality of the installed file. Not proven all dialogues/actions, new sessions, all monitors or migration. Still no visual confirmation of the user. Opaque surfaces for reading; not extended shared shell blur. Decoration conserves KDE font.
+
+Portable material: contributions/dolphin-noctalia-identity/apply.py, dolphin.qss, README.md and MIT license. Applicator generates private backup and offers --restaurar BACKUP. In this work were two applications: undo in reverse order 20261010-210632-242640 and 20261010-210604-287127, under $HOME/.local/state/ricy-dolphin-backups. Restorer restores entire files and absences; reopens Dolphin. Later changes in these files can be replaced. Synchronized active/portable kits and new hashes checked, preserving previous entries. Backups/captures/unpublished state. Preserved historical compacts.
+
+
+## Contribution — Dolphin: blur, corners and chips — 2026-10-10  21:33 (America/Sao_Paulo)
+
+Harmonization Chat Dolphin/Noctalia. The user rejected the first opaque/squared version; this contribution replaces this final state, preserving its historical record. Background Now #181825 alpha 178/255 (~0,70), translucent card of archives #313244 alpha 40/255, radius 12, contour #46485c. A private generic Qt plugin, activated by -plugin ricydolphinui no launcher, brand DolphinMainWindow WA_TranslucentBackground before surface creation. Kvantum Ricy-Dolphin activates translucent_windows/blurring, reduce_window_opacity=30 for the surface, Base/AlternateBase transparent and transparent_dolphin_view. Texts/icons are clear; ricyblur provides native blur to external apps, without extension of the shared background Noctalia. No restart of the compositor.
+
+Ricydolphinrounding own effect, installed with Polkit in /usr/lib/qt6/plugins/kwin/effects/plugins/ricydolphinrounding.so, assigns native radius Window::setBorderRadius(16) only normal/dialogues dolphin/org.kde.dolphin. Partial/complete maximization, fullscreen and tinting use zero. Original radii save/restaure and follow changes by signals. It does not add shader or own passes; it uses KWin native clipping and blur 6.7.5Breeze maintains solid title and KDE source. Ricydolphincorners/ricydolphinshape prototypes downloaded, deleted keys and removed libraries. Only final effect installed.
+
+At later request, side hover became chip by content and all detail lines received rounded backgrounds. User approved, then asked to include icons and adjust header. Final status: side involves icon + name; lines #313244 alpha 90, radius 10, inserts 3/2; hover/selection #977dba with alpha 95/170/195 and solid focus #cba6f7 covering icon and line.313244 alpha 155, contour #46485c alpha 150, Noto Sans 10 native pt and arrow. QProxyStyle over Kvantum primitive exchange; wrapper preserves delete KIO for sections, devices, capability and tooltips. QGraphicsEffect draws backgrounds before native drawSource. No intercept mouse/keyboard or change files. Line Chips used in items >140 Px of a width and <=64 px height; large thumbnails maintain their content. QSS alone does not correct zebra fillRect; transparent palette and item backing solve this design itself.
+
+Compilation Qt and installation of checked helper; new captures showed chips, selection with icon, rounded solid focus and arrowheader. Desktop capture showed composite blur. Previous RGBA capture measured alpha 178 at the bottom (before) 255). Native status confirmed lightning16; disposable Qt client confirmed normal16, maximized0 and restored16. No crashes observed in test logs. ricyblur/ricydolphinrounding loaded and active Noctalia/adapter. User approved chips before icons/header inclusion; this final revision still without visual confirmation of it. Not tested all dialogues, transfers, drag/drop, reordering/resizing columns, monitors/scales, giant folders or performance; reset to another PC has not been tested.
+
+Sources/compilers/README/MIT license in the new contribution contributions/dolphin-blur-corners. Updated apply.py, QSS and dolphin-noctalia-identity README; added launch.py. Qt6 Widgets/headers, g++ and pkg-config suffice for helper. Effect requires headers/KWin dependencies 6.7.5; build.py Reused Vulkan heads of official Ricy cache. None .so, screenshot, cache, backup or private data included in the kit. External sources of consulted corners without reuse code. Credits from Catppuccin/MIT theme preserved. Services/desktop keep wrapper; daemon not restarted or automatically closed windows by the applicator. Old instances need to reopen for plugin/theme, QSS applied live by D-Bus; script treats running when user closes an instance during application.
+
+Play/restor by READMEs and updated step 8 of REINSTALL.md. Corner backup: ~/.local/state/ricy-dolphin-corners-backups/20261010-211849-253315. Backup before chips: ~/.local/state/ricy-dolphin-backups/20261010-212842-374549; reverse in reverse order 213035-906999, 212959-440141, 212842-374549 (prefix 20261010-) returns to the previous blur revision. For state prior to blur, continue 211713-181764, 211458-875287 and 211018-558522. Corner restorer preserves keys/radii without replacing whole kwinrc; does not remove library. Backups are private, use new names issued in destination.
+
+Register added under shared flock. Updated identity and tokens, synchronised active and portable kits; manifests preserve existing inputs, recalculate only edited materials, and include new files. Preserved old compacted. This section supersides the previous affirmation of opaque surfaces.
+
+
+## Contribution — Plasma/Noctalia Alternance without restoring old settings — 2026-10-10  22:49 (America/Sao_Paulo)
+
+Work: Concise alternation between the two shells, preserving the Ricy. The user reported no simple return to Noctalia and unexpected change of the wallpaper when using the return to Plasma. This state replaces the exchange flow of previous noctalia-autostart and integration/KDE contributions; historical records and original backup were preserved.
+
+### Cause conferred and result applied
+
+The old return overwrites plasma-org.kde.plasma.desktop-appletsrc and plasmashellrc whole from plasma-before.tar.gz. The restored layout had a group of old north wallpaper; the living desktops 43/44 The old input also ran restore-wallpaper.js, with fixed IDs and image captured before. Wrappers $HOME/ricy/start.sh and return.sh mentioned in the history no longer existed in the destination. At the beginning of this work, Plasma was active, Noctalia/adaptor/integer inactive and login preference disabled; there was a live panel (23, monitor 0).
+
+Installed contributions/plasma-nottalia-switching with seven public files. $HOME/.local/bin: ricy noctalia, ricy plasma, ricy alter (also the action of ricy without argument), ricy status, back-to-nottalia, back-to-plasma. Persistent entries in the menu: Back to Noctalia, Back to Plasma, Toner Plasma and Noctalia. Recreated $HOME/ricy/start.sh, return.sh and switch.sh. The two explicit actions also change the preference of login.
+
+The installer has replaced start-test.sh and return-to-plasma.sh in three sites of the active kit (historical outputs, integration/KDE and start-automatic models) by wrappers that lead to new implementation. In the public kit these historical scripts remain original; the new installer replaces them in the destination. Units, drop-ins and profile names remained existing.
+
+Before collecting panels, plasmashell is briefly stopped/started to sync KConfig and capture all groups of panels and their geometry. Return restores only these groups; conserves desktops, wallpaper, widgets and current general groups. Includes external trace and remaps IDs when they conflict with later desktops/widgets; on this machine the nested applet 43 was remapped to 47 in the first return. Return with already existing panels is innocuous. Snapshot without panels does not replace a valid snapshot.
+
+Super, Super+Space and Super+V are captured every cycle, transferred to Noctalia and restored to their previous actions. Shell/adapter must be ready before the panels are removed. Error in this step tries to recover Plasma; the command also disables Noctalia preference if the drive fails. Command and integration locks serialize calls; login continues using ricy-noctalia-integracao.serviceEach command fires a worker in a separate transitory unit to survive the caller shell closure. Thus the return can also conclude when initiated by the Noctalia menu.
+
+Retrieved once the previously chosen Limine, /usr/local/share/ricy/limine-splash.png, FillMode 2, on live desktops by locally obtained IDs. The private state of Noctalia and the previous record confirmed this image. The following exchanges do not impose any wallpaper. Desktop and general appearance are shared; Noctalia is integrated with KDE/KWin. It is neither songwriter/session nor restoration of the old themes.
+
+### Play and undo
+
+After preparing integration/KDE and installing noctalia-autostart:
 
 ```bash
-python "$HOME/ricy-kit/contributions/plasma-noctalia-switching/instalar.py"
+python "$HOME/ricy-kit/contributions/plasma-noctalia-switching/install.py"
 "$HOME/.local/bin/ricy" noctalia
-# Para voltar ou alternar:
+# To return or switch:
 "$HOME/.local/bin/ricy" plasma
 "$HOME/.local/bin/ricy" alternar
 ```
 
-Requer Python/PyGObject, qdbus6, flock, systemctl e kbuildsycoca6 na sessão
-Plasma Wayland já preparada. Não usa sudo nem reinstala pacotes. Perfil
-continua em contributions/noctalia-kde-integration-and-menus/work/noctalia-profile;
-o serviço mantém o executável personalizado $HOME/.local/lib/ricy-noctalia/noctalia.
-Sem alteração de binário, patches, cores, Dolphin, efeitos, login ou bloqueio.
-REINSTALAR.md atualizado com o instalador e os comandos nos dois sentidos.
-Reaplique o instalador se reinstalar posteriormente os scripts antigos.
+Require Python/PyGObject, qdbus6, flock, systemctl and kbuildsycoca6 in the already prepared Plasma Wayland session. Do not use sudo or reinstall packages. Profile continues in contributions/noctalia-kde-integration-and-menus/work/nottalia-profile; service keeps executable custom $HOME/.local/lib/ricy-noctalia/noctalia. No torque change, patches, colors, Dolphin, effects, login or lock. REINSTALL.md updated with the installer and commands in both directions. Reinstall the installer if you reinstall the old scripts later.
 
-Backup privado emitido nesta máquina:
-$HOME/.local/state/ricy-alternancia/backups/20261010-224512-267960.
-Guarda wrappers anteriores, ausências e os archives Plasma anteriores à
-recuperação do wallpaper. Snapshots de painéis/atalhos e marcadores ficam
-em $HOME/.local/state/ricy-alternancia. Não são materiais de migração.
-O README contém restaurar-instalacao.py: execute primeiro ricy plasma, depois
-passe o backup para restaurar wrappers/entradas e estado anteriores; o
-restaurador preserva o desktop atual. Não desfaz o wallpaper nem aparência.
-O backup completo original continua disponível, mas restaurá-lo integralmente
-reintroduz a perda das preferências posteriores.
+Private backup emitted on this machine: $HOME/.local/state/ricy-alternancia/backups/20261010-224512-267960. Guard previous wrappers, absences and Plasma files prior to wallpaper recovery. Panel/shortcut snapshots and markers stay on $HOME/.local/state/ricy-alternancia. They are not migration materials. README contains restore-installation.py: Run first plasma ricy, then pass the backup to restore wrappers/inputs and previous status; the restorer preserves the current desktop. Do not undo the wallpaper or appearance. The original full backup remains available, but restores it fully reintroduces the loss of later preferences.
 
-### Verificação e limites
+### Verification and limits
 
-Dois ciclos reais Plasma→Noctalia→Plasma concluídos, mais um terceiro retorno
-iniciado por um chamador descartável vinculado à shell e entrada final no
-Noctalia. O chamador foi encerrado com a shell; o worker separado continuou
-e repôs painel/KRunner com sucesso. Isso simula a dependência de ciclo de vida
-do comando aberto pela shell; não houve clique visual no menu neste teste. Testados ricy alternar, aliases, status e chamadas repetidas em ambos
-os ambientes. O segundo retorno teve grupos completos de painéis/geometria
-idênticos ao último snapshot; um painel Plasma foi conservado. Wallpaper
-Limine presente nos dois monitores em ambos os sentidos. Shell/adaptador e
-integração ativos ao final, zero painéis Plasma, preferência Noctalia habilitada;
-KRunner ativo quando Plasma selecionado. Atalhos originais conferidos no D-Bus
-no retorno. Oito hashes de binário, TOML, drop-ins, kdeglobals, kwinrc, dolphinrc
-e seleção Kvantum permaneceram idênticos; PIDs dos apps acompanhados preservados.
+Two actual cycles Plasma→Noctalia→Plasma completed, plus a third return initiated by a disposable caller linked to shell and final entry into Noctalia. The caller was closed with the shell; the separate worker continued and restored panel/KRunner successfully. This simulates the dependence of the shell-opened command life cycle; there was no visual click on the menu in this test. Ricy tests alternate, aliases, status and repeated calls in both environments. The second return had complete groups of panels/geometry identical to the last snapshot; a Plasma panel was conserved. Wallpaper Limine present on both monitors in both directions. Shell/adaptator and active integration at the end, zero Plasma panels, enabled Noctalia preference; KRunner active when Selected Plasma. Original shortcuts conferred on D-Bus in return. Eight torque hashes, TOML, kdeglobals, kwinrc, dolphinrc and Kvantum selection remained identical; P-Bus added.
 
-verificar.py passou: preservação de wallpaper/desktops/widgets/views, IDs e
-referências em conflito, tray externo, comentários, idempotência e recusa de
-backup vazio. Sintaxe Python/Bash, desktop-file-validate e systemd-analyze
---user verify passaram. Um erro inicial na fixture usou expectativa de ID
-inconsistente com seus próprios applets; corrigida a fixture, suíte final passou.
-Não houve reinício completo/login novo, medição visual de todas as geometrias
-ou injeção real de falha durante remoção/recuperação. Não testado em outro PC.
+verify.py passed: preservation of wallpaper/desktops/widgets/views, IDs and references in conflict, external tragedy, comments, idempotence and refusal of empty backup. Syntax Python/Bash, desktop-file-validate and systemd-analyze --user verify passed. An initial error in fixture used expectation of inconsistent ID with its own applets; fixed the fixture, final suite passed. There was no complete restart/new login, visual measurement of all geometries or actual injection of failure during removal/recovery. Not tested on another PC.
 
-Materiais públicos copiados explicitamente, sem perfil/clipboard, backups,
-binários, screenshots ou bytecode. Ambos os manifestos agora têm 518 entradas
-conferidas; 511 existentes preservadas, sete materiais novos, hashes dos seis
-wrappers atualizados apenas no kit ativo. Compactados históricos preservados.
-Registro acrescentado sob o bloqueio compartilhado de documentação.
+Public material copied explicitly, without profile/clipboard, backups, binaries, screenshots or bytecode. Both manifests now have 518 entries granted; 511 Existing preserved, seven new materials, hashes of the six wrappers updated only in active kit. Historical compacted preserved. Register added under shared documentation lock.
 
 
-## Contribuição — Posição do hover do header Dolphin — 2026-10-11 (America/Sao_Paulo)
+## Contribution — Header Dolphin hover position — 2026-10-11 (America/Sao_Paulo)
 
-A pedido do usuário, corrigida a posição da chip de hover nas colunas do
-cabeçalho: inicia 8 px antes do retângulo nativo da coluna, inset vertical
-3 px e interseção com o header inteiro recuado 5/3 px. Evita encostar o texto
-na borda e extrapolar a cápsula nas colunas largas/roladas. HeaderChip fornece
-bounds temporários ao QProxyStyle durante drawSource, sem alterar eventos,
-labels, seta ou geometria das colunas. ui.cpp recompilado/instalado pelo
-aplicar.py; backup 20261011-083312-062208 em ~/.local/state/ricy-dolphin-backups.
-Restaurar com aplicar.py --restaurar BACKUP, depois reabrir Dolphin.
-Teste de desenho Qt offscreen passou: padding antes do label, inset superior/
-inferior e recorte do overflow. Nova janela de Dolphin aberta para conferência;
-instâncias antigas precisam reabrir para código novo. Não testados todos os
-monitores, escalas, RTL ou scroll horizontal reais. README e ui.cpp sincronizados
-no kit ativo/portátil; hashes atualizados preservando demais entradas.
+At user request, correct the hover chip position in header columns: Starts 8 px before the native column rectangle, vertical insert 3 px and intersection with the entire header retreated 5/3 px. Avoid touching the text on the edge and extrapolate the capsule into the wide/rolled columns. HeaderChip provides temporary bundles to QProxyStyle during drawSource, without changing events, labels, arrows or geometry of the columns. ui.cpp recompiled/installed by apply.py; backup 20261011-083312-062208 ed ~/.local/state/ricy-dolphin-backups. Restore with apply.py  --restaurar BACKUP, then reopen Dolphin. Qt offscreen drawing test passed: padding before label, top/ bottom insect and overflow clipping. New Dolphin window open for conference; old instances need to reopen to new code. Not tested all monitors, scales, RTL or real horizontal scroll. README and ui.cpp synchronized in active/portable kit; updated hashes preserving too many inputs.
 
 
-## Contribuição — Hover Size/Modified Dolphin — 2026-10-11 (America/Sao_Paulo)
+## Contribution — Hover Size/Modified Dolphin — 2026-10-11 (America/Sao_Paulo)
 
-Hover inclui o retângulo nativo da seta de ordenação com margem 6 px.
-Última coluna identificada pela pintura do padding End (section-1), ou posição
-End da própria coluna; seu hover alcança a borda interna direita do header.
-Name mantém os insets anteriores. Sem usar strings traduzidas das colunas.
-Teste Qt offscreen passou para identificação da última coluna, preenchimento
-até a margem direita, limites externos/verticais e inclusão da seta.
-Backup ~/.local/state/ricy-dolphin-backups/20261011-084408-791214.
-Reverter com aplicar.py --restaurar BACKUP e reabrir Dolphin.
+Hover includes the native rectangle of the margin sorting arrow 6 px. Last column identified by padding End painting (section-1), or End position of the column itself; its hover reaches the right internal border of the header. Name keeps the previous inserts. Without using translated strings of the columns. Qt test offscreen passed to identify the last column, fill to the right margin, external/vertical limits and arrow inclusion. Backup ~/.local/state/ricy-dolphin-backups/20261011-084408-791214. Revert with apply.py  --restaurar BACKUP and reopen Dolphin.
 
-Helper recompilado/instalado; fontes/README sincronizados nos dois kits e
-hashes conferidos. Instâncias existentes precisam reabrir para novo código.
-Sem confirmação visual do usuário nesta revisão.
+Recompiled/installed Helper; sources/ README synchronized in the two checked kits and hashes. Existing instances need to reopen for new code. No visual confirmation of the user in this review.
 
 
-## Contribuição — Size somente texto no hover — 2026-10-11 (America/Sao_Paulo)
+## Contribution — Size text only on hover — 2026-10-11 (America/Sao_Paulo)
 
-Pedido esclarecido: Size deve ter chip curta somente em volta do texto, sem
-incluir seta. Substitui a regra de inclusão da seta da revisão anterior.
-Colunas intermediárias usam SE_HeaderLabel, alinhamento/direção nativos e
-largura do texto elidido + 8 px de padding de cada lado. Name e extensão da
-última coluna Modified preservados. Seta continua desenhada nativamente.
-Helper recompilado/instalado; teste offscreen conferiu chip menor que coluna,
-texto dentro e ausência de preenchimento junto à seta. Última coluna continua
-preenchendo até a margem direita. Sem confirmação visual final do usuário.
-Backup ~/.local/state/ricy-dolphin-backups/20261011-084526-161433.
-Restaurar com aplicar.py --restaurar BACKUP e reabrir Dolphin.
+Enlightened request: Size should have a short chip only around the text, without including arrow. Replaces the arrow inclusion rule of the previous revision. Intermediate columns use SE_HeaderLabel, native alignment/direction and width of the deleted text + 8 px padding on each side. Name and extension of last Modified column preserved. Arrow continues natively drawn. Helper recompiled/installed; Offscreen test checked chip smaller than column, text inside and no fillout next to arrow. Last column continues filling up to the right margin. No final visual confirmation of user. Backup ~/.local/state/ricy-dolphin-backups/20261011-084526-161433. Restore with apply.py  --restaurar BACKUP and reopen Dolphin.
 
 
-## Contribuição — Size: largura da coluna sem seta — 2026-10-11 (America/Sao_Paulo)
+## Contribution — Size: width of column without arrow — 2026-10-11 (America/Sao_Paulo)
 
-Correção do pedido: chip ocupa a largura da coluna Size, não só o texto.
-Colunas intermediárias usam o rect nativo com inset 3 px em cada lado, sem
-o deslocamento negativo que engolia a seta da coluna anterior. Quando a
-própria coluna tem seta de ordenação, esse espaço é excluído com margem 4 px.
-Name e Modified preservados. Substitui a regra de largura pelo texto.
-Compilação/instalação e teste offscreen passaram: início dentro da coluna,
-preenchimento além do label, área anterior sem hover e reserva da seta.
-Backup ~/.local/state/ricy-dolphin-backups/20261011-084620-426269.
-Reverter com aplicar.py --restaurar BACKUP e reabrir Dolphin.
-Sem confirmação visual final; processos antigos precisam reabrir.
+Order correction: chip occupies the width of the Size column, not only the text. Intermediate columns use native rect with insert 3 px on each side, without the negative displacement that swallowed the arrow of the anterior column. When the column itself has sorting arrow, this space is excluded with margin 4 px. Name and Modified preserved. Replaces the rule of width by text. Compilation/installation and offscreen test passed: start inside the column, fill in beyond the label, previous area without hover and arrow reserve. Backup ~/.local/state/ricy-dolphin-backups/20261011-084620-426269. Revert with apply.py  --restaurar BACKUP and reopen Dolphin. No final visual confirmation; old processes need to reopen.
 
 
-## Contribuição — Padding interno de Size — 2026-10-11 (America/Sao_Paulo)
+## Contribution — Internal Padding of Size — 2026-10-11 (America/Sao_Paulo)
 
-Chip mantém a largura da coluna e o limite que exclui a seta anterior.
-Agora o label de colunas intermediárias é recuado para garantir 8 px internos
-no início/fim, sem deslocar a chip sobre a seta. Name e Modified preservados.
-Helper recompilado/instalado. Teste de pintura Qt offscreen passou para
-preenchimento da largura, reserva da seta e primeiro pixel do texto pelo
-menos 8 px após a borda da chip. Nova janela pelo launcher aberta.
-Backup ~/.local/state/ricy-dolphin-backups/20261011-084751-069063; restaurar
-com aplicar.py --restaurar BACKUP e reabrir. Sem aprovação visual final.
+Chip keeps the column width and the limit that deletes the previous arrow. Now the intermediate column label is backed down to ensure 8 px internal at the beginning/end, without moving the chip over the arrow. Name and Modified preserved. Helper recompiled/installed. Qt painting test offscreen passed to fill in the width, reserve the arrow and first pixel of the text at least 8 px after chip edge. New window by open launcher. Backup ~/.local/state/ricy-dolphin-backups/20261011-084751-069063; restore with apply.py  --restaurar Backup and reopen.
 
 
-## Contribuição — Name: espaço à direita da seta — 2026-10-11 (America/Sao_Paulo)
+## Contribution — Name: arrow-right space — 2026-10-11 (America/Sao_Paulo)
 
-Usuário aprovou padding de Size. Hover da primeira coluna Name agora estende
-a borda direita em 6 px, mantendo recorte no header comum. Size e Modified
-preservados. Helper recompilado/instalado. Teste offscreen verificou extensão
-finita à direita e manteve checks de Size, padding e última coluna.
-Backup ~/.local/state/ricy-dolphin-backups/20261011-084856-807309; restaurar
-com aplicar.py --restaurar BACKUP e reabrir. Sem aprovação final de Name.
+User approved Size padding. Hover of the first column Name now extends the right border on 6 px, keeping clipping on the common header. Size and Modified preserved. Helper recompiled/installed. Offscreen test checked finite extension to the right and maintained Size checks, padding and last column. Backup ~/.local/state/ricy-dolphin-backups/20261011-084856-807309; restore with apply.py  --restaurar Backup and reopen, no final approval from Name.
 
 
-## Contribuição — Espaçamento uniforme do header Dolphin — 2026-10-11 (America/Sao_Paulo)
+## Contribution — Uniform spacing of the Dolphin header — 2026-10-11 (America/Sao_Paulo)
 
-Usuário aprovou Size e solicitou simetria do espaçamento. Geometria centralizada
-em headerChipRect: chips terminam no limite de coluna +3 px; a seguinte inicia
-nesse limite +9 px, mantendo 6 px entre elas. Name conserva margem da seta,
-última coluna alcança a margem interna direita. Todas usam inset vertical 3 px
-e conteúdo com padding mínimo 8 px; labels intermediárias/final recuados,
-sem deslocar chip sobre a seta anterior. A seta da própria coluna, quando
-necessário, tem área reservada à parte. Não altera largura/hit-test das colunas.
-Compilação/instalação e teste Qt offscreen confirmaram 6 px nos dois intervalos,
-altura/y iguais, Modified até o fim, texto com padding e Size ocupando largura.
-Backup ~/.local/state/ricy-dolphin-backups/20261011-085034-172903; restaurar
-com aplicar.py --restaurar BACKUP e reabrir Dolphin. Ainda sem confirmação
-visual deste espaçamento; não mede todos os cenários de ordenação/RTL/scroll.
+User approved Size and requested symmetry of spacing. HeaderChipRect centralized geometry: chips end at column limit +3 px; the following starts at this limit +9 px, keeping 6 px between them. Name conserves margin of the arrow, last column reaches the right internal margin. All use vertical insert 3 px and content with minimal padding 8 px; intermediate/final backed labels, without shifting chip over the previous arrow. The arrow of the column itself, when necessary, has area reserved to the part. It does not change width/hit-test of the columns. Compilation/installation and Qt offscreen test confirmed 6 px in both ranges, height/y equal, Modified to the end, text with padding and Size occupying width. ~/.local/state/ricy-dolphin-backups/20261011-085034-172903; restore with apply.py  --restaurar BACKUP and reopen Dolphin. Still no visual confirmation of this spacing; does not measure all sorting/RTL/scroll scenarios.
 
 
-## Contribuição — Padding lateral da sidebar Dolphin — 2026-10-11 (America/Sao_Paulo)
+## Contribution — Sidebar Padding Dolphin — 2026-10-11 (America/Sao_Paulo)
 
-KFilePlacesView recebe padding-left/right 8 px na folha Qt. Recuo do viewport
-move juntos títulos, ícones, chips e barras de capacidade, sem deslocar só
-o desenho do delegate. Aplicador criou backup privado
-~/.local/state/ricy-dolphin-backups/20261011-085235-777886. Captura de janela
-nova confirmou títulos/ícones/chip recuados; sidebar não encosta na esquerda.
-QSS aplicado também a instâncias existentes, sem fechá-las. Fonte/helpers
-e espaçamento do header preservados. Reverter: aplicar.py --restaurar BACKUP
-e reabrir Dolphin. Não testados scrollbars/drag-drop em todas as larguras.
+KFilePlacesView receives padding-left/right 8 px on the Qt sheet. Viewport backend moves together titles, icons, chips and capacity bars without shifting only the design of the delegate. Applicator created private backup ~/.local/state/ricy-dolphin-backups/20261011-085235-777886. New window capture confirmed backwards titles/icons/chip; sidebar does not touch the left. QSS also applied to existing instances without closing them. Source/helpers and header spacing preserved. Revert: apply.py  --restaurar BACKUP and reopen Dolphin. Not tested scrollbars/drag-drop in all widths.
 
 
-## Contribuição — Sidebar estável, expansão e chips aninhadas — 2026-10-11 (America/Sao_Paulo)
+## Contribution — Stable sidebar, expansion and nested chips — 2026-10-11 (America/Sao_Paulo)
 
-Usuário confirmou que o crash da sidebar parou; aprovou chips acompanhando
-a largura visível e o recuo final até aproximadamente o ícone da pasta pai.
-Removidos PlacesDelegate/setItemDelegate: não troca mais delegate nativo
-KFilePlacesView. ChipStyle consulta índice/texto/ícone via view/model públicos
-durante pintura. Preserva conexões e eventos KIO. Core coredumpctl/gdb indicava
-tratamento de eventos KIO; não há símbolos de debug suficientes para a linha
-exata. Teste nativo KIO QtTest passou 21 cliques/21 sinais urlChanged.
+User confirmed that the crash of the sidebar stopped; approved chips accompanying the visible width and the final indentation to approximately the parent folder icon. Removed PlacesDelegate/setItemDelegate: no longer swap native KFilePlacesView. ChipStyle query index/text/icon via public view/model during painting. Preserves connections and events KIO. Core coredumpctl/gdb indicated treatment of KIO events; there are not enough debug symbols for the exact line. Native test KIO QtTest passed 21 clicks/21 UrlChanged signals.
 
-Outra causa de crash nas atualizações: copy2 sobrescrevia o inode da biblioteca
-.so mapeada por processos abertos. Instalador agora copia para tempfile no
-mesmo diretório e troca por os.replace. Reaplicação preservou processo anterior
-315482 vivo, sem corromper a biblioteca carregada. Isto substitui instalação
-in-place; verificações visuais anteriores não cobriam esse risco.
+Another cause of crash in updates: copy2 overwrites library inode .so mapped by open processes. Installer now copies to tempfile in the same directory and trades for os.replace. Reapplication preserved previous process 315482 live, without corrupting the loaded library. This replaces in-place installation; previous visual checks did not cover that risk.
 
-Configuração final dolphinrc: DetailsMode/ExpandableFolders=true e
-LeftPadding=20; General/ShowSelectionToggle=false/BrowseThroughArchives=true.
-Quadrado '+' de .md era seleção por hover, não expansão, e foi desligado.
-Chevron 6 px, traço1,5 #a6adc8 só para PE_IndicatorBranch State_Children;
-direita/baixo fechado/aberto. Arquivos comuns não têm seta. QStyleSheetStyle
-Qt descartava branch com QStyleOption simples; itens gráficos agora usam
-ChipStyle diretamente, widgets mantêm QSS. Teste Dolphin real em fixture
-privada expandiu pasta via clique, 2→3 linhas, filho indentado e chevron.
-Navegação em compactados ativada; modelo nativo expande diretórios em árvore,
-não archives compactados. Estes podem ser abertos via KIO quando suportados;
-sem seta sem ação funcional. Não testados todos os formatos.
+Final configuration dolphinrc: DetailsMode/ExpandableFolders=true and LeftPadding=20; General/ShowSelectionToggle=false/BrowseThroughArchives=true. .md it was hover selection, not expansion, and it was shut down. 6 px, dash1,5 #a6adc8 only for PE_IndicatorBranch State_Children; right/low closed/open. Common files have no arrow. QStyleSheetStyle Qt discarded branch with simple QStyleOption; graphics items now use ChipStyle directly, widgets keep QSS. Real Dolphin test in private fixture expanded folder via click, 2→3 lines, indented child and chevron. Compacted navigation enabled; native model expands tree directories, not compressed files. These can be opened via KIO when supported; no arrow without functional action. Not tested all formats.
 
-RowChip intersecta bounds do item com viewport visível em coordenadas locais.
-Fundo/clip/foco arredondados acompanham largura visível; conteúdo excedente
-recortado. sourcePixmap NoPad com contexto mede profundidade pelos slots
-nativos de branch. Recorte alcança hover/seleção em cache, foco redesenhado
-na chip para manter contorno após recuo. Estado final aprovado: raiz inset3px;
-filho acrescenta 20px gutter + profundidade × altura da linha. Na altura22px,
-primeiro nível começa ~45px, no ícone da pasta pai; próximos avançam22px.
-Substitui tentativa8px por nível rejeitada como pequena. Direita inset3px,
-vertical2px/raio até10px; conteúdo/colunas não deslocados. Capturas de viewport
-real conferiram expansão, chevron e recuo. Usuário aprovou largura e recuo.
+RowChip intersects items with viewport visible in local coordinates. Rounded background/clip/focus accompany visible width; over cut content. sourcePixmap NoPad with context measures depth by native branch slots. Crop reaches hover/cache selection, redesigned focus on chip to maintain contour after indentation. End state approved: root insert3px; son adds 20px gutter + depth × line height. At height22px, first level begins ~45px, in the parent folder icon; next advance22px. Replaces attempt8px for rejected level as small. Inset3px right, vertical2px/ray up to10px; content/columns not moved. Real viewport captures checked expansion, chevron and indentation. User approved width and indentation.
 
-Probe Qt temporário carregado explicitamente e fixture no cache não entram
-no kit. Biblioteca de probe e cópia extraída do core removidas ao terminar;
-janelas manipuladas pelo usuário preservadas. Não testados RTL, centenas de
-níveis, escalas/formatos de arquivo, transferências, drag/drop ou performance.
+Probe temporary Qt explicitly loaded and fixture in cache do not enter the kit. Probe library and copy extracted from core removed at the end; preserved user-managed windows. Not tested RTL, hundreds of levels, file scales/formats, transfers, drag/drop or performance.
 
-Backups em ~/.local/state/ricy-dolphin-backups, restaurar em ordem inversa para
-voltar antes da sequência: 20261011-090752-444876, 20261011-090705-662420,
-20261011-090614-400487, 20261011-090454-088355, 20261011-090310-602007,
-20261011-090132-953293, 20261011-085727-916570. Use aplicar.py --restaurar
-BACKUP e reabra. Restaurador repõe archives inteiros, podendo substituir
-edições posteriores. Não reaplique instalador antigo que sobrescreve .so.
-Probe nos backups permanece privado/inativo; launcher só usa ricydolphinui.
-Pode excluir libricyprobe.so ao restaurar snapshot com probe.
+Backups in ~/.local/state/ricy-dolphin-backups, restore in reverse order to return before the sequence: 20261011-090752-444876, 20261011-090705-662420, 20261011-090614-400487, 20261011-090454-088355, 20261011-090310-602007, 20261011-090132-953293, 20261011-085727-916570- Use it. apply.py  --restaurar BACKUP and reopen. Restorer replaces entire files, and can replace later edits. Do not reapply old installer that overwrites .so. Probe in backups remains private/inactive; launcher only uses ricydolphinui. It can delete libricyprobe.so while restoring snapshot with probe.
 
-Fontes/aplicador/READMEs sincronizados nos kits ativo/portátil; hashes conferidos
-preservando demais entradas. Não incluídos .so, screenshots, core ou backups.
+Sources/applicant/Readmes synchronized in active/portable kits; hashes checked preserving other inputs. Not included .so, screenshots, core or backups.
 
 
-## Contribuição — Painel e tabs como botões Noctalia; setas aninhadas — 2026-10-11 (America/Sao_Paulo)
+## Contribution — Panel and tabs as Noctalia buttons; nested arrows — 2026-10-11 (America/Sao_Paulo)
 
-Pedido: topbar/sidebar com blur, conteúdo em painel delimitado e tabs com
-cores/formato de botões Noctalia. Também preservar ajuste de setas aninhadas
-feito antes da ampliação do pedido. Tabs: neutro #313244/#cdd6f4, contorno
-#46485c; ativa #cba6f7 com texto #11111b; hover #977dba/texto #000000.
-Raio12 px, padding6/14 px e margem3 px (intervalo6 px). Troca as tabs pill
-raio14/translúcidas Mauve da tentativa anterior por botões como referência.
-QTabBar::close-button reserva right8/12px; toolbuttons do tabbar compactos;
-QTabWidget::pane sem borda; helper setDrawBase(false) elimina linha de base.
-Ícones e fechamento/reordenação mantêm comportamento nativo.
+Request: topbar/sidebar with blur, delimited panel content and tabs with color/Noctalia button format. Also preserve adjustment of nested arrows made before the request amplification. Tabs: neutral #313244/#cdd6f4, outline #46485; active #cba6f7 with text #11111b; hover #977dba/text #000000. Radius12 px, padding6/14 px and margin3 px (range6 px). Swap the tabs pill radius14/translucent Mauve from the previous attempt by buttons as reference. QTabBar::close-button reserve right8/12px; compact tabbar buttons; QTabWidget::pane without edge; helper setDrawBase(false) eliminates baseline. Icons and closing/reordering maintain native behavior.
 
-Root QMainWindow mantém #181825 alfa178/255 (~0,70), sidebar/topbar continuam
-transparentes sobre esse fundo, com canal alfa antes de criar a superfície.
-Conteúdo fica em painel #181825 alfa96/255 sobre o root, contorno #46485c,
-raio12 e margem/padding8. Substitui painel #313244 alfa40; alfa composto medido
-em captura de janela ~207/255. Topbar/sidebar mediram178/255. Textos e ícones
-não recebem opacidade global. Captura real de Dolphin nova com várias tabs
-mostrou botões Mauve/neutros e painel delimitado. No momento desta revisão
-blur nativo KWin está carregado (blurEnabled=true/força5), ricyblur não está
-carregado nem habilitado. Esse estado foi encontrado na sessão e preservado:
-não reativado ricyblur, não reiniciado compositor ou Noctalia. Não confundir
-essa observação atual com os estados anteriores documentados nesta contribuição.
+Root QMainWindow keeps #181825 alpha178/255 (~0,70), sidebar/topbar remain transparent on this background, with alpha channel before creating the surface.181825 alpha96/255 over root, contour #46485c, radius12 and margin/padding8. Replace panel #313244 alpha40; alpha composite measured in window capture ~207/255. Topbar/sidebar measured178/255. Texts and icons do not receive global opacity. Real Dolphin capture new with several tabs showed Mauve/neutral buttons and delimited panel. At the time of this native KWin blur revision is loaded (blueEnabled=true/force5), ricyblur is not loaded or enabled. This state was found in the session and preserved: not reactivated ricyblur, not restarted compositor or Noctalia. Do not confuse this current observation with the previous states documented in this contribution.
 
-Setas de subpastas deslocadas4px para dentro (RTL direção oposta), quando
-o branch está além do slot raiz; seta raiz preservada. Geometria/hit-test
-nativos de expansão não mudam; deslocamento cabe no slot de expansão.
-Recorte de chips filhas e conteúdo acompanha viewport como aprovado.
+Arrows of dislocated subfolders4px inside (RTL opposite direction), when the branch is beyond the root slot; preserved root arrow. Geometry/hit-test native expansion does not change; shift fits in the expansion slot. Cut of daughter chips and content accompanies viewport as approved.
 
-Compilação/helper instalado conferidos e instalação atômica preservada.
-Teste Qt de tabs confirmou ícones definidos preservados, botão de fechar
-recuado e base desativada. Fixture usa ícone sintético, não valida todos os
-ícones Breeze. Captura do Dolphin real confirmou paleta/layout; não testadas
-todas as ações de abas, monitores, RTL ou todos os níveis de pastas. Uma captura
-posterior de janela ativa pegou Codex porque o usuário trocou foco; não usada
-como evidência do Dolphin. Aprovação visual desta revisão ainda pendente.
+Compilation/helper installed checked and preserved atomic installation. Qt tabs test confirmed preserved defined icons, back down button and deactivated base. Fixture uses synthetic icon, does not validate all Breeze icons. Real Dolphin capture confirmed palette/layout; not tested all tabs, monitors, RTL or all folder levels. A later active window capture caught Codex because the user switched focus; not used as Dolphin evidence. Visual approval of this still pending review.
 
-Backups privados em ~/.local/state/ricy-dolphin-backups: final
-20261011-091610-462637; para voltar ao estado antes desta sequência, restaurar
-em ordem inversa também 20261011-091325-096396 e 20261011-091239-713431.
-Use aplicar.py --restaurar BACKUP e reabra. Restaurador repõe archives inteiros
-e pode substituir edições posteriores. Kits ativo/portátil e tokens locais
-sincronizados; hashes preservam demais entradas. Capturas/testes ficam no
-cache privado, sem binários/estado/screenshots no kit.
+Private backups in ~/.local/state/ricy-dolphin-backups: end 20261011-091610-462637; to return to the state before this sequence, restore in reverse order also 20261011-091325-096396 and 20261011-091239-713431- Use it. apply.py  --restaurar BACKUP and reopen. Restorer replaces entire files and can replace later edits. Active/portable kits and synchronized local tokens; hashes preserve too many entries. Captures/tests stay in the private cache, without binaries/state/screenshots in the kit.
 
 
-### Revisão — painel opaco e fechar das tabs — 2026-10-11
+### Review — opaque panel and tab closure — 2026-10-11
 
-Área principal usa #313244 sólido (alfa 255), conforme painel Noctalia
-referenciado pelo usuário. Sidebar/topbar permanecem sobre #181825 alfa178,
-com blur nativo KWin preservado. O helper reposiciona os botões nativos das
-tabs antes de pintar, com 12px de recuo externo (inclui margem de 3px);
-preserva sinais e ações de fechamento. Subcontrol QSS anterior não deslocava
-o botão no Dolphin real. Captura/probe no aplicativo confirmou painel
-RGBA(49,50,68,255), shell alfa178 e recuo12 nas três tabs.
-Backup final: ~/.local/state/ricy-dolphin-backups/20261011-092428-218159;
-anterior nesta sequência: 20261011-092338-169456. Helper usa instalação
-atômica; código novo requer janela nova.
+Main area uses #313244 solid (alpha) 255), as Noctalia panel referenced by the user. Sidebar/topbar remain on #181825 alfa178, with preserved native KWin blur. Helper repositions the native tab buttons before painting, with 12px of external indentation (includes 3px margin); preserves closing signals and actions. Previous QSS subcontrol did not move the button in the actual Dolphin. Capture/probe in the application confirmed RGBA panel(49,50,68,255), shell alfa178 and retreat12 in the three tabs. Final backup: ~/.local/state/ricy-dolphin-backups/20261011-092428-218159; previous in this sequence: 20261011-092338-169456. Helper uses atomic installation; new code requires new window.
 
 
-### Revisão — sidebar/topbar num painel em L; botões laterais — 2026-10-11
+### Revision — sidebar/topbar on an L panel; side buttons — 2026-10-11
 
-Por solicitação do usuário, sidebar e topbar agora compartilham um único
-painel opaco #313244, igual ao painel principal. ShellPanel é um QWidget
-filho atrás dos controles: desenha o L inteiro com raio12, margem8 e
-gutter8 para a área de archives, sem receber input ou alterar o layout.
-Geometria acompanha os containers visíveis (inclusive mais de uma área),
-redimensionamento e ocultação do dock; sem sidebar desenha só o painel de
-topbar. A margem externa continua sobre a shell translúcida alfa178, com
-blur KWin preservado. Esta revisão substitui a transparência interna da
-sidebar/topbar registrada anteriormente.
+At user request, sidebar and topbar now share a single opaque panel #313244, equal to the main panel. ShellPanel is a child QWidget behind the controls: draws the entire L with radius12, margin8 and gutter8 for the archival area, without receiving input or changing the layout. Geometry accompanies the visible containers (including more than one area), resizing and concealing the dock; without sidebar drawing only the topbar panel. The outer margin continues on the alpha178, translucent shell with preserved KWin bluff. This review replaces the internal transparency of the previously registered sidebar/topbar.
 
-Itens laterais são botões de largura uniforme: neutro #242435, hover
-#977dba, selecionado #cba6f7, contorno #46485c, raio8. Ícones nativos24,
-spacing1 da lista e recuo vertical2 deixam 6px entre botões. Padding lateral
-12; paleta HighlightedText #11111b, preservando desenho nativo do texto
-ativo/inativo e ícones. KFilePlacesView mantém seu delegate original,
-cliques, atalhos, drop, indicadores de capacidade e ações dos dispositivos.
-Tamanho de ícones é gravado pelo KIO em dolphinrc, incluído nos backups.
+Side items are buttons of uniform width: neutral #242435, hover #977dba, selected #cba6f7, contour #46485c, radius8.Native icons24, list spacing1 and vertical indentation2 leave 6px between buttons. Side padding 12; HighlightedText #11111b palette, preserving native drawing of active/inactive text and icons. KFilePlacesView keeps its original delegate, clicks, shortcuts, drop, capability indicators and device actions. Icon size is recorded by KIO in dolphinrc, included in backups.
 
-Verificações: helper compilado/instalado atomicamente; captura no Dolphin
-real confirma L contínuo e botões; teste da lateral passou21 cliques/21
-navegações sem trocar delegate. Fixture Qt confirma braços conectados,
-recorte livre para conteúdo, ausência de captura de mouse, resize e
-sidebar ocultada. Não validados todos os layouts RTL ou docks flutuantes.
-Backup final: ~/.local/state/ricy-dolphin-backups/20261011-093607-825801.
-Antes desta sequência: 20261011-093205-549123, seguido de 093320-666039
-e 093439-242103 (mesmo prefixo de data). Para reverter toda a sequência,
-restaure na ordem inversa. Código novo requer janela nova.
+Checks: helper compiled/installed atomically; capture in the real Dolphin confirms continuous L and buttons; lateral test passed21 clicks/21 navigations without switching delegate. Fixture Qt confirms connected arms, free clipping for content, no mouse capture, resize and hidden sidebar. Not validated all RTL layouts or floating docks. Final backup: ~/.local/state/ricy-dolphin-backups/20261011-093607-825801. Before this sequence: 20261011-093205-549123followed by 093320-666039 and 093439-242103 (even date prefix). To reverse the entire sequence, restore in reverse order. New code requires new window.

@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
-Name=Área de transferência Noctalia (teste)
-Exec="/home/delta/Projects/ricy/ricy-kit/outputs/noctalia-test/abrir-clipboard.sh"
+Name=Noctalia Clipboard (test)
+Exec="/home/delta/Projects/ricy/ricy-kit/outputs/noctalia-test/open-clipboard.sh"
 Icon=edit-paste
 Categories=Utility;
 X-KDE-Shortcuts=Meta+V
