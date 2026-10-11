@@ -4,8 +4,11 @@ An opinionated desktop for CachyOS, built on KWin/Wayland, with Noctalia as the
 primary shell and Plasma/Dolphin for fallback and recovery.
 
 **Current state:** Noctalia is integrated into the Plasma session, which still
-provides the wallpaper/desktop. An independent session and Ricy Files are planned;
-this foundation has not migrated the runtime or implemented new applications.
+provides the wallpaper/desktop. Dolphin is the file manager in Ricy and Plasma
+Recovery; the separate Ricy Files prototype is retired. An independent session
+remains planned. The user assesses Dolphin visual work as about 90% complete;
+see the [read-only baseline](docs/DOLPHIN-BASELINE.md), not a certification of
+all functions or recovery.
 
 **Architecture:** KWin remains infrastructure; Ricy uses a single workspace.
 Preserving access to Plasma and Dolphin is a requirement. Legacy discrepancies

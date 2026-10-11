@@ -46,10 +46,14 @@ been approved. No contribution currently has sufficient evidence for REMOVE.
 | Preparation/applicators | installer/ | Separate public backup/state materials by allowlist |
 | AIC8800 Driver | integrations/hardware/ | Keep optional, pin/licenses and kernel support |
 | Common wrappers/helpers | core/ if justified | Find real duplication; do not create framework |
-| No current Files application | apps/file-manager/ | New implementation proposal, approved toolkit/contracts |
 | Checks of this step | scripts/ | Keep offline; tools/ only for needed tools |
 
 ## Safe migrations
+The own Files application and 07–10 implementation gates are retired under
+[ADR-0011](adr/0011-dolphin-as-ricy-file-manager.md). There is no app migration
+or replacement-manager roadmap. Future Dolphin visual polish must start from
+the [recorded baseline](DOLPHIN-BASELINE.md), with separate authorization.
+
 Documenting borders, adding rules/links and read-only tests are safe at this stage. Consolidating references can precede movement of sources. Even a seemingly simple change of path requires search for callers. Before each migration: inventory → references → backup → minimum change → appropriate validation → update of affected docs/manifests → clear rollback.
 
 ## Risky migrations — not executed
@@ -66,7 +70,8 @@ portable path, absence of private data; choose versioning before publishing.
 3. Centralize consumption of tokens, one component at a time, with visual comparison.
 4. Extract patches/builds and component integrations with path compatibility.
 5. Design Plasma Recovery isolation and only then an independent Ricy session.
-6. Propose implementation of Ricy Files by keeping Dolphin as recovery.
+6. Maintain Dolphin as the file manager; evaluate separately authorized visual
+   polish without taking over upstream filesystem responsibilities.
 
 ## Architecture Decisions Required — Only Blocked Future Parts
 
@@ -151,7 +156,7 @@ external ad hoc shell commands, hidden launchers or other installations.
 |---|---|
 | Current Noctalia | Reordering pins 5.2.1/`6ef43e2bf2f3d5b4205ec72a72e34a2ab76ce3b4`, takes a complete cumulative patch and supports `RICY_NOCTALIA_SOURCE`; default cache `ricy-noctalia-src-5.2.1`, Meson/Ninja output `build-ricy/noctalia`. Keep exact diff guards, C++/QJSEngine validators, license and activator call path. Never stack historical cumulative patches. Current source is not deployed; retain old binary/cache provenance. |
 | KWin native plugins | Blur pins 6.7.5/`ab7df7ccb7c6af20f4b279cd6220f7cd3d2267d7`, uses `ricy-kwin-src-6.7.5` and `ricy-blur-build-6.7.5/ricyblur.so`. Dolphin corners checks installed KWin headers and uses `ricy-dolphin-corners-build-6.7.5/ricydolphinrounding.so`. Keep header/API gates, metadata, licenses, compiler inputs and native-blur fallback. No rebuild/reload in this task. |
-| Dolphin Qt helper | `build-ui.py` copies `ui.cpp`/`ui.json`, uses Qt6 moc/C++, outputs `ricy-dolphin-ui-build/libricydolphinui.so`; identity installer replaces it atomically under `plugins/generic/`. Keep separate from KWin corners. Exact installed helper provenance remains UNKNOWN. |
+| Dolphin Qt helper | `build-ui.py` copies `ui.cpp`/`ui.json`, uses Qt 6 moc/C++, outputs `ricy-dolphin-ui-build/libricydolphinui.so`; identity installer replaces it atomically under `plugins/generic/`. Keep separate from KWin corners. Exact installed helper provenance remains UNKNOWN. |
 | Scripted/optional effects | Window-fade-expand copies a JS effect, no native build. Appearance optionally runs the windowsarrows native build; its three extensions have different current classes. Keep packaged sources/licenses and per-extension selection rather than treating the asset bundle as one current runtime. |
 | Hardware/package patches | AIC8800 PKGBUILD pins Radxa `d13d07963cd15d731e2895e8288a04cca6152ac9`, replays upstream Debian patch series and packages DKMS/firmware/modprobe files. Target fixes retain two-hash manifests and `configure-super.py.patch`/`debtap-changes.patch`; they cannot be replayed on later integration revisions (G-10). Keep checksums and matching inputs, no package build/install. |
 

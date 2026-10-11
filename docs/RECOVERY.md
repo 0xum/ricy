@@ -11,13 +11,17 @@ responsible for wallpaper/desktop; return uses Ricy scripts, user systemd,
 D-Bus, KGlobalAccel, and panel/shortcut snapshots. No isolation against KWin,
 login, or Ricy-script failure has been demonstrated.
 
-The [Files integration assessment](FILES-INTEGRATION.md) records the shared user
-Dolphin desktop override, FileManager1 service and systemd drop-in that still
-reach both shell modes. [ADR-0007](adr/0007-session-file-manager-boundary.md) proposes
-native Dolphin defaults/activation independent of Files and Ricy adapters for
-future Recovery. It remains Proposed: no overrides, associations, packages or
-return paths are changed. A direct binary launch alone does not prove independence;
-session environment, existing daemons and activation/configuration must be tested.
+[ADR-0011](adr/0011-dolphin-as-ricy-file-manager.md) selects Dolphin in Ricy
+and Plasma Recovery. Access to files must not require an own Ricy application,
+filesystem/Trash implementation or FileManager1 service. Ricy visual adaptations
+are permitted, but Recovery must remain usable if those adaptations fail.
+
+The [baseline](DOLPHIN-BASELINE.md) confirms that the existing user desktop
+override, FileManager1 service and systemd drop-in still use the visual wrapper
+and are shared by the current shell modes. That coupling is preserved in this
+documentation/retirement task. Cold activation, unavailable helper/theme and
+login/failure recovery are NOT RUN; independent Recovery remains UNKNOWN.
+ADRs0007/0008/0009 and the own prototype are historical, not current contracts.
 
 The [contribution grounding](CONTRIBUTION-AUDIT.md) identifies RECOVERY consumers
 and part-level exceptions. On the audited installation, native blur is loaded,

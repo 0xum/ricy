@@ -11,11 +11,10 @@ reapply installed preferences.
 Ownership preserves upstream licenses. Each
 component link below leads to its local README; consult the audit before acting.
 
-[Files integration](FILES-INTEGRATION.md) inventories file-manager consumers and
-proposes ownership of the future public contracts, external package handler and
-Dolphin/KDE-only adapters. [ADR-0007](adr/0007-session-file-manager-boundary.md)
-is awaiting approval; it does not change the current ownership table or authorize
-a component migration, new service, toolkit or default association.
+[Dolphin is the chosen file manager](adr/0011-dolphin-as-ricy-file-manager.md).
+The [baseline](DOLPHIN-BASELINE.md) maps existing upstream ownership and Ricy
+visual adaptations. The own prototype and its infrastructure are retired;
+[historical records](history/ricy-files/README.md) do not define active contracts.
 
 The root `ricy-kit/` owns the active installation; this does not make every file
 in it ACTIVE. `docs/ricy-kit/` preserves HISTORICAL transport variants. Read
@@ -60,8 +59,7 @@ is loaded; the ricyblur selector is failed. See audit G-02/G-03 for the limits.
 |  [prepare-environment.py](../ricy-kit/prepare-environment.py), outputs/ | Preparation and seeds/templates; you can create private backups | installer/ + integrations/ | Python and destination settings | HISTORICAL root recipe; see audit | Do not execute on active kit to validate structure |
 |  [generate-kvantum-variant.py](../ricy-kit/generate-kvantum-variant.py)  | Qt style variant | themes/ | Kvantum/existing theme | HISTORICAL generator; selected theme assets ACTIVE elsewhere | Shared style with recovery |
 |  [Transport kit](ricy-kit/AGENTS.md) and archives/ | Reproduction/historical | installer/ and historical file after audit | Manifests, scripts and licenses | HISTORICAL; UNKNOWN publication readiness | Do not copy active installation status |
-| KWin / Plasma / Dolphin | Compositor, shared desktop, and files | compositor/kwin/ + recovery/plasma/ | System Packages | ACTIVE infrastructure/desktop; RECOVERY packages/tools | Unremovable |
-|  [Ricy Files](../apps/file-manager/README.md)  | Future Ricy Standard Manager | apps/file-manager/ | UNKNOWN: toolkit/contracts | UNKNOWN implementation; PLANNED / RICY-OWNED | Dolphin remains available |
+| KWin / Plasma / Dolphin | Compositor, shared desktop, and the Ricy/Recovery file manager | compositor/kwin/ + recovery/plasma/ | System Packages | ACTIVE infrastructure/desktop; RECOVERY packages/tools | Unremovable |
 |  [Core](../core/AGENTS.md) / [Services](../services/AGENTS.md)  | Future common limits; current services are in the contributions | core/ + services/ | UNKNOWN: new contracts | UNKNOWN implementation; PLANNED | Do not create new daemon/IPC by assumption |
 
 Classes have part-level overrides in the [audit](CONTRIBUTION-AUDIT.md): notably

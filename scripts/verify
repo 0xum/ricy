@@ -17,7 +17,8 @@ SKILLS = ('architecture-change', 'component-development', 'visual-development',
 DOCS = ('ARCHITECTURE', 'INVARIANTS', 'COMPONENTS', 'DESIGN-SYSTEM',
         'DEVELOPMENT', 'RECOVERY', 'MIGRATION-PLAN', 'CHANGELOG')
 ADRS = ('0001-single-workspace', '0002-plasma-recovery', '0003-ricy-files',
-        '0004-agent-first-development', '0006-service-template-source-lookup')
+        '0004-agent-first-development', '0006-service-template-source-lookup',
+        '0011-dolphin-as-ricy-file-manager')
 LOCAL = ('core', 'shell', 'compositor', 'apps', 'services', 'themes',
          'integrations', 'recovery', 'installer', 'tools', 'scripts',
          'ricy-kit', 'ricy-kit/contributions', 'docs/ricy-kit',
@@ -28,7 +29,7 @@ LOCAL = ('core', 'shell', 'compositor', 'apps', 'services', 'themes',
          'ricy-kit/contributions/noctalia-visual-identity',
          'ricy-kit/contributions/dolphin-blur-corners')
 PAGES = ('shell/noctalia/README.md', 'compositor/kwin/README.md',
-         'apps/file-manager/README.md', 'recovery/plasma/README.md',
+         'docs/DOLPHIN-BASELINE.md', 'recovery/plasma/README.md',
          'themes/tokens/README.md', '.agents/references/README.md', 'docs/adr/README.md')
 # Explicit HISTORICAL entries from CONTRIBUTION-AUDIT; mixed-role folders stay.
 HISTORICAL_VARIANTS = ('taskbar-menu-composition', 'tray-menu-composition',
@@ -96,6 +97,10 @@ def link_targets(text):
 
 
 def architecture():
+    if (ROOT / 'apps/file-manager').exists():
+        report('FAIL', 'Retired apps/file-manager is present; ADR-0011 selects Dolphin')
+    else:
+        report('PASS', 'Own file-manager implementation absent under ADR-0011')
     required = ['AGENTS.md', 'CLAUDE.md', 'README.md', 'scripts/verify', 'scripts/doctor', 'scripts/test-foundation.py']
     required += [f'services/{name}.service.in' for name in
                  ('noctalia-test', 'noctalia-desktop-search', 'ricy-noctalia-integration')]

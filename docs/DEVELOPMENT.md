@@ -41,10 +41,10 @@ python3 themes/tokens/render-reference.py --check
   work, outputs, backups, upstream assets, and explicitly HISTORICAL recipes);
   syntax of migrated `integrations/keyboard-cedilla/` applicators;
   syntax of the seven historical build guards; offline Noctalia action tests when
-  a local source matches the expected commit/patch and PyQt6 is available;
+  a local source matches the expected commit/patch and PyQt 6 is available;
   single-space policy and native drag regressions when that source has a build.
 - `recovery`: existing in-memory panel capture/merge test; QJSEngine window-effect
-  tests when PyQt6 is available. Does not switch shell/compositor.
+  tests when PyQt 6 is available. Does not switch shell/compositor.
 - `all`: combines the above; does not certify the desktop.
 - `doctor`: read-only diagnostics of tools, packages through pacman, reported
   environment, units, and the Plasma Wayland entry. Never performs repairs.
@@ -122,6 +122,13 @@ is not a link. Inline-code paths and runtime symlinks are outside its scope.
 Preserved historical documents may contain old paths.
 
 ## Levels and evidence
+The own Files build, runner, tests, packaging and 07–10 gates are retired under
+[ADR-0011](adr/0011-dolphin-as-ricy-file-manager.md). Do not run the historical
+prototype commands or merge an unintegrated branch as a prerequisite to cleanup.
+Dolphin visual/integration work uses existing contribution checks and the
+[Dolphin baseline](DOLPHIN-BASELINE.md). Configuration/source evidence does not
+certify live file operations or failure recovery.
+
 | Level | When relevant | Limit |
 |---|---|---|
 | Static | Changed docs, rules, scripts/configs | Parsing/link checks do not guarantee behavior |

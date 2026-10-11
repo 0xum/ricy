@@ -50,14 +50,17 @@ later token promotion preserves existing values and live settings.
 
 ## APPLICATION CONSUMPTION — KNOWN contract / PLANNED runtime
 [ADR-0005](adr/0005-consumable-visual-tokens.md) records the authorized promotion
-of existing values to plain versioned JSON. Future Ricy applications, especially
-Files, consume that source through a local toolkit adapter or bundled resource.
+of existing values to plain versioned JSON. Future explicitly approved Ricy applications consume that source through a local toolkit adapter or bundled resource.
 Use shared color/type/spacing/motion roles; keep shell, KDE, Dolphin and terminal
 adaptations scoped. Font px/pt, scale, fill alpha and compositor blur must not
 be conflated. Blur support for a new application remains UNKNOWN.
 
 Migrate runtime consumers one at a time with before/after comparison, contract
-versioning and rollback. Files' toolkit and implementation remain undecided.
+versioning and rollback. Dolphin is the file manager under
+[ADR-0011](adr/0011-dolphin-as-ricy-file-manager.md); no own file-manager toolkit
+or application is planned. Its [baseline](DOLPHIN-BASELINE.md) maps canonical
+roles versus local Qt/QSS/Kvantum hardcodes without changing token values or
+migrating consumers. The own prototype's token use is historical.
 No desktop generator, SDK or live token loader was introduced. Do not create
 arbitrary colors, radii, spacing, animations or a parallel design system.
 

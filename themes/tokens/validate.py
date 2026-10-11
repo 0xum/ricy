@@ -89,8 +89,26 @@ def main():
 
     dolphin = dict(tokens['application_adaptations']['dolphin'])
     selection = dolphin.pop('file_selection')
-    require(resolve_colors(dolphin) == legacy['application_adaptations']['dolphin'],
-            'Existing Dolphin adaptation changed')
+    # The user approved the search-result Places adaptation on 2026-10-11.
+    # Retain exact promotion equivalence for the other legacy adaptations.
+    places = dolphin.pop('places_buttons')
+    # Requested 2026-10-11: scoped row radius and padded navigation treatment.
+    dolphin.pop('navigation')
+    dolphin.pop('toolbar')
+    # Scoped native popup, scrollbar and panel treatments requested 2026-10-11.
+    for adaptation in ('context_menu', 'scrollbars', 'rubber_band', 'panel_layout', 'launch'):
+        dolphin.pop(adaptation)
+    require(dolphin['rows']['radius_max'] == tokens['geometry']['native_radius_logical_px']['medium'],
+            'Dolphin rows must use the native medium radius')
+    dolphin['rows'] = dict(dolphin['rows'])
+    dolphin['rows']['radius_max'] = legacy['application_adaptations']['dolphin']['rows']['radius_max']
+    legacy_dolphin = dict(legacy['application_adaptations']['dolphin'])
+    legacy_dolphin.pop('places_buttons')
+    require(resolve_colors(dolphin) == legacy_dolphin,
+            'Existing Dolphin adaptation outside Places changed')
+    require(places['style'] == 'search_results'
+            and places['neutral_alpha_255'] == 0 and places['border_alpha_255'] == 0,
+            'Places results must remain borderless with transparent normal rows')
     helper = (ROOT / selection['source']).read_text()
     require('fill.setAlpha(selected ? 170 : 95)' in helper and 'fill.setAlpha(195)' in helper,
             'Audit Dolphin selection alpha changes')

@@ -16,6 +16,9 @@ with tempfile.TemporaryDirectory(prefix='ricy-foundation-') as tmp:
  def run(scope='architecture',env=None):
   return subprocess.run([sys.executable,'-B',str(dst/'scripts/verify'),scope],cwd='/',env=env,text=True,capture_output=True)
  result=run();check('root resolved outside the project working directory',result.returncode==0,result.stdout+result.stderr)
+ retired=dst/'apps/file-manager';retired.mkdir(parents=True)
+ r=run();retired.rmdir()
+ check('retired own file-manager reservation rejected',r.returncode==1 and 'Retired apps/file-manager' in r.stdout,r.stdout)
  for rel in ['AGENTS.md','docs/ARCHITECTURE.md','docs/adr/0001-single-workspace.md','.agents/skills/testing/SKILL.md','shell/AGENTS.md',
              'services/noctalia-test.service.in','services/noctalia-desktop-search.service.in',
              'services/ricy-noctalia-integration.service.in']:

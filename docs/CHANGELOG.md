@@ -3,6 +3,243 @@
 Record significant changes in short entries. Minimum fields:
 Model/Agent, Date, Purpose, Validation performed. Do not sign source files.
 
+## 2026-10-11 — Dolphin selected; own Ricy Files retired
+
+- **Model/Agent:** Codex (GPT-6).
+- **Date:** 2026-10-11 (America/Sao_Paulo).
+- **Purpose:** execute the user's explicitly approved direction: Dolphin is the
+  Ricy file manager; retire the own application and record its current baseline
+  without visual or runtime work. User assesses Dolphin visual progress at 90%.
+- **Changes:** Accepted [ADR-0011](adr/0011-dolphin-as-ricy-file-manager.md), updated
+  RICY-005/architecture/components/recovery/design/development rules. ADRs 0003,
+  0008 and 0009 are Superseded; unaccepted 0007/0010 are Rejected. Removed 24 tracked
+  prototype files (C++, QML, CMake, packaging, tests and exclusive runner) from
+  the active checkout. No own build directory existed there. Retired 07–10 gates;
+  specifications/evaluation/prototype README preserved as [history](history/ricy-files/README.md).
+  The code was not in main, was not merged into it, and remains in Git history.
+  Unmerged browser/UI worktrees were left intact as historical work.
+- **Baseline:** [DOLPHIN-BASELINE](DOLPHIN-BASELINE.md) distinguishes installed
+  registration/configuration, inferred behavior and unproved runtime behavior;
+  records hashes, colors/geometry/materials/controls, token hardcodes and gaps
+  only as backlog. No automatic next stage. Earlier uncommitted Dolphin work
+  remains intact; no applicator ran in this task.
+- **Validation performed:** PASS architecture (57 mandatory files, 420 links),
+  foundation regression suite (39 checks, including rejection of the retired
+  application reservation), token/provenance checks, offline Recovery panel
+  merge and 28 window-effect scenarios, historical moved-document links,
+  installed Dolphin before/after hashes and diff whitespace.
+  Canonical JSON/validators/renderers/identity board remain byte-identical in
+  this task; only token README consumer-direction documentation changed.
+- **FAIL:** none in the executed checks.
+- **UNKNOWN:** independent live Recovery when visual helpers/themes fail,
+  process-loaded helper/source reproducibility and full functional/visual coverage.
+- **NOT RUN:** live UI/cold launch/FileManager1/device/Trash/portal operations,
+  failure switching/login, all scales/RTL. No Dolphin process/FileManager1 owner
+  was present at the read-only snapshot; no application was launched to fill gaps.
+- **NOT APPLICABLE:** own backend implementation/build tests after retirement;
+  external-link/latest-upstream verification for the local installed baseline.
+- **Recovery:** installed wrapper/desktop/default/service/theme/QSS/helper and
+  dolphinrc unchanged by this task; no KWin/Plasma/Noctalia action. Historical
+  transport/manifests and private rollback state preserved. This source/document
+  change is reviewable in Git without rewriting any history.
+
+## 2026-10-11 — Dolphin menus follow configured KDE proportions
+
+- **Model/Agent:** Codex (GPT-6).
+- **Date:** 2026-10-11 (America/Sao_Paulo).
+- **Purpose:** match the user's configured KDE menu density and spacing.
+- **Changes:** panel padding 12, item vertical padding4/margin1 and horizontal
+  padding 12; native icon inset retained; transparent4px separator gaps.
+- **Validation performed:** PASS Qt menu capture/fixture, architecture/token
+  validation and diff whitespace. NOT RUN all live submenus, RTL or scales.
+- **Recovery:** QSS applied to existing windows with private whole-file backup;
+  no helper, session or compositor change in this revision.
+
+## 2026-10-11 — Dolphin popup corner transparency and icon spacing
+
+- **Model/Agent:** Codex (GPT-6).
+- **Date:** 2026-10-11 (America/Sao_Paulo).
+- **Purpose:** remove native popup backing from rounded corner cutouts and
+  give context-menu icons more left breathing room.
+- **Changes:** radius 12 native menu surface mask, transparent Window palette
+  and no background autofill; icons and text shift inward8px together.
+- **Validation performed:** PASS helper build/atomic application, Qt menu
+  fixture (transparent corners/mask, icon capture, keyboard/native actions),
+  architecture/token checks and diff whitespace. NOT RUN all live submenus,
+  RTL or display scales.
+- **Recovery:** existing private backup/whole-file rollback; new process
+  required for helper changes. No shell/compositor or historical kit changes.
+
+## 2026-10-11 — Dolphin menus, scrolling and panel containment
+
+- **Model/Agent:** Codex (GPT-6).
+- **Date:** 2026-10-11 (America/Sao_Paulo).
+- **Purpose:** match context menus, scrollbars, selection and draggable panel
+  divisions to the existing identity; fix clipping and stale Meta+E launches.
+- **Changes:** rounded opaque popup with native actions, compact rounded
+  scrollbar track/thumb, rounded translucent drag selection; card backing
+  around the full view container with real layout insets and contained scrolls.
+  Internal gaps reduced while preserving outer 8px margins. Native divider
+  paints track color normally, thumb color on hover and accent during drag.
+  GUI launches use a new process; existing KDE shortcut cache refreshed.
+- **Validation performed:** live menu/split captures; native Qt fixtures for
+  menu actions, scrollbar keyboard input, selection and splitter interactions.
+  User confirmed Meta+E, scrolls, reduced gap and neutral divider. PASS
+  architecture/token validation and diff whitespace. NOT RUN all scales, RTL,
+  floating docks, every popup/dialog or live Recovery.
+- **Recovery:** existing atomic installer and private whole-file backups;
+  no session/compositor changes. Qt helper changes require a new process.
+
+## 2026-10-11 — Dolphin breadcrumb and path input alignment
+
+- **Model/Agent:** Codex (GPT-6).
+- **Date:** 2026-10-11 (America/Sao_Paulo).
+- **Purpose:** align native breadcrumbs and give the editable path the
+  Noctalia search-input treatment with padded internal content.
+- **Changes:** transparent breadcrumb container, centered28px native segments;
+  36px surface path field, accent2px border, radius 8, internal horizontal
+  padding and a clear action independent of toolbar sizing/padding.
+- **Validation performed:** PASS helper build/atomic application, live Dolphin
+  captures including centered native clear button,10 native KIO mode switches,
+  architecture verification, token validation and diff whitespace.
+  NOT RUN all widths, RTL, scales or live recovery.
+- **Recovery:** existing private backups/whole-file rollback; historical
+  transport snapshots, compositor and Noctalia remain unchanged.
+
+## 2026-10-11 — Dolphin rounded rows and navigation header
+
+- **Model/Agent:** Codex (GPT-6).
+- **Date:** 2026-10-11 (America/Sao_Paulo).
+- **Purpose:** implement the user's request for less pill-shaped file rows
+  and better header padding, breadcrumbs and editable location-bar styling.
+- **Changes:** radius 6 across row backing/focus/clipping; padded toolbar
+  and outlined neutral location bar. Both KIO height limits remain36px
+  across mode changes, fixing lower-edge clipping. Canonical adaptations
+  and provenance validation updated; Places/tabs/nesting behavior retained.
+- **Validation performed:** PASS helper build, live breadcrumb hover/path
+  captures, and native KIO fixture (10 mode toggles, URL/editor retained).
+  PASS `./scripts/verify architecture`, `python3 themes/tokens/validate.py`
+  and `git diff --check`.
+  NOT RUN all widths, nested levels, RTL, monitors/scales or live recovery.
+- **Recovery:** existing atomic applicator/whole-file backups retained;
+  no KWin, shell, default or transport-kit change.
+
+## 2026-10-11 — Dolphin Places match Noctalia search results
+
+- **Model/Agent:** Codex (GPT-6).
+- **Date:** 2026-10-11 (America/Sao_Paulo).
+- **Purpose:** implement the user's search-result reference and subsequent
+  smaller-icon request, preserving Dolphin navigation and the unified L.
+- **Changes:** transparent/borderless normal rows, accent/on-accent selection
+  without focus, semibold labels, 16px icons and native6px label gap. The
+  native default delegate stays installed/alive; a column paint adapter
+  forwards native behavior. Canonical tokens and provenance validation
+  reflect this approved adaptation; transport copies/manifests stay intact.
+- **Validation performed:** PASS Qt helper build and native KIO fixture
+  (default delegate identity, unfocused dark selection,21 navigations); live
+  Dolphin normal-row capture and final user visual approval. PASS
+  `./scripts/verify architecture`, `python3 themes/tokens/validate.py` and
+  `git diff --check`.
+  NOT RUN all devices, drag/drop, scales/monitors or session recovery.
+- **Recovery:** existing atomic applicator and private file backups retained;
+  no shell/KWin/default migration.
+
+## 2026-10-11 — Accepted bounded native Trash and completed milestone 08
+
+- **Model/Agent:** Codex (GPT-6), coordinator.
+- **Date:** 2026-10-11 (America/Sao_Paulo).
+- **Purpose:** record the user's explicit option A approval for ADR-0009 and
+  finish the reviewed MVP specification before executable development.
+- **Changes:** ADR-0009 is Accepted with approval evidence and strict send-to-trash
+  scope; KIO retains the other selected responsibilities. Milestone 08 is COMPLETE,
+  with reconciled architecture/UX/filesystem/testing requirements and sequential
+  AC09/AC10 gates. Updated maintained references; ADR-0007 remains Proposed.
+- **Validation performed:** PASS `./scripts/verify architecture` (zero failures/
+  skips) and `git diff --check`; prior milestone 08 review findings remain resolved.
+  NOT RUN application build/runtime/operations or live recovery at this checkpoint.
+- **Preservation:** no default/FileManager1/Dolphin/Plasma/session change or native
+  backend implementation in this checkpoint. Accepted Trash is not a framework,
+  purge, overwrite, deletion/restore API or authority to replace other KIO roles.
+
+## 2026-10-11 — Accepted Files architecture and reviewed milestone 08 draft
+
+- **Model/Agent:** Codex (GPT-6), coordinator with separate architecture, UX,
+  filesystem and testing review subagents.
+- **Date:** 2026-10-11 (America/Sao_Paulo).
+- **Purpose:** record the user's explicit option A approval for ADR-0008 and
+  specify the MVP with conflict, partial-result, cancellation, applicable rollback,
+  destructive protection, symlink, mount, permission and KIO-failure contracts.
+- **Changes:** marked ADR-0008 Accepted with approval evidence; kept ADR-0007
+  Proposed. Added [FILES-MVP](history/ricy-files/FILES-MVP.md), MVP/LATER/OUT OF SCOPE, private module
+  boundaries, navigation/selection/UX/token/launch contracts, bounded operation
+  semantics and AC09/AC10 acceptance criteria. Updated foundation-era Files
+  restrictions only for the approved isolated scope and synchronized maintained
+  architecture/component/design/development/recovery/migration references.
+- **Safety findings:** KIO 6.30 rename uses check-then-rename; require private
+  Linux no-replace policy for rename/same-mount move. Generic recursive KIO
+  traversal has no mount-confinement hook; recursive copy/cross-mount move are
+  LATER. KIO trash can purge old entries via configured policies. Qt 6.12 trash
+  avoids that policy but has a replace-capable orphan-payload commit. Added
+  Proposed ADR-0009 for a bounded native standard-trash adapter with exclusive
+  metadata/no-replace payload commit, reconciliation and no-purge/no-delete
+  fallback. This is extra backend ownership, awaiting explicit approval.
+- **Review reconciliation:** PASS scoped written architecture, UX, filesystem and
+  testing reviews after clarifying candidate/committed navigation, rename-ID
+  remapping, protected operands, unsupported name encoding, byte metadata,
+  ambiguous commit cleanup, fixture Home/mount/trash containment, positive volume
+  cases, deterministic collision races and mixed skip/cancel result oracles.
+  Review PASS is not implementation acceptance.
+- **Validation performed:** PASS `./scripts/verify architecture` (zero
+  failures/skips), scoped current-document links, `python3 themes/tokens/validate.py`
+  and `git diff --check`. PASS before/after SHA-256/mode preservation of the
+  1,113-file baseline, except intended documentation/local-rule edits; only two
+  new milestone 08 documents were added. ADR-0007 bytes remain unchanged.
+- **Limits/checkpoint:** 07 COMPLETE and Accepted; 08 written contract reviewed,
+  final exit pending ADR-0009; 09–10 NOT STARTED. Builds/runtime/real KIO primitives,
+  trash/volumes/Wayland and login/failure recovery are NOT RUN; new app
+  Component/Visual execution is NOT APPLICABLE to this document-only task. Live
+  recovery remains UNKNOWN. No application, native backend, package installation,
+  service/default/FileManager1/Dolphin/Plasma change or private-state mutation
+  occurred. Rollback of this work removes specification/proposal/reference/rule
+  edits; preserve recorded ADR-0008 acceptance unless the user revokes it.
+
+## 2026-10-11 — Ricy Files milestone 07 technical proposal
+
+- **Model/Agent:** Codex (GPT-6), coordinator with three independent research/review
+  subagents for toolkit/models, filesystem safety and desktop/design integration.
+- **Date:** 2026-10-11 (America/Sao_Paulo).
+- **Purpose:** investigate the requested initial Files roadmap and prepare the
+  technical decision required before milestone 08, preserving sequential gates.
+- **Changes:** added [FILES-TECHNICAL-ARCHITECTURE](history/ricy-files/FILES-TECHNICAL-ARCHITECTURE.md)
+  and Proposed ADR-0008; linked them from the Files reservation, architecture,
+  components and ADR index. Compared Qt Quick/C++ with selected KIO/Solid, pure Qt,
+  Widgets/KIO and PySide/QML. Recommended a standalone Qt Quick/C++17 application,
+  local model/job/token/device/launch adapters, own QML conflict presentation,
+  bounded local/trash capability, opaque initial surface and distinct identity.
+  No architecture was accepted, contract frozen or application implemented.
+- **Findings:** KIOCore/KIOGui reuse does not provide stock conflict dialogs or
+  eliminate worker/helper dependencies. Explicit association resolution is needed
+  to avoid OpenUrlJob's missing-handler fallback. Cancellation does not imply
+  rollback. KIO package closure is broader than selected link targets. Qt/KF6
+  are present, but CMake/ECM are absent; package presence is not build readiness.
+  ADR-0007, session/default isolation and C-002/C-003 remain pending/unresolved.
+- **Validation performed:** PASS independent architectural/toolkit/testing,
+  filesystem/safety and desktop/recovery/design proposal reviews; nonblocking
+  executable-contract details remain milestone 08 work. PASS
+  `./scripts/verify architecture` (zero failures/skips), targeted proposal/ADR/Files
+  README relative-link checks, `python3 themes/tokens/validate.py` and
+  `git diff --check`. PASS before/after tracked-file SHA-256/mode comparison:
+  all 1,111 baseline files retain bytes/modes except the five intended navigation
+  and changelog documentation edits; new files are the two proposal documents.
+- **Limits and checkpoint:** runtime listing, launch, file operations, media/trash,
+  Wayland visuals, login/switching and recovery trials are NOT RUN. New application
+  Component/Visual builds are NOT APPLICABLE to this documentation-only stage.
+  Recovery runtime functionality remains UNKNOWN; preservation is limited to
+  unchanged sources and absence of task-induced runtime/settings mutations.
+  No installation, service/default change, token change, private-kit copying or
+  publication occurred. ADR-0008 awaits explicit approval; milestones 08–10 are
+  NOT STARTED. Rollback removes proposal/navigation/changelog edits only.
+
 ## 2026-10-11 — Future Files integration assessment and proposed boundary
 
 - **Model/Agent:** Codex (GPT-6), agent for this task.
@@ -127,7 +364,7 @@ Model/Agent, Date, Purpose, Validation performed. Do not sign source files.
   migration and Files documentation without choosing a toolkit or implementing
   an application.
 - **Findings:** native Style provides the spacing/type/radius/motion cadence;
-  existing runtime sources retain hardcodes. Shell fill .70, Dolphin alpha178/255
+  existing runtime sources retain hardcodes. Shell fill .70, Dolphin alpha 178/255
   and Konsole .85 remain distinct. Native KWin blur is attributed to grounding
   G-03; old ricyblur records are historical and new-app blur support remains
   UNKNOWN. Root/contribution search-support radii differ and were preserved.

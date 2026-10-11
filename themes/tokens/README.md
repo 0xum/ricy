@@ -15,7 +15,7 @@ not synchronized. No file, profile, backup or manifest was moved or renamed.
 ## Contract and units
 
 This is ordinary UTF-8 JSON, using the existing vocabulary. It is not DTCG,
-Noctalia configuration, a Qt theme, or a toolkit selection for Files. Parse it
+Noctalia configuration, a Qt theme, or a toolkit selection for an application. Parse it
 with the consumer's JSON library. Check `schema_version == 1` and supported
 `contract_version` before using it; missing required roles or an unsupported
 major must produce a clear error, not silent substitute literals. Additive
@@ -64,7 +64,7 @@ when a toolkit requires a fraction. `178/255` is not exactly `0.70`.
 | `materials.cards`, `detached_panels`, `outline` | Opaque cards/panels; outline width 1 logical px | Detached-panel solid policy; paint contour only where already enabled |
 | `blur.settings` | Strength 5, noise 2, unit `kwin_effect_setting` | Existing KWin reference, not CSS/Qt blur radius or Gaussian sigma |
 | `blur.observed_backend`, status fields | Native KWin blur; shared sampling/new-app support UNKNOWN | Audited observation, not runtime detection or effect activation |
-| `application_adaptations.dolphin` | Noto Sans 10 pt; surface alpha 178; opaque card/L panel; 12/8/16 px scoped radii; row/header/selection alpha and tab/place geometry | Existing Dolphin adaptation only; color fields reuse shared roles except neutral `#242435` |
+| `application_adaptations.dolphin` | Noto Sans 10 pt; surface alpha 178; opaque card/L panel; 12/8/16 px scoped radii; row/header/selection alpha and tab/place geometry | Dolphin adaptation only; Places now use search-result states (transparent normal rows, 16px icons), while the retained neutral `#242435` color has alpha0 |
 | `application_adaptations.konsole` | `#1e1e2e`, opacity .85, blur request, KDE monospaced font references | Existing terminal adaptation, not a shared surface replacement |
 
 At local scale 1, shell radii are 3.9/7.8/11.7/15.6 logical px. Apply that factor
@@ -86,7 +86,7 @@ numbers with different meanings are not interchangeable tokens.
 | Noctalia Style, public TOML and KDE-Current JSON | KNOWN existing consumers of duplicated native constants/configuration; no central runtime import yet |
 | Qt/KDE/Kvantum, Dolphin QSS/helper, KWin effects | KNOWN existing role adaptations with hardcodes; no runtime migration in this task |
 | Konsole, GTK, Plasma, login/lock themes | Existing adaptations/settings; upstream assets retain identity/licensing; no central runtime import or full harmonization claim |
-| Ricy Files (`apps/file-manager/`) and future Ricy apps | PLANNED JSON consumers through a toolkit-specific adapter when their implementation is approved; no application or toolkit selected here |
+| Future explicitly approved Ricy apps | Possible JSON consumers through a toolkit-specific adapter; the own Ricy Files application is retired under ADR-0011, not a planned consumer |
 
 ## How future Ricy applications consume identity
 
@@ -123,7 +123,7 @@ content_gap_logical_px = identity["geometry"]["native_spacing_logical_px"]["sm"]
 Transparency affects fill only. Blur requires compositor/window integration
 and a legible opaque fallback, using the existing surface role. Do not activate
 ricyblur, rewrite KWin preferences or assume shell shared sampling extends to an
-application. Files' actual material integration remains UNKNOWN until validated.
+application. A new application's material integration remains UNKNOWN until validated.
 Do not change Dolphin/MIME/FileManager1 or recovery dependencies to consume tokens.
 
 ## Validation, regeneration and rollback

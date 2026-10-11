@@ -2,11 +2,17 @@
 
 Status: Proposed — awaiting explicit user approval; not Accepted.
 
+
+> Historical record only. The separate application was explored and a prototype
+> was produced, then retired before taking on file operations, Trash, devices
+> and FileManager1. The user chose Dolphin to reduce infrastructure scope.
+> Earlier approvals/proposals below no longer authorize implementation.
+
 ## Context
 
 [ADR-0003](0003-ricy-files.md) and RICY-005 already establish Ricy Files as the
 future Ricy default and Dolphin for Plasma Recovery. Detailed contracts were left
-UNKNOWN. The [integration assessment](../FILES-INTEGRATION.md) maps current
+UNKNOWN. The [integration assessment](../history/ricy-files/FILES-INTEGRATION.md) maps current
 directory defaults, launcher discovery, FileManager1, desktop overrides, devices,
 trash, package handlers, KDE actions, appearance and recovery dependencies.
 

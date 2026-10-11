@@ -42,12 +42,12 @@ CachyOS
     ├── Ricy Desktop
     │   ├── Noctalia Shell
     │   ├── Ricy Core / Services (responsibilities still to be defined)
-    │   └── Ricy Files and future applications
+    │   └── Dolphin with Ricy visual adaptations
     └── Plasma Recovery
         └── plasmashell, Dolphin, System Settings, and KDE tools
 ```
 
-The division into `core/`, `shell/noctalia/`, `compositor/kwin/`, `apps/file-manager/`,
+The division into `core/`, `shell/noctalia/`, `compositor/kwin/`, `apps/`,
 `services/`, `themes/`, `integrations/`, `recovery/plasma/`, `installer/`, and `tools/`
 is primarily a documentary reservation; session executables remain in the kit.
 The opt-in keyboard applicators now reside in `integrations/keyboard-cedilla/`
@@ -62,12 +62,18 @@ migrate shell/session runtime or implement an application.
 New Core/Services, IPC, and dedicated-session contracts are UNKNOWN, not implicitly
 approved APIs. See [migration](MIGRATION-PLAN.md).
 
-The [Files integration assessment](FILES-INTEGRATION.md) maps current Dolphin,
-launcher, defaults, D-Bus, device, trash, package, appearance and recovery edges.
-[ADR-0007](adr/0007-session-file-manager-boundary.md) is **Proposed**, not Accepted:
-its session-scoped contracts and independent Dolphin Recovery criteria await
-approval. No file-manager implementation, default change or session isolation
-is claimed; C-002/C-003 remain unresolved.
+[ADR-0011](adr/0011-dolphin-as-ricy-file-manager.md) explicitly chooses
+Dolphin for Ricy and Plasma Recovery. The own prototype and 07–10 implementation
+roadmap are closed; no own filesystem, Trash adapter, FileManager1, toolkit or
+Dolphin fork is planned. Historical assessments/ADRs remain in
+[the closed exploration](history/ricy-files/README.md), without active authority.
+
+The [Dolphin baseline](DOLPHIN-BASELINE.md) records the read-only installed
+configuration, registered integrations, helper/theme provenance and remaining
+visual backlog. The user's90% visual assessment is recorded separately from
+functional/recovery evidence. Current shared integration is preserved; the
+policy of usable Recovery when visual customizations fail is not a claim that
+independent failure recovery has already been demonstrated.
 
 ## Ownership and boundaries
 - **UPSTREAM**: Noctalia, KWin, Plasma, Dolphin, Qt, Kvantum, and third-party themes.
@@ -75,7 +81,8 @@ is claimed; C-002/C-003 remain unresolved.
   licenses, build, and reversal alongside the patch. Old variants are historical.
 - **RICY-OWNED**: integration/switching scripts, adapters, and local policies.
   Maintenance ownership does not erase the licenses of KDE-derived code.
-- **PLANNED RICY-OWNED**: Ricy Files. No application is implemented in this foundation.
+- **RETIRED**: the own Ricy Files prototype; source history is preserved, but
+  code/build/tests/packaging are removed from the active checkout.
 
 Build scripts fetch upstream sources into caches outside the project.
 [app-icon-reordering/build.sh](../ricy-kit/contributions/app-icon-reordering/build.sh)
@@ -89,7 +96,7 @@ These are the kit's baseline, not claims about the latest upstream versions.
 |---|---|---|
 | C-001 | [Workspace audit](WORKSPACE-AUDIT.md) identifies Ricy Noctalia UI/commands and shared Plasma surfaces; [grounding G-02](CONTRIBUTION-AUDIT.md) connects the running binary to the earlier cumulative diff | Current source patch disables Ricy groups/badges, workspace widget, navigation/alert commands and settings; the running binary still matches the pre-policy variant preserved in the transport copy. Visible-window membership remains internal in current source. No activation occurred in either audit. Shared KWin/Plasma shortcuts, menus and gestures remain preserved; full live compliance is UNKNOWN. |
 | C-002 | `integration.py` uses plasmashell/wallpaper and restores through Ricy scripts | Separate, independent recovery is PLANNED. Do not claim isolation has already been achieved. |
-| C-003 | Launcher and FileManager1 integration use customized Dolphin | Preserve until Ricy Files is validated; do not change MIME/defaults at this stage. |
+| C-003 | Launcher and FileManager1 integration use customized Dolphin | Dolphin is the chosen base. Preserve existing integration; optional visual failure recovery remains unproven, with no MIME/default changes in this task. |
 | C-004 | Canonical consumable JSON now exists in themes/tokens; configs/QSS/scripts still contain values | Offline identity board consumes central tokens with exact byte equality. Runtime migrations remain PLANNED; see ADR-0005 and the token audit. |
 | C-005 | Two kit trees and absolute paths in wrappers | INFERRED: moving directories can break units and shortcuts. Preserve and map references before migration. |
 | C-006 | [Grounding G-03](CONTRIBUTION-AUDIT.md): native blur loaded, ricyblur absent, enabled selector unit failed at a D-Bus method lookup | `blur-continuity` disposition is UNKNOWN; old README claims that ricyblur remains loaded are historical. Preserve existing native blur and recovery; repair/retirement was not performed. |

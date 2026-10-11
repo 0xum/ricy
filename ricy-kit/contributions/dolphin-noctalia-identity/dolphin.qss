@@ -6,6 +6,24 @@ QToolButton:pressed, QToolButton:checked { background-color: #977dba; color: #00
 QToolButton:disabled { color: #a6adc8; }
 QLineEdit { background-color: #313244; color: #cdd6f4; border: 1px solid #46485c; border-radius: 8px; padding: 5px 8px; selection-background-color: #977dba; selection-color: #000000; }
 QLineEdit:focus { border-color: #cba6f7; }
+/* Opaque popup panel and inset rows; retain native actions and submenus. */
+QMenu { background-color: #313244; color: #cdd6f4; border: 1px solid #46485c; border-radius: 12px; padding: 12px; }
+QMenu::item { background: transparent; border: none; border-radius: 6px; padding: 4px 12px; margin: 1px 0px; }
+QMenu::icon { left: 8px; }
+QMenu::item:selected { background-color: #cba6f7; color: #11111b; }
+QMenu::item:disabled { color: #a6adc8; }
+QMenu::separator { height: 4px; background: transparent; margin: 0px 12px; }
+QMenu QToolButton, QMenu QPushButton { background-color: #242435; color: #cdd6f4; border: 1px solid #46485c; border-radius: 6px; padding: 4px 8px; }
+QMenu QToolButton:hover, QMenu QPushButton:hover { background-color: #977dba; color: #11111b; }
+/* Shared compact scrollbars across views, sidebars, dialogs and popups. */
+QScrollBar:vertical { background-color: #242435; border: none; border-radius: 3px; width: 6px; margin: 0px; }
+QScrollBar:horizontal { background-color: #242435; border: none; border-radius: 3px; height: 6px; margin: 0px; }
+QScrollBar::handle:vertical { background-color: rgba(166,173,200,128); border: none; border-radius: 3px; min-height: 24px; }
+QScrollBar::handle:horizontal { background-color: rgba(166,173,200,128); border: none; border-radius: 3px; min-width: 24px; }
+QScrollBar::handle:hover { background-color: #a6adc8; }
+QScrollBar::handle:pressed { background-color: #cba6f7; }
+QScrollBar::add-line, QScrollBar::sub-line { background: transparent; border: none; width: 0px; height: 0px; }
+QScrollBar::add-page, QScrollBar::sub-page { background: transparent; border: none; }
 /* Tabs like Noctalia buttons: neutral, hover and active. */
 QTabBar { background: transparent; border: none; }
 QTabBar::tab { background-color: #313244; color: #cdd6f4; border: 1px solid #46485c; border-radius: 12px; padding: 6px 14px; margin: 3px; }
@@ -20,12 +38,28 @@ QDockWidget { color: #a6adc8; }
 QStatusBar { color: #a6adc8; }
 
 /* Main panel and L panel: #313244; outer shell keeps glass. */
-KItemListContainer { background-color: #313244; border: 1px solid #46485c; border-radius: 12px; padding: 8px; margin: 8px; }
+DolphinViewContainer { background-color: #313244; border: 1px solid #46485c; border-radius: 12px; padding: 8px; margin: 4px 4px 8px 4px; }
+DolphinViewContainer[ricyRightEdge="true"] { margin-right: 8px; }
+DolphinViewContainer[ricyLeftEdge="true"] { margin-left: 8px; }
+KItemListContainer { background: transparent; border: none; padding: 0px; margin: 0px; }
 KItemListContainerViewport, KItemListContainerViewport > QWidget { background: transparent; border: none; }
-QToolBar { background: transparent; border: none; spacing: 4px; padding: 4px 8px; }
+QToolBar { background: transparent; border: none; spacing: 8px; min-height: 36px; padding: 8px 16px; }
+QToolBar QToolButton { min-width: 20px; min-height: 20px; padding: 4px 8px; }
+QToolBar QToolButton:hover { background-color: rgba(151,125,186,65); border-color: transparent; }
+/* Breadcrumbs stay light; only the editable path has a field backing. */
+KUrlNavigator { background: transparent; border: none; }
+KUrlNavigator QComboBox { background-color: #181825; border: 2px solid #cba6f7; border-radius: 8px; padding: 0px 8px 0px 12px; }
+KUrlNavigator QComboBox:focus { border-color: #cba6f7; }
+KUrlNavigator QComboBox::drop-down { border: none; background: transparent; width: 24px; }
+KUrlNavigator QLineEdit { background: transparent; border: none; padding: 0px 12px; }
+KUrlNavigator QLineEdit:focus { border: none; }
+KUrlNavigator QAbstractButton { border: 1px solid transparent; border-radius: 6px; background: transparent; color: #cdd6f4; }
+KUrlNavigator QAbstractButton:hover { background-color: rgba(151,125,186,65); }
+/* Keep the native clear action independent of toolbar button dimensions. */
+KUrlNavigator QLineEdit QToolButton { min-width: 0px; min-height: 0px; padding: 0px; border: none; background: transparent; }
 QStatusBar { background: transparent; border: none; }
 QDockWidget { background: transparent; border: none; }
-QSplitter::handle { background: transparent; width: 8px; height: 8px; }
+QSplitter::handle { background: transparent; width: 4px; height: 4px; }
 
 QMainWindow { background-color: rgba(24,24,37,178); }
 PlacesPanel, PlacesPanel > QWidget, PlacesPanel > QWidget > QWidget { background: transparent; border: none; }

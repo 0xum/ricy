@@ -1,17 +1,25 @@
+> HISTORICAL — Closed on 2026-10-11 by [ADR-0011](../../adr/0011-dolphin-as-ricy-file-manager.md). This preserves the explored proposal/prototype, not an active roadmap, implementation contract, or command to execute. Dolphin is the current Ricy file manager.
+
 # Ricy Files integration assessment
 
 Status: investigation and **Proposed** contracts, 2026-10-11. This document does
-not authorize implementation or default changes. [ADR-0003](adr/0003-ricy-files.md)
+not authorize implementation or default changes. [ADR-0003](../../adr/0003-ricy-files.md)
 already accepts Files as the future Ricy default and Dolphin for recovery;
-[ADR-0007](adr/0007-session-file-manager-boundary.md) proposes the integration
+[ADR-0007](../../adr/0007-session-file-manager-boundary.md) proposes the integration
 boundary below. Until approval, new contracts are proposals, not PLANNED policy.
+
+The separate toolkit/application-local decision in
+[ADR-0008](../../adr/0008-ricy-files-technical-architecture.md) is now Accepted. Its
+[MVP draft](FILES-MVP.md) permits no default/session/FileManager1 migration;
+ADR-0007's contracts here remain Proposed, and the additional trash-backend
+decision in ADR-0009 is now separately Accepted for bounded native trash mutation.
 
 ## Scope and evidence
 
 **KNOWN** means inspected source or registration, not an exercised workflow.
 **INFERRED** identifies a consequence of those registrations. **PLANNED** is
 reserved for accepted target intent. **UNKNOWN** means unproven behavior.
-The [contribution audit](CONTRIBUTION-AUDIT.md) remains the broader grounding.
+The [contribution audit](../../CONTRIBUTION-AUDIT.md) remains the broader grounding.
 
 This assessment inspected the active kit, maintained cumulative Noctalia patch,
 the preserved Noctalia 5.2.1 source cache, installed file-manager registrations,
@@ -31,14 +39,14 @@ mapped below rather than asserted to work.
 
 | ID | Source and responsibility |
 |---|---|
-| E1 | [Dolphin identity applicator](../ricy-kit/contributions/dolphin-noctalia-identity/apply.py): desktop override, FileManager1 activation, user systemd drop-in, per-app Kvantum assignment, dolphinrc and backup/restoration. |
-| E2 | [Dolphin launcher](../ricy-kit/contributions/dolphin-noctalia-identity/launch.py): forwards arguments to `/usr/bin/dolphin`, injecting `QT_PLUGIN_PATH`, `ricydolphinui` and QSS. |
-| E3 | [Qt helper](../ricy-kit/contributions/dolphin-blur-corners/ui.cpp), [KWin effect](../ricy-kit/contributions/dolphin-blur-corners/corners.cpp), [identity history](../ricy-kit/contributions/dolphin-noctalia-identity/README.md): Dolphin widget-specific adaptations and class-filtered corners; distinct lifecycles. |
-| E4 | [Search adapter](../ricy-kit/contributions/noctalia-kde-integration-and-menus/outputs/noctalia-test/desktop-search.py): owns the KRunner compatibility name and opens the Noctalia launcher; it does not route directory URIs. |
-| E5 | [Package integration installer](../ricy-kit/contributions/dolphin-deb-rpm-installer/install-integration.py), [application entry](../ricy-kit/contributions/dolphin-deb-rpm-installer/desktop/cachyos-local-package-installer.desktop.in), [service menu](../ricy-kit/contributions/dolphin-deb-rpm-installer/desktop/cachyos-install-package.desktop.in), [backend](../ricy-kit/contributions/dolphin-deb-rpm-installer/app/backend.py): separate package app, three MIME defaults and a KDE action. |
-| E6 | [Package restorer](../ricy-kit/contributions/dolphin-deb-rpm-installer/restore-integration.py), [correction bundle](../ricy-kit/contributions/target-implementation-fixes/README.md): destination backups and version-specific Debtap preparation. |
-| E7 | [Switching integration](../ricy-kit/contributions/plasma-noctalia-switching/integration.py), [command](../ricy-kit/contributions/plasma-noctalia-switching/ricy), [recovery](RECOVERY.md): panel/shortcut restoration inside the existing Plasma session. |
-| E8 | [Shared KDE style applicator](../ricy-kit/contributions/noctalia-kde-integration-and-menus/apply-style.sh), [design system](DESIGN-SYSTEM.md), [token contract](../themes/tokens/README.md): shared KDE appearance versus scoped Dolphin values. |
+| E1 | [Dolphin identity applicator](../../../ricy-kit/contributions/dolphin-noctalia-identity/apply.py): desktop override, FileManager1 activation, user systemd drop-in, per-app Kvantum assignment, dolphinrc and backup/restoration. |
+| E2 | [Dolphin launcher](../../../ricy-kit/contributions/dolphin-noctalia-identity/launch.py): forwards arguments to `/usr/bin/dolphin`, injecting `QT_PLUGIN_PATH`, `ricydolphinui` and QSS. |
+| E3 | [Qt helper](../../../ricy-kit/contributions/dolphin-blur-corners/ui.cpp), [KWin effect](../../../ricy-kit/contributions/dolphin-blur-corners/corners.cpp), [identity history](../../../ricy-kit/contributions/dolphin-noctalia-identity/README.md): Dolphin widget-specific adaptations and class-filtered corners; distinct lifecycles. |
+| E4 | [Search adapter](../../../ricy-kit/contributions/noctalia-kde-integration-and-menus/outputs/noctalia-test/desktop-search.py): owns the KRunner compatibility name and opens the Noctalia launcher; it does not route directory URIs. |
+| E5 | [Package integration installer](../../../ricy-kit/contributions/dolphin-deb-rpm-installer/install-integration.py), [application entry](../../../ricy-kit/contributions/dolphin-deb-rpm-installer/desktop/cachyos-local-package-installer.desktop.in), [service menu](../../../ricy-kit/contributions/dolphin-deb-rpm-installer/desktop/cachyos-install-package.desktop.in), [backend](../../../ricy-kit/contributions/dolphin-deb-rpm-installer/app/backend.py): separate package app, three MIME defaults and a KDE action. |
+| E6 | [Package restorer](../../../ricy-kit/contributions/dolphin-deb-rpm-installer/restore-integration.py), [correction bundle](../../../ricy-kit/contributions/target-implementation-fixes/README.md): destination backups and version-specific Debtap preparation. |
+| E7 | [Switching integration](../../../ricy-kit/contributions/plasma-noctalia-switching/integration.py), [command](../../../ricy-kit/contributions/plasma-noctalia-switching/ricy), [recovery](../../RECOVERY.md): panel/shortcut restoration inside the existing Plasma session. |
+| E8 | [Shared KDE style applicator](../../../ricy-kit/contributions/noctalia-kde-integration-and-menus/apply-style.sh), [design system](../../DESIGN-SYSTEM.md), [token contract](../../../themes/tokens/README.md): shared KDE appearance versus scoped Dolphin values. |
 
 ## Current integration map
 
@@ -178,7 +186,7 @@ Before any migration, a separate implementation proposal must resolve:
 Current discrepancy C-003 is retained: customized Dolphin handles file-manager
 integration. Current C-002 is also retained: Recovery still uses Ricy switching
 scripts. The proposal adds gates; it does not silently mark either discrepancy
-resolved. Migration batches in [MIGRATION-PLAN](MIGRATION-PLAN.md) are not executed.
+resolved. Migration batches in [MIGRATION-PLAN](../../MIGRATION-PLAN.md) are not executed.
 
 ## Future validation and transition gates
 

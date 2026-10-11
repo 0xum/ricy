@@ -2,6 +2,11 @@
 
 Status: Accepted, authorized by the user's token-centralization task on 2026-10-11.
 
+
+Files references below describe the historical context of this token decision.
+The own application is retired by [ADR-0011](0011-dolphin-as-ricy-file-manager.md);
+canonical token authority remains accepted and its values are unchanged.
+
 ## Context
 
 RICY-006 requires one identity source. Existing structured values are documented

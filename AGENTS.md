@@ -34,7 +34,8 @@ Use KNOWN (evidence), INFERRED (inference), PLANNED (future), and UNKNOWN (unpro
 ## Architectural Invariants
 RICY-001: a single-space experience, without workspace UI, actions, or gestures.
 RICY-002: KWin is infrastructure. RICY-003: Noctalia is the primary shell.
-RICY-004/005: preserve Plasma and Dolphin Recovery; Ricy Files is a future component.
+RICY-004: preserve Plasma Recovery. RICY-005: Dolphin is the Ricy file manager;
+visual customization must not make recovery file access depend on Ricy code.
 RICY-006: centralized identity; reuse the [existing design](docs/DESIGN-SYSTEM.md).
 The full normative text is in INVARIANTS; discrepancies are in ARCHITECTURE.
 

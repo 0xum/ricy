@@ -20,6 +20,13 @@
 #include <QGraphicsScene>
 #include <QPainterPath>
 #include <QListView>
+#include <QAbstractButton>
+#include <QComboBox>
+#include <QLayout>
+#include <QMenu>
+#include <QDockWidget>
+#include <QSplitterHandle>
+#include <QMouseEvent>
 
 namespace {
 struct PlacesPaint { QString text; int iconSize; };
@@ -40,7 +47,7 @@ void chip(QPainter *painter, QRectF rect, QColor fill, QColor outline = Qt::tran
     painter->setRenderHint(QPainter::Antialiasing);
     painter->setPen(outline.alpha() ? QPen(outline, 1) : QPen(Qt::NoPen));
     painter->setBrush(fill);
-    const qreal radius = qMin<qreal>(10, rect.height()/2);
+    const qreal radius = qMin<qreal>(6, rect.height()/2);
     painter->drawRoundedRect(rect, radius, radius);
     painter->restore();
 }
@@ -49,6 +56,35 @@ public:
     explicit ChipStyle(QStyle *base) : QProxyStyle(base) {}
     void drawPrimitive(PrimitiveElement element, const QStyleOption *option,
                        QPainter *painter, const QWidget *widget = nullptr) const override {
+        if (widget && QByteArray(widget->metaObject()->className()).contains("KUrlNavigator") &&
+            (element == PE_IndicatorArrowRight || element == PE_IndicatorArrowLeft || element == PE_IndicatorArrowDown)) {
+            painter->save();
+            painter->setRenderHint(QPainter::Antialiasing);
+            painter->setPen(QPen(option->palette.color(QPalette::WindowText), 1.5,
+                                 Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+            painter->setBrush(Qt::NoBrush);
+            const QPointF center = QRectF(option->rect).center();
+            QPainterPath arrow;
+            if (element == PE_IndicatorArrowDown) {
+                arrow.moveTo(center+QPointF(-3,-1.5));
+                arrow.lineTo(center+QPointF(0,1.5));
+                arrow.lineTo(center+QPointF(3,-1.5));
+            } else {
+                const int direction = element == PE_IndicatorArrowLeft ? -1 : 1;
+                arrow.moveTo(center+QPointF(-1.5*direction,-3));
+                arrow.lineTo(center+QPointF(1.5*direction,0));
+                arrow.lineTo(center+QPointF(-1.5*direction,3));
+            }
+            painter->drawPath(arrow);
+            painter->restore();
+            return;
+        }
+        if (element == PE_PanelButtonCommand && widget &&
+            QByteArray(widget->metaObject()->className()).contains("KUrlNavigator")) {
+            QColor hover("#977dba"); hover.setAlpha(65);
+            chip(painter, QRectF(option->rect).adjusted(1,2,-1,-2), hover);
+            return;
+        }
         const auto *viewOption = qstyleoption_cast<const QStyleOptionViewItem *>(option);
         const QWidget *candidate = widget ? widget : (viewOption ? viewOption->widget : nullptr);
         if (!candidate) candidate = dynamic_cast<QWidget *>(painter->device());
@@ -109,13 +145,14 @@ public:
             if (!places && !selected && !hovered) return;
             QRectF rect = (rowPaint ? *rowPaint : QRectF(option->rect)).adjusted(3, 2, -3, -2);
             if (places) {
-                rect = QRectF(option->rect).adjusted(0, 2, 0, -2);
-                // Equal-width buttons include native labels, icons and device
-                // controls; the native delegate retains all interaction.
-                const QColor fill(selected ? "#cba6f7" : hovered ? "#977dba" : "#242435");
+                rect = QRectF(option->rect);
+                // Search-result treatment: only hover/selection have a backing.
+                if (!selected && !hovered) return;
+                QColor fill(selected ? "#cba6f7" : "#977dba");
+                if (!selected) fill.setAlpha(65);
                 painter->save();
                 painter->setRenderHint(QPainter::Antialiasing);
-                painter->setPen(QPen(QColor(selected ? "#cba6f7" : "#46485c"), 1));
+                painter->setPen(Qt::NoPen);
                 painter->setBrush(fill);
                 painter->drawRoundedRect(rect, 8, 8);
                 painter->restore();
@@ -156,6 +193,14 @@ public:
     }
     void drawControl(ControlElement element, const QStyleOption *option,
                      QPainter *painter, const QWidget *widget = nullptr) const override {
+        if (element == CE_RubberBand) {
+            // Preserve the native drag rectangle and animation opacity while
+            // matching the medium-radius translucent selection treatment.
+            QColor fill("#977dba"); fill.setAlpha(65);
+            QColor outline("#cba6f7"); outline.setAlpha(150);
+            chip(painter, QRectF(option->rect).adjusted(0.5,0.5,-0.5,-0.5), fill, outline);
+            return;
+        }
         if (element == CE_Header && (headerPaint || fileViewport(widget))) {
             const auto *header = qstyleoption_cast<const QStyleOptionHeader *>(option);
             if (!header) return;
@@ -188,8 +233,54 @@ public:
     }
 };
 
-// KFilePlacesView keeps its native delegate and all its internal event connections.
-// ChipStyle obtains the label via the public view/model API during painting.
+// Keep KFilePlacesView's default delegate alive and installed. A column-only
+// paint adapter forwards native geometry, device controls, help and editor
+// events. Unlike replacing/deleting the default delegate, this leaves KIO's
+// private delegate pointer, timers and existing signal connections intact.
+class PlacesResultPaint : public QAbstractItemDelegate {
+public:
+    PlacesResultPaint(QAbstractItemDelegate *native, QObject *parent)
+        : QAbstractItemDelegate(parent), m_native(native) {}
+    void paint(QPainter *painter, const QStyleOptionViewItem &option,
+               const QModelIndex &index) const override {
+        if (!m_native) return;
+        QStyleOptionViewItem styled(option);
+        // KIO's text rectangle starts at a fixed local x, while the icon
+        // includes rect.left(). Normalize the origin to retain its 6px gap
+        // even with QListView spacing and viewport padding.
+        painter->save();
+        painter->translate(option.rect.left(), 0);
+        styled.rect.moveLeft(0);
+        styled.font.setWeight(QFont::DemiBold);
+        styled.fontMetrics = QFontMetrics(styled.font);
+        painter->setFont(styled.font);
+        if (styled.state & QStyle::State_Selected) {
+            // KIO chooses Text rather than HighlightedText when Places lacks
+            // focus. Both roles must remain readable on the accent backing.
+            styled.palette.setColor(QPalette::Text, QColor("#11111b"));
+            styled.palette.setColor(QPalette::HighlightedText, QColor("#11111b"));
+        }
+        m_native->paint(painter, styled, index);
+        painter->restore();
+    }
+    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override {
+        if (!m_native) return QSize();
+        QSize size = m_native->sizeHint(option,index);
+        // Preserve the existing 24px-icon row height with smaller 16px icons.
+        size.rheight() += qMax(0, 24 - qMax(option.decorationSize.height(), option.fontMetrics.height()));
+        return size;
+    }
+    bool helpEvent(QHelpEvent *event, QAbstractItemView *view,
+                   const QStyleOptionViewItem &option, const QModelIndex &index) override {
+        return m_native && m_native->helpEvent(event,view,option,index);
+    }
+    bool editorEvent(QEvent *event, QAbstractItemModel *model,
+                     const QStyleOptionViewItem &option, const QModelIndex &index) override {
+        return m_native && m_native->editorEvent(event,model,option,index);
+    }
+private:
+    QPointer<QAbstractItemDelegate> m_native;
+};
 
 // Native alternating rows use fillRect, outside the style API. Keep that palette
 // transparent and draw a rounded backing before each file item's native content.
@@ -229,7 +320,7 @@ protected:
         painter->save();
         if (row) {
             QPainterPath clip;
-            clip.addRoundedRect(rect, qMin<qreal>(10,rect.height()/2), qMin<qreal>(10,rect.height()/2));
+            clip.addRoundedRect(rect, qMin<qreal>(6,rect.height()/2), qMin<qreal>(6,rect.height()/2));
             painter->setClipPath(clip, Qt::IntersectClip);
         }
         painter->drawPixmap(offset, content);
@@ -282,7 +373,7 @@ protected:
         for (auto *child : window->findChildren<QWidget *>()) {
             if (child->inherits("KFilePlacesView") && child->isVisible() && child->window() == window)
                 sidebarVisible = true;
-            if (!child->inherits("KItemListContainer") || !child->isVisible()) continue;
+            if (!child->inherits("DolphinViewContainer") || !child->isVisible()) continue;
             const QPoint pos = child->mapTo(window, QPoint());
             if (!found || pos.x() < innerX) innerX = pos.x();
             if (!found || pos.y() < innerY) innerY = pos.y();
@@ -290,7 +381,7 @@ protected:
         }
         const qreal left = 8, top = 8, right = width()-8, bottom = height()-8;
         if (right <= left || bottom <= top) return;
-        // File cards have their own 8px margin; the L ends at the container
+        // File cards have their own 4px top/side margin; the L ends at the outer container
         // edge, leaving that same gutter between the two panels.
         innerX = qBound(left+24, innerX, right);
         innerY = qBound(top+24, innerY, bottom);
@@ -355,12 +446,57 @@ public:
         });
     }
     bool eventFilter(QObject *object,QEvent *event) override {
+        if (event->type() == QEvent::Resize || event->type() == QEvent::Show)
+            if (auto *menu = qobject_cast<QMenu *>(object)) {
+                // Match the popup's actual surface to its rounded QSS panel,
+                // so native backing cannot remain in the corner cutouts.
+                QPainterPath shape;
+                shape.addRoundedRect(QRectF(menu->rect()),12,12);
+                menu->setMask(QRegion(shape.toFillPolygon().toPolygon()));
+            }
+        if (event->type() == QEvent::Enter || event->type() == QEvent::Leave)
+            if (auto *handle = qobject_cast<QSplitterHandle *>(object)) handle->update();
+        if (event->type() == QEvent::MouseButtonPress || event->type() == QEvent::MouseButtonRelease)
+            if (auto *handle = qobject_cast<QSplitterHandle *>(object);
+                handle && static_cast<QMouseEvent *>(event)->button() == Qt::LeftButton) {
+                handle->setProperty("ricyDragging",event->type() == QEvent::MouseButtonPress);
+                handle->update();
+            }
+        // KIO fixes the navigator to the editor's native height when its mode
+        // changes. Keep both limits consistent with the padded 36px bar;
+        // raising only minimumHeight leaves a smaller native maximumHeight.
+        if (event->type() == QEvent::Resize)
+            if (auto *widget = qobject_cast<QWidget *>(object);
+                widget && widget->inherits("KUrlNavigator") && widget->height() != 36)
+                widget->setFixedHeight(36);
         if (event->type() == QEvent::Resize || event->type() == QEvent::LayoutRequest ||
             event->type() == QEvent::Show || event->type() == QEvent::Hide || event->type() == QEvent::Move) {
             auto *widget = qobject_cast<QWidget *>(object);
+            if (widget && widget->inherits("DolphinViewContainer")) {
+                widget->setAttribute(Qt::WA_StyledBackground);
+                const bool rightEdge = widget->mapTo(widget->window(), QPoint(widget->width(),0)).x()
+                                       >= widget->window()->width()-12;
+                const bool leftEdge = widget->mapTo(widget->window(), QPoint()).x() <= 12;
+                if (widget->property("ricyRightEdge").toBool() != rightEdge ||
+                    widget->property("ricyLeftEdge").toBool() != leftEdge) {
+                    widget->setProperty("ricyRightEdge",rightEdge);
+                    widget->setProperty("ricyLeftEdge",leftEdge);
+                    widget->style()->unpolish(widget);
+                    widget->style()->polish(widget);
+                    widget->update();
+                }
+                // QSS only paints this QWidget's margin; reserve the actual
+                // 4px top/side gutter plus 8px inner padding in the native layout.
+                // Keep the outer right/bottom window margins at their original 8px.
+                if (widget->layout()) widget->layout()->setContentsMargins(leftEdge?16:12,12,rightEdge?16:12,16);
+            }
+            if (auto *dock = qobject_cast<QDockWidget *>(widget);
+                dock && dock->widget() && dock->widget()->inherits("KFilePlacesView"))
+                dock->setContentsMargins(0,0,0,12);
             auto *window = widget ? widget->window() : nullptr;
             if (window && window->inherits("DolphinMainWindow") &&
                 (widget == window || widget->inherits("KItemListContainer") ||
+                 widget->inherits("DolphinViewContainer") ||
                  widget->inherits("QDockWidget"))) {
                 auto *panel = window->findChild<QWidget *>(QStringLiteral("ricyShellPanel"), Qt::FindDirectChildrenOnly);
                 if (!panel) panel = new ShellPanel(window);
@@ -374,6 +510,26 @@ public:
         // Keep the native buttons/signals, but align their actual hit rectangles
         // inside the pill after Qt has finished laying out the tab bar.
         if (event->type() == QEvent::Paint) {
+            if (auto *handle = qobject_cast<QSplitterHandle *>(object)) {
+                bool filePanels = false;
+                for (auto *child : handle->splitter()->findChildren<QWidget *>())
+                    if (child->inherits("DolphinViewContainer")) { filePanels = true; break; }
+                if (filePanels) {
+                    QPainter painter(handle);
+                    painter.setRenderHint(QPainter::Antialiasing);
+                    painter.setPen(Qt::NoPen);
+                    QColor color("#242435");
+                    if (handle->property("ricyDragging").toBool()) color = QColor("#cba6f7");
+                    else if (handle->underMouse()) { color = QColor("#a6adc8"); color.setAlpha(128); }
+                    painter.setBrush(color);
+                    const bool horizontal = handle->orientation() == Qt::Horizontal;
+                    const QRectF line = horizontal
+                        ? QRectF((handle->width()-2)/2.0,12,2,qMax(0,handle->height()-24))
+                        : QRectF(12,(handle->height()-2)/2.0,qMax(0,handle->width()-24),2);
+                    painter.drawRoundedRect(line,1,1);
+                    return true;
+                }
+            }
             if (auto *tabs = qobject_cast<QTabBar *>(object)) {
                 for (int index = 0; index < tabs->count(); ++index) {
                     const QRect rect = tabs->tabRect(index);
@@ -392,11 +548,38 @@ public:
         }
         if(event->type() == QEvent::Polish) {
             auto *widget = qobject_cast<QWidget *>(object);
+            // Let QSS rounded popup corners expose the desktop, not a square
+            // native backing. Preserve Qt popup flags and all menu actions.
+            if (auto *menu = qobject_cast<QMenu *>(widget)) {
+                menu->setAttribute(Qt::WA_TranslucentBackground);
+                menu->setAttribute(Qt::WA_OpaquePaintEvent, false);
+                menu->setAutoFillBackground(false);
+                QPalette palette = menu->palette();
+                palette.setColor(QPalette::Window, Qt::transparent);
+                menu->setPalette(palette);
+            }
             if (auto *tabs = qobject_cast<QTabBar *>(widget)) tabs->setDrawBase(false);
+            if (widget && widget->inherits("KUrlNavigator")) {
+                widget->setAttribute(Qt::WA_StyledBackground);
+                widget->setFixedHeight(36);
+                if (widget->layout()) widget->layout()->setContentsMargins(8,0,8,0);
+            }
+            // Newly created segments inherit the navigator's minimum height.
+            // Give every direct button the same 28px content slot inside its
+            // 36px parent, rather than mixing 28px and clipped 36px segments.
+            if (widget && widget->parentWidget() && widget->parentWidget()->inherits("KUrlNavigator") &&
+                qobject_cast<QAbstractButton *>(widget)) widget->setFixedHeight(28);
+            if (widget && widget->parentWidget() && widget->parentWidget()->inherits("KUrlNavigator") &&
+                qobject_cast<QComboBox *>(widget)) widget->setFixedHeight(36);
             if (widget && widget->inherits("KFilePlacesView"))
                 if (auto *places = qobject_cast<QListView *>(widget)) {
-                    places->setSpacing(1);
-                    places->setIconSize(QSize(24,24));
+                    places->setSpacing(3);
+                    places->setIconSize(QSize(16,16));
+                    QFont font = places->font();
+                    font.setWeight(QFont::DemiBold);
+                    places->setFont(font);
+                    if (!places->itemDelegateForColumn(0))
+                        places->setItemDelegateForColumn(0, new PlacesResultPaint(places->itemDelegate(),places));
                     QPalette palette = places->palette();
                     for (auto group : {QPalette::Active, QPalette::Inactive, QPalette::Disabled}) {
                         palette.setColor(group, QPalette::HighlightedText, QColor("#11111b"));

@@ -55,3 +55,148 @@ At user request, sidebar and topbar now share a single opaque panel #313244, equ
 Side items are buttons of uniform width: neutral #242435, hover #977dba, selected #cba6f7, contour #46485c, radius8.Native icons24, list spacing1 and vertical indentation2 leave 6px between buttons. Side padding 12; HighlightedText #11111b palette, preserving native drawing of active/inactive text and icons. KFilePlacesView keeps its original delegate, clicks, shortcuts, drop, capability indicators and device actions. Icon size is recorded by KIO in dolphinrc, included in backups.
 
 Checks: helper compiled/installed atomically; capture in the real Dolphin confirms continuous L and buttons; lateral test passed21 clicks/21 navigations without switching delegate. Fixture Qt confirms connected arms, free clipping for content, no mouse capture, resize and hidden sidebar. Not validated all RTL layouts or floating docks. Final backup: ~/.local/state/ricy-dolphin-backups/20261011-093607-825801. Before this sequence: 20261011-093205-549123followed by 093320-666039 and 093439-242103 (even date prefix). To reverse the entire sequence, restore in reverse order. New code requires new window.
+
+
+## 2026-10-11 — Places aligned with Noctalia search results
+
+KNOWN: user-approved normal rows are transparent and borderless; selection
+uses accent with on-accent text, including when Places lacks focus. Hover
+uses the existing hover-selection color at alpha65. Radius8 and panel/L
+geometry are preserved. Native icons are 16px; semibold labels keep a 6px
+icon gap. The native 24px-icon row slot is retained, with list spacing3
+(6px between rows). These values update only the Dolphin adaptation in
+the canonical token source; retained legacy/transport snapshots and
+SHA256SUMS are historical and remain unchanged.
+
+The helper retains the original default KFilePlacesView delegate and its
+KIO timers/connections. A column-only paint adapter forwards size, painting,
+help and editor events to that still-live delegate, normalizes the item
+origin for KIO's label geometry, and supplies the selected text palette.
+It does not replace/delete the default delegate or intercept navigation.
+Applicator installation remains atomic with the existing private backup
+and restore path. Most recent pre-application backup:
+`~/.local/state/ricy-dolphin-backups/20261011-181156-397343`; earlier
+iterations in this revision: 180945-849849, 181007-994984, 181148-655625
+(with the same date prefix). Restoring whole files can replace later changes.
+
+Validation: PASS helper build; Qt/KIO fixture asserts default delegate
+identity, semibold labels and dark selected text without focus, then passes
+21 clicks/21 navigations. Live Dolphin capture verifies the search-style
+normal rows; user confirmed the final smaller-icon/padding revision.
+NOT RUN all devices, drag/drop, every scale/monitor or session recovery.
+No KWin effect, shell/default switch or transport-kit synchronization.
+
+
+## 2026-10-11 — Rounded rows and padded navigation header
+
+KNOWN: file/folder row backing, selection, focus and visible/nested clipping
+now share radius6 (the existing native medium radius), rather than capsule
+radius10. Existing visible-width bounds and parent-icon nesting inset remain
+unchanged. The shared header backing also uses radius6. Places/tabs retain
+their approved treatments.
+
+The top toolbar uses spacing8 and vertical/horizontal padding8/16; action
+buttons retain minimum20px content with padding4/8. The location bar uses
+the existing scoped neutral #242435, outline, radius8 and height36, with
+internal layout padding4/8. Breadcrumb hover is hover-selection alpha65,
+radius6; the native path editor has padding4/8, radius6 and accent focus.
+KIO's mode switch resets the navigator's fixed height: the helper keeps
+both height limits at36, preventing the earlier bottom-edge clipping and
+keeping the two modes aligned with toolbar actions. Native segment menus,
+URL completion and editing are retained.
+
+PASS: helper build/atomic application, live Dolphin captures of breadcrumbs
+(including hover) and editable path, and Qt/KIO fixture with10 mode toggles,
+visible native editor and unchanged URL. Captures/probes remain private.
+NOT RUN all nested depths, overflow layouts, RTL, monitors/scales or session
+recovery in this revision. Canonical scoped tokens are updated; legacy
+transport copies/manifests are unchanged. Latest private backup:
+`~/.local/state/ricy-dolphin-backups/20261011-182112-225971`. Earlier backups
+in this revision are181607-044728,181738-794586 and181910-844955 with the
+same date prefix. Existing whole-file rollback applies; reopen Dolphin
+for helper-code changes. No compositor or shell/session switch.
+
+## 2026-10-11 — Aligned breadcrumbs and path input
+
+Breadcrumbs now have a transparent container and centered28px native buttons
+inside the36px navigator. The user accepted the breadcrumb alignment. Editable
+mode alone uses surface (#181825), accent2px border and radius8. The combo has
+left/right padding12/8; its native editor has horizontal padding12 and zero
+vertical padding. The native clear button overrides inherited toolbar minimum
+dimensions and padding, keeping its icon vertically centered.
+
+PASS live Dolphin capture: folder/text inset and centered clear icon. The
+native clear button is22x18 at y7 inside the32px editor, matching their centers.
+PASS native Qt/KIO fixture:10 mode switches with editor/URL retained. PASS
+architecture verification, token validation and diff whitespace. NOT RUN all
+widths, RTL, scales or live recovery. Latest private backup:
+`~/.local/state/ricy-dolphin-backups/20261011-183250-171013`. Existing atomic
+application/whole-file rollback remains; transport kit/manifests, compositor
+and Noctalia are unchanged.
+
+## 2026-10-11 — Native menus, scrolling and contained panels
+
+KNOWN: Dolphin context menus use an opaque card/outline panel with radius12,
+padding8 and radius6 accent-selected action rows. Native popup flags, submenus,
+shortcuts and folder-color widget actions are retained; translucent window
+corners allow the rounded panel to expose the desktop.
+
+All Qt scrollbars use a6px dark neutral (#242435) track, radius3 and a minimum
+24px thumb. The thumb uses existing secondary text at50% opacity, with secondary
+hover and accent press. The user accepted the scrollbar treatment. Native drag
+selection uses radius6, hover-selection alpha65 and accent-outline alpha150,
+retaining Dolphin's rectangle/hit testing and animation opacity.
+
+The card backing belongs to DolphinViewContainer, which contains the native
+viewport, scrollbars and status area. Actual layout insets reserve the painted
+gutter plus8px content padding; the Places dock reserves12px at its bottom.
+Internal card gutters are4px; outer window edges remain8px, including the
+rightmost pane and sidebar-hidden left edge. Split panels have a12px gap with
+a native4px splitter. Its2px rounded line uses track color normally, the thumb
+color/opacity on hover, and accent during drag; native resizing remains intact.
+The user accepted the neutral line/gap and requested these interaction states.
+
+GUI wrapper launches add --new-window to avoid reusing a process with an old
+mapped helper. Explicit --new-window and FileManager1 --daemon are preserved.
+The existing KDE Dolphin shortcut component was refreshed in the live session
+after its cached service continued launching /usr/bin/dolphin; Meta+E is still
+assigned to Dolphin and the user confirmed the corrected appearance. This is
+a shared existing KDE integration, not a claim of independent Recovery.
+
+Validation: live Dolphin menu and split-panel captures; native Qt fixtures for
+menu keyboard activation, submenu/widget actions, rounded selection painting,
+scrollbar orientations/keyboard scrolling, divider states and native resizing.
+Static architecture/token/whitespace checks are recorded in CHANGELOG. NOT RUN
+all display scales, RTL, floating docks, every popup/dialog or live recovery.
+Private captures/probes remain outside the repository. Latest private backup:
+`~/.local/state/ricy-dolphin-backups/20261011-192442-284891`. Whole-file rollback
+and atomic helper installation remain; helper updates need a new process.
+Historical transport snapshots/manifests, Noctalia and KWin remain unchanged.
+
+## 2026-10-11 — Popup corner cutouts and icon inset
+
+Menus/submenus now suppress native background autofill, use a transparent
+Window palette role and a radius12 surface mask matching the existing rounded
+QSS backing. The panel fill/border remain; corner cutouts are excluded from
+the native surface. Native icons move8px inward and label left padding is20px
+(existing12px plus8px), preserving the icon/text gap rather than compressing it.
+
+PASS helper compilation/atomic application and Qt menu fixture: transparent
+corner pixels, corner-excluding mask with rounded edge retained, visible native
+icon inset, keyboard action, submenu and widget action. PASS architecture/token
+checks and diff whitespace. NOT RUN every live submenu, RTL or display scale.
+Latest private backup: `~/.local/state/ricy-dolphin-backups/20261011-192959-179609`.
+Helper surface changes need a new process; QSS is applied to existing windows.
+
+## 2026-10-11 — KDE menu proportions
+
+The user's configured KDE-Noctalia Menu/MenuItem geometry provides the reference:
+12px panel framing and4px item vertical padding. Dolphin now uses panel padding12,
+item padding4/12 and vertical margin1, replacing the taller6px-padding rows.
+The8px native icon inset remains; text padding returns to12px to match the
+reference's closer icon/text relationship. Separators are transparent4px gaps.
+The existing rounded surface, colors, native actions and corner cutouts remain.
+PASS Qt capture and menu fixture (icon inset, transparent corners, keyboard
+action and native submenu/widget action), architecture/token/whitespace checks.
+NOT RUN all live submenus, RTL or display scales. QSS updates existing windows.
+Private backup: `~/.local/state/ricy-dolphin-backups/20261011-193208-529316`.

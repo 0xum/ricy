@@ -127,3 +127,75 @@ Ricydolphinrounding effect uses KWin native radius 16 px only in Dolphin; maximi
 
 
 Current Dolphin adaptation (2026-10-11): sidebar/topbar unified in a panel in L #313244 opaque, radius12/margin8, with side buttons of uniform width, radius8, neutral #242435 and selection #cba6f7. The outer margin keeps glass #181825 Alpha178. Archives area continues #313244 opaque, separated by 8px.
+
+
+User-approved Places revision (2026-10-11): search-result rows replace the
+outlined neutral buttons. Normal rows have no fill or border; selected rows
+use accent/on-accent even without focus. Icons are16px with a6px label gap,
+semibold text and the previous row height. The opaque unified L remains
+unchanged. Current values are in the canonical Dolphin adaptation tokens.
+
+
+Dolphin refinement (2026-10-11): file rows and shared header backing use
+the native medium radius6. Top navigation has consistent8px spacing and
+8/16px toolbar padding, with a36px location bar shared by breadcrumbs and
+editable path; radius8 container and radius6 hover/editor. Native editing
+and navigation remain available. Current scoped values are in the central
+tokens; this revision awaits final user visual approval.
+
+## 2026-10-11 — Aligned breadcrumbs and path input
+
+Breadcrumbs now have a transparent container and centered28px native buttons
+inside the36px navigator. The user accepted the breadcrumb alignment. Editable
+mode alone uses surface (#181825), accent2px border and radius8. The combo has
+left/right padding12/8; its native editor has horizontal padding12 and zero
+vertical padding. The native clear button overrides inherited toolbar minimum
+dimensions and padding, keeping its icon vertically centered.
+
+PASS live Dolphin capture: folder/text inset and centered clear icon. The
+native clear button is22x18 at y7 inside the32px editor, matching their centers.
+PASS native Qt/KIO fixture:10 mode switches with editor/URL retained. PASS
+architecture verification, token validation and diff whitespace. NOT RUN all
+widths, RTL, scales or live recovery. Latest private backup:
+`~/.local/state/ricy-dolphin-backups/20261011-183250-171013`. Existing atomic
+application/whole-file rollback remains; transport kit/manifests, compositor
+and Noctalia are unchanged.
+
+## 2026-10-11 — Native menus, scrolling and contained panels
+
+KNOWN: Dolphin context menus use an opaque card/outline panel with radius12,
+padding8 and radius6 accent-selected action rows. Native popup flags, submenus,
+shortcuts and folder-color widget actions are retained; translucent window
+corners allow the rounded panel to expose the desktop.
+
+All Qt scrollbars use a6px dark neutral (#242435) track, radius3 and a minimum
+24px thumb. The thumb uses existing secondary text at50% opacity, with secondary
+hover and accent press. The user accepted the scrollbar treatment. Native drag
+selection uses radius6, hover-selection alpha65 and accent-outline alpha150,
+retaining Dolphin's rectangle/hit testing and animation opacity.
+
+The card backing belongs to DolphinViewContainer, which contains the native
+viewport, scrollbars and status area. Actual layout insets reserve the painted
+gutter plus8px content padding; the Places dock reserves12px at its bottom.
+Internal card gutters are4px; outer window edges remain8px, including the
+rightmost pane and sidebar-hidden left edge. Split panels have a12px gap with
+a native4px splitter. Its2px rounded line uses track color normally, the thumb
+color/opacity on hover, and accent during drag; native resizing remains intact.
+The user accepted the neutral line/gap and requested these interaction states.
+
+GUI wrapper launches add --new-window to avoid reusing a process with an old
+mapped helper. Explicit --new-window and FileManager1 --daemon are preserved.
+The existing KDE Dolphin shortcut component was refreshed in the live session
+after its cached service continued launching /usr/bin/dolphin; Meta+E is still
+assigned to Dolphin and the user confirmed the corrected appearance. This is
+a shared existing KDE integration, not a claim of independent Recovery.
+
+Validation: live Dolphin menu and split-panel captures; native Qt fixtures for
+menu keyboard activation, submenu/widget actions, rounded selection painting,
+scrollbar orientations/keyboard scrolling, divider states and native resizing.
+Static architecture/token/whitespace checks are recorded in CHANGELOG. NOT RUN
+all display scales, RTL, floating docks, every popup/dialog or live recovery.
+Private captures/probes remain outside the repository. Latest private backup:
+`~/.local/state/ricy-dolphin-backups/20261011-192442-284891`. Whole-file rollback
+and atomic helper installation remain; helper updates need a new process.
+Historical transport snapshots/manifests, Noctalia and KWin remain unchanged.
