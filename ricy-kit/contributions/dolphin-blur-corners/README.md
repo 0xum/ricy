@@ -1,5 +1,40 @@
 # Dolphin: transparency with Qt and KWin native corners
 
+## Identity & Motion Pass — Motion
+
+`motion.h`, used by `ui.cpp`, owns only QWidget chrome interpolation inside the
+existing Dolphin generic plugin. KWin/corners.cpp retains window ownership.
+Toolbar/navigation buttons, tabs, path-editor focus and native Places viewport
+states use short QVariantAnimation crossfades, starting from the last presented
+frame on interruption. Native QSS/style draws final content; geometry and events
+stay upstream. Native Places model/device/content changes and path text changes
+cancel immediately. No file viewport/content/loading/scroll/drag animation is
+installed. Menus and headers retain existing state painting without new motion.
+
+Native Qt SH_Widget_Animate/SH_Widget_Animation_Duration control availability and
+local duration scaling; explicit KDE AnimationDurationFactor=0 disables immediately.
+Positive KWin factors are not repurposed as widget speed. No Noctalia synchronization
+or settings writes are added. Config preference changes may require reopening
+Dolphin; live cross-app reload is UNKNOWN. A zero-delay, one-shot show capture
+primes initial native paint, and there is no permanent timer/polling. Stable
+effects are disabled, allowing normal native painting. State/connections are
+owned by controls and cleaned up with them; model replacement disconnects the
+previous bounded set of native signal connections.
+
+```bash
+python3 -B ricy-kit/contributions/dolphin-blur-corners/validate-motion.py
+QT_SCALE_FACTOR=1.5 python3 -B ricy-kit/contributions/dolphin-blur-corners/validate-motion.py
+```
+
+The isolated Qt/KIO fixture verifies actual intermediate pixels, interruption,
+exact final paint, press/release/checked/focus, native tabs/Places, no repeating
+idle paints, disable, fixed geometry and destruction during transitions. It does
+not certify the compositor or live Recovery. See the [runtime/visual/CPU comparison](../../../docs/DOLPHIN-BASELINE.md#identity--motion-pass--phase-3-motion--2026-10-11)
+and scoped `apply-motion.py` in the sibling contribution for installation/rollback.
+No canonical identity tokens, layout, filesystem providers or desktop services
+change. Historical observations below retain their original scope; the font
+hardcode and prior motion absence are superseded by the phase records.
+
 Update of the dolphin-identity-nottalia contribution. The first opaque version was rejected by the user. The current appearance uses background #181825 with alpha 178/255 (~0,70) and compositor blur. The area of archives has contour #46485c, radius 12 px and light fill #313244 (40/255), allowing the blur to remain visible. Texts/icons do not receive window opacity.
 
 Two small and independent components:

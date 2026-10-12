@@ -394,3 +394,160 @@ the optional overlay's prior absence and Phase1 helper. Existing manifest restor
 followed by reopening Dolphin returns the phase to the previous state. Source
 rollback reverts this phase's commit. Typography is independently retained.
 No service/default/theme-global reset or KWin change is needed.
+
+## Identity & Motion Pass — Phase 3: Motion — 2026-10-11
+
+**Phase result: PASS for inspected paint transitions, interruption and stable idle.**
+Started only after Iconography commit `7f9a888`. The overall run still has the
+separately recorded preexisting shutdown FAIL and live Recovery UNKNOWN.
+
+### Scope and ownership
+
+The existing Dolphin-only Qt helper owns toolbar/navigation-button hover,
+press/release/checked/focus, tab hover/active state, path-editor focus and native
+Places hover/selection/focus. `motion.h` uses QVariantAnimation with OutCubic:
+fast100ms, hover140ms, state160ms, scaled by native widget duration relative to
+normal200ms. These reuse grounding concepts without changing canonical tokens.
+Native QSS/style remains responsible for final paint. Controls retain geometry,
+hitboxes, accessible/native events and selection/action semantics. Event filters
+return false; no file model or upstream provider is replaced.
+
+Stable effects are disabled and native painting is idle. Only transitions blend
+cached transparent native frames; interruption restarts from the actual last
+presented frame. A one-shot show capture primes initial state. Native Places
+data/model/device-state updates and typed path content cancel immediately;
+bounded signal connections disconnect on model replacement and target lifetime.
+No permanent polling/repaint timer, daemon, framework or QML layer is introduced.
+The helper links KDE KConfigCore, already used by Dolphin, for preference reads.
+Menu/header motion is deferred. Files/loading/scrolling/thumbnails/drag/drop,
+filesystem operations and large file-selection populations are not animated.
+KWin retains window open/close/minimize/restore/geometry/compositor ownership.
+
+### Preference evidence
+
+- **KNOWN:** active Qt/Kvantum exposes SH_Widget_Animate=1 and
+  SH_Widget_Animation_Duration=200; active Kvantum animate_states=true supersedes
+  the historical false snapshot. Both native widget disable hints are respected.
+- **KNOWN:** KDE AnimationDurationFactor=0.25 is active. Its positive value remains
+  KWin's clock; zero is respected as explicit animation disable. Isolated native
+  zero trials show immediate final state, no running hover/tab/Places transition.
+- **KNOWN:** current Noctalia profile has no motion override; inspected pinned
+  implementation defaults enabled=true/speed=1. Those are shell preferences.
+- **UNKNOWN/MISSING:** shared cross-app reduced-motion authority and live reload
+  of cached KDE preference. Reopen Dolphin after a KDE preference change. No new
+  settings/synchronization system is added; uncertain native disable hints fall
+  back conservatively to immediate final paint.
+
+### Isolated and runtime validation
+
+- **PASS:** `validate-motion.py` at1x and process1.5x verifies intermediate pixel
+  changes, no-snap reversal,30 rapid reversals, exact final QSS colors, native
+  press/release/checked/focus, active tabs, Places delegate/selection retention,
+  immediate native content invalidation, unchanged hit geometry, native motion
+  disable and30 controls destroyed mid-transition with clean fixture shutdown.
+  A measured stable-control paint count guards against repeated idle repaint.
+- **PASS:** real Wayland Dolphin captures at1x/1.5x show short toolbar, tab and
+  Places transitions and native final state. Native Qt mouse/focus events drive
+  the checks; physical mouse/keyboard hardware coverage is NOT RUN.56 sampled
+  transition frames per trial supplement mid/reversed/settled captures. Actual
+  native state/disabled behavior is checked; parsing/build alone is not evidence.
+- **PASS:** real2000-file fixture directory, repeated hover and tabs/Places,
+  no motion effect on KItemListContainerViewport. Five consecutive one-second
+  stable samples report zero file-view/root-window paints at both scales, with
+  approximately0.0036–0.0046 process CPU seconds per one-second sample. The Phase2
+  control at1.5x also settles to zero paints. Startup/loading peaks occur before
+  stable state in both versions and are not attributed to new motion.
+- **Corrected before gate:** the first always-enabled effect caused idle root
+  repaints. Stable native bypass and conditional unchanged tab-close masks
+  eliminated that feedback. A snapshot experiment outside Qt effect paint
+  context failed the isolated fixture and was rejected; final snapshots use
+  transparent native widget rendering while disabled. It was never installed.
+- **PASS:** helper build, atomic deployment and installed/source-built equality;
+  existing QSS checks at both scales, icon/provenance/native fallback checks,
+  token identity validation and integrated offline harness.
+- **FAIL, preexisting:** graceful diagnostic window teardown still exits139.
+  Same probe/control with Phase2 helper also exits139; Typography already
+  reproduced it with the pre-pass helper. Repeated probe open/close is therefore
+  not a clean real-Dolphin lifetime PASS. Isolated new-control destruction passes.
+- **FAIL, preexisting visual:** native file rows can overlap status/header bounds
+  in the long-list capture. Phase2 control captures also exhibit this; existing
+  clipping/layout is outside this paint-only pass and is not silently repaired.
+- **UNKNOWN:** all runtime device/MTP/storage states, thumbnail formats,
+  complete RTL/accessibility coverage, cross-app motion preference synchronization,
+  all physical fractional-output/compositor combinations and independent Recovery.
+- **NOT RUN:** physical mouse/keyboard matrix, filesystem mutation operations,
+  full live failure/login/Recovery switching. Private fixture selection/read tests
+  do not certify these contracts.
+- **NOT APPLICABLE:** new architecture, content icon replacement, new type family,
+  global settings migration, KWin/window animations or further Dolphin redesign.
+
+Private probe sources, isolated configs, logs and PNG evidence remain in
+`~/.cache/ricy-dolphin-identity-motion/motion/`. `verified-1x-*`,
+`verified-1_5x-*` and `verified-disabled-*` record the final candidate; the
+`final-before-1_5x-*` Phase2 control and earlier iteration records retain failures
+instead of hiding them. No private runtime captures are committed to the kit.
+
+### Rollback and integrated outcome
+
+The initial Motion helper-only installation saved Phase2 at
+`~/.local/state/ricy-dolphin-backups/20261011-231749-708289`. Subsequent atomic
+installs preserve their own printed manifests. To remove all Motion iterations,
+restore that initial manifest with existing `apply.py --restaurar BACKUP` and
+reopen Dolphin; Typography/Iconography remain. Restore other phases in reverse
+order if needed. Source rollback reverts the Motion commit; reproduction scripts
+always build current source. No service/default/global-theme reset is required.
+The final transparent-snapshot build was installed with additional backup
+`~/.local/state/ricy-dolphin-backups/20261011-232158-039103`; installed SHA-256 is
+`dbd9a003559c1c502765eb624cc2f54c3c5e938d3f2cb1d08017c09d72475f47`.
+
+Integrated regression: system-aligned typography, optional Tabler chrome plus
+native KDE content inheritance, paint-only interruptible motion and stable idle
+are PASS within the described evidence. `scripts/verify all` with the matching
+Noctalia5.2.1 source/patch passes architecture, shell and Recovery offline with
+zero failures/unavailable checks. Static scope review preserves filesystem/
+FileManager1/MIME/default-handler/KIO/Solid/native model/Recovery contracts and
+all canonical token bytes; it does not replace unrun live contract tests. KWin
+and its window motion are untouched. Stop here; no later redesign phase begins.
+
+### Changed repository files across all three phases
+
+- `docs/CHANGELOG.md`
+- `docs/DESIGN-SYSTEM.md`
+- `docs/DOLPHIN-BASELINE.md`
+- `docs/NOCTALIA-VISUAL-GROUNDING.md`
+- `ricy-kit/contributions/dolphin-blur-corners/README.md`
+- `ricy-kit/contributions/dolphin-blur-corners/build-ui.py`
+- `ricy-kit/contributions/dolphin-blur-corners/motion.h`
+- `ricy-kit/contributions/dolphin-blur-corners/ui.cpp`
+- `ricy-kit/contributions/dolphin-blur-corners/validate-motion.cpp`
+- `ricy-kit/contributions/dolphin-blur-corners/validate-motion.py`
+- `ricy-kit/contributions/dolphin-noctalia-identity/README.md`
+- `ricy-kit/contributions/dolphin-noctalia-identity/apply-icons.py`
+- `ricy-kit/contributions/dolphin-noctalia-identity/apply-motion.py`
+- `ricy-kit/contributions/dolphin-noctalia-identity/apply-typography.py`
+- `ricy-kit/contributions/dolphin-noctalia-identity/apply.py`
+- `ricy-kit/contributions/dolphin-noctalia-identity/dolphin.qss`
+- `ricy-kit/contributions/dolphin-noctalia-identity/icons/Ricy-Dolphin/LICENSE`
+- `ricy-kit/contributions/dolphin-noctalia-identity/icons/Ricy-Dolphin/README.md`
+- `ricy-kit/contributions/dolphin-noctalia-identity/icons/Ricy-Dolphin/index.theme`
+- `ricy-kit/contributions/dolphin-noctalia-identity/icons/Ricy-Dolphin/provenance.json`
+- `ricy-kit/contributions/dolphin-noctalia-identity/icons/Ricy-Dolphin/scalable/actions/application-menu.svg`
+- `ricy-kit/contributions/dolphin-noctalia-identity/icons/Ricy-Dolphin/scalable/actions/dialog-close.svg`
+- `ricy-kit/contributions/dolphin-noctalia-identity/icons/Ricy-Dolphin/scalable/actions/document-close.svg`
+- `ricy-kit/contributions/dolphin-noctalia-identity/icons/Ricy-Dolphin/scalable/actions/edit-find.svg`
+- `ricy-kit/contributions/dolphin-noctalia-identity/icons/Ricy-Dolphin/scalable/actions/go-next.svg`
+- `ricy-kit/contributions/dolphin-noctalia-identity/icons/Ricy-Dolphin/scalable/actions/go-previous.svg`
+- `ricy-kit/contributions/dolphin-noctalia-identity/icons/Ricy-Dolphin/scalable/actions/go-up.svg`
+- `ricy-kit/contributions/dolphin-noctalia-identity/icons/Ricy-Dolphin/scalable/actions/tab-new.svg`
+- `ricy-kit/contributions/dolphin-noctalia-identity/icons/Ricy-Dolphin/scalable/actions/view-list-details.svg`
+- `ricy-kit/contributions/dolphin-noctalia-identity/icons/Ricy-Dolphin/scalable/actions/view-list-icons.svg`
+- `ricy-kit/contributions/dolphin-noctalia-identity/icons/Ricy-Dolphin/scalable/actions/view-list-tree.svg`
+- `ricy-kit/contributions/dolphin-noctalia-identity/icons/Ricy-Dolphin/scalable/actions/view-refresh.svg`
+- `ricy-kit/contributions/dolphin-noctalia-identity/icons/Ricy-Dolphin/scalable/actions/view-split-left-right.svg`
+- `ricy-kit/contributions/dolphin-noctalia-identity/validate-icons.py`
+- `themes/tokens/SEMANTICS.md`
+
+The private active Noctalia configuration, Dolphin view-font flags, installed
+QSS/helper and optional overlay are deployment state outside this tracked list.
+Canonical token JSON, window effects, provider/handler/default registrations and
+Recovery implementation have no changes in this pass.

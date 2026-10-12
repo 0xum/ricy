@@ -257,3 +257,15 @@ point size and Noctalia preserves contextual size/scale. The official
 confirms shell.font_family; the pinned implementation and active profile were
 also inspected. Captured canonical JSON values remain unchanged reference data.
 This introduces no continuous generator, synchronization service or new decision.
+
+## Authorized Dolphin chrome motion
+
+The [Motion phase](DOLPHIN-BASELINE.md#identity--motion-pass--phase-3-motion--2026-10-11)
+reuses the existing fast100ms, hover140ms, interaction-state160ms and normal200ms
+reference cadence, with OutCubic easing. These are local Qt helper constants,
+not new global tokens. Native QSS supplies final states; interpolation is limited
+to chrome and Places UI states. File models/content changes, menus/header motion
+and KWin/window geometry remain outside this adaptation. Native Qt animation
+hints and explicit KDE disable take precedence. Noctalia's independent enabled/
+speed preferences remain native to the shell; cross-app preference synchronization
+is still UNKNOWN and no settings service is introduced.

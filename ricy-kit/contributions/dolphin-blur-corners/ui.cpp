@@ -31,6 +31,7 @@
 #include <QMouseEvent>
 #include <KIconTheme>
 #include <KIconLoader>
+#include "motion.h"
 
 namespace {
 struct PlacesPaint { QString text; int iconSize; };
@@ -632,14 +633,21 @@ public:
                         if (button->pos() != position) button->move(position);
                         // A clipped tab must not leave an active close button
                         // over the scroll controls or outside the visible strip.
-                        if (available.contains(button->geometry())) button->clearMask();
-                        else button->setMask(QRegion(QRect(-1,-1,1,1)));
+                        // Setting an unchanged mask during an effect capture
+                        // invalidates its source again. Stable tabs must be idle.
+                        const QRegion wanted = available.contains(button->geometry())
+                            ? QRegion() : QRegion(QRect(-1,-1,1,1));
+                        if (button->mask() != wanted) {
+                            if (wanted.isEmpty()) button->clearMask();
+                            else button->setMask(wanted);
+                        }
                     }
                 }
             }
         }
         if(event->type() == QEvent::Polish) {
             auto *widget = qobject_cast<QWidget *>(object);
+            installChromeMotion(widget);
             // Let QSS rounded popup corners expose the desktop, not a square
             // native backing. Preserve Qt popup flags and all menu actions.
             if (auto *menu = qobject_cast<QMenu *>(widget)) {

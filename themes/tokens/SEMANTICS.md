@@ -147,8 +147,11 @@ These roles describe purpose/preferences; they do not start animations.
 Shell speed2 halves base duration; disabled animation settles at final state.
 Upstream effective preference/clamp belongs to the consumer. App adapters must
 not depend on a running Noctalia service to read identity. Native menu/launcher
-enter/exit easings remain contextual; Dolphin receives no new animations.
-Current Kvantum animate_states=false is scoped source evidence.
+enter/exit easings remain contextual. The captured Kvantum animate_states=false
+is historical source evidence, superseded for the deployed Dolphin helper by
+the authorized [Motion phase](../../docs/DOLPHIN-BASELINE.md#identity--motion-pass--phase-3-motion--2026-10-11).
+Current native widget animation hints and explicit KDE disable govern that local
+adaptation; the canonical snapshot and shell preferences are unchanged.
 
 Preserve `motion.application_icon_hover`, `motion.taskbar_window_indicator`,
 `motion.app_icon_state_actions` and fixed hit areas. `motion.kwin_window_actions`

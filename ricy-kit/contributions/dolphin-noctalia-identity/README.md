@@ -306,3 +306,22 @@ payload for reproduction. Qt/KF6IconThemes headers are required to build.
 record PASS within scope and the outstanding shutdown FAIL/Recovery UNKNOWN.
 `python3 -B ricy-kit/contributions/dolphin-noctalia-identity/validate-icons.py`
 checks scope, provenance and nonempty Qt SVG paint without installing.
+
+## Identity & Motion Pass — Motion
+
+The existing Dolphin-filtered helper adds paint-only, interruptible chrome
+transitions. QSS retains the final state, native input/model semantics and geometry
+are unchanged, and the effect is disabled during stable native painting.
+Run `python3 -B ricy-kit/contributions/dolphin-noctalia-identity/apply-motion.py`
+to build/install only this helper atomically, with a printed restorer-compatible
+backup. No QSS, font, icon, default-handler or KWin setting is written by this
+installer. All phase installers rebuild the current helper source; source phase
+rollback therefore also requires reverting the corresponding commit.
+
+Qt Widgets and existing KDE KConfigCore/IconThemes development headers/libraries
+are required; Dolphin already uses these native libraries. The helper does not
+require Noctalia to run. [Phase evidence and limits](../../../docs/DOLPHIN-BASELINE.md#identity--motion-pass--phase-3-motion--2026-10-11)
+and [implementation checks](../dolphin-blur-corners/README.md#identity--motion-pass--motion)
+record results separately from the preexisting shutdown failure and untested live
+Recovery. Reopen Dolphin after restoring a backup; existing mapped libraries
+remain valid until their process exits.

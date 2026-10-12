@@ -3,6 +3,30 @@
 Record significant changes in short entries. Minimum fields:
 Model/Agent, Date, Purpose, Validation performed. Do not sign source files.
 
+## 2026-10-11 — Dolphin Identity & Motion Pass: Motion
+
+- **Model/Agent:** Codex (GPT-6).
+- **Date:** 2026-10-11 (America/Sao_Paulo).
+- **Purpose:** add subtle paint-only chrome transitions after the validated
+  Typography and Iconography commits, preserving native behavior and Recovery.
+- **Changes:** event-driven QVariantAnimation in the existing Qt helper;
+  transparent native snapshots, interruption from presented paint, fast/hover/
+  interaction-state cadence, native Qt hints/KDE explicit disable, stable native
+  painting and safe control/model connection lifetime. Avoid redundant tab-close
+  mask invalidation. Scoped helper-only atomic installer with private rollback.
+- **Validation performed:** PASS isolated Qt/KIO intermediate pixels/reversal/
+  exact final state, geometry, input/state/disable/lifetime and idle paints at
+  1x/1.5x; real Dolphin chrome captures,2000-file read/repeated-hover comparison,
+  five stable samples with zero window/file paints at both scales, native KDE
+  disable, helper build/deployment, QSS/icon/token checks and full offline harness
+  (zero failures/skips). Early effect idle feedback and rejected snapshot failure
+  were corrected before the gate, retaining their evidence.
+- **FAIL, preexisting:** real graceful shutdown139 and long-list status/header
+  overlap reproduced with Phase2 control. UNKNOWN live Recovery, physical input/
+  fractional/RTL/accessibility matrix and cross-app motion preference reload.
+  Filesystem mutation/Recovery switching NOT RUN; further redesign NOT APPLICABLE.
+- **Evidence/rollback:** [phase and integrated record](DOLPHIN-BASELINE.md#identity--motion-pass--phase-3-motion--2026-10-11).
+
 ## 2026-10-11 — Dolphin Identity & Motion Pass: Iconography
 
 - **Model/Agent:** Codex (GPT-6).
