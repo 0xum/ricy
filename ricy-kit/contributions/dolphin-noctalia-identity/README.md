@@ -246,3 +246,18 @@ These exercise real Qt state precedence, painting and native editor/tab/menu
 signals. They do not load the helper or prove compositor masks, device behavior
 or live Plasma Recovery. Captures use the registered wrapper's normal environment;
 incomplete isolated-theme captures are not current visual references.
+
+
+## 2026-10-11 — Toolbar dropdown arrow padding
+
+Ordinary toolbar menu indicators use existing 6px glyph boxes with 4px inward/
+bottom offsets. Split buttons style the menu surface and its centered arrow
+jointly so Qt does not paint both native and custom indicators. The menu region
+uses 16px with compensating 12px right padding: the measured primary action width
+remains 76px while the menu target grows from 12px to 16px. This supersedes the
+initial inset-only rule that caused duplicate arrows and separator clipping.
+Native icons, actions and popup modes are retained. QSS is installed atomically
+with private rollback backups; available live sheets are refreshed without
+closing windows. PASS Qt preview/state checks, single-arrow visual inspection,
+primary geometry and architecture/token checks. NOT RUN full live menus, RTL,
+all scales or Recovery. No helper, KWin or launcher/default change.

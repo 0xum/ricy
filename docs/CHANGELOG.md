@@ -3,6 +3,27 @@
 Record significant changes in short entries. Minimum fields:
 Model/Agent, Date, Purpose, Validation performed. Do not sign source files.
 
+## 2026-10-11 — Dolphin toolbar menu-arrow insets
+
+- **Model/Agent:** Codex (GPT-6).
+- **Date:** 2026-10-11 (America/Sao_Paulo).
+- **Purpose:** inset toolbar dropdown indicators and resolve duplicate arrows
+  and separator clipping reported by the user after the initial QSS adjustment.
+- **Changes:** ordinary menu indicators retain a 6px box and 4px inward/bottom
+  offsets. Split buttons explicitly style both the transparent menu surface and
+  its single centered 6px glyph, preventing the native/custom double paint.
+  A 16px menu region provides edge clearance; split-button right padding grows
+  from 8px to 12px, preserving the measured primary action width while enlarging
+  the menu target. Existing approved values are reused. Native icons, actions
+  and popup modes remain; no helper, KWin, launcher/default or filesystem change.
+- **Validation performed:** PASS Qt before/after previews for three popup modes,
+  single-arrow inspection and primary-action geometry (76px retained; menu region
+  grows 12px to 16px); existing QSS/state fixture, architecture/token checks and
+  whitespace. Installed QSS equals source, with private atomic rollback backups.
+- **NOT RUN:** complete live popup interactions, all scales/RTL and live Recovery.
+  Live stylesheets are refreshed when an instance is available, without closing
+  windows. The original inset-only split-button rule is superseded by this fix.
+
 ## 2026-10-11 — Rounded Dolphin path dropdown
 
 - **Model/Agent:** Codex (GPT-6).
