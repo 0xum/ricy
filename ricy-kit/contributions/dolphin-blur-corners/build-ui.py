@@ -6,6 +6,10 @@ work=Path(os.environ.get('XDG_CACHE_HOME',Path.home()/'.cache'))/'ricy-dolphin-u
 for name in ['ui.cpp','ui.json']:shutil.copy2(base/name,work/name)
 flags=shlex.split(subprocess.check_output(['pkg-config','--cflags','Qt6Widgets'],text=True))
 libs=shlex.split(subprocess.check_output(['pkg-config','--libs','Qt6Widgets'],text=True))
+# Dolphin already uses this native KDE icon loader. The helper selects an
+# optional process-local overlay while retaining its inherited content providers.
+flags += ['-I/usr/include/KF6/KIconThemes']
+libs += ['-lKF6IconThemes']
 subprocess.run(['/usr/lib/qt6/moc',*flags,'ui.cpp','-o','ui.moc'],cwd=work,check=True)
 subprocess.run(['g++','-std=c++17','-O2','-fPIC','-shared',*flags,'ui.cpp','-o','libricydolphinui.so',*libs],cwd=work,check=True)
 print(work/'libricydolphinui.so')

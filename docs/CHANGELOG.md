@@ -3,6 +3,25 @@
 Record significant changes in short entries. Minimum fields:
 Model/Agent, Date, Purpose, Validation performed. Do not sign source files.
 
+## 2026-10-11 — Dolphin Identity & Motion Pass: Iconography
+
+- **Model/Agent:** Codex (GPT-6).
+- **Date:** 2026-10-11 (America/Sao_Paulo).
+- **Purpose:** align small Dolphin action glyphs with Noctalia's Tabler language
+  while preserving KDE content/state assets and Recovery fallback.
+- **Changes:**13 Actions-only SVGs with pinned upstream hashes/MIT attribution;
+  optional native process-local helper selection and scoped atomic installer.
+  No global icon setting, persistent Dolphin theme key, content substitution or
+  geometry change. Existing native breadcrumb/tab primitive glyphs remain.
+- **Validation performed:** PASS native paths/content inheritance, SVG paint/
+  licensing/scope checks, native modes/contrast/stable geometry at1x/1.5x, live
+  toolbar/menu/breadcrumb/tabs/overflow/search, missing-overlay Breeze fallback,
+  helper build/installed equality, QSS states and architecture/token checks.
+- **FAIL, preexisting:** shutdown139 remains; all device/thumbnail formats, full
+  RTL/accessibility/physical scales and independent live Recovery NOT RUN/UNKNOWN.
+  Rejected rc fallback and initial SVG errors were corrected before the gate.
+- **Evidence/rollback:** [phase record](DOLPHIN-BASELINE.md#identity--motion-pass--phase-2-iconography--2026-10-11).
+
 ## 2026-10-11 — Dolphin Identity & Motion Pass: Typography
 
 - **Model/Agent:** Codex (GPT-6).

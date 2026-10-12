@@ -351,3 +351,13 @@ backing. PASS architecture/token checks and whitespace. NOT RUN all scales/RTL,
 complete dropdown keyboard interactions or live Recovery. Only the helper is
 installed atomically with private restorer-compatible backups; no KWin, token,
 QSS or additional Recovery dependency. New processes load this correction.
+
+## Identity & Motion Pass — optional chrome overlay
+
+The Qt helper now selects a valid optional Ricy-Dolphin icon overlay through the
+process-local native KDE icon loader. Missing overlay leaves the system theme;
+content/device/application icons remain inherited native assets. KF6IconThemes
+headers/library supplement the existing Qt build prerequisites; Dolphin already
+requires the native library. No compositor/effect source or ABI change occurs.
+See [mapping and license](../dolphin-noctalia-identity/icons/Ricy-Dolphin/README.md)
+and [validation/rollback](../../../docs/DOLPHIN-BASELINE.md#identity--motion-pass--phase-2-iconography--2026-10-11).

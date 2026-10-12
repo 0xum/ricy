@@ -1,0 +1,14 @@
+[Icon Theme]
+Name=Ricy Dolphin
+Comment=Selected Tabler chrome glyphs for Dolphin; native KDE content inheritance
+Inherits=breeze-dark,breeze,hicolor
+Hidden=true
+FollowsColorScheme=true
+Directories=scalable/actions
+
+[scalable/actions]
+Size=22
+MinSize=12
+MaxSize=32
+Type=Scalable
+Context=Actions

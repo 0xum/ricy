@@ -287,3 +287,22 @@ See the [phase validation and rollback record](../../../docs/DOLPHIN-BASELINE.md
 Typography is PASS in its inspected scope; the preexisting shutdown FAIL and live
 Recovery UNKNOWN remain explicit. The installer prints a private backup compatible
 with `apply.py --restaurar BACKUP`; then reload Noctalia and reopen Dolphin.
+
+## Identity & Motion Pass — Iconography
+
+An optional13-glyph Actions-only XDG overlay supplies Tabler chrome identity.
+The existing Dolphin-only helper selects it in-process when valid; missing
+overlay preserves the system Breeze theme, and missing names inherit Breeze/
+hicolor. Native content/Places/device providers remain unchanged. No global
+icon setting or persistent dolphinrc theme override is written.
+
+Use `apply-icons.py` for a scoped helper/overlay installation and the printed
+private manifest for existing `apply.py --restaurar BACKUP` rollback. Reopen
+Dolphin for helper changes; the full applicator includes the same optional
+payload for reproduction. Qt/KF6IconThemes headers are required to build.
+
+[Mapping, licensing, provenance and fallback](icons/Ricy-Dolphin/README.md) and
+[phase evidence](../../../docs/DOLPHIN-BASELINE.md#identity--motion-pass--phase-2-iconography--2026-10-11)
+record PASS within scope and the outstanding shutdown FAIL/Recovery UNKNOWN.
+`python3 -B ricy-kit/contributions/dolphin-noctalia-identity/validate-icons.py`
+checks scope, provenance and nonempty Qt SVG paint without installing.

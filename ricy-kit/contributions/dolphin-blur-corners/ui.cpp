@@ -29,6 +29,8 @@
 #include <QDockWidget>
 #include <QSplitterHandle>
 #include <QMouseEvent>
+#include <KIconTheme>
+#include <KIconLoader>
 
 namespace {
 struct PlacesPaint { QString text; int iconSize; };
@@ -490,6 +492,13 @@ protected:
 class RicyDolphinUi : public QObject {
 public:
     RicyDolphinUi() : QObject(qApp) {
+        // Process-local native KDE selection. An absent/invalid optional overlay
+        // keeps the system theme; no dolphinrc/kdeglobals theme override is saved.
+        const QString overlay = QStringLiteral("Ricy-Dolphin");
+        if (KIconTheme(overlay).isValid()) {
+            KIconTheme::forceThemeForTests(overlay);
+            KIconLoader::global()->reconfigure(QCoreApplication::applicationName(), {});
+        }
         qApp->installEventFilter(this);
         QTimer::singleShot(0, this, [this] {
             if (QStyle *base = QStyleFactory::create(QStringLiteral("kvantum"))) {

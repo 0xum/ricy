@@ -328,3 +328,69 @@ environment, and reopen Dolphin. Existing windows retain their mapped helper.
 Whole-file restore may replace subsequent settings changes; restore passes in
 reverse order. Source rollback reverts this phase's commit. No service/default
 or KWin migration is required. Live failure Recovery remains UNKNOWN.
+
+## Identity & Motion Pass — Phase 2: Iconography — 2026-10-11
+
+**Phase result: PASS for the scoped chrome overlay and native content fallback.**
+Started only after the Typography commit `f7db218`. This is not a clean-shutdown
+or independent Recovery certification; Motion has not started at this gate.
+
+[Overlay mapping/provenance](../ricy-kit/contributions/dolphin-noctalia-identity/icons/Ricy-Dolphin/README.md)
+records actual native action names from the live KActionCollection, named Tabler
+resources and internal Noctalia aliases. Thirteen selected action assets come
+from pinned, MIT-licensed upstream SVGs, preserving geometry/stroke and adapting
+only KDE filenames/palette CSS. Current breadcrumbs, tab close/overflow primitives
+retain their approved geometric paint and native semantics. Places icons and
+all content/state providers remain native. No icon pack or Breeze copy is added.
+
+The existing Dolphin-filtered helper selects the optional valid overlay via
+the native process-local KIconTheme/KIconLoader API. No KDE global theme or
+dolphinrc theme override persists. The helper now directly links the already
+required KDE icon library; its headers join existing build prerequisites. The
+rejected per-app rc experiment had inadequate missing-theme fallback and was
+fully undone; malformed/black initial SVG adaptations were corrected before
+phase validation. These were implementation failures, not architectural choices.
+
+### Isolated validation
+
+- **PASS:** native loader paths at1x and process1.5x: selected actions resolve to
+  the overlay, while folder/text-plain resolve to Breeze Dark places/mimetypes,
+  drive-harddisk/drive-removable-media to native devices, and org.kde.dolphin to
+  hicolor. The overlay contains only Actions SVGs; native thumbnail/preview
+  pipelines, device/mount/MTP state and model code are unchanged. Their complete
+  runtime state/provider coverage remains UNKNOWN.
+- **PASS:** all13 SVGs parse/paint visible strokes, pinned license/provenance/hash
+  checks; native QIcon normal/disabled/checked modes and dark-surface contrast
+  at1x/1.5x. Disabled glyphs fade through the native engine. Button hit geometry
+  stays fixed across disabled/checked/hover/focus state changes.
+- **PASS:** real Dolphin toolbar, native menu actions, breadcrumb/editor, tabs/
+  overflow, hover/focus and search captures. Native tab close/overflow and
+  breadcrumb glyphs retain their original mechanisms, including RTL policy.
+  No SVG geometry is used as layout geometry.
+- **PASS:** missing-overlay trial with isolated XDG_DATA_HOME and system data dirs
+  reports breeze-dark and native actions/content paths; real startup/captures
+  have no missing replacement glyphs. Global KDE remains breeze-dark and the
+  temporary dolphinrc theme selection is absent.
+- **PASS:** helper build/atomic installed equality; architecture/token/whitespace
+  checks and existing QSS/state checks. No canonical JSON/value change.
+- **FAIL, preexisting:** capture processes still exit139 on graceful teardown;
+  Typography's before/after control already reproduced this failure.
+- **UNKNOWN / NOT RUN:** all devices/MTP/mount states, thumbnail-provider behavior
+  for all formats, physical fractional-output/RTL combinations, complete keyboard
+  accessibility and independent live Recovery.
+- **NOT APPLICABLE:** content icon substitution, global icon-theme migration,
+  shell/font/geometry/KWin/filesystem or default-handler change.
+
+Private captures/logs and native-icon mode matrices are in
+`~/.cache/ricy-dolphin-identity-motion/iconography/`: `live-1x-*`, `live-1_5x-*`,
+`actions-1x-*`, `actions-1_5x-*`, `modes-1x.png`, `modes-1_5x.png` and
+`missing-overlay-*`. Evidence is private rather than published active-kit data.
+
+### Rollback
+
+The final scoped installer printed
+`~/.local/state/ricy-dolphin-backups/20261011-215948-522634`; it captures only
+the optional overlay's prior absence and Phase1 helper. Existing manifest restore
+followed by reopening Dolphin returns the phase to the previous state. Source
+rollback reverts this phase's commit. Typography is independently retained.
+No service/default/theme-global reset or KWin change is needed.

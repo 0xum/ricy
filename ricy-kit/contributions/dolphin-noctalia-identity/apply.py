@@ -9,7 +9,8 @@ config=home/'.config/Kvantum/kvantum.kvconfig'
 desktop=home/'.local/share/applications/org.kde.dolphin.desktop'
 drop=home/'.config/systemd/user/plasma-dolphin.service.d/70-ricy-aparencia.conf'
 service=home/'.local/share/dbus-1/services/org.freedesktop.FileManager1.service'
-targets=[theme,root,wrapper,config,desktop,drop,service,home/".config/dolphinrc"]
+overlay=home/'.local/share/icons/Ricy-Dolphin'
+targets=[theme,root,wrapper,config,desktop,drop,service,home/".config/dolphinrc",overlay]
 def refresh():
  subprocess.run(['systemctl','--user','daemon-reload'],check=True)
  subprocess.run(['kbuildsycoca6','--noincremental'],check=True,stdout=subprocess.DEVNULL)
@@ -56,6 +57,7 @@ for key in list(cfg['Applications']):
 cfg['Applications'][name]='dolphin'
 with config.open('w') as f: cfg.write(f,space_around_delimiters=False)
 root.mkdir(parents=True,exist_ok=True); shutil.copy2(here/'dolphin.qss',root/'dolphin.qss')
+shutil.copytree(here/'icons/Ricy-Dolphin',overlay,dirs_exist_ok=True)
 wrapper.parent.mkdir(parents=True,exist_ok=True)
 shutil.copy2(here/'launch.py',wrapper); wrapper.chmod(0o755)
 plugin=root/'plugins/generic'; plugin.mkdir(parents=True,exist_ok=True)
