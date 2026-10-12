@@ -1,0 +1,435 @@
+{
+  "captured_at": "2026-10-12T03:39:10.172021+00:00",
+  "source_profile": "ricy-kit/contributions/noctalia-kde-integration-and-menus/work/noctalia-profile",
+  "scope": "User-authorized local repository snapshot; no runtime activation",
+  "shell": {
+    "package": "noctalia 5.2.1-1.1",
+    "active_binary": "/home/delta/.local/lib/ricy-noctalia/noctalia",
+    "active_binary_sha256": "df24834abdaa477f55cfdfee2c2e497392a34026a1e8d424f4a47a02a9229bd0"
+  },
+  "plugins": [
+    {
+      "id": "yuuto/arch-updater",
+      "version": "2.0.3",
+      "plugin_api": 9,
+      "license": "MIT",
+      "dependencies": [
+        "pacman-contrib",
+        "awk",
+        "cat",
+        "date",
+        "flatpak",
+        "grep",
+        "head",
+        "install",
+        "kill",
+        "less",
+        "pacman",
+        "paru",
+        "pkexec",
+        "rm",
+        "sed",
+        "sh",
+        "sudo",
+        "tail",
+        "tee",
+        "test",
+        "uname",
+        "wc",
+        "xdg-open",
+        "yay"
+      ]
+    },
+    {
+      "id": "riversyx/noctaproton-vpn",
+      "version": "1.0.0",
+      "plugin_api": 24,
+      "license": "GPL-3.0",
+      "dependencies": [
+        "proton-vpn-cli",
+        "nmcli",
+        "python"
+      ]
+    },
+    {
+      "id": "lucasoe/proton-pass",
+      "version": "0.1.0",
+      "plugin_api": 3,
+      "license": "MIT",
+      "dependencies": [
+        "proton-pass-cli"
+      ]
+    },
+    {
+      "id": "aabidk20/yt-music",
+      "version": "0.4.0",
+      "plugin_api": 28,
+      "license": "MIT",
+      "dependencies": [
+        "yt-dlp",
+        "mpv",
+        "mpv-mpris",
+        "jq",
+        "curl",
+        "nc"
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "declared": "awk",
+      "command": "/usr/bin/awk",
+      "package": "gawk",
+      "installed_version": "gawk 5.4.1-1.1",
+      "status": "KNOWN"
+    },
+    {
+      "declared": "cat",
+      "command": "/usr/bin/cat",
+      "package": "coreutils",
+      "installed_version": "coreutils 9.12-2.1",
+      "status": "KNOWN"
+    },
+    {
+      "declared": "curl",
+      "command": "/usr/bin/curl",
+      "package": "curl",
+      "installed_version": "curl 8.22.0-1.1",
+      "status": "KNOWN"
+    },
+    {
+      "declared": "date",
+      "command": "/usr/bin/date",
+      "package": "coreutils",
+      "installed_version": "coreutils 9.12-2.1",
+      "status": "KNOWN"
+    },
+    {
+      "declared": "flatpak",
+      "command": "/usr/bin/flatpak",
+      "package": "flatpak",
+      "installed_version": "flatpak 1:1.18.4-1.1",
+      "status": "KNOWN"
+    },
+    {
+      "declared": "grep",
+      "command": "/usr/bin/grep",
+      "package": "grep",
+      "installed_version": "grep 3.12-2.1",
+      "status": "KNOWN"
+    },
+    {
+      "declared": "head",
+      "command": "/usr/bin/head",
+      "package": "coreutils",
+      "installed_version": "coreutils 9.12-2.1",
+      "status": "KNOWN"
+    },
+    {
+      "declared": "install",
+      "command": "/usr/bin/install",
+      "package": "coreutils",
+      "installed_version": "coreutils 9.12-2.1",
+      "status": "KNOWN"
+    },
+    {
+      "declared": "jq",
+      "command": "/usr/bin/jq",
+      "package": "jq",
+      "installed_version": "jq 1.8.2-1.1",
+      "status": "KNOWN"
+    },
+    {
+      "declared": "kill",
+      "command": "/usr/bin/kill",
+      "package": "util-linux",
+      "installed_version": "util-linux 2.42.4-1.1",
+      "status": "KNOWN"
+    },
+    {
+      "declared": "less",
+      "command": "/usr/bin/less",
+      "package": "less",
+      "installed_version": "less 1:710-1.1",
+      "status": "KNOWN"
+    },
+    {
+      "declared": "mpv",
+      "command": "/usr/bin/mpv",
+      "package": "mpv",
+      "installed_version": "mpv 1:0.41.0-6.1",
+      "status": "KNOWN"
+    },
+    {
+      "declared": "mpv-mpris",
+      "command": null,
+      "package": null,
+      "installed_version": null,
+      "status": "UNKNOWN"
+    },
+    {
+      "declared": "nc",
+      "command": "/usr/bin/nc",
+      "package": "openbsd-netcat",
+      "installed_version": "openbsd-netcat 1.238_1-1.1",
+      "status": "KNOWN"
+    },
+    {
+      "declared": "nmcli",
+      "command": "/usr/bin/nmcli",
+      "package": "networkmanager",
+      "installed_version": "networkmanager 1.58.1-2",
+      "status": "KNOWN"
+    },
+    {
+      "declared": "pacman",
+      "command": "/usr/bin/pacman",
+      "package": "pacman",
+      "installed_version": "pacman 7.1.0.r9.g54d9411-4",
+      "status": "KNOWN"
+    },
+    {
+      "declared": "pacman-contrib",
+      "command": null,
+      "package": "pacman-contrib",
+      "installed_version": "pacman-contrib 1.13.1-1.2",
+      "status": "KNOWN"
+    },
+    {
+      "declared": "paru",
+      "command": null,
+      "package": null,
+      "installed_version": null,
+      "status": "UNKNOWN"
+    },
+    {
+      "declared": "pkexec",
+      "command": "/usr/bin/pkexec",
+      "package": "polkit",
+      "installed_version": "polkit 127-3.1",
+      "status": "KNOWN"
+    },
+    {
+      "declared": "proton-pass-cli",
+      "command": null,
+      "package": null,
+      "installed_version": null,
+      "status": "UNKNOWN"
+    },
+    {
+      "declared": "proton-vpn-cli",
+      "command": null,
+      "package": "proton-vpn-cli",
+      "installed_version": "proton-vpn-cli 1.0.5-1",
+      "status": "KNOWN"
+    },
+    {
+      "declared": "python",
+      "command": "/usr/bin/python",
+      "package": "python",
+      "installed_version": "python 3.14.7-2",
+      "status": "KNOWN"
+    },
+    {
+      "declared": "rm",
+      "command": "/usr/bin/rm",
+      "package": "coreutils",
+      "installed_version": "coreutils 9.12-2.1",
+      "status": "KNOWN"
+    },
+    {
+      "declared": "sed",
+      "command": "/usr/bin/sed",
+      "package": "sed",
+      "installed_version": "sed 4.10-2.1",
+      "status": "KNOWN"
+    },
+    {
+      "declared": "sh",
+      "command": "/usr/bin/sh",
+      "package": "bash",
+      "installed_version": "bash 5.3.20-2",
+      "status": "KNOWN"
+    },
+    {
+      "declared": "sudo",
+      "command": "/usr/bin/sudo",
+      "package": "sudo",
+      "installed_version": "sudo 1.9.17.p2-6.1",
+      "status": "KNOWN"
+    },
+    {
+      "declared": "tail",
+      "command": "/usr/bin/tail",
+      "package": "coreutils",
+      "installed_version": "coreutils 9.12-2.1",
+      "status": "KNOWN"
+    },
+    {
+      "declared": "tee",
+      "command": "/usr/bin/tee",
+      "package": "coreutils",
+      "installed_version": "coreutils 9.12-2.1",
+      "status": "KNOWN"
+    },
+    {
+      "declared": "test",
+      "command": "/usr/bin/test",
+      "package": "coreutils",
+      "installed_version": "coreutils 9.12-2.1",
+      "status": "KNOWN"
+    },
+    {
+      "declared": "uname",
+      "command": "/usr/bin/uname",
+      "package": "coreutils",
+      "installed_version": "coreutils 9.12-2.1",
+      "status": "KNOWN"
+    },
+    {
+      "declared": "wc",
+      "command": "/usr/bin/wc",
+      "package": "coreutils",
+      "installed_version": "coreutils 9.12-2.1",
+      "status": "KNOWN"
+    },
+    {
+      "declared": "xdg-open",
+      "command": "/usr/bin/xdg-open",
+      "package": "xdg-utils",
+      "installed_version": "xdg-utils 1.2.1-2",
+      "status": "KNOWN"
+    },
+    {
+      "declared": "yay",
+      "command": null,
+      "package": null,
+      "installed_version": null,
+      "status": "UNKNOWN"
+    },
+    {
+      "declared": "yt-dlp",
+      "command": "/usr/bin/yt-dlp",
+      "package": "yt-dlp",
+      "installed_version": "yt-dlp 2026.08.19-1",
+      "status": "KNOWN"
+    }
+  ],
+  "excluded": [
+    "state.toml",
+    "clipboard",
+    "notification_history.json",
+    "usage_counts.json",
+    "recently_used.json",
+    "plugins/data",
+    "plugin-cache",
+    "credentials and account sessions"
+  ],
+  "files": {
+    "assets/limine-splash.png": "f92f09f9729b2297cd29b37bebfc811296d8c7715489743952de4b98178502df",
+    "config/noctalia/config.toml": "042b0901876d841d33b197ac5483b1ef332badfff5272dc7debfa660784d5020",
+    "config/noctalia/palettes/KDE-Atual.json": "f1f87af08aefaab48aabd682a49756149ca53ddb8172fec3d288b1730dbc2300",
+    "packages.txt": "bc63044835ec8854cb4770f1d284ec00b6f78059f6d0f60804cd9767e360f176",
+    "state/noctalia/community-templates/vscode/.noctalia-cache.json": "38ef31d817605347a1f8d40e49fc48ee40e574049a1db841c966168a160bcc01",
+    "state/noctalia/community-templates/vscode/template.toml": "2c0a6d95e99cd00d0ba59a85772e8b2cd05d1f130494fcc504f336d10d9bc9a8",
+    "state/noctalia/community-templates/vscode/vscode.json": "fadb70ad1e6d78ea38bc8b61ea8ba6682ff36c223cc5609837bba297301e6c2f",
+    "state/noctalia/plugins/materialized/community/arch-updater/CHANGELOG.md": "8bdc8ed5c319fe64732a02bbec04180609158e76e900dff9bd93a7ed3b28d17f",
+    "state/noctalia/plugins/materialized/community/arch-updater/README.md": "1154f56def393670658085fce33946f0a7b156fe361b43d445347c77b73ce2e2",
+    "state/noctalia/plugins/materialized/community/arch-updater/launcher.luau": "827076cd20c0a3b1acf23ca3fa427daa2ec0bddbaa822689d5499274fcdecb56",
+    "state/noctalia/plugins/materialized/community/arch-updater/panel.luau": "f9520e81fe4fe73a5c1716d11b4311246d28e0b40cfcd354f34fea597421b5fd",
+    "state/noctalia/plugins/materialized/community/arch-updater/plugin.toml": "8eb3b49dca4e27f6edd33dc35afa18a8bb93dd847611164d6074e864de87878b",
+    "state/noctalia/plugins/materialized/community/arch-updater/polkit/49-arch-updater-pacman.rules": "4f04e8fb01fb0ffc4971545cb85df67ad4276d85cb91c99526c15a7ca42dd6c7",
+    "state/noctalia/plugins/materialized/community/arch-updater/service.luau": "02f3187afa662cb65c73a8c6820751d3d24ad643c4059e082ca99da05128ad0f",
+    "state/noctalia/plugins/materialized/community/arch-updater/thumbnail.webp": "e90e2169276f164a35d7d8b595fa0f53bb57750c3011c402334ed6fa15633d45",
+    "state/noctalia/plugins/materialized/community/arch-updater/translations/de.json": "7e4226c63410545c0ad1609258d6e97510748e933dc79568c7ab63c292942a33",
+    "state/noctalia/plugins/materialized/community/arch-updater/translations/en.json": "cafe6c9028831f365ded19900522200d774dc20e658bf7631eee5393933a785f",
+    "state/noctalia/plugins/materialized/community/arch-updater/translations/fr.json": "e0e2b72eab3a66cdc5a08dc7b11a1fb265b361ff01f6a30f2f1bf4c866ce26ff",
+    "state/noctalia/plugins/materialized/community/arch-updater/translations/pt-BR.json": "7408f8fc7f14d5da27f8e8d4b1776c5c662a296988615b8ae5c8b261522f9534",
+    "state/noctalia/plugins/materialized/community/arch-updater/translations/tr.json": "e65ebe64709adefaa300d02a8a7cd5b06b66e531fc7bcce463db67d4c3065700",
+    "state/noctalia/plugins/materialized/community/arch-updater/widget.luau": "fe800ec95789fbfa940c4992652d1a6cb92bf2944adc07fd78bdb61c334417f9",
+    "state/noctalia/plugins/materialized/community/noctaproton-vpn/.gitignore": "a94b8d125040a91f0b57b2c9f783fcf6790c3f4cdeb403cf23b5c2f803f6ebc6",
+    "state/noctalia/plugins/materialized/community/noctaproton-vpn/LICENSE": "ac738669a225e85c6a464f56c97645c5ddc292fb6a127f843fa06f3a7fb353b6",
+    "state/noctalia/plugins/materialized/community/noctaproton-vpn/README.md": "c30bff536fe16b9ffa87500751b579a6c282d5fd42d2194f848206cf6d280fa9",
+    "state/noctalia/plugins/materialized/community/noctaproton-vpn/apps.py": "af244499c6fd93805329e23f0ef3fd1100d7d393cb8283d747a5011a682ed5f8",
+    "state/noctalia/plugins/materialized/community/noctaproton-vpn/assets/proton.svg": "c127c9c42169dee0eac9ad16c80df15e9552b970f6e9b6b20ab01902c036defd",
+    "state/noctalia/plugins/materialized/community/noctaproton-vpn/bar.luau": "facdf6fc3757e04ab256af24e804ad96de60ddb1a69dcfe6d8cc24f82c6d1bfb",
+    "state/noctalia/plugins/materialized/community/noctaproton-vpn/panel.luau": "dd4f1bf2cc278ce6ea5a406a26452e37eec28e30a3f82439bf87e458a2edfbc1",
+    "state/noctalia/plugins/materialized/community/noctaproton-vpn/plugin.toml": "216629dbe68e258f5fe455c6665f138dc684344a7fb1e794d075203535efc778",
+    "state/noctalia/plugins/materialized/community/noctaproton-vpn/port.py": "d70ea72529bc7ea4f311b210beba40ae0d03957f5624950aebc6a02610285db7",
+    "state/noctalia/plugins/materialized/community/noctaproton-vpn/servers.py": "b731c1de9e903b32ab9ee532f66c4a2d5e4e80d6e480dd25dd3b6f75b318a4e5",
+    "state/noctalia/plugins/materialized/community/noctaproton-vpn/service.luau": "c4f4439ce92106dbac9c812bfe807f99fc2e2b94d9e7b8202e0c7eb521f628b2",
+    "state/noctalia/plugins/materialized/community/noctaproton-vpn/shortcut.luau": "c87dfe87b5c04cd3d71cb45c43e89d081b74f601463b06f2cd5c7bcb4b0ae171",
+    "state/noctalia/plugins/materialized/community/noctaproton-vpn/signin.sh": "f0736ee3123e4105a4174cbf749f11c104e038c6ecaccb1d8947032dd53ebc52",
+    "state/noctalia/plugins/materialized/community/noctaproton-vpn/thumbnail.webp": "fd1100560cb78cbec2916d29301932dae66e5a0db567a3cccaa27cb6a2234827",
+    "state/noctalia/plugins/materialized/community/noctaproton-vpn/translations/en.json": "6fb0a83cfa101f696b7766771f07f2e94dcde4c9c4a5d98c65e35abeaff24185",
+    "state/noctalia/plugins/materialized/community/proton-pass/README.md": "0a229c52da49469f936bbecf635f44ad77ecd51fa2f793367df56c307ed10f8e",
+    "state/noctalia/plugins/materialized/community/proton-pass/launcher.luau": "a72e48c955bdbac4416097f8190be6126808056545ffe88233f851aac8412a7a",
+    "state/noctalia/plugins/materialized/community/proton-pass/plugin.toml": "6b371777f0d1ab15b20e2c02da869a50b8dea0ac348bc4e8b8df1b2c632309cd",
+    "state/noctalia/plugins/materialized/community/proton-pass/thumbnail.webp": "4c309357b44e287150b2ecfa1f9e9e715223af579f0aa4ef5221975234860ee9",
+    "state/noctalia/plugins/materialized/community/proton-pass/translations/de.json": "f70914108f2318991914f6100198a53d11b80b99f51816bcc3ae090b73adf360",
+    "state/noctalia/plugins/materialized/community/proton-pass/translations/en.json": "19bd592f7c143a7b49d2d4b8399c9b777477f38d7928825e2933aa80d045ba46",
+    "state/noctalia/plugins/materialized/community/yt-music/CHANGELOG.md": "384fb3e90de6e05cc2a7bea48009d64bd6f9d670fdc83d082f1f8538b18a72ba",
+    "state/noctalia/plugins/materialized/community/yt-music/README.md": "e03524c63f3c3b647c6a2eb65577cb27dd2030235b33426154cc8c57bc4a8d91",
+    "state/noctalia/plugins/materialized/community/yt-music/api/browse.luau": "6599424c73e67b4d9a3ea07d6f0d7e8a38d63c604538e8ae2a448fe884fa9d60",
+    "state/noctalia/plugins/materialized/community/yt-music/api/cache.luau": "284911abfac7cb89f1af17553d97e030bd5fd3bb3943d328c24f47dfa4fdfde6",
+    "state/noctalia/plugins/materialized/community/yt-music/api/constants.luau": "02f11d629fb3fb625a209e3ebb3354805bdd6566928a6d200ba0140610660f5c",
+    "state/noctalia/plugins/materialized/community/yt-music/api/innerTube.luau": "993e4a1884fb488d1a2059f3d218ec23fa5691fa5c0bc3806595d78da5194940",
+    "state/noctalia/plugins/materialized/community/yt-music/api/likes.luau": "5360a0338b4c176df5e1e0fef0faa303ff1f0b70f91b0334a55cd3ed4069b049",
+    "state/noctalia/plugins/materialized/community/yt-music/api/resolve.luau": "d7ad359d24803a82cfd27e19632021b29ceba0cb6b70c7623570ab698bf34024",
+    "state/noctalia/plugins/materialized/community/yt-music/api/search.luau": "3f0a0778e90c281b01cf06f323dce446d93a739000bc6338c90ee1fc2377ddb2",
+    "state/noctalia/plugins/materialized/community/yt-music/api/stats.luau": "d4e86db31fd96384ccce63539a791c88ae14866e8b08b8ef1e7a83c5083d4a43",
+    "state/noctalia/plugins/materialized/community/yt-music/api/thumbnails.luau": "bf7cd26672559f7c5fdb3a3c4569556ae03c1c59f25ea91ca72f31f35b3c2c62",
+    "state/noctalia/plugins/materialized/community/yt-music/api.luau": "56041387b64713ef0ff53e0c11b65957c81af1276127d4422aa74c4b83371680",
+    "state/noctalia/plugins/materialized/community/yt-music/mini.luau": "a3313e39df670e94af62d99020b9d16f7c1abbb33938c6b4ae14a63df97e6103",
+    "state/noctalia/plugins/materialized/community/yt-music/modules/auth.luau": "8e2f2ef117905a26e27e1202625170bf2f589589aa5a4e7400628d9dd5eab3af",
+    "state/noctalia/plugins/materialized/community/yt-music/modules/cacheops.luau": "973d9bd7c39e9c501ff998338f879e0576e84221bee43b9e3e6eb456ab158f95",
+    "state/noctalia/plugins/materialized/community/yt-music/modules/downloader.luau": "6f066762949546c9fc0f770ad430527ff52a69e0d827fe7ccdab69f8abc9b14c",
+    "state/noctalia/plugins/materialized/community/yt-music/modules/home.luau": "141de2dbb5543b119d9ddc5d09f448eee8adddbaf096358c6ae1f0ad4a7981fd",
+    "state/noctalia/plugins/materialized/community/yt-music/modules/library.luau": "897a741adca121dcc69cb91a82ac87f69e867eba5b8a4f62912620dcb504f39b",
+    "state/noctalia/plugins/materialized/community/yt-music/modules/mpv.luau": "80d583b4bb5e46f4de4a95490369b92ece9d2f50be7a52971251b8bded49b95e",
+    "state/noctalia/plugins/materialized/community/yt-music/modules/player.luau": "6c0aba09e578b49744ab8110c3e802a5c25a1d4315bb0ea08752c3ebc616484b",
+    "state/noctalia/plugins/materialized/community/yt-music/modules/playlist.luau": "59ee8128e7aca127bf6d3ead19f18fb1f221075ccf484d940b30fe51d13c27ea",
+    "state/noctalia/plugins/materialized/community/yt-music/modules/search.luau": "b26c405baa7d666484dee9b7f75a35320609dfd479614636c8f9e5ab2a4407c1",
+    "state/noctalia/plugins/materialized/community/yt-music/modules/store.luau": "ea496e4c3d74ac6fbd6fe418a509c8ed7e24cdb4c4cb5c7cb74219a7e51dc965",
+    "state/noctalia/plugins/materialized/community/yt-music/panel.luau": "294b5eff83abdb37bae59b2b514e2d9ba4a9f1ed14775da1e12de60452803690",
+    "state/noctalia/plugins/materialized/community/yt-music/plugin.toml": "da18610435885552fab74b9a68c1b4592c20aff224e5a5672a2f6916a9296eea",
+    "state/noctalia/plugins/materialized/community/yt-music/scripts/cookies.sh": "4332e36b976013090ab62c069a039a38f19b537715d0a91671c9584a045f1d1b",
+    "state/noctalia/plugins/materialized/community/yt-music/scripts/health.sh": "ec2413ba3887d6f435abe5f3bad0e68854bba26b110a9495da3c898c6c005282",
+    "state/noctalia/plugins/materialized/community/yt-music/scripts/mpv.sh": "24e64311ca996a04a583238c7adb3274d0d8e32b38e1e95df39e3dbbd5daaa3e",
+    "state/noctalia/plugins/materialized/community/yt-music/service.luau": "e605d192ac6ec1f36bb0eda5a103390d9519e4f2166d0624c04cdf7768f16092",
+    "state/noctalia/plugins/materialized/community/yt-music/thumbnail.webp": "aad885117cd17d5da7c0f6d9f30a0b631243187fe697e5f2924f2d662111f58c",
+    "state/noctalia/plugins/materialized/community/yt-music/translations/ca.json": "d85d44cc66a89333a704208ca037908a8572044ab730b24fc1bbaef3ef0c7954",
+    "state/noctalia/plugins/materialized/community/yt-music/translations/en.json": "4f136bb340a5d7f7a8b2ac09d232a2c1bd54a4d6d365856407a3b362df3ced61",
+    "state/noctalia/plugins/materialized/community/yt-music/translations/es.json": "7b7d2528e99e6c4624a436873f594d2f1a51da0fc7f0917933e9631585149406",
+    "state/noctalia/plugins/materialized/community/yt-music/utils/bash.luau": "09a6f3074e8a6b9eead503d93258ab13f825f9955085df70b98098706b1d5313",
+    "state/noctalia/plugins/materialized/community/yt-music/utils/browsers.luau": "cac37adce409ee8b363e5b635f15191692b24e956dba8be3300a533562185140",
+    "state/noctalia/plugins/materialized/community/yt-music/utils/filters.luau": "4e2e7b07016536f93e8dd7aa95a1bf34573684c584e9446c49b6f960eb9b22db",
+    "state/noctalia/plugins/materialized/community/yt-music/utils/helpers.luau": "721e0f65e0a96618d16a42f981942b5b7f7a3261093dcc8bdfde64a5e7d6d495",
+    "state/noctalia/plugins/materialized/community/yt-music/utils/log.luau": "e9f4df55784b623b5ff05c7df05122258d8071b9db6f06d8f3206e5e4f9ebfc1",
+    "state/noctalia/plugins/materialized/community/yt-music/utils/network.luau": "388a4d61ce70b74b34cd563cfad19a3938f15e8b2efbd8f0f50f246eaa005a63",
+    "state/noctalia/plugins/materialized/community/yt-music/utils/queueorder.luau": "749db0c1421265d8aee89a9cf5153df8ab1bebf7a6b759f9496c2991e8390800",
+    "state/noctalia/plugins/materialized/community/yt-music/utils/schema.luau": "95cd46bbb7773bb180a3be6b9555d0b0b8cbebd0f2548b64303044b904999c69",
+    "state/noctalia/plugins/materialized/community/yt-music/utils/scratch.luau": "199118aaf11656193c0653dbfeabfdeab2d7ba63847b3b7c92dbfef801b8b5bc",
+    "state/noctalia/plugins/materialized/community/yt-music/utils/sha1.luau": "990e9e36e65f86f583926f85e5d6995aa61adb663ab287a1102c7a9fb07275e7",
+    "state/noctalia/plugins/materialized/community/yt-music/utils/theme.luau": "fc0f4c4e4b462196a11077843765b0f65eefd6dfd76b23dbfbd23ae8dff18d9a",
+    "state/noctalia/plugins/materialized/community/yt-music/utils/types.luau": "fd3b67fbc9614341ffcce0a6e3d99cc4c2854fbe13549baec7818ae09b1f9447",
+    "state/noctalia/plugins/materialized/community/yt-music/views/actions.luau": "173b36338fc74533a72557c60ae382b3cf7fa11b731850659fe6de67ffd98b82",
+    "state/noctalia/plugins/materialized/community/yt-music/views/common.luau": "43887c1e026177f522cf367ef1d6150db437604c74808fb2c4ebf3545675664e",
+    "state/noctalia/plugins/materialized/community/yt-music/views/components/artist.luau": "94ae9850a46d4eb557c0aba61ddf0a8bda562bf7c202b86dae39c32b256cb7a6",
+    "state/noctalia/plugins/materialized/community/yt-music/views/components/auth.luau": "4739a8972718dd4bcdc09a189e7641150386aacdd8b0635869b8e91a42b11420",
+    "state/noctalia/plugins/materialized/community/yt-music/views/components/discover.luau": "48adcb32f885d636cefa8b3ebedcfb2e92b67062ac9c6c1be2bfbac11b8c74c8",
+    "state/noctalia/plugins/materialized/community/yt-music/views/components/home.luau": "5452872bbc6ec8b814cbe0a61bf4acb3162fbc31e3e7004332e7f214816dfc1f",
+    "state/noctalia/plugins/materialized/community/yt-music/views/components/library.luau": "01f5259cd28f959cd342cd34864eb162fe0c1f1eff5e5bb2de3bf98deca115ff",
+    "state/noctalia/plugins/materialized/community/yt-music/views/components/offline.luau": "c641e5ab2fe70cf11c189d3c16a0e59c681568a85922deef8061f6aa36b9a8ef",
+    "state/noctalia/plugins/materialized/community/yt-music/views/components/playerbar.luau": "c2384784f1569d5cf65fcd7e327dfa514636e57297b904f5b1233c8860965916",
+    "state/noctalia/plugins/materialized/community/yt-music/views/components/playlist.luau": "ab9b9d5aabd1bca181fb210f12e7809a2266e715fe81418fceb50b57a1d62b69",
+    "state/noctalia/plugins/materialized/community/yt-music/views/components/queue.luau": "35545f4890b6d53c7b679c2af0c3b99c23796d43a203915352ab90e5e1175338",
+    "state/noctalia/plugins/materialized/community/yt-music/views/components/settings.luau": "ec6dcf11f90ce12e9950060bc5e6fa4789403ed90b34ce5e532639ace35adcbb",
+    "state/noctalia/plugins/materialized/community/yt-music/views/components/sidebar.luau": "e25facbb5c6df405b375c8c67791f2738090731688b9c6c0afc4b04903ee363c",
+    "state/noctalia/plugins/materialized/community/yt-music/views/rerender.luau": "93be19687cf04f82a32e40f76b68d12a57f0e03ff6d12f2fff8daa11ddda11b9",
+    "state/noctalia/plugins/materialized/community/yt-music/views/state.luau": "de2f088c57d4e0104d2ab39b278514b2e18a955122fa045753ac9cdcb1319687",
+    "state/noctalia/plugins/materialized/community/yt-music/widget.luau": "ec79bb8e98215d76d6211046d33022507354305b2fcd5a03259533fe33f702bd",
+    "state/noctalia/settings.toml": "515b9b872276a8c53c8e1dc20bf1cde994d17f2992c0e799e7a3095ec67c4d76"
+  },
+  "settings_captured_at": "2026-10-12T03:40:20.779252+00:00"
+}

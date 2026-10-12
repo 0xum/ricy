@@ -92,3 +92,11 @@ Preparation/application/restoration scripts have been adapted to the destination
 Catppuccin MIT theme included in `outputs/kde-outlines/KDE-Noctalia/LICENSE`. Checkout consulted: catppuccin/kvantum 71105d224fef95d023691303477ce3eea487457. Consulted code of tsujan/Kvantum 110aff8b97a221531ef55acc4faeacfd719cdfea and plasma/plasma-integration 46eddde9d38cf907786e567ddd4a942140bb1f797: are research reviews, not proof that they correspond exactly to the package installed. Theme ready files are sufficient to install; it is not necessary to compile or download these checkouts.
 
 Origins: https://github.com/catppuccin/kvantum ; https://github.com/tsujan/Kvantum ; https://invent.kde.org/plasma/plasma-integration ; https://github.com/noctalia-dev/noctalia .
+
+## User-requested current configuration backup
+
+The [2026-10-12 snapshot](snapshots/2026-10-12/README.md) records the active base
+configuration, saved overrides, four installed plugins, selected community
+template, wallpaper asset and installed dependency inventory. It is an opt-in
+local backup, with private histories and credentials excluded; it does not
+replace maintained integration sources or activate the captured preferences.

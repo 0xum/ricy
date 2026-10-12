@@ -3,6 +3,24 @@
 Record significant changes in short entries. Minimum fields:
 Model/Agent, Date, Purpose, Validation performed. Do not sign source files.
 
+## 2026-10-12 — User-requested Noctalia configuration snapshot
+
+- **Model/Agent:** Codex (GPT-6).
+- **Date:** 2026-10-12 (America/Sao_Paulo).
+- **Purpose:** preserve current Noctalia preferences, installed plugins and
+  dependency versions in the local repository at the user's explicit request.
+- **Changes:** opt-in [snapshot](../ricy-kit/contributions/noctalia-kde-integration-and-menus/snapshots/2026-10-12/README.md)
+  of base config/palette, UI overrides, four plugin payloads, VS Code template,
+  wallpaper and dependency inventory/checksums. Existing private histories,
+  credentials, runtime data and recovery backups remain excluded and untouched.
+  No runtime migration, installation, restart or canonical token change.
+- **Validation performed:** PASS architecture, payload SHA-256 checks, TOML/JSON
+  parsing, current configuration equality, enabled-plugin coverage and whitespace.
+  PASS available shell syntax checks; NOT RUN shell action checks because the
+  default source cache differs from the pinned cumulative patch. UNKNOWN local
+  resolution for mpv-mpris, proton-pass-cli, paru and yay. Live restoration,
+  Recovery round trip and redistribution review NOT RUN.
+
 ## 2026-10-11 — Dolphin motion color regression correction
 
 - **Model/Agent:** Codex (GPT-6).
