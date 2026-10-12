@@ -75,8 +75,8 @@ drop.write_text(f'[Service]\nExecStart=\nExecStart="{wrapper}" --daemon\n')
 service.parent.mkdir(parents=True,exist_ok=True)
 service.write_text(f'[D-BUS Service]\nName=org.freedesktop.FileManager1\nExec="{wrapper}" --daemon\nSystemdService=plasma-dolphin.service\n')
 for group in ['IconsMode','CompactMode','DetailsMode']:
- subprocess.run(['kwriteconfig6','--file','dolphinrc','--group',group,'--key','UseSystemFont','false'],check=True)
- subprocess.run(['kwriteconfig6','--file','dolphinrc','--group',group,'--key','ViewFont','Noto Sans,10,-1,5,50,0,0,0,0,0'],check=True)
+ subprocess.run(['kwriteconfig6','--file','dolphinrc','--group',group,'--key','UseSystemFont','true'],check=True)
+ # Preserve dormant personal ViewFont values; UseSystemFont selects KDE/Qt.
 for group,key,value in [('General','ShowSelectionToggle','false'),
                         ('General','BrowseThroughArchives','true'),
                         ('DetailsMode','ExpandableFolders','true'),

@@ -109,3 +109,13 @@ The [READY FOR DOLPHIN POLISH list](NOCTALIA-VISUAL-GROUNDING.md#ready-for-dolph
 contains existing references for a subsequent approved task. No polish starts
 in this grounding. No canonical token, active theme/profile, compositor or
 Recovery runtime setting changes; no new Recovery dependency is introduced.
+
+## Active system typography — Identity & Motion Pass
+
+For the authorized Dolphin/Noctalia typography synchronization, use the active
+KDE/Qt application font as the family authority. Dolphin inherits its point size;
+Noctalia uses that family through official shell.font_family while preserving
+contextual logical-pixel sizes and font_scale. Captured Noto Sans references in
+canonical JSON/identity boards remain historical reference values, not commands
+to override the user's system choice. Terminal/code/monospace roles remain
+separate. See [the current evidence](DOLPHIN-BASELINE.md#identity--motion-pass--phase-1-typography--2026-10-11).

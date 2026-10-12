@@ -1,5 +1,5 @@
 /* Ricy: scoped to the Dolphin process; values follow the existing token contract. */
-QWidget { font-family: "Noto Sans"; font-size: 10pt; }
+/* Inherit the active KDE/Qt application font, including its point size. */
 QToolButton { border: 1px solid transparent; border-radius: 8px; padding: 4px; color: #cdd6f4; }
 QToolButton:hover { background-color: #313244; border-color: #46485c; }
 QToolButton:pressed, QToolButton:checked { background-color: #977dba; color: #000000; border-color: #977dba; }

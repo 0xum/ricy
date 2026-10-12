@@ -185,3 +185,13 @@ semibold token. Deployed font fallback coverage is UNKNOWN.
 
 No painting, motion, icon recoloring or contrast certification follows merely
 from assigning these documentary roles.
+
+## Authorized application typography synchronization
+
+The [Typography phase](../../docs/DOLPHIN-BASELINE.md#identity--motion-pass--phase-1-typography--2026-10-11)
+supersedes the deployed Noto Sans QSS/view override described above.
+`application_adaptations.dolphin.font` and captured family fields retain their
+original values as reference evidence. Current type.application_body inherits
+the active KDE/Qt font; the shell shares its family through official configuration
+and keeps native contextual sizes/scales. No token values, names or contract
+versions change. Do not overwrite the active system choice from the snapshot.

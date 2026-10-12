@@ -683,7 +683,6 @@ public:
             if(item && item->inherits("KItemListWidget") && !item->graphicsEffect())
                 item->setGraphicsEffect(new RowChip(item));
             if(item && item->inherits("KItemListHeaderWidget") && !item->graphicsEffect()) {
-                item->setFont(QFont(QStringLiteral("Noto Sans"), 10));
                 item->setGraphicsEffect(new HeaderChip);
             }
         }

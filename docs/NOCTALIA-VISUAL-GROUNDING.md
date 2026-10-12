@@ -246,3 +246,14 @@ KWin remain unchanged. Selected repository/runtime file fingerprints were
 compared locally; that does not continuously monitor every private state file.
 Visual/live Recovery tests are NOT RUN: no visual/runtime change. App propagation
 remains UNKNOWN; generator migration/execution is NOT APPLICABLE to this scope.
+
+## Typography pass supersession
+
+The [validated Phase1 record](DOLPHIN-BASELINE.md#identity--motion-pass--phase-1-typography--2026-10-11)
+supersedes this grounding's captured Noto Sans QSS/view-family difference.
+Active KDE/Qt application font supplies the shared family; Dolphin inherits its
+point size and Noctalia preserves contextual size/scale. The official
+[Shell configuration](https://docs.noctalia.dev/noctalia/configuration/shell/)
+confirms shell.font_family; the pinned implementation and active profile were
+also inspected. Captured canonical JSON values remain unchanged reference data.
+This introduces no continuous generator, synchronization service or new decision.

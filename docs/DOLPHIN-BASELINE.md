@@ -242,3 +242,89 @@ The backup manifest contains only these two targets, so it does not replace the
 launcher, services, helper or theme. Preserve later user edits before restoring
 whole files. Private captures, logs, fixtures and backup paths stay outside the
 public kit. First pass ends here; no second phase starts automatically.
+
+## Identity & Motion Pass — Phase 1: Typography — 2026-10-11
+
+**Phase result: PASS for font inheritance and the inspected typography surfaces.**
+This supersedes the captured Noto Sans application override above. It is not a
+clean-shutdown or independent Recovery certification. Later phases have not
+started at this gate.
+
+### Scope, authority and implementation
+
+- **KNOWN:** active `kdeglobals/General/font`, menuFont and toolBarFont all select
+  JetBrainsMono Nerd Font 10pt. A new QApplication on the installed KDE Wayland
+  platform returns that application font; QFontInfo resolves the same installed
+  family. This existing system choice is the application authority. No new font
+  was selected; fixed/terminal/code fonts and global KDE settings were not edited.
+- **KNOWN:** QSS no longer sets family/size; the helper's KItemListHeaderWidget
+  override is removed. Native IconsMode, CompactMode and DetailsMode select
+  UseSystemFont=true. Dormant personal ViewFont values remain stored but inactive.
+  Places retains inherited-family DemiBold emphasis and its original delegate.
+- **KNOWN:** the running Noctalia process's NOCTALIA_CONFIG_HOME identifies its
+  private profile. Its existing official shell.font_family now matches Qt. The
+  bar has no family override; font_scale=0.85, contextual sizes, settings and all
+  unrelated TOML values are preserved. Official config validation/reload succeeds;
+  bar, launcher and control-center captures show the new family.
+- **INFERRED:** other Ricy applications using native KDE/Qt font inheritance will
+  share the same system choice. No continuous cross-toolkit synchronizer exists.
+- **UNKNOWN:** every script/glyph fallback and unrelated application, every monitor
+  combination, and independent live Plasma Recovery. Shell was inspected at the
+  current 1x outputs; its behavior on a physical 1.5x output remains NOT RUN.
+
+[apply-typography.py](../ricy-kit/contributions/dolphin-noctalia-identity/apply-typography.py)
+performs an explicit one-shot sync and atomic helper/QSS installation with the
+existing restorer manifest. PyQt6 and the existing Qt helper build prerequisites
+are installation-time dependencies; neither becomes a new Dolphin runtime
+service. The full identity applicator now also enables native system-font use.
+
+Canonical JSON typography/application_adaptations.dolphin.font values remain
+unchanged captured references. They no longer describe the deployed application
+override; replaying Noto Sans from those snapshots would undo this authorized
+synchronization. Qt's active font is authoritative for family/point size; shell
+contextual logical-pixel sizes and scales remain local. No token/schema migration
+is part of this change.
+
+### Isolated validation and evidence
+
+- **PASS:** existing helper build in a separate cache; installed QSS/source and
+  installed/helper output equality. Protected launcher/MIME/FileManager1, native
+  models/KIO/Solid, Kvantum composition, KWin and canonical token values unchanged.
+- **PASS:** real Dolphin startup through the installed wrapper, all three native
+  view modes, toolbar, breadcrumbs/editor/clear control, tabs, Places, native menu
+  and status at 1x and process scale1.5. A private diagnostic plugin uses the
+  native KActionCollection for mode/tab/editor actions in isolated configuration.
+  Actual widget/graphics fonts resolve JetBrainsMono Nerd Font 10pt; Places
+  weight600, native metrics17px, navigator36px, header25px and rows21px.
+- **PASS:** visual inspection of normal/narrow layouts, native long-name elision,
+  alignment and text containment. The wider system family increases native
+  breadcrumb/device-label elision; no hit area or geometry was replaced. Native
+  small-status summary elision occurs with both old and new helpers/fonts and
+  remains the preexisting baseline gap. No status sizing redesign was attempted.
+- **PASS:** official Noctalia config validation/reload, live bar/launcher/control
+  surfaces at current output scale. Contextual hierarchy and scales preserved.
+- **PASS:** validate-polish.py at1x/1.5x; architecture verification, token validator
+  and whitespace checks. QSS fixtures prove state/native signals, not live Recovery.
+- **FAIL, preexisting:** graceful process shutdown exits139 with the backed-up
+  pre-change helper/QSS and with this change. The same private probe completes
+  captures before shutdown in both trials. This is not attributed to Typography.
+- **NOT RUN:** transfer/mount/Trash operations, live Recovery round trip, physical
+  fractional-output combinations, all RTL/glyph cases and complete accessibility.
+- **NOT APPLICABLE:** new architectural decision, new font selection, global font
+  or icon-theme change, compositor/window animation or filesystem implementation.
+
+Private before/after captures, logs, fixtures and isolated config are in
+`~/.cache/ricy-dolphin-identity-motion/typography/`; they are not publication
+artifacts. `live-1x-{icons,compact,details,tabs,menu,editor,narrow}.png` and the
+corresponding `live-1_5x-*` captures record Qt surfaces; `before-*` supplies the
+pre-change comparison, and `noctalia-*` supplies shell observations.
+
+### Rollback
+
+Private restorer-compatible backup:
+`~/.local/state/ricy-dolphin-backups/20261011-214727-270924`. Restore with the
+existing `apply.py --restaurar BACKUP`, reload Noctalia in its active profile
+environment, and reopen Dolphin. Existing windows retain their mapped helper.
+Whole-file restore may replace subsequent settings changes; restore passes in
+reverse order. Source rollback reverts this phase's commit. No service/default
+or KWin migration is required. Live failure Recovery remains UNKNOWN.

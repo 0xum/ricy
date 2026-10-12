@@ -1,6 +1,6 @@
 # Dolphin with identity Noctalia
 
-Kvantum's exclusive Ricy-Dolphin variant, derived from KDE-Noctalia/Catppuccin MIT installed. Background #181825, text #cdd6f4, secondary #a6adc8, contour #46485c, control cards #313244 and featured #977dba/#cba6f7. 10 pt in the interface and in the three file modes. Controls of the bar, fields and tabs have corners of 8 px. Menus preserve the existing KDE-Noctalia compact variant. Breeze Dark Icons and preserved archive operations.
+Kvantum's exclusive Ricy-Dolphin variant, derived from KDE-Noctalia/Catppuccin MIT installed. Background #181825, text #cdd6f4, secondary #a6adc8, contour #46485c, control cards #313244 and featured #977dba/#cba6f7. The interface and all three file modes inherit the active KDE/Qt application font. Controls of the bar, fields and tabs have corners of 8 px. Menus preserve the existing KDE-Noctalia compact variant. Breeze Dark Icons and preserved archive operations.
 
 The theme is assigned only to dolphin in Kvantum/Applications. Launcher ricy-dolphin injects Qt sheet and transparency helper. Desktop, FileManager1 service and drop-in plasma-dolphin.service use the launcher. The current version requires sister contribution dolphin-blur-corners, which contains the Qt compiler. Background 0,70 with blur, area of translucent, rounded archives of 12 px and native external corners of 16 px by the optional KWin effect. The side uses chip involving icon + name; lines, hover, selection/focus and file header use rounded capsules, keeping the drawings and native events. Read your README for compilation, evidence, version update, and reverse corners.
 
@@ -8,7 +8,7 @@ Global KDE source, archive operations, MIME and Noctalia preserved. Breeze maint
 
 ## Reproduce
 
-Prerequisites: Plasma Wayland, Dolphin, Qt/Kvantum, KDE-Noctalia installed, Noto Sans, Qt6/headers, g++, pkg-config, Python, qdbus6, kwriteconfig6, kbuildsycoca6 and user systemd. 5.2.1, KWin 6.7.5.
+Prerequisites: Plasma Wayland, Dolphin, Qt/Kvantum, KDE-Noctalia installed, the active system font, Qt6/headers, g++, pkg-config, Python, qdbus6, kwriteconfig6, kbuildsycoca6 and user systemd. 5.2.1, KWin 6.7.5.
 
 ```bash
 cd "$HOME/Projects/ricy/ricy-kit/contributions/dolphin-noctalia-identity"
@@ -261,3 +261,29 @@ with private rollback backups; available live sheets are refreshed without
 closing windows. PASS Qt preview/state checks, single-arrow visual inspection,
 primary geometry and architecture/token checks. NOT RUN full live menus, RTL,
 all scales or Recovery. No helper, KWin or launcher/default change.
+
+## Identity & Motion Pass — Typography
+
+Family/size hardcodes have been removed from QSS and the native header helper.
+The normal applicator selects UseSystemFont=true in all native view modes and
+preserves dormant personal ViewFont settings. Places keeps inherited-family
+semibold. The explicit, scoped one-shot installer also synchronizes the official
+Noctalia shell family; it does not change shell sizes/scales or KDE font settings:
+
+```bash
+python3 -B ricy-kit/contributions/dolphin-noctalia-identity/apply-typography.py \
+  --noctalia-config /absolute/path/to/active/noctalia/config.toml
+# In the running shell's NOCTALIA_CONFIG_HOME/NOCTALIA_STATE_HOME environment:
+noctalia config validate
+noctalia msg config-reload
+```
+
+PyQt6 queries the active Qt platform font; the helper uses the existing build
+prerequisites. No daemon/watcher is introduced. Do not use an offscreen platform
+or substitute captured token families when synchronizing an active desktop.
+Source and installation ownership remain in the existing contributions.
+
+See the [phase validation and rollback record](../../../docs/DOLPHIN-BASELINE.md#identity--motion-pass--phase-1-typography--2026-10-11).
+Typography is PASS in its inspected scope; the preexisting shutdown FAIL and live
+Recovery UNKNOWN remain explicit. The installer prints a private backup compatible
+with `apply.py --restaurar BACKUP`; then reload Noctalia and reopen Dolphin.

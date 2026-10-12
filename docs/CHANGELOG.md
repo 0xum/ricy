@@ -3,6 +3,29 @@
 Record significant changes in short entries. Minimum fields:
 Model/Agent, Date, Purpose, Validation performed. Do not sign source files.
 
+## 2026-10-11 — Dolphin Identity & Motion Pass: Typography
+
+- **Model/Agent:** Codex (GPT-6).
+- **Date:** 2026-10-11 (America/Sao_Paulo).
+- **Purpose:** synchronize existing Dolphin/Noctalia typography with the active
+  KDE/Qt application family instead of selecting another font.
+- **Changes:** remove QSS family/size and native-header hardcodes; enable native
+  system font in all three modes, preserving dormant ViewFont and Places emphasis.
+  Explicit one-shot installer atomically installs existing helper/QSS and changes
+  only those font flags and official Noctalia family, with private rollback.
+  Contextual shell sizes/font_scale, canonical token values and protected
+  infrastructure/defaults remain unchanged.
+- **Validation performed:** PASS phase-scoped typography: active KDE/Qt resolution,
+  isolated helper build, installed equality, live native Dolphin modes/chrome/menu/
+  editor/tabs/Places/status at1x and process1.5x, Noctalia bar/launcher/controls,
+  config validation/reload, QSS/state checks at both scales, architecture/tokens
+  and whitespace. Native status elision remains preexisting.
+- **FAIL, preexisting:** shutdown139 reproduced with backed-up helper/QSS and the
+  updated helper/QSS; not attributed to Typography. Live independent Recovery,
+  operations/devices, physical fractional monitors and complete RTL/glyph coverage
+  NOT RUN/UNKNOWN. No new architecture was needed.
+- **Evidence/rollback:** [phase record](DOLPHIN-BASELINE.md#identity--motion-pass--phase-1-typography--2026-10-11).
+
 ## 2026-10-11 — Dolphin toolbar menu-arrow insets
 
 - **Model/Agent:** Codex (GPT-6).
