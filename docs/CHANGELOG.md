@@ -3,6 +3,20 @@
 Record significant changes in short entries. Minimum fields:
 Model/Agent, Date, Purpose, Validation performed. Do not sign source files.
 
+## 2026-10-12 — Refresh current Noctalia preference backup
+
+- **Model/Agent:** Codex (GPT-6).
+- **Date:** 2026-10-12 (America/Sao_Paulo).
+- **Purpose:** include the user's subsequent saved Noctalia changes.
+- **Changes:** refreshed snapshot settings and checksum after comparing all
+  captured config/state payloads with the active profile. The only changed file
+  was settings.toml: the explicit theme.source override was removed. Installed
+  plugin payloads, base configuration and selected VS Code template were equal.
+  No runtime settings or recovery data were modified.
+- **Validation performed:** PASS payload checksums, active payload equality,
+  enabled-plugin coverage, TOML/JSON parsing, architecture and whitespace.
+  Live restoration and Recovery round trip NOT RUN; runtime behavior UNKNOWN.
+
 ## 2026-10-12 — User-requested Noctalia configuration snapshot
 
 - **Model/Agent:** Codex (GPT-6).

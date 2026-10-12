@@ -429,7 +429,7 @@
     "state/noctalia/plugins/materialized/community/yt-music/views/rerender.luau": "93be19687cf04f82a32e40f76b68d12a57f0e03ff6d12f2fff8daa11ddda11b9",
     "state/noctalia/plugins/materialized/community/yt-music/views/state.luau": "de2f088c57d4e0104d2ab39b278514b2e18a955122fa045753ac9cdcb1319687",
     "state/noctalia/plugins/materialized/community/yt-music/widget.luau": "ec79bb8e98215d76d6211046d33022507354305b2fcd5a03259533fe33f702bd",
-    "state/noctalia/settings.toml": "515b9b872276a8c53c8e1dc20bf1cde994d17f2992c0e799e7a3095ec67c4d76"
+    "state/noctalia/settings.toml": "fadeaab376ce3ae30f587db5819fa5653df7bbf5a87a8b2ef81c6385f47b8a4c"
   },
-  "settings_captured_at": "2026-10-12T03:40:20.779252+00:00"
+  "settings_captured_at": "2026-10-12T03:43:39.115365+00:00"
 }

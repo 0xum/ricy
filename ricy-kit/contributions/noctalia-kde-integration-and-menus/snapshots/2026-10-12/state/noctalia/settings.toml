@@ -205,7 +205,6 @@ builtin = "Noctalia"
 community_palette = "Oxocarbon"
 custom_palette = "KDE-Atual"
 mode = "dark"
-source = "custom"
 wallpaper_scheme = "m3-content"
 
     [theme.templates]
