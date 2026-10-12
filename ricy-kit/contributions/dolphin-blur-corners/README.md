@@ -35,6 +35,21 @@ No canonical identity tokens, layout, filesystem providers or desktop services
 change. Historical observations below retain their original scope; the font
 hardcode and prior motion absence are superseded by the phase records.
 
+### Motion color regression correction
+
+The original painter-opacity/Plus combination changed common colors and alpha
+during interrupted transitions. The helper now interpolates premultiplied image
+channels using complementary integer weights, preserving identical opaque pixels
+exactly. The native Places paint adapter explicitly retains its view/index and
+paint context when KIO draws through QApplication's style into an image.
+Geometry, providers, action semantics and palette tokens are unchanged.
+
+The motion validator now compiles the actual `ui.cpp` style/adapter, rather than
+testing the animation class alone. It verifies the selected accent and opacity
+during capture and24 rapid hover changes, followed by absence of residual hover
+backing. See the [correction evidence](../../../docs/DOLPHIN-BASELINE.md#motion-transition-color-regression--2026-10-11).
+This supersedes the earlier PASS for intermediate color consistency.
+
 Update of the dolphin-identity-nottalia contribution. The first opaque version was rejected by the user. The current appearance uses background #181825 with alpha 178/255 (~0,70) and compositor blur. The area of archives has contour #46485c, radius 12 px and light fill #313244 (40/255), allowing the blur to remain visible. Texts/icons do not receive window opacity.
 
 Two small and independent components:

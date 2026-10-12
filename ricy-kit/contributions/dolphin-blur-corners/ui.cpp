@@ -35,6 +35,7 @@
 
 namespace {
 struct PlacesPaint { QString text; int iconSize; };
+thread_local const PlacesPaint *nativePlacesPaint = nullptr;
 
 thread_local const QRectF *rowPaint = nullptr;
 thread_local int *rowDepth = nullptr;
@@ -168,7 +169,7 @@ public:
             }
         }
         PlacesPaint context;
-        const PlacesPaint *placesPaint = nullptr;
+        const PlacesPaint *placesPaint = nativePlacesPaint;
         if (placesView) {
             QModelIndex index = viewOption ? viewOption->index : QModelIndex();
             if (!index.isValid()) index = placesView->indexAt(option->rect.center());
@@ -317,6 +318,8 @@ public:
                const QModelIndex &index) const override {
         if (!m_native) return;
         QStyleOptionViewItem styled(option);
+        styled.index = index;
+        styled.widget = qobject_cast<QWidget *>(parent());
         // KIO's text rectangle starts at a fixed local x, while the icon
         // includes rect.left(). Normalize the origin to retain its 6px gap
         // even with QListView spacing and viewport padding.
@@ -332,7 +335,17 @@ public:
             styled.palette.setColor(QPalette::Text, QColor("#11111b"));
             styled.palette.setColor(QPalette::HighlightedText, QColor("#11111b"));
         }
+        // KIO calls QApplication::style() without a widget argument. During
+        // offscreen motion capture the painter device is a pixmap, so retain
+        // Places identity explicitly, just like the existing file/header paint
+        // contexts. Never fall through to unrelated native selection colors.
+        const auto *view = qobject_cast<QListView *>(parent());
+        const PlacesPaint context{index.data(Qt::DisplayRole).toString(),
+                                  view ? view->iconSize().width() : option.decorationSize.width()};
+        const PlacesPaint *previous = nativePlacesPaint;
+        nativePlacesPaint = &context;
         m_native->paint(painter, styled, index);
+        nativePlacesPaint = previous;
         painter->restore();
     }
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override {

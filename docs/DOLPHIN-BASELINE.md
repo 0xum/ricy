@@ -551,3 +551,69 @@ The private active Noctalia configuration, Dolphin view-font flags, installed
 QSS/helper and optional overlay are deployment state outside this tracked list.
 Canonical token JSON, window effects, provider/handler/default registrations and
 Recovery implementation have no changes in this pass.
+
+## Motion transition color regression — 2026-10-11
+
+**Original intermediate-color behavior: FAIL. Correction: PASS in the tested
+Qt/KIO and native Dolphin color sequences at1x/1.5x.** A user screenshot revealed
+gray Places selection and faded icons/text during interaction. This is a Motion
+regression introduced by `0c687a8`, not a preexisting palette problem. The original
+Phase3 validation did not compare common selected pixels/alpha through rapid
+native hover transitions; its PASS was insufficient for this case.
+
+The control uses the installed pre-correction helper, identical QSS/config and
+native Documents/Places surfaces. It reproduces gray selection in the window:
+the selected pixel begins at #cba6f7/alpha255 and deviates in all24 sampled frames,
+with alpha falling to153 and image colors washing out. Native background
+composition makes those altered image pixels appear gray in the window.
+
+### Local correction
+
+`motion.h` replaces opacity-modulated CompositionMode_Plus with complementary
+integer interpolation of premultiplied channels. Clamping/opacity no longer
+changes common opaque color pixels. `PlacesResultPaint` also supplies explicit
+view/index and scoped native Places context, so style dispatch does not depend
+on a painter device being a QWidget during offscreen capture. This follows the
+existing file/header paint-context convention, with stack lifetime/restoration.
+No new palette values, settings, geometry, model/provider/delegate replacement,
+Noctalia, KWin, default/handler or architectural contract is introduced.
+
+### Validation and limits
+
+- **PASS:** updated `validate-motion.py` compiles the real UI style and Places
+  adapter, retaining existing interaction/interruption/disable/lifetime checks.
+  At1x/1.5x, selected accent/opacity remains consistent in intermediate capture
+  and24 rapid hover changes; settled nonselected rows have no residual backing.
+  The previous source fails this same test with a washed-out mid-frame color.
+- **PASS:** real Wayland Dolphin Documents/Places before/after screenshots and
+  native Qt input sequence. Both corrected scales preserve #cba6f7/alpha255 in
+  all24 sampled frames (zero bad frames), while the original produces24 bad
+  frames. No physical mouse movement is required by this private probe.
+- **PASS:** QSS/state/geometry fixtures at both scales; helper build/atomic
+  install equality; architecture/token checks and whitespace. Canonical token
+  JSON and content icon/providers remain unchanged.
+- **UNKNOWN:** live idle/performance comparison in these color trials. An
+  unrelated tab-hover animation remained active during the purported idle sample
+  in both old and corrected helpers; a later1.5x trial also received333 mouse
+  moves. These samples are not stable-idle evidence. The isolated stable-control
+  repaint test still passes; previous Motion idle records retain their scope.
+- **FAIL, preexisting:** native diagnostic process teardown still exits139 in
+  both versions. This correction does not certify real Dolphin shutdown.
+- **NOT RUN:** complete hardware/input/RTL/device matrix and live Recovery.
+  The extra native KDE-zero trial produced no usable probe record; current
+  isolated native-style disable checks pass, without a new live-disable claim.
+- **NOT APPLICABLE:** redesign, icon/font migration, new architecture or KWin
+  changes. This is a local correction within the existing helper.
+
+Private evidence is in `~/.cache/ricy-dolphin-places-color-fix/`:
+`before-1x-{mid15,settled}.png`, `before-1x.log`, `before-fixture.log`,
+`after-1x-{mid15,settled}.png`, `after-1x.log`, corresponding `after-1_5x-*`
+and `settled-*` traces. Intermediate diagnostic/fixture attempts are retained
+with their failures. No screenshots/profile state are published in the kit.
+Only `motion.h`, `ui.cpp`, the existing motion validator/driver and their
+documentation change. New Dolphin processes load the correction; existing
+mapped helper libraries remain valid and require closing/reopening the window.
+The scoped helper installer preserves a private manifest of the pre-fix library:
+`~/.local/state/ricy-dolphin-backups/20261011-234907-430907`.
+Restore that printed manifest using existing `apply.py --restaurar BACKUP`,
+then reopen Dolphin. Source rollback reverts the correction commit alone.

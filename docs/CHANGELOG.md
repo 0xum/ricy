@@ -3,6 +3,24 @@
 Record significant changes in short entries. Minimum fields:
 Model/Agent, Date, Purpose, Validation performed. Do not sign source files.
 
+## 2026-10-11 — Dolphin motion color regression correction
+
+- **Model/Agent:** Codex (GPT-6).
+- **Date:** 2026-10-11 (America/Sao_Paulo).
+- **Purpose:** correct user-reported gray Places selection and faded colors
+  introduced by the Motion pass; its prior visual validation missed this case.
+- **Changes:** complementary premultiplied-channel interpolation preserves common
+  opaque colors/alpha; explicit native Places view/index/paint context keeps
+  style identity during capture. Existing validator compiles the actual style
+  and adapter and checks selected pixels/opacity through rapid hover and settle.
+- **Validation performed:** PASS current Qt/KIO motion and QSS checks at1x/1.5x,
+  native before/after reproduction (24/24 bad original frames,0/24 corrected at
+  each scale), build/install equality, architecture/tokens and whitespace.
+  FAIL preexisting shutdown139; live idle sample UNKNOWN due active tab hover/
+  mouse input, full hardware/RTL/Recovery NOT RUN. No palette, geometry, model,
+  provider/default, shell, KWin or canonical token changes.
+- **Evidence/rollback:** [correction record](DOLPHIN-BASELINE.md#motion-transition-color-regression--2026-10-11).
+
 ## 2026-10-11 — Dolphin Identity & Motion Pass: Motion
 
 - **Model/Agent:** Codex (GPT-6).

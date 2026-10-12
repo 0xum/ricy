@@ -72,19 +72,29 @@ protected:
             m_from.devicePixelRatio() != final.devicePixelRatio() || offset != m_offset) {
             m_presented = final;
         } else {
-            // Premultiplied additive blending keeps shared opaque text/background
-            // opaque. SourceOver twice would dim the whole control mid-transition.
-            QPixmap frame(final.size());
+            // Interpolate premultiplied channels directly. QPainter's Plus
+            // with global opacity clamps before interpolation and can wash out
+            // colors/alpha. Complementary integer weights keep shared opaque
+            // pixels exactly opaque, including interrupted Places transitions.
+            const QImage from = m_from.toImage().convertToFormat(QImage::Format_ARGB32_Premultiplied);
+            const QImage to = final.toImage().convertToFormat(QImage::Format_ARGB32_Premultiplied);
+            QImage frame(to.size(), QImage::Format_ARGB32_Premultiplied);
             frame.setDevicePixelRatio(final.devicePixelRatio());
-            frame.fill(Qt::transparent);
-            QPainter blend(&frame);
-            blend.setOpacity(1 - m_mix);
-            blend.drawPixmap(0, 0, m_from);
-            blend.setCompositionMode(QPainter::CompositionMode_Plus);
-            blend.setOpacity(m_mix);
-            blend.drawPixmap(0, 0, final);
-            blend.end();
-            m_presented = frame;
+            const int weight = qBound(0, qRound(m_mix * 256), 256);
+            const auto mix = [weight](int a, int b) {
+                return (a * (256 - weight) + b * weight + 128) >> 8;
+            };
+            for (int y = 0; y < frame.height(); ++y) {
+                const auto *a = reinterpret_cast<const QRgb *>(from.constScanLine(y));
+                const auto *b = reinterpret_cast<const QRgb *>(to.constScanLine(y));
+                auto *pixels = reinterpret_cast<QRgb *>(frame.scanLine(y));
+                for (int x = 0; x < frame.width(); ++x)
+                    pixels[x] = qRgba(mix(qRed(a[x]), qRed(b[x])),
+                                     mix(qGreen(a[x]), qGreen(b[x])),
+                                     mix(qBlue(a[x]), qBlue(b[x])),
+                                     mix(qAlpha(a[x]), qAlpha(b[x])));
+            }
+            m_presented = QPixmap::fromImage(frame);
         }
         m_offset = offset;
         painter->drawPixmap(offset, m_presented);

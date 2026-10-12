@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 // Isolated Qt/KIO paint and lifetime fixture; never changes desktop settings.
-#include "motion.h"
+#include "ui.cpp"
 #include <QMainWindow>
 #include <QToolButton>
 #include <QTabWidget>
@@ -35,6 +35,14 @@ QColor pixel(QWidget *widget) {
     return image.pixelColor(qRound(8 * image.devicePixelRatio()),
                             qRound(widget->height()/2.0 * image.devicePixelRatio()));
 }
+QColor placeBackground(KFilePlacesView *view, const QModelIndex &index) {
+    const QRect rect = view->visualRect(index);
+    require(rect.isValid(), "Places row is visible");
+    const QImage image = view->viewport()->grab().toImage();
+    const qreal scale = image.devicePixelRatio();
+    return image.pixelColor(qRound((rect.right()-18)*scale),
+                            qRound((rect.bottom()-8)*scale));
+}
 void enter(QWidget *widget) {
     const QPointF point(widget->rect().center());
     widget->setAttribute(Qt::WA_UnderMouse, true);
@@ -50,7 +58,7 @@ void leave(QWidget *widget) {
 }
 int main(int argc, char **argv) {
     QApplication app(argc, argv);
-    app.setStyle(QStyleFactory::create("Fusion"));
+    app.setStyle(new ChipStyle(QStyleFactory::create("Fusion")));
     app.setStyleSheet("QToolButton {background:#313244;border:1px solid transparent;border-radius:6px;padding:8px;}"
                      "QToolButton:hover {background:#977dba;} QToolButton:checked {background:#cba6f7;}"
                      "QToolButton:focus {border-color:#cba6f7;}");
@@ -125,11 +133,12 @@ int main(int argc, char **argv) {
     QTest::qWait(30); enter(button); QTest::qWait(10);
     require(!effect->running() && effect->progress() == 1, "native motion disabled is immediate");
     require(pixel(button) == QColor("#977dba"), "disabled motion reaches exact final state");
-    app.setStyle(QStyleFactory::create("Fusion"));
+    app.setStyle(new ChipStyle(QStyleFactory::create("Fusion")));
     QTest::qWait(30);
     auto *places = new KFilePlacesView;
     auto *model = new KFilePlacesModel(places);
     places->setModel(model);
+    places->setItemDelegateForColumn(0, new PlacesResultPaint(places->itemDelegate(), places));
     installChromeMotion(places);
     places->resize(300, 460); places->show(); QTest::qWait(80);
     auto *placeEffect = dynamic_cast<ChromeMotion *>(places->viewport()->graphicsEffect());
@@ -138,6 +147,37 @@ int main(int argc, char **argv) {
     if (model->rowCount() > 1) {
         places->selectionModel()->select(model->index(1,0), QItemSelectionModel::ClearAndSelect);
         QTest::qWait(40); require(placeEffect->running(), "native Places selection interpolates");
+        QTest::qWait(220);
+        const QColor selected = placeBackground(places, model->index(1,0));
+        require(selected == QColor("#cba6f7"), "Places final selection uses the approved accent");
+        // Focus transitions render the already-selected row into an offscreen
+        // image too. Its unchanged selection must not turn native gray mid-frame.
+        enter(places->viewport());
+        QTest::qWait(40);
+        require(placeEffect->running(), "Places hover captures the selected viewport");
+        const QColor during = placeBackground(places, model->index(1,0));
+        fprintf(stderr,"Places colors: final=%s mid=%s\n",qPrintable(selected.name()),qPrintable(during.name()));
+        places->viewport()->grab().save(qEnvironmentVariable("RICY_PLACES_FIXTURE"));
+        require(qAbs(during.red()-selected.red()) <= 1 &&
+                qAbs(during.green()-selected.green()) <= 1 &&
+                qAbs(during.blue()-selected.blue()) <= 1 && during.alpha() >= 254,
+                "Places offscreen transition preserves selected accent");
+        const QColor untouched = placeBackground(places, model->index(3,0));
+        for (int i=0; i<24; ++i) {
+            const QPointF point(places->visualRect(model->index(2+i%2,0)).center());
+            QMouseEvent move(QEvent::MouseMove, point, places->viewport()->mapToGlobal(point.toPoint()),
+                             Qt::NoButton, Qt::NoButton, Qt::NoModifier);
+            app.sendEvent(places->viewport(), &move);
+            QTest::qWait(12);
+            const QColor frame = placeBackground(places, model->index(1,0));
+            require(qAbs(frame.red()-selected.red()) <= 2 &&
+                    qAbs(frame.green()-selected.green()) <= 2 &&
+                    qAbs(frame.blue()-selected.blue()) <= 2 && frame.alpha() >= 253,
+                    "rapid Places hover preserves common selection color/opacity");
+        }
+        leave(places->viewport()); QTest::qWait(220);
+        require(placeBackground(places, model->index(3,0)) == untouched,
+                "Places hover leaves no residual backing after settling");
         places->selectionModel()->select(model->index(0,0), QItemSelectionModel::ClearAndSelect);
         QTest::qWait(40);
         model->dataChanged(model->index(0,0),model->index(0,0));
