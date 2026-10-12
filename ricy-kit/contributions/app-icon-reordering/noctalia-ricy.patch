@@ -122,6 +122,18 @@ index f73710e..e3f76e5 100644
    registerSessionIpc(m_ipcService, m_sessionActionRunner, m_lockScreen, m_configService);
  
    if (m_powerProfilesService != nullptr) {
+diff --git a/src/app/application_services.cpp b/src/app/application_services.cpp
+index bdc2075..8d1094d 100644
+--- a/src/app/application_services.cpp
++++ b/src/app/application_services.cpp
+@@ -1529,6 +1529,7 @@ void Application::initSessionBusServices() {
+   auto shouldRefreshControlCenter = [this]() { return m_panelManager.isOpenPanel("control-center"); };
+ 
+   if (m_bus != nullptr) {
++    m_gammaService.startKwin(*m_bus);
+     try {
+       m_debugService = std::make_unique<DebugService>(*m_bus, m_notificationManager);
+       kLog.info("debug service active on dev.noctalia.Debug");
 diff --git a/src/cli/schema_msg.h b/src/cli/schema_msg.h
 index 3d89dee..82be26d 100644
 --- a/src/cli/schema_msg.h
@@ -1780,6 +1792,29 @@ index eda5766..f1ff715 100644
 +  };
    return definition;
  }
+diff --git a/src/shell/control_center/shortcut_registry.cpp b/src/shell/control_center/shortcut_registry.cpp
+index 851a7c3..97350e2 100644
+--- a/src/shell/control_center/shortcut_registry.cpp
++++ b/src/shell/control_center/shortcut_registry.cpp
+@@ -96,7 +96,7 @@ namespace {
+     NightlightShortcut(GammaService* svc, CompositorPlatform* platform) : m_svc(svc), m_platform(platform) {}
+     std::string_view id() const override { return "nightlight"; }
+     std::string defaultLabel() const override { return i18n::tr("control-center.shortcuts.nightlight"); }
+-    bool enabled() const override { return m_platform != nullptr && m_platform->hasGammaControl(); }
++    bool enabled() const override { return m_svc != nullptr && m_svc->available(); }
+     std::string displayLabel() const override {
+       if (m_svc == nullptr) {
+         return defaultLabel();
+@@ -129,7 +129,8 @@ namespace {
+     }
+     void onRightClick() override {
+       if (enabled() && m_svc != nullptr) {
+-        m_svc->toggleForceEnabled();
++        if (m_svc->usesKwin()) m_svc->openKwinSettings();
++        else m_svc->toggleForceEnabled();
+       }
+     }
+ 
 diff --git a/src/shell/control_center/tabs/home_tab.cpp b/src/shell/control_center/tabs/home_tab.cpp
 index 240a069..813ff5a 100644
 --- a/src/shell/control_center/tabs/home_tab.cpp
@@ -3920,6 +3955,214 @@ index a95b3a5..a7ce3a5 100644
    Timer m_retryTimer;
    std::function<void()> m_closedCallback;
  };
+diff --git a/src/system/gamma_service.cpp b/src/system/gamma_service.cpp
+index ffaee1f..5e45a4f 100644
+--- a/src/system/gamma_service.cpp
++++ b/src/system/gamma_service.cpp
+@@ -1,6 +1,10 @@
+ #include "system/gamma_service.h"
+ 
+ #include "core/log.h"
++#include "core/process/process.h"
++#include "dbus/session_bus.h"
++#include <map>
++#include <tuple>
+ #include "ipc/ipc_service.h"
+ #include "system/day_night_schedule.h"
+ #include "wayland/wayland_connection.h"
+@@ -50,6 +54,66 @@ GammaService::GammaService(WaylandConnection& wayland) : m_wayland(wayland) {}
+ 
+ GammaService::~GammaService() { restoreAll(); }
+ 
++// KWin owns temperature and scheduling. The shell only observes its state and
++// invokes the same temporary inhibition action as Plasma's native shortcut.
++void GammaService::startKwin(SessionBus& bus) {
++  if (m_wayland.hasGammaControl() || m_kwinProxy != nullptr) {
++    return;
++  }
++  try {
++    auto dbus = sdbus::createProxy(bus.connection(), sdbus::ServiceName{"org.freedesktop.DBus"},
++                                  sdbus::ObjectPath{"/org/freedesktop/DBus"});
++    bool owned = false;
++    dbus->callMethod("NameHasOwner").onInterface("org.freedesktop.DBus")
++        .withTimeout(std::chrono::milliseconds(250)).withArguments(std::string("org.kde.KWin")).storeResultsTo(owned);
++    if (!owned) return;
++    m_kwinBus = &bus;
++    m_kwinProxy = sdbus::createProxy(bus.connection(), sdbus::ServiceName{"org.kde.KWin"},
++                                   sdbus::ObjectPath{"/org/kde/KWin/NightLight"});
++    m_kwinProxy->uponSignal("PropertiesChanged").onInterface("org.freedesktop.DBus.Properties")
++        .call([this](const std::string& iface, const std::map<std::string, sdbus::Variant>&,
++                     const std::vector<std::string>&) {
++          if (iface == "org.kde.KWin.NightLight") refreshKwin();
++        });
++    refreshKwin();
++    // Recover from service disappearance and missed signals without restarting the shell.
++    m_kwinTimer.startRepeating(std::chrono::seconds(5), [this]() { refreshKwin(); });
++  } catch (const sdbus::Error& e) {
++    kLog.warn("KWin Night Light unavailable: {}", e.what());
++    m_kwinProxy.reset();
++    m_kwinBus = nullptr;
++  }
++}
++
++bool GammaService::available() const {
++  return usesKwin() ? m_kwinAvailable : m_wayland.hasGammaControl();
++}
++
++void GammaService::openKwinSettings() {
++  if (usesKwin()) (void)process::runAsync({"kcmshell6", "kcm_nightlight"});
++}
++
++void GammaService::refreshKwin() {
++  const auto before = std::tuple(m_kwinAvailable, m_kwinEnabled, m_kwinInhibited, m_kwinRunning, m_kwinTemperature);
++  try {
++    std::map<std::string, sdbus::Variant> properties;
++    m_kwinProxy->callMethod("GetAll").onInterface("org.freedesktop.DBus.Properties")
++        .withTimeout(std::chrono::milliseconds(250)).withArguments(std::string("org.kde.KWin.NightLight"))
++        .storeResultsTo(properties);
++    m_kwinAvailable = properties.at("available").get<bool>();
++    m_kwinEnabled = properties.at("enabled").get<bool>();
++    m_kwinInhibited = properties.at("inhibited").get<bool>();
++    m_kwinRunning = properties.at("running").get<bool>();
++    m_kwinTemperature = properties.at("currentTemperature").get<std::uint32_t>();
++  } catch (const std::exception&) {
++    m_kwinAvailable = m_kwinEnabled = m_kwinRunning = false;
++    m_kwinInhibited = false;
++    m_kwinTemperature = 6500;
++  }
++  const auto after = std::tuple(m_kwinAvailable, m_kwinEnabled, m_kwinInhibited, m_kwinRunning, m_kwinTemperature);
++  if (before != after && m_changeCallback) m_changeCallback();
++}
++
+ void GammaService::setChangeCallback(ChangeCallback callback) { m_changeCallback = std::move(callback); }
+ 
+ void GammaService::setStateFeedbackCallback(StateFeedbackCallback callback) { m_stateFeedback = std::move(callback); }
+@@ -73,12 +137,33 @@ void GammaService::reload(const NightLightConfig& config, const LocationConfig&
+ }
+ 
+ void GammaService::setEnabled(bool enabled) {
++  if (usesKwin()) {
++    refreshKwin();
++    if (!m_kwinAvailable) return;
++    if (!m_kwinEnabled) {
++      openKwinSettings();
++      return;
++    }
++    if (enabled == this->enabled()) return;
++    try {
++      auto proxy = sdbus::createProxy(m_kwinBus->connection(), sdbus::ServiceName{"org.kde.kglobalaccel"},
++                                     sdbus::ObjectPath{"/component/kwin"});
++      proxy->callMethod("invokeShortcut").onInterface("org.kde.kglobalaccel.Component")
++          .withTimeout(std::chrono::milliseconds(250)).withArguments(std::string("Toggle Night Color"));
++      refreshKwin();
++      notifyStateFeedback();
++    } catch (const sdbus::Error& e) {
++      kLog.warn("KWin Night Light toggle failed: {}", e.what());
++    }
++    return;
++  }
+   m_enabledOverride = enabled;
+   apply();
+   notifyStateFeedback();
+ }
+ 
+ void GammaService::toggleEnabled() {
++  if (usesKwin()) { refreshKwin(); setEnabled(!enabled()); return; }
+   // Toggling out of the forced state lands on scheduled-on rather than off, so the force override
+   // stays reachable in both directions.
+   if (effectiveForce()) {
+@@ -113,6 +198,7 @@ void GammaService::setResolvedCoordinates(std::optional<double> latitude, std::o
+ }
+ 
+ void GammaService::setForceEnabled(bool enabled) {
++  if (usesKwin()) { openKwinSettings(); return; }
+   m_forceOverride = enabled;
+   apply();
+   notifyStateFeedback();
+@@ -121,16 +207,18 @@ void GammaService::setForceEnabled(bool enabled) {
+ void GammaService::toggleForceEnabled() { setForceEnabled(!forceEnabled()); }
+ 
+ void GammaService::clearForceOverride() {
++  if (usesKwin()) return;
+   m_forceOverride.reset();
+   apply();
+   notifyStateFeedback();
+ }
+ 
+-bool GammaService::enabled() const { return effectiveConfiguredEnabled(); }
++bool GammaService::enabled() const { return usesKwin() ? m_kwinAvailable && m_kwinEnabled && !m_kwinInhibited : effectiveConfiguredEnabled(); }
+ 
+-bool GammaService::forceEnabled() const { return effectiveForce(); }
++bool GammaService::forceEnabled() const { return !usesKwin() && effectiveForce(); }
+ 
+ bool GammaService::active() const {
++  if (usesKwin()) return enabled() && m_kwinRunning && m_kwinTemperature < 6500;
+   if (!effectiveEnabled()) {
+     return false;
+   }
+@@ -524,6 +612,7 @@ GammaService::GammaTarget GammaService::computeTarget() const {
+ }
+ 
+ void GammaService::apply() {
++  if (usesKwin()) { refreshKwin(); return; }
+   if (!m_wayland.hasGammaControl()) {
+     if (!m_gammaUnavailableLogged) {
+       kLog.warn("compositor does not support gamma control");
+@@ -608,6 +697,7 @@ void GammaService::registerIpc(IpcService& ipc) {
+   });
+ 
+   ipc.bind(noctalia::cli::msg::nightlightForceToggle, [this](const std::string&) -> std::string {
++    if (usesKwin()) return "error: configure KWin Night Light in KDE settings\n";
+     toggleForceEnabled();
+     return "ok\n";
+   });
+diff --git a/src/system/gamma_service.h b/src/system/gamma_service.h
+index 43451e1..aae9134 100644
+--- a/src/system/gamma_service.h
++++ b/src/system/gamma_service.h
+@@ -7,11 +7,14 @@
+ #include <cstdint>
+ #include <functional>
+ #include <list>
++#include <memory>
+ #include <optional>
+ #include <string>
+ #include <string_view>
+ 
+ class IpcService;
++class SessionBus;
++namespace sdbus { class IProxy; }
+ class WaylandConnection;
+ struct wl_output;
+ struct zwlr_gamma_control_v1;
+@@ -27,6 +30,11 @@ public:
+   GammaService(const GammaService&) = delete;
+   GammaService& operator=(const GammaService&) = delete;
+ 
++  void startKwin(SessionBus& bus);
++  [[nodiscard]] bool available() const;
++  [[nodiscard]] bool usesKwin() const { return m_kwinProxy != nullptr; }
++  void openKwinSettings();
++
+   void reload(const NightLightConfig& config, const LocationConfig& location);
+   void setLocationResolving(bool resolving);
+   void setResolvedCoordinates(std::optional<double> latitude, std::optional<double> longitude);
+@@ -96,6 +104,15 @@ private:
+   [[nodiscard]] static RgbMultipliers kelvinToRgb(int kelvin);
+   static void fillGammaRamp(std::uint16_t* ramp, std::uint32_t size, const RgbMultipliers& mul);
+ 
++  void refreshKwin();
++  SessionBus* m_kwinBus = nullptr;
++  std::unique_ptr<sdbus::IProxy> m_kwinProxy;
++  bool m_kwinAvailable = false;
++  bool m_kwinEnabled = false;
++  bool m_kwinInhibited = false;
++  bool m_kwinRunning = false;
++  std::uint32_t m_kwinTemperature = 6500;
++  Timer m_kwinTimer;
+   WaylandConnection& m_wayland;
+   NightLightConfig m_config;
+   LocationConfig m_location;
 diff --git a/src/wayland/wayland_toplevels.cpp b/src/wayland/wayland_toplevels.cpp
 index 0438a2f..7fbb185 100644
 --- a/src/wayland/wayland_toplevels.cpp

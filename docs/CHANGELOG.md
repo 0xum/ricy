@@ -3,6 +3,39 @@
 Record significant changes in short entries. Minimum fields:
 Model/Agent, Date, Purpose, Validation performed. Do not sign source files.
 
+## 2026-10-12 — Integrate Noctalia Night Light with KWin
+
+- **Model/Agent:** Codex (GPT-6).
+- **Date:** 2026-10-12 (America/Sao_Paulo).
+- **Purpose:** make the Noctalia control available and reflect the native filter
+  already configured in KWin instead of requiring Wayland gamma-control support.
+- **Changes:** the existing GammaService observes KWin Night Light properties
+  through the existing session bus. Left-click uses the native KGlobalAccel
+  pause/resume action; right-click opens KDE Night Light settings. KWin retains
+  temperature/schedule ownership. Noctalia configuration reloads cannot override
+  that backend; unsupported forced-mode IPC returns an error. Property signals
+  update the UI; bounded periodic refresh handles service loss and return.
+  The cumulative patch, component dependency record, contribution guide, and
+  shell validation harness include this integration. No new daemon, package,
+  visual token, compositor patch, or session path was introduced.
+- **Validation performed:** PASS isolated incremental release build using
+  unchanged prior compiled inputs and rebuilt affected consumers; clean-index
+  cumulative patch replay; private D-Bus tests of night/day state, pause/resume,
+  external changes, configuration reload, unavailability, and service return;
+  `RICY_NOCTALIA_SOURCE=<matching-source> ./scripts/verify shell`;
+  `./scripts/verify architecture`; `./scripts/verify recovery` offline;
+  39 foundation regressions and architecture validation of the exact staged tree;
+  live pause/resume through Noctalia IPC and KWin properties, restored to 4500 K;
+  unchanged KWin configuration and preserved application processes; active menu
+  visual inspection and user confirmation. Activation used the existing
+  backup/restore tool and the shell remains active without automatic restarts.
+  NOT RUN hover/focus, other monitor scales, persistent failure Recovery/login.
+- **Recovery:** KWin continues owning the filter independently of the shell;
+  upstream Noctalia, KDE settings, earlier source/build, and the activator's
+  binary/drop-in backup are preserved. See
+  [the contribution guide](../ricy-kit/contributions/app-icon-reordering/README.md#kwin-night-light).
+
+
 ## 2026-10-12 — Refresh current Noctalia preference backup
 
 - **Model/Agent:** Codex (GPT-6).

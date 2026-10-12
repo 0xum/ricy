@@ -241,6 +241,9 @@ def shell():
     if (source / 'build-ricy/noctalia').is_file() and shutil.which('c++') and shutil.which('dbus-run-session'):
         run('Noctalia single-space, drag and KDE window identity (offline)',
             [sys.executable, '-B', str(native_test), '--fonte', str(source)])
+        run('Noctalia KWin Night Light (private D-Bus)',
+            [sys.executable, '-B', str(ROOT / 'ricy-kit/contributions/app-icon-reordering/validate-nightlight.py'),
+             '--source', str(source)])
     else:
         not_run('Noctalia single-space/native drag/KDE identity: matching build, C++ compiler or dbus-run-session unavailable')
 

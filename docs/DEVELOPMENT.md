@@ -42,8 +42,8 @@ python3 themes/tokens/render-reference.py --check
   syntax of migrated `integrations/keyboard-cedilla/` applicators;
   syntax of the seven historical build guards; offline Noctalia action tests when
   a local source matches the expected commit/patch and PyQt 6 is available;
-  single-space policy, native drag and exact KDE window identity regressions when
-  that source has a build (`dbus-run-session` isolates the synthetic KWin fixture).
+  single-space policy, native drag, exact KDE window identity, and KWin Night Light
+  regressions when that source has a build (`dbus-run-session` isolates the synthetic KWin fixture).
 - `recovery`: existing in-memory panel capture/merge test; QJSEngine window-effect
   tests when PyQt 6 is available. Does not switch shell/compositor.
 - `all`: combines the above; does not certify the desktop.
@@ -88,8 +88,11 @@ Historical build guards still receive Bash syntax checks.
 
 For current shell source development, use
 [app-icon-reordering](../ricy-kit/contributions/app-icon-reordering/README.md).
-Its cumulative RICY-001/UUID correction was built in an isolated source and
-activated on 2026-10-11. The original cache and earlier binary remain
+Its cumulative patch includes RICY-001/UUID corrections and the KWin Night Light
+adapter. The latter uses the native filter through the existing session bus,
+with a private D-Bus regression; see the contribution README for activation evidence.
+The RICY-001/UUID correction was activated on 2026-10-11; Night Light on
+2026-10-12. The original cache and earlier binary remain
 rollback/provenance material; the default cache still differs from the current
 source patch, so select the matching isolated source explicitly.
 The selected window effect belongs to

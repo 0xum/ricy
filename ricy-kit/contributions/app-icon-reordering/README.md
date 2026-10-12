@@ -1,12 +1,46 @@
 # Reorganize application icons
 
-> **Current status (2026-10-11):** the cumulative RICY-001/UUID correction is ACTIVE
+> **Current status (2026-10-12):** the cumulative RICY-001/UUID + KWin Night Light variant is ACTIVE
 > after isolated build and activation; the earlier cache/binary is retained for rollback. The bundled
 > `apply-animations.py` and window assets are HISTORICAL; use
 > [window-fade-expand](../window-fade-expand/README.md) for the selected effect.
 > Keep historical restoration interfaces and consult
 > [CONTRIBUTION-AUDIT](../../../docs/CONTRIBUTION-AUDIT.md) before interpreting
 > the earlier commands or session results below.
+
+## KWin Night Light
+
+KNOWN: built and activated on 2026-10-12 on Noctalia 5.2.1. Private D-Bus
+regressions, shell/architecture checks, and live pause/resume passed. The active
+menu state was visually inspected, and the user confirmed the result. The
+previous binary/drop-in remains in the activator backup. Hover/focus, other
+monitor scales, persistent shell failure, and login were NOT RUN.
+
+The current cumulative patch adapts the existing GammaService and Night Light
+shortcut to KWin's `org.kde.KWin.NightLight` D-Bus interface when KWin is present
+and the Wayland gamma protocol is absent. The existing session bus carries
+property changes; a five-second bounded refresh also handles service loss/return.
+The control shows actual warming from `running` and `currentTemperature`, including
+transitions. Existing colors, geometry, and other compositor backends are preserved.
+
+Left-click invokes KWin's native `Toggle Night Color` action through KGlobalAccel,
+pausing/resuming the configured schedule without modifying temperature, times,
+location, or persistent enablement. Right-click opens `kcmshell6 kcm_nightlight`.
+If KDE's schedule is disabled, left-click opens its settings to enable it. KWin
+owns the filter and schedule; Noctalia settings cannot override this backend.
+Forced-mode IPC is rejected on KWin; force gestures open KDE settings instead.
+No daemon, package, compositor patch, or new configuration authority is introduced.
+Ownership remains the existing shell/KDE adapter; dependencies are the existing
+session bus, KWin, KGlobalAccel, and KDE configuration module.
+
+Build and validate with `RICY_NOCTALIA_SOURCE` pointing to the matching isolated
+checkout. `validate-nightlight.py --source <checkout>` links the actual compiled
+service to a private D-Bus fixture; `scripts/verify shell` includes this regression.
+Activate through the existing notification-continuity activator, whose emitted
+backup supports `enable.py --restaurar <backup>`. Preserve upstream Noctalia,
+previous source/builds, and backups. Shell failure does not disable the native
+KWin filter or remove KDE settings; activation restarts only the shell/adapter
+while preserving applications. Live failure Recovery/login remains unproven.
 
 ## Exact window activation
 
