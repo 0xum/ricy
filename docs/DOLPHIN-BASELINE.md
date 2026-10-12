@@ -143,3 +143,102 @@ No backend implementation tests are applicable after retirement.
 | cached helper binary | `01d9d831c4112a10b45e05d95784fe115fb7f3a9737689721985ceb0c2200f7a` |
 | installed helper binary | `01d9d831c4112a10b45e05d95784fe115fb7f3a9737689721985ceb0c2200f7a` |
 | canonical tokens | `e8194379106f4513f56d9f49a1535e66752490f843c783e4ede904fddbe5925e` |
+
+## First visual polish pass — 2026-10-11
+
+This section records the subsequent authorized polish task; the read-only scope
+above describes the earlier snapshot. Visual authority remains
+[DESIGN-SYSTEM](DESIGN-SYSTEM.md), [SEMANTICS](../themes/tokens/SEMANTICS.md),
+[Noctalia grounding](NOCTALIA-VISUAL-GROUNDING.md) and the unchanged canonical
+`application_adaptations.dolphin` contract. No new architecture or visual values.
+
+### Current consumer and audit
+
+KNOWN: Super+E/search use the installed Dolphin desktop entry's visual wrapper.
+A normal wrapper launch mapped the installed Qt helper and Kvantum style; source
+QSS matched the installed sheet before editing. The helper is newer than the
+fingerprint above: the separately completed
+[tab overflow revision](CHANGELOG.md#2026-10-11--dolphin-tab-overflow-controls)
+is preserved. The maintained consumers are the active
+[QSS](../ricy-kit/contributions/dolphin-noctalia-identity/dolphin.qss) and
+[helper](../ricy-kit/contributions/dolphin-blur-corners/ui.cpp), rather than the
+historical transport copies linked in parts of the original snapshot.
+Early direct-launch/probe and incomplete isolated-theme captures were rejected
+as visual references after the user's correction. Final visual observations
+use the installed wrapper with its normal configuration and environment.
+
+| Area / classification | Observed inconsistency or current evidence | First-pass disposition |
+|---|---|---|
+| Toolbar — hover, selection, color role | Generic checked/pressed fill was overridden by the more specific toolbar hover rule, leaving the old interaction foreground on a faint hover overlay | QSS keeps the existing interaction-fill/on-interaction-fill pair for checked/pressed native actions during hover |
+| Controls — spacing | Generic tool buttons and text fields used residual 5px padding outside the approved spacing scale | Use the existing 4px spacing; preserve scoped toolbar, menu, tab and editor overrides |
+| Controls — focus, border | Transparent control borders had no explicit focus contour; toolbar hover could suppress it | Accent focus border within the existing 1px border slot, including toolbar/overflow/menu controls and native breadcrumb buttons; no layout shift |
+| Controls — color role, hierarchy | Disabled checked tools could keep a filled action backing while using secondary text | Transparent disabled backing/border with existing secondary text; native disabled actions remain inert |
+| Top chrome — radius, material/surface, alignment, vertical rhythm | Unified opaque L, inherited toolbar/breadcrumb surfaces, 36px navigator and scoped padding already match approved adaptations | Preserve layout and geometry; no additional bars, separators or shadows |
+| Tabs — radius, spacing, hover, selection, close state, focus | Approved active/inactive/hover pairs and latest native close/overflow geometry are present | Preserve treatment and native keyboard/close behavior; no close-icon substitution or new animation |
+| Places — typography, hierarchy, spacing, selection, icon treatment | Transparent normal rows, group hierarchy, native 16px icons and device rows match the existing adaptation | Preserve native model/delegate, group titles, row heights and indicators; full device/hover coverage remains UNKNOWN |
+| Content — material/surface, alignment, radius, selection | Captured grid/compact/details retain solid cards, native icon/text layout and existing moderate-alpha file states | Preserve row/grid geometry and file-selection roles; no filesystem/model changes |
+| Status/navigation surface — truncation, hierarchy, alignment | Small native status overlay abbreviates summaries despite available width; storage/Places labels also elide | Retain native small mode. Full-width native configuration removed summary elision but exposed clipped storage controls; test setting reverted |
+| Menus/floating surfaces — material/surface, border, radius, elevation | Approved opaque card/outline, rounded native popup mask and shadowless per-app treatment already exist | Preserve surface geometry/materials; focus contour only for embedded controls. Native popup composition is not fully certified |
+| Motion | Installed Kvantum has `animate_states=true`, whereas the grounding describes `false` | Record preexisting conflict; preserve installed preference and add no animation or QSS transition |
+| Native configuration | Current DetailsMode LeftPadding is 0, whereas the earlier snapshot recorded 20 | Preserve current value; this pass does not normalize native file geometry from stale documentation |
+
+The QSS change uses existing colors, spacing and radius scopes. It introduces no
+runtime token loader, generator, additional token, upstream patch, helper change,
+Kvantum edit, KWin rule, wrapper/default/MIME/FileManager1 change or session switch.
+Generic padding normalization does not change toolbar minimum content dimensions;
+focus uses existing border space. Recovery receives no additional dependency.
+
+### Validation and limits
+
+- **PASS:** `python3 -B ricy-kit/contributions/dolphin-noctalia-identity/validate-polish.py`,
+  also with `QT_SCALE_FACTOR=1.5`: actual Qt parsing/painting, checked+hover and
+  pressed/disabled/focus precedence, fixed toolbar hit area, native text editing,
+  tab keyboard navigation/close signal and menu keyboard invocation. The regression
+  fixture fails on pre-pass QSS at checked+hover and passes on deployed QSS. Qt fixtures
+  cover QSS; they do not prove installed-helper/compositor behavior.
+- **PASS:** installed wrapper startup and mapped helper/Kvantum; native directory
+  navigation and tab creation using a private fixture; real grid, compact and
+  details captures. No file transfer, mount, Trash or package operation ran.
+- **PASS:** canonical token checks, Kvantum INI/SVG parsing, architecture and
+  Recovery offline harness. Installed QSS equals the maintained source;
+  canonical JSON, helper, launcher and protected registrations remain unchanged.
+  Dolphin configuration returned exactly to its pre-task bytes after the rejected
+  status test. Normal application launches may persist native window/tab state;
+  they are not a filesystem-behavior implementation change.
+- **PASS, limited offline fallback:** native Dolphin under isolated D-Bus/config/
+  state/data, Fusion style, missing optional helper and missing QSS opens the test
+  directory. This demonstrates a manual upstream fallback, not automatic failure
+  handling by the shared wrapper or a Plasma Recovery round trip.
+- **FAIL, preexisting:** graceful shutdown of the installed customized Dolphin
+  produces SIGSEGV in Qt application destruction, with and without the early
+  probe. Prior coredumps and the tab-overflow changelog predate this pass. It is
+  not repaired or attributed to the QSS edit.
+- **UNKNOWN / NOT RUN:** independent live Recovery, every device/mount/storage
+  state, real monitor/scale combinations, all popup/submenu composition, Places
+  hover/drag/drop, complete keyboard/focus traversal, RTL and reduced-motion
+  preference combinations. Offline scale checks are not monitor certification.
+- **NOT APPLICABLE:** new helper build, upstream patch, filesystem backend,
+  FileManager1/MIME/default migration or global KWin validation for this QSS pass.
+
+### Separate backlog and rollback
+
+1. Repair the preexisting customized-Dolphin teardown crash in a separately scoped
+   helper/Qt lifetime investigation. Establish clean exit and independent live
+   Recovery before claiming recovery safety end to end.
+2. Resolve native small-status summary elision and clipped full-width storage
+   indicators. Existing configuration alone was insufficient; investigate native
+   sizing and existing styling before proposing a minimal helper/upstream change.
+   Preserve message/progress/cancellation and storage behavior.
+3. Complete device indicators, native icon contrast, popup/submenu composition,
+   all focus states, supported scales/RTL and live failure-Recovery validation.
+4. Reconcile the preexisting Kvantum motion and native padding documentary drift
+   in a separately evidenced task; neither discrepancy authorizes changing them.
+
+Only the QSS is deployed for this pass, atomically, with an existing-restorer
+compatible private backup. Rollback restores the pre-pass QSS and the unchanged
+saved dolphinrc; consult the existing
+[restorer](../ricy-kit/contributions/dolphin-noctalia-identity/README.md#restore).
+The backup manifest contains only these two targets, so it does not replace the
+launcher, services, helper or theme. Preserve later user edits before restoring
+whole files. Private captures, logs, fixtures and backup paths stay outside the
+public kit. First pass ends here; no second phase starts automatically.

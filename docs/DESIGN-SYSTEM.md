@@ -8,6 +8,13 @@ consumer status and application consumption. The [source audit](../themes/tokens
 records existing hardcodes and conflicts. This document remains the normative
 entry point; it does not create a second palette.
 
+The [semantic role dictionary](../themes/tokens/SEMANTICS.md) formalizes existing
+color, surface/material, border/radius, elevation, motion, typography and state
+roles. These are documentary bindings to the current contract, not new JSON
+keys or runtime aliases. The [Noctalia Visual Language Grounding](NOCTALIA-VISUAL-GROUNDING.md)
+records official-source concepts, KNOWN/INFERRED/MISSING findings, app-theming
+feasibility and the Dolphin CURRENT → role → existing target mapping.
+
 The detailed [VISUAL IDENTITY](VISUAL-IDENTITY.md) and retained
 [legacy JSON](../ricy-kit/contributions/noctalia-visual-identity/tokens.json) provide
 provenance, including older implementation stages. The legacy JSON is unchanged
@@ -75,3 +82,30 @@ For states/interactions, materials, or adaptations between components, use
 Validate normal, hover, focus, selected, disabled, scale, monitors, reduced motion,
 and blur/junctions when applicable. Without real captures/interactions, report
 Visual NOT RUN; parsing tokens does not prove appearance.
+
+## Semantic selection — existing identity, values preserved
+
+1. Classify purpose: base chrome, content, floating presentation, control, or
+   inherited backing. Floating placement does not choose a color or shadow.
+2. Choose the existing scoped material: solid, glass intent, state overlay or
+   inherited fill. Ricy has no soft preset. Text/icons remain opaque.
+3. Resolve color pairs and border/radius through the
+   [dictionary](../themes/tokens/SEMANTICS.md). Native radii derive from the
+   existing scale; Dolphin/bar adaptations retain their own values and owners.
+4. Preserve consumer state, type units and motion preferences. Enter/exit/easing
+   are contextual; no new app animation, font or universal disabled recipe.
+5. Identify shadow/corner/blur ownership before painting: Noctalia shell,
+   Qt/QSS/Kvantum popup or KWin window integration. Missing recipes remain
+   MISSING; unknown live behavior remains UNKNOWN.
+
+Noctalia is a reference/consumer and possible future generator. Ricy tokens
+remain the authority. Shipped KColorScheme templates can modify global KDE
+configuration and derive colors beyond Ricy's current palette; they are not
+an approved propagation pipeline. The grounding evaluates options without
+adopting one. A new integration/ownership/runtime contract requires
+architecture-change and explicit approval before implementation.
+
+The [READY FOR DOLPHIN POLISH list](NOCTALIA-VISUAL-GROUNDING.md#ready-for-dolphin-polish)
+contains existing references for a subsequent approved task. No polish starts
+in this grounding. No canonical token, active theme/profile, compositor or
+Recovery runtime setting changes; no new Recovery dependency is introduced.

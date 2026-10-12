@@ -216,3 +216,33 @@ Use `apply.py --restaurar BACKUP` with the backup printed by installation;
 whole-file rollback can replace later helper updates. Existing processes keep
 their mapped helper; launch a new Dolphin window for the update. No private
 backup contents, compiled helpers or captures are included in the repository.
+
+## First visual polish pass — 2026-10-11
+
+The current audit, state classification, rejected native status experiment,
+Recovery limits and separate backlog are recorded in
+[Dolphin baseline](../../../docs/DOLPHIN-BASELINE.md#first-visual-polish-pass--2026-10-11).
+QSS now normalizes residual generic padding to the existing 4px spacing, preserves
+checked/pressed toolbar interaction colors through hover, supplies accent focus
+contours without changing border geometry, and keeps disabled tools unfilled.
+Approved tabs, Places, file states, popup materials and the newer tab-overflow
+helper remain intact. Values remain owned by the canonical token contract.
+
+This pass installs only QSS atomically. Do not run the full applicator as a test:
+it also rewrites launchers/services and native configuration. The normal native
+small status mode is retained; the tested full-width setting was reverted.
+Existing wrapper/helper/theme Recovery coupling and the preexisting Qt teardown
+crash are not solved by appearance changes. The private rollback manifest follows
+this contribution's existing restorer format and targets only QSS and dolphinrc.
+
+Offline checks (PyQt6 required; no desktop settings or file operations changed):
+
+```bash
+python3 -B ricy-kit/contributions/dolphin-noctalia-identity/validate-polish.py
+QT_SCALE_FACTOR=1.5 python3 -B ricy-kit/contributions/dolphin-noctalia-identity/validate-polish.py
+```
+
+These exercise real Qt state precedence, painting and native editor/tab/menu
+signals. They do not load the helper or prove compositor masks, device behavior
+or live Plasma Recovery. Captures use the registered wrapper's normal environment;
+incomplete isolated-theme captures are not current visual references.

@@ -38,6 +38,25 @@ def walk(value, path=''):
         yield path, value
 
 
+def validate_documented_paths(tokens, documents):
+    """Resolve documentary token paths without implementing semantic aliases."""
+    pattern = re.compile(
+        r'`((?:colors|materials|typography|geometry|motion|blur|application_adaptations)\.[a-z0-9_.]+)`'
+    )
+    count = 0
+    for document in documents:
+        paths = set(pattern.findall(document.read_text(encoding='utf-8')))
+        require(paths, f'No canonical token references in {document.name}')
+        for path in sorted(paths):
+            target = tokens
+            for part in path.split('.'):
+                require(isinstance(target, dict) and part in target,
+                        f'{document.name}: unresolved canonical token path {path}')
+                target = target[part]
+        count += len(paths)
+    return count
+
+
 def main():
     tokens = json.loads((BASE / 'tokens.json').read_text(), object_pairs_hook=unique_object)
     require(type(tokens['schema_version']) is int and tokens['schema_version'] == 1,
@@ -68,6 +87,11 @@ def main():
                 target = target[part]
             require(isinstance(target, (str, int, float)), f'Invalid scalar reference: {path}')
     print('PASS contract version, groups, color references, finite numbers and alpha units')
+
+    count = validate_documented_paths(tokens, [
+        BASE / 'SEMANTICS.md', ROOT / 'docs/NOCTALIA-VISUAL-GROUNDING.md',
+    ])
+    print(f'PASS {count} documentary canonical token references (semantic roles/Noctalia grounding)')
 
     provenance = tokens['provenance']
     reference = ROOT / provenance['reference']

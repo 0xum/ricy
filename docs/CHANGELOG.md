@@ -3,6 +3,59 @@
 Record significant changes in short entries. Minimum fields:
 Model/Agent, Date, Purpose, Validation performed. Do not sign source files.
 
+## 2026-10-11 — Rounded Dolphin path dropdown
+
+- **Model/Agent:** Codex (GPT-6).
+- **Date:** 2026-10-11 (America/Sao_Paulo).
+- **Purpose:** widen the compact path-dropdown button so its approved rounded
+  hover backing fits, matching the root breadcrumb button reference.
+- **Changes:** the existing Qt helper reserves a 24px width for
+  KUrlNavigatorDropDownButton, retaining the existing 28px height, radius6 and
+  hover-selection alpha65 treatment. Upstream derives the natural width from
+  half the natural height; the earlier helper height override left the button
+  too narrow. The user's clarification supersedes the initial glyph-only edit;
+  glyph geometry/stroke are restored and no oversized backing is painted outside
+  the control. Native menu, keyboard handling and breadcrumb behavior remain.
+  Atomic helper-only installation with private existing-restorer-compatible backups.
+- **Validation performed:** PASS helper compilation, native KUrlNavigator Qt
+  fixture with ten breadcrumb/editor toggles and unchanged URL/editor; controlled
+  hover in a real Dolphin window using the installed wrapper and a uniquely named
+  private diagnostic plugin confirms 24x28 bounds and unclipped rounded backing.
+  PASS architecture/token checks and whitespace. No token or KWin change.
+- **NOT RUN:** all scales/RTL, complete dropdown-menu keyboard interactions and
+  live Recovery. Existing windows retain their mapped helper; new processes load
+  the change. The documented shutdown SIGSEGV remains outside this visual edit.
+
+## 2026-10-11 — Dolphin first visual polish pass
+
+- **Model/Agent:** Codex (GPT-6).
+- **Date:** 2026-10-11 (America/Sao_Paulo).
+- **Purpose:** correct confirmed QSS spacing/state inconsistencies in the current
+  installed Dolphin while retaining approved layout, native behavior and the
+  separately updated tab-overflow helper.
+- **Changes:** normalize residual generic padding from 5px to existing 4px; preserve
+  checked/pressed toolbar interaction fill/foreground during hover; explicit
+  accent focus contours in existing border slots; unfilled disabled tools.
+  Atomically deploy only QSS with a private existing-restorer-compatible backup.
+  The native full-width status experiment exposed clipped storage controls and
+  was reverted; dolphinrc equals its initial bytes. No token, helper, theme,
+  launcher, MIME, FileManager1, filesystem implementation or KWin change.
+- **Validation performed:** PASS Qt QSS painting/state precedence and native
+  editor/tab/menu interactions at 1x/1.5x; installed-wrapper startup, directory/tab
+  navigation and live grid/compact/details captures; token checks, architecture,
+  Recovery offline, Kvantum INI/SVG parsing and changed-file whitespace checks.
+  PASS limited native offline fallback with missing optional visual layers and
+  Fusion under isolated D-Bus/config/state/data; not automatic Recovery.
+- **FAIL (preexisting):** customized Dolphin shutdown SIGSEGV in Qt application
+  destruction, also present before edits and documented by the tab-overflow task.
+- **UNKNOWN / NOT RUN:** independent live Recovery, every device/hover/focus state,
+  complete popup composition, live scale/monitor/RTL/reduced-motion combinations.
+  No complete Recovery-regression claim. No new compiled layer or backend test
+  applies. Wrong/incomplete early test captures were discarded after user correction.
+- **Record/backlog:** [first-pass audit](DOLPHIN-BASELINE.md#first-visual-polish-pass--2026-10-11)
+  documents categories, current-source differences, unchanged ownership/dependencies,
+  recovery implications and deferred status/lifetime work. No second phase.
+
 ## 2026-10-11 — Dolphin tab overflow controls
 
 - **Model/Agent:** Codex (GPT-6).
@@ -72,6 +125,58 @@ Model/Agent, Date, Purpose, Validation performed. Do not sign source files.
   exited 139; the previous baseline comparison reproduced the same failure.
 - **NOT RUN:** all display scales, live Recovery and every tab interaction.
   Existing windows keep the mapped helper; open a new window for the update.
+
+## 2026-10-11 — Noctalia Visual Language Grounding
+
+- **Model/Agent:** Codex (GPT-6).
+- **Date:** 2026-10-11 (America/Sao_Paulo).
+- **Purpose:** formalize existing Ricy visual roles using official Noctalia v5+
+  concepts while preserving themes/tokens as the canonical authority.
+- **Changes:** updated [DESIGN-SYSTEM](DESIGN-SYSTEM.md), added the documentary
+  [semantic dictionary](../themes/tokens/SEMANTICS.md) and
+  [grounding assessment](NOCTALIA-VISUAL-GROUNDING.md). Recorded
+  KNOWN/INFERRED/MISSING findings, color correspondences, surfaces/materials,
+  border/radius/shadow ownership, contextual motion/type/states, App Theming/
+  KColorScheme feasibility, Dolphin CURRENT → role → existing token mapping
+  and READY FOR DOLPHIN POLISH references. The existing token validator now
+  resolves documentary canonical paths; it does not implement semantic aliases.
+  No new architecture/generator contract was selected or made normative.
+- **Validation performed:** PASS `./scripts/verify architecture`,
+  `python3 -B scripts/test-foundation.py` (39 disposable-fixture regressions),
+  `python3 -B themes/tokens/validate.py` (95 documentary token references plus
+  existing schema/units/provenance/equality checks),
+  `python3 -B themes/tokens/render-reference.py --check` (identical SVG),
+  five isolated reference-validator probes (valid scalar/group and rejection
+  of missing scalar/scoped leaf, empty references and scalar traversal),
+  47 local documentation links/three heading anchors and diff whitespace.
+  Official URLs were accessed and the pinned upstream template/Style source
+  was inspected read-only. Repository/selected runtime fingerprints confirm
+  unchanged canonical JSON, existing identity assets and 49 selected installed
+  configuration/asset files; unrelated preexisting work was preserved.
+- **Harness scope:** `./scripts/verify all` exited2 with no failures and one
+  unavailable check. PASS maintained source syntax/historical guard syntax,
+  offline Recovery panel merge and 28 window-effect scenarios. This does not
+  certify a live session.
+- **FAIL:** none remaining. The initial foundation regression rejected new
+  direct links to outputs excluded from its fixture. Grounding now cites the
+  maintained provenance inventory and records those inspected paths as text;
+  the unchanged foundation suite passes. An initially incorrect external
+  Theme path was corrected to the official navigation target.
+- **NOT RUN:** Noctalia action/native regressions through the default harness
+  cache, which does not match the current cumulative patch; no cache was
+  rebuilt/replaced for this documentation task. Visual/scale/RTL interactions,
+  application propagation, live session and failure Recovery were not exercised.
+- **UNKNOWN:** generated output equivalence/end-to-end app theming, full private
+  palette equivalence, composited opacity/blur continuity, full shadow toggles,
+  helper lineage and independent live Recovery. Missing semantic values remain
+  unassigned rather than borrowing upstream defaults.
+- **NOT APPLICABLE:** runtime deployment, visual changes, generator/consumer
+  migration, KWin changes, new daemon/engine/ADR and automatic Dolphin polish.
+- **Recovery:** no applicator/hook/installer, profile/theme selection, service
+  restart, file-manager launch or compositor action ran. Canonical JSON remains
+  schema1/contract1.0.0 byte-identical; QSS/Kvantum/KColorScheme and existing
+  restoration paths remain intact. Rollback affects only this step's
+  documentation and reference-validator edits; no runtime dependency was added.
 
 ## 2026-10-11 — Taskbar actions preserve the clicked KWin window
 

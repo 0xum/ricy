@@ -7,6 +7,12 @@ entry point; [AUDIT](AUDIT.md) records provenance, hardcodes and discrepancies.
 [ADR-0005](../../docs/adr/0005-consumable-visual-tokens.md) records this task's
 authorized scope. Ricy owns visual roles; upstream owns toolkit primitives.
 
+[SEMANTICS](SEMANTICS.md) is the documentary role dictionary grounded in the
+existing values; [Noctalia grounding](../../docs/NOCTALIA-VISUAL-GROUNDING.md)
+records external concepts, missing roles, integration options and the future
+Dolphin consumer mapping. Neither adds keys, alias evaluation, a generator
+contract or runtime migration. Canonical JSON/schema/contract remain unchanged.
+
 The legacy contribution's [JSON snapshot](../../ricy-kit/contributions/noctalia-visual-identity/tokens.json)
 remains byte-for-byte intact for compatibility and provenance. Its values are
 no longer a second editable authority. The transport copy is historical and is
@@ -138,6 +144,8 @@ python3 themes/tokens/render-reference.py --check
 
 The validator checks structure, references/units, retained-snapshot SHA-256,
 before/after value equality, source-backed additions and exact SVG output. The
+validator also resolves exact inline canonical paths in SEMANTICS and the
+Noctalia grounding document, catching stale/missing token references. The
 migration equality guard is intentional: an approved future visual change must
 revise its provenance/guard and audit explicitly, rather than silently weakening
 the check. `--check` is read-only. To regenerate the reviewed board explicitly:

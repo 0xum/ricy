@@ -333,3 +333,21 @@ shutdown is not validated by this capture. NOT RUN all display scales, live
 Recovery and every tab interaction. The installed helper was replaced atomically;
 private rollback backup: the private backup printed during installation.
 New Dolphin processes load this change. Historical transport snapshots stay intact.
+
+
+## 2026-10-11 — Rounded path-dropdown control
+
+The user clarified that the purple backing, rather than the chevron glyph, was
+intended to match the rounded root breadcrumb button. The glyph-only adjustment
+is superseded and reverted. KUrlNavigatorDropDownButton now reserves the existing
+24px control width, with its existing 28px height and shared radius6/alpha65 hover
+paint. This contains the backing inside the actual widget instead of enlarging
+paint beyond the native narrow bounds. Native glyphs, menus and keyboard actions
+remain upstream-owned; file expansion arrows are unaffected.
+
+PASS helper build, native breadcrumb/editor fixture, and controlled hover capture
+in a real installed-wrapper Dolphin window: 24x28 bounds and rounded, unclipped
+backing. PASS architecture/token checks and whitespace. NOT RUN all scales/RTL,
+complete dropdown keyboard interactions or live Recovery. Only the helper is
+installed atomically with private restorer-compatible backups; no KWin, token,
+QSS or additional Recovery dependency. New processes load this correction.

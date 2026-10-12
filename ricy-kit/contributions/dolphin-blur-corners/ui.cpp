@@ -652,6 +652,11 @@ public:
             // 36px parent, rather than mixing 28px and clipped 36px segments.
             if (widget && widget->parentWidget() && widget->parentWidget()->inherits("KUrlNavigator") &&
                 qobject_cast<QAbstractButton *>(widget)) widget->setFixedHeight(28);
+            // The native path dropdown's size hint uses half its natural font
+            // height. Reserve the existing 24px control slot so the shared
+            // rounded hover backing fits inside its actual paint/hit bounds.
+            if (widget && QByteArray(widget->metaObject()->className()).contains("KUrlNavigatorDropDownButton"))
+                widget->setFixedWidth(24);
             if (widget && widget->parentWidget() && widget->parentWidget()->inherits("KUrlNavigator") &&
                 qobject_cast<QComboBox *>(widget)) widget->setFixedHeight(36);
             if (widget && widget->inherits("KFilePlacesView"))
