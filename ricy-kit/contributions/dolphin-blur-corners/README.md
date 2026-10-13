@@ -1,5 +1,167 @@
 # Dolphin: transparency with Qt and KWin native corners
 
+## Hide normal hover-selection badges in Ricy — 2026-10-13
+
+The helper sets Dolphin's native `General/ShowSelectionToggle` preference to
+false in its process-local shared KConfig, using nonpersistent write flags.
+Keep the shared object alive for Dolphin's settings reader; no disk override,
+paint suppression or invisible toggle hit area is introduced. Normal hover
+selection badges disappear for files and folders; native click/keyboard
+selection and explicit selection mode remain native. Plasma's independent
+preference remains unchanged, including after unrelated configuration saves.
+This supersedes reliance on the historical installer-written shared preference
+for ordinary Ricy launches. No new dependency, token, launcher or ownership
+change is required. New Ricy processes load the helper; restoration uses the
+existing private helper-only backup and identity restorer.
+
+The existing motion validator now checks the native shared value and verifies
+that unrelated saves preserve the independent disk value. Native Dolphin hover
+and keyboard selection are exercised separately in an isolated temporary
+fixture. These checks do not certify Recovery round trips.
+
+## Rounded embedded terminal with inset shadow — 2026-10-13
+
+The native Konsole TerminalDisplay inside Dolphin's TerminalPanel now clips
+its own surface to an 8px radius. An input-transparent child paints a bounded
+4px black inset, alpha65/255 at the edge with quadratic falloff. Values and
+justification are centralized in the scoped
+[token recipe](../../../themes/tokens/SEMANTICS.md#shadow-and-elevation).
+The external card, perfected close button, layout, native profile/font/colors,
+keyboard, accessibility and scrollback remain upstream. Other Konsole windows
+receive no treatment. No new runtime dependency or graphics-effect capture is
+added; resizing updates the mask/overlay without a permanent timer.
+
+```bash
+python3 -B ricy-kit/contributions/dolphin-blur-corners/validate-terminal.py
+QT_SCALE_FACTOR=1.5 python3 -B ricy-kit/contributions/dolphin-blur-corners/validate-terminal.py
+```
+
+The isolated fixture loads the actual installed Konsole part with production
+QSS and temporary XDG state. It checks native corner exposure, inset pixels,
+unchanged center/profile, keyboard/shell output, scrollback and resize.
+Runtime installation replaces only the helper atomically with a private
+restorer-compatible backup. Restore with the identity contribution's
+`apply.py --restaurar BACKUP`, then reopen Ricy Dolphin. Plasma and Recovery
+retain their independent file access. The fixture does not certify the live
+compositor, sustained output/CPU or Recovery round trips.
+
+PASS native Konsole-part checks above and standalone exclusion at 1x/1.5x,
+existing close-button/motion/plugin lifetime at both scales, inspected live 1x
+Dolphin compositor capture, build/source/installed equality, canonical tokens,
+architecture and whitespace. NOT RUN live 1.5x desktop, sustained terminal
+output/CPU and Recovery round trips. The new Ricy process uses the updated
+helper; the QSS/card/close-button treatment remains unchanged.
+
+## Rounded close backing with smaller Tabler glyph — 2026-10-13
+
+Restore the 24px native button with its existing 8px radius, and reduce only
+the Tabler icon canvas to 16px. This supersedes the 18px backing, whose retained
+radius looked nearly circular. The title/card-gutter center and 8px trailing
+inset remain balanced; native actions and state color pairs are preserved.
+
+PASS native geometry, balanced gaps, centered legible glyph, state pairs,
+close/reopen, RTL, motion/plugin lifetime at 1x/1.5x; inspected isolated hover
+capture, installed equality, architecture, whitespace. Live compositor capture
+and Recovery NOT RUN. Only the helper changes, with an atomic replacement and
+private restorer-compatible backup; a new Ricy process loads it. Plasma,
+canonical tokens, QSS radius, and panel padding remain unchanged.
+
+## 18px close control and balanced header gaps — 2026-10-13
+
+The native dock close button is now 18px, as requested. Vertical placement
+includes the adjacent card's existing 4px top gutter, balancing visible space
+above and below within integer-pixel rounding. Title text shares that center;
+the trailing inset remains 8px. The Tabler glyph and state colors are preserved.
+This supersedes the 24px control below without changing panel/card padding.
+
+PASS production-QSS native geometry, balanced gaps, centered/legible glyph,
+hover/press colors, close/reopen, RTL, motion, and plugin lifetime at 1x/1.5x;
+isolated control capture, installed/helper equality, architecture, whitespace.
+Live compositor capture and Recovery NOT RUN. Only the helper is replaced
+atomically with a private restorer-compatible backup; a new Ricy process loads
+it. Existing user windows, Plasma, and global configuration remain intact.
+
+## Compact Tabler dock close control — 2026-10-13
+
+The native close button now uses a centered 20px icon canvas inside a 24px
+control, retaining the 8px trailing inset and vertical title-row centering.
+This supersedes the preceding 28px control and indirect native icon sizing.
+The helper caches the existing optional Tabler `dialog-close.svg` and paints its
+alpha mask directly, avoiding Qt/Kvantum glyph reduction and placement. Normal,
+hover, pressed, and disabled glyphs use the existing paired foreground roles;
+QSS still paints the button backing. No new icon asset or dependency is added.
+Missing overlay falls back to the theme/native close icon. Native events,
+accessibility, locking, close/reopen, and dock resizing remain unchanged.
+
+PASS native production-QSS fixture: 24px geometry, centered legible Tabler
+strokes, hover/pressed fill/foreground pairs, native close/reopen, RTL, motion,
+and plugin lifetime at 1x/1.5x. Inspected isolated normal/hover/pressed control
+captures; source/installed helper and Tabler asset equality, architecture, and
+whitespace pass. Live compositor capture and Recovery NOT RUN. The private
+helper-only backup uses the existing identity restorer; reopen Ricy Dolphin
+after restoration. Existing windows retain their mapped helper; a new Ricy
+window was opened. Plasma, global themes, and card padding remain unchanged.
+
+## Unlocked dock headers and terminal junction — 2026-10-13
+
+Unlocked panels retain Qt's actual close buttons, now with 28px hit rectangles,
+8px trailing insets, and centered placement. The existing helper enables the
+native button-panel primitive for QSS normal/hover/press paint and draws its
+glyph at 16px, using the existing dialog-close theme icon with native fallback.
+Native close/reopen actions and dock dragging remain unchanged. Locked panels
+keep Dolphin's empty title widget and hide the close control.
+
+The helper paints each horizontal title once using the widget's active font,
+secondary text, a 16px leading inset, and vertical centering in the native title
+row. Its 8px vertical title margin reserves space for the close button. This
+avoids shifted QSS/Kvantum title painting and inconsistent native bold fonts.
+Vertical title bars retain upstream painting. The Places backing now stops at
+its dock's bottom gutter, so a bottom terminal header and its top gap inherit a
+uniform base surface across the whole window. Terminal content padding remains
+the shared file-card recipe; terminal profile/text rendering remain native.
+
+PASS production-QSS native close geometry, hover/press colors, close/reopen,
+RTL, motion, and plugin lifetime at 1x/1.5x; QSS/native locked-title checks at
+both scales; isolated native Dolphin header/terminal captures, build,
+source/installed equality, architecture, and whitespace. Live compositor
+capture of these final headers, all dock-drag arrangements, floating/vertical
+docks, live 1.5x desktop, and Recovery NOT RUN. A new Ricy process loads the
+matched helper/QSS pair; existing user windows remain intact. Private backup
+uses the identity contribution's existing restorer manifest. No global KDE,
+KWin, launcher, terminal profile, or Recovery dependency changes.
+
+## Shared split-pane and dock divider — 2026-10-13
+
+The Information/auxiliary dock separator now uses the exact same `panelDivider`
+paint routine as the existing split-folder handle: a 2px rounded line, 12px end
+insets, neutral track color, secondary half-alpha hover, and accent drag. Dock
+separators dispatch through Qt's native resize-handle primitive; native hit
+testing, separator extent, and resizing stay unchanged. The existing event
+filter tracks the main window's left-button state and clears it on release,
+mouse ungrab, or hiding. Card padding and QSS remain unchanged.
+
+PASS native dock-primitive normal/hover/drag colors, end insets, and thin stroke
+in the existing component fixture at 1x/1.5x; motion/plugin lifetime; isolated
+Dolphin rendering; live 1x split-folder/Information capture; installed/source
+equality, architecture, and whitespace. Live drag/release across every panel,
+floating docks, live 1.5x desktop, and Recovery NOT RUN. Only the Ricy helper is
+atomically replaced, with a private helper-only backup using the identity
+contribution's existing restorer. New processes load it; existing user windows
+and Plasma remain intact. No KWin, global theme, or integration change.
+
+## Generic plugin lifetime correction — 2026-10-13
+
+Qt owns generic plugin instances and destroys them during application shutdown.
+The helper must remain parentless; also parenting it to QApplication caused a
+second deletion and a reproducible shutdown crash on Qt 6.12.0. The motion
+validator now loads the actual shared plugin through Qt's generic plugin factory
+and completes application shutdown in an isolated offscreen fixture.
+
+PASS: the previous helper crashed in the isolated fixture; the corrected helper
+passes it and the motion suite. A real Dolphin window opened and exited normally.
+No visual tokens, file providers or action semantics change. Restore the emitted
+identity-installer backup to revert the helper and desktop integration together.
+
 ## Identity & Motion Pass — Motion
 
 `motion.h`, used by `ui.cpp`, owns only QWidget chrome interpolation inside the

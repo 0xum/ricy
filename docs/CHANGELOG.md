@@ -3,6 +3,346 @@
 Record significant changes in short entries. Minimum fields:
 Model/Agent, Date, Purpose, Validation performed. Do not sign source files.
 
+## 2026-10-13 — Route Dolphin shortcuts by the active shell
+
+- **Model/Agent:** Codex (GPT-6).
+- **Date:** 2026-10-13 (America/Sao_Paulo).
+- **Purpose:** Implement the clarified policy: Plasma Super+E uses native
+  Breeze Dolphin and its launcher uses Ricy Dolphin; Noctalia uses Ricy for
+  both. Extend the existing capture/transfer/restore to Meta+E, migrate the
+  active older shortcut snapshot once without replacing saved shell keys,
+  refresh Dolphin's stale desktop-action cache on transfer and retain its
+  persistent registered action on return. Preserve visual assets, global
+  defaults, wallpaper/panels and existing boundaries/dependencies. Back up
+  source and private shortcut state using the existing switching backup route.
+- **Validation performed:** PASS isolated capture/transfer/restore, empty
+  original, older/partial migration and reentry; startup and offline recovery
+  regressions; live shortcut-only Noctalia/Plasma/Noctalia round trip with
+  snapshot preservation and one owner per phase; actual refreshed Noctalia
+  action opens the Ricy helper/QSS and its live capture was inspected. The
+  preceding native action test confirmed Breeze without the helper/QSS.
+  PASS architecture and whitespace. User-reported PASS on 2026-10-13: the
+  requested behavior passed after reboot. Agent physical key input,
+  complete shell-switch/Recovery round trip or backup restoration after this
+  change are NOT RUN. The first live invocation exposed a stale native launch
+  cache; refreshing the Dolphin component corrected it and the rerun passed.
+
+## 2026-10-13 — Restore Super+E to native Plasma/Breeze Dolphin
+
+- **Model/Agent:** Codex (GPT-6).
+- **Date:** 2026-10-13 (America/Sao_Paulo).
+- **Purpose:** Follow the user's clarified preference for native Dolphin on
+  Super+E. The existing shortcut was active but launched the Ricy wrapper.
+  Add a local, hidden native-Breeze launcher alias and assign Meta+E only to
+  it, preserving the customized menu/default/FileManager1 route and other
+  shortcuts. Preserve KWin, Noctalia, Plasma and open applications; no session
+  switch or global appearance change. Back up files and action assignments
+  with a scoped private restoration script.
+- **Validation performed:** PASS desktop-entry validation, one live Meta+E
+  owner and persisted assignment; invoke the actual KGlobalAccel action and
+  confirm a new native Dolphin process with Breeze mapped, no Ricy helper or
+  stylesheet; inspect its live capture; unchanged menu/clipboard shortcuts,
+  restoration-script syntax, architecture and whitespace. NOT RUN physical
+  key input, fresh login, restoration execution or full Recovery round trips.
+
+## 2026-10-13 — Remove normal hover-selection badges from Ricy Dolphin
+
+- **Model/Agent:** Codex (GPT-6).
+- **Date:** 2026-10-13 (America/Sao_Paulo).
+- **Purpose:** Disable native `ShowSelectionToggle` through a nonpersistent,
+  process-local shared KConfig preference in the existing Ricy helper. Remove
+  normal file/folder hover badges while retaining native click/keyboard
+  selection and explicit selection mode. Preserve Plasma's disk preference,
+  geometry, icons, dependencies and Recovery boundaries. Atomically replace
+  only the helper with a private restorer-compatible backup and open a new
+  Ricy window.
+- **Validation performed:** PASS native Dolphin isolated before/after hover
+  comparison (one toggle becomes zero), Ctrl+A through native accessible
+  selected states, disk preference preservation on shutdown and unrelated
+  saves; existing close-button/motion/plugin-lifetime checks at 1x, helper build
+  and source/installed equality, architecture and whitespace. NOT RUN live
+  pointer hover across all view modes and Recovery round trips.
+
+## 2026-10-13 — Round the embedded terminal surface and add an inset shadow
+
+- **Model/Agent:** Codex (GPT-6).
+- **Date:** 2026-10-13 (America/Sao_Paulo).
+- **Purpose:** Round the native Konsole display inside Dolphin's TerminalPanel
+  to 8px and paint a subtle 4px inset shadow. Centralize the scoped recipe and
+  justification while retaining the existing external card and approved close
+  button. Preserve native input, profile, accessibility, scrollback and resize;
+  no standalone Konsole, global theme, KWin or Recovery dependency change.
+  Atomically install only the helper with a private backup and open a new
+  Ricy window.
+- **Validation performed:** PASS actual Konsole-part corner exposure, inset
+  pixels, unchanged center/font/colors, keyboard/shell output, scrollback,
+  resize and standalone exclusion at 1x/1.5x; existing close-button/motion/plugin
+  lifetime checks at both scales; live 1x Dolphin compositor capture inspected;
+  build/source/installed equality, tokens, architecture and whitespace checks.
+  NOT RUN live 1.5x desktop, sustained terminal-output/CPU trials and Recovery
+  round trips.
+
+## 2026-10-13 — Restore the rounded close button and reduce its icon
+
+- **Model/Agent:** Codex (GPT-6).
+- **Date:** 2026-10-13 (America/Sao_Paulo).
+- **Purpose:** Restore the 24px button with the existing 8px radius and reduce
+  only the Tabler icon canvas to 16px. Preserve balanced vertical gaps, native
+  actions, and state color pairs. Atomically replace only the helper with a
+  private backup and open a new Ricy window; Plasma and Recovery dependencies
+  remain unchanged.
+- **Validation performed:** PASS native geometry, balanced gaps, centered
+  legible glyph, state pairs, close/reopen, RTL, motion/plugin lifetime at
+  1x/1.5x; isolated hover capture, installed equality, architecture, whitespace.
+  NOT RUN live compositor capture and Recovery round trips.
+
+## 2026-10-13 — Reduce the dock close button and balance vertical gaps
+
+- **Model/Agent:** Codex (GPT-6).
+- **Date:** 2026-10-13 (America/Sao_Paulo).
+- **Purpose:** Reduce the native close control to the requested 18px. Include
+  the existing 4px card-top gutter in its vertical center and align title text
+  to the same center, preserving the Tabler glyph, state colors, trailing inset,
+  and panel padding. Atomically replace only the helper with a private backup;
+  open a new Ricy window. Plasma and Recovery dependencies remain unchanged.
+- **Validation performed:** PASS production-QSS 18px geometry, balanced gaps
+  within pixel rounding, centered/legible glyph, state colors, native close/
+  reopen, RTL, motion/plugin lifetime at 1x/1.5x; isolated capture, installed
+  equality, architecture, and whitespace. NOT RUN live compositor capture and
+  Recovery round trips.
+
+## 2026-10-13 — Correct the Dolphin dock close icon and compact alignment
+
+- **Model/Agent:** Codex (GPT-6).
+- **Date:** 2026-10-13 (America/Sao_Paulo).
+- **Purpose:** Use the existing Tabler close SVG directly in a centered 20px
+  icon canvas and compact 24px native control. Preserve the trailing/title-row
+  alignment and native actions while pairing glyph colors with existing button
+  states. Replace the ineffective indirect native icon-size override. Install
+  only the helper atomically with a private backup and open a new Ricy window.
+  No new asset, dependency, global theme, Plasma, or Recovery contract change.
+- **Validation performed:** PASS production-QSS geometry, centered/legible
+  glyph, paired hover/pressed colors, close/reopen, RTL, motion/plugin lifetime
+  at 1x/1.5x; inspected isolated normal/hover/pressed captures; helper and Tabler
+  asset equality, architecture, and whitespace. NOT RUN live compositor capture
+  and Recovery round trips.
+
+## 2026-10-13 — Align unlocked Dolphin headers and the terminal junction
+
+- **Model/Agent:** Codex (GPT-6).
+- **Date:** 2026-10-13 (America/Sao_Paulo).
+- **Purpose:** Style the native unlocked-panel close buttons with 28px hit areas
+  and existing visual states, align title text using the active widget font,
+  and stop the Places backing above the terminal so its header/top gap share a
+  uniform base surface. Preserve locking, native close/reopen and dragging,
+  terminal profile/content, card padding, and Plasma. Atomically install only
+  QSS/helper with a private backup and open a new Ricy process. Ownership,
+  dependencies, launchers, KWin, and Recovery contracts remain unchanged.
+- **Validation performed:** PASS production-QSS native dock geometry, state
+  colors, close/reopen, RTL, motion/plugin lifetime, and QSS/locked-title checks
+  at 1x/1.5x; isolated native Dolphin header/terminal captures, build,
+  source/installed equality, architecture, and whitespace. NOT RUN live
+  compositor capture of final headers, exhaustive drag arrangements,
+  floating/vertical docks, live 1.5x desktop, and Recovery round trips.
+
+## 2026-10-13 — Reuse the split-folder drag line between Dolphin panels
+
+- **Model/Agent:** Codex (GPT-6).
+- **Date:** 2026-10-13 (America/Sao_Paulo).
+- **Purpose:** Share the existing 2px divider renderer between split-folder
+  handles and native auxiliary dock separators, including existing state colors
+  and end insets. Preserve native resizing, card padding, and Plasma. Atomically
+  install only the Ricy helper with a private backup and open a new split window.
+  No ownership, dependency, KWin, or Recovery contract change.
+- **Validation performed:** PASS native dock-primitive paint/color/thickness/
+  inset checks and motion/plugin-lifetime checks at 1x/1.5x; isolated Dolphin
+  rendering; live 1x split-folder/Information capture; source/installed equality,
+  architecture, and whitespace. NOT RUN exhaustive live drag/release, floating
+  docks, live 1.5x desktop, and Recovery round trips.
+
+## 2026-10-13 — Align Dolphin auxiliary-panel padding
+
+- **Model/Agent:** Codex (GPT-6).
+- **Date:** 2026-10-13 (America/Sao_Paulo).
+- **Purpose:** Match Information/Folders/Terminal card gutters and inner padding
+  to the existing file card. Share edge detection and real layout margins in
+  the existing Ricy helper; preserve native panel controls and the Plasma
+  appearance. Atomically install only QSS/helper with a private backup and open
+  a new Ricy process, preserving existing windows and Recovery dependencies.
+- **Validation performed:** PASS live 1x Folders/Information/file-card capture,
+  isolated native panel rendering, installed/source equality, QSS state checks
+  at 1x/1.5x, motion/plugin-lifetime checks at 1x, architecture, and whitespace.
+  NOT RUN live terminal/floating panels, live 1.5x desktop, and Recovery.
+
+## 2026-10-13 — Align Ricy Dolphin settings and auxiliary panels
+
+- **Model/Agent:** Codex (GPT-6).
+- **Date:** 2026-10-13 (America/Sao_Paulo).
+- **Purpose:** Extend existing Qt/QSS visual roles to settings, toolbar editing,
+  and Information/Folders/Terminal panels. Preserve native controls and terminal
+  rendering. Correct disk-space text clipping caused by inherited vertical
+  layout margins, and align zoom/capacity paint with existing colors and radii.
+  Atomically install only QSS and the existing helper with a private backup;
+  refresh QSS only in Ricy processes and open a new process for helper loading.
+  Ownership/dependencies remain unchanged; no global KDE, launcher, KWin,
+  canonical-token, or Recovery dependency change.
+- **Validation performed:** PASS native Dolphin captures of the two dialogs,
+  auxiliary panels, and readable status controls at 1x; extended QSS state and
+  keyboard tests plus motion/plugin-lifetime checks at 1x/1.5x; architecture,
+  whitespace, and source/installed equality. NOT RUN live scaled desktop,
+  complete settings/popup coverage, file operations, and Recovery round trips.
+
+## 2026-10-13 — Remove the Ricy Dolphin main-panel outline
+
+- **Model/Agent:** Codex (GPT-6).
+- **Date:** 2026-10-13 (America/Sao_Paulo).
+- **Purpose:** Make the existing DolphinViewContainer border transparent only
+  in Ricy QSS, preserving its geometry and other visual properties. Updated the
+  installed stylesheet and the running Ricy process through the existing D-Bus
+  setter; native Plasma/Breeze receives no stylesheet update. Ownership and
+  Qt/QSS dependencies remain unchanged; a private QSS-only backup retains the
+  existing restorer manifest format. No Recovery dependency is introduced.
+- **Validation performed:** PASS source/installed/runtime stylesheet equality,
+  existing QSS interaction checks at 1x, and architecture validation. Visual
+  NOT RUN: the target window was not visible in desktop captures. Live Recovery
+  and file operations NOT RUN; no related behavior changed.
+
+## 2026-10-13 — Apply the documented terminal appearance for fish
+
+- **Model/Agent:** Codex (GPT-6).
+- **Date:** 2026-10-13 (America/Sao_Paulo).
+- **Purpose:** apply the existing Ricy terminal appearance to the Konsole windows
+  running the user's fish shell, conditional on documented configuration.
+- **Changes:** use the maintained konsole-animated-cursor applicator to install
+  PlasmaBlur profile/palette, Kvantum wrapper and application entry. Select the
+  profile as default and preserve unrelated konsolerc settings. The documented
+  preset uses Catppuccin Mocha, JetBrainsMono Nerd Font 10pt, .85 opacity, blur
+  request and animated cursor support. No fish-specific Ricy prompt preset was
+  found; preserve the user's CachyOS/Pure prompt and fish configuration.
+- **Validation performed:** PASS supported AnimatingCursorEnabled property,
+  exact profile/palette asset equality, desktop-file validation and fish config
+  syntax. PASS byte equality of personal fish config/universal variables before
+  and after application. PASS a fresh default-profile Konsole window running
+  fish, reporting Plasma Blur and mapping Kvantum; visually inspected font,
+  palette and terminal surface. Existing terminal windows were not closed.
+  Backup emitted by the maintained applicator. NOT RUN every terminal launch
+  route, all ANSI combinations, cursor-motion timing or new-login recovery.
+
+## 2026-10-13 — Keep two shell-switching entries in the application menu
+
+- **Model/Agent:** Codex (GPT-6).
+- **Date:** 2026-10-13 (America/Sao_Paulo).
+- **Purpose:** remove duplicate/test script entries from the user's launcher and
+  keep only the proven Return to Noctalia and Return to Plasma actions.
+- **Changes:** back up and remove three legacy menu/clipboard/return entries and
+  the redundant visible toggle entry. Hide the package's direct Noctalia daemon
+  launcher with a user-local NoDisplay override. Keep the active menu/clipboard
+  desktop IDs as NoDisplay helpers for Super/Super+Space/Super+V. Apply NoDisplay
+  to their maintained templates and the installer's optional toggle entry so a
+  switch or reinstall does not reintroduce visible duplicates. Preserve runtime
+  scripts, service paths, package files and recovery commands.
+- **Validation performed:** PASS desktop-file-validate for the two visible
+  launchers, hidden helpers and package override; application-entry inspection
+  confirms exactly two visible Ricy actions; live shortcut registry retains all
+  three menu/clipboard bindings. PASS architecture and whitespace checks.
+  NOT RUN another shell round trip or login in this menu-only cleanup; both
+  retained actions were already exercised earlier in this session.
+
+## 2026-10-13 — Fix Noctalia startup after a cold login
+
+- **Model/Agent:** Codex (GPT-6).
+- **Date:** 2026-10-13 (America/Sao_Paulo).
+- **Purpose:** prevent Noctalia initialization from aborting after reboot when
+  installed static shell/search units are not loaded yet.
+- **Changes:** make `reset-failed` preparation nonfatal. The subsequent shell
+  start and readiness checks remain mandatory, with existing Plasma recovery on
+  actual failure. Restore the user-requested Noctalia autostart preference.
+  No new watchdog, delay, session boundary or layout change.
+- **Validation performed:** KNOWN current-boot journal and a direct invocation
+  reproduce `Unit not loaded` for reset-failed. PASS a regression that fails on
+  the prior integration and passes after the fix; a separate case confirms that
+  real shell-start failure still propagates and calls recovery. PASS architecture
+  and recovery validators, live startup in the affected boot, shell/search/
+  integration active, IPC responsive and persistent autostart target enabled.
+  PASS captured layout and centered control preserved. NOT RUN another reboot
+  or login after this correction; persistent shell-failure recovery remains
+  outside this test. Original source/validator backed up privately.
+
+## 2026-10-13 — Refresh the Dolphin shortcut cache and compare shell modes
+
+- **Model/Agent:** Codex (GPT-6).
+- **Date:** 2026-10-13 (America/Sao_Paulo).
+- **Purpose:** make Meta+E launch the Ricy-customized Dolphin and verify that
+  Plasma and Noctalia use the same Dolphin appearance.
+- **Changes:** the installed desktop override, FileManager1 service and systemd
+  drop-in already pointed to the visual wrapper. The existing KGlobalAccel
+  service-action component retained an earlier `/usr/bin/dolphin` launch entry.
+  Back up the shortcut/desktop files, rebuild the KDE service cache, clean up
+  only the Dolphin component and register its `_launch` action with Meta+E.
+  Preserve application identity, MIME defaults, other shortcuts and source assets.
+- **Validation performed:** PASS reproduction through the actual cached shortcut
+  action: the original launch lacked the Ricy helper. PASS refreshed invocation
+  in both Noctalia and Plasma: wrapper arguments, mapped Qt helper, Kvantum and
+  stylesheet source were correct. PASS identical QSS and theme/helper hashes
+  across shell modes, and one Meta+E registration. Return to Noctalia with the
+  centered control preserved. Only agent-created Dolphin test windows were
+  closed. NOT RUN physical keyboard input, new login, every file operation or
+  all visual/interaction states.
+
+## 2026-10-13 — Restore the captured Noctalia preferences and center its control
+
+- **Model/Agent:** Codex (GPT-6).
+- **Date:** 2026-10-13 (America/Sao_Paulo).
+- **Purpose:** restore the user's saved Ricy layout from the 2026-10-12
+  integration snapshot. The initial migration preserved an older local profile
+  and omitted the versioned UI overrides; matching that older backup did not
+  reproduce the captured Ricy layout.
+- **Changes:** restore captured base configuration, palette, settings, four plugin
+  payloads and selected community template while preserving private runtime data.
+  Adapt saved monitor identifiers to the destination's two 1920x1080 outputs
+  and the wallpaper path to a user-owned asset. Per explicit user clarification,
+  place `control-center` alone in `bar.default.center`; move the captured center
+  clock to the end group. Retain captured capsule treatment, 42px thickness,
+  scales, font and border preferences. Preserve the original source snapshot.
+- **Validation performed:** PASS all snapshot payload checksums, configuration
+  validation, effective configuration export, active shell/search/integration and
+  visual inspection of both bars with the Noctalia icon centered. PASS restored
+  monitor placement and visible desktop widgets. Destination/profile/template
+  backup saved before application. NOT RUN every plugin/account operation,
+  template destination, all interaction states, login and failure recovery.
+
+## 2026-10-13 — Migrate the installed legacy desktop to the GitHub kit
+
+- **Model/Agent:** Codex (GPT-6).
+- **Date:** 2026-10-13 (America/Sao_Paulo).
+- **Purpose:** update this CachyOS desktop using `https://github.com/0xum/ricy`,
+  revision `9815558313809c31887bbc55e3a8717bac31d039`.
+- **Changes:** build and activate the maintained cumulative Noctalia 5.2.1
+  patch; install persistent shell/search/session integration and panel-only
+  switching, preserving the legacy profile, private state and original panel
+  backup. Disable the legacy full-layout session monitor and route its return
+  wrappers to the maintained switching command. Remove legacy shortcut defaults
+  to avoid duplicate menu/clipboard registrations. A session drop-in preserves
+  applications and selects the migrated profile while an existing child process
+  keeps the former transient shell unit alive. Apply the maintained Dolphin
+  identity/helper and window fade/expansion assets, with installer backups.
+- **Local compatibility fixes:** make the KConfig reader accept valid valueless
+  deletion entries such as `BorderSize[$d]`. Keep the Qt generic plugin parentless
+  because Qt owns its shutdown lifetime; parenting it to QApplication caused
+  double deletion. Add a real generic-plugin shutdown regression to the existing
+  isolated motion validator. No compositor replacement or new architecture.
+- **Validation performed:** PASS isolated release build and `scripts/verify all`
+  with the matching cumulative source, zero failures or unavailable checks;
+  Dolphin motion, QSS/icon validation and generic-plugin shutdown regression;
+  real Dolphin opening and clean exit; systemd unit validation, running executable
+  hash equality, shell IPC and search adapter activation. PASS live Plasma/Noctalia
+  round trip: panels restored then hidden, KWin PID and wallpaper preserved;
+  final shell/search/integration active and login preference enabled.
+  NOT RUN reboot/login, persistent shell-failure recovery, all file operations,
+  all visual states and monitor scales. Optional compiled KWin corner/blur
+  plugins were not installed. Private backup paths remain in the local update
+  record rather than public source documentation.
+
 ## 2026-10-12 — Integrate Noctalia Night Light with KWin
 
 - **Model/Agent:** Codex (GPT-6).
@@ -78,7 +418,7 @@ Model/Agent, Date, Purpose, Validation performed. Do not sign source files.
   opaque colors/alpha; explicit native Places view/index/paint context keeps
   style identity during capture. Existing validator compiles the actual style
   and adapter and checks selected pixels/opacity through rapid hover and settle.
-- **Validation performed:** PASS current Qt/KIO motion and QSS checks at1x/1.5x,
+- **Validation performed:** PASS current Qt/KIO motion and QSS checks at 1x/1.5x,
   native before/after reproduction (24/24 bad original frames,0/24 corrected at
   each scale), build/install equality, architecture/tokens and whitespace.
   FAIL preexisting shutdown139; live idle sample UNKNOWN due active tab hover/
@@ -121,7 +461,7 @@ Model/Agent, Date, Purpose, Validation performed. Do not sign source files.
   No global icon setting, persistent Dolphin theme key, content substitution or
   geometry change. Existing native breadcrumb/tab primitive glyphs remain.
 - **Validation performed:** PASS native paths/content inheritance, SVG paint/
-  licensing/scope checks, native modes/contrast/stable geometry at1x/1.5x, live
+  licensing/scope checks, native modes/contrast/stable geometry at 1x/1.5x, live
   toolbar/menu/breadcrumb/tabs/overflow/search, missing-overlay Breeze fallback,
   helper build/installed equality, QSS states and architecture/token checks.
 - **FAIL, preexisting:** shutdown139 remains; all device/thumbnail formats, full
@@ -143,7 +483,7 @@ Model/Agent, Date, Purpose, Validation performed. Do not sign source files.
   infrastructure/defaults remain unchanged.
 - **Validation performed:** PASS phase-scoped typography: active KDE/Qt resolution,
   isolated helper build, installed equality, live native Dolphin modes/chrome/menu/
-  editor/tabs/Places/status at1x and process1.5x, Noctalia bar/launcher/controls,
+  editor/tabs/Places/status at 1x and process1.5x, Noctalia bar/launcher/controls,
   config validation/reload, QSS/state checks at both scales, architecture/tokens
   and whitespace. Native status elision remains preexisting.
 - **FAIL, preexisting:** shutdown139 reproduced with backed-up helper/QSS and the

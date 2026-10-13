@@ -23,6 +23,17 @@ documentation/retirement task. Cold activation, unavailable helper/theme and
 login/failure recovery are NOT RUN; independent Recovery remains UNKNOWN.
 ADRs0007/0008/0009 and the own prototype are historical, not current contracts.
 
+KNOWN update 2026-10-13: the user selected native Dolphin/Breeze for Plasma's
+Meta+E and Ricy Dolphin for the application launcher; Noctalia uses Ricy for
+both. The existing switching code transfers/restores this shortcut and extends
+older snapshots without replacing saved shell keys. The native launcher alias
+executes the installed Dolphin directly with Breeze, independent of the visual
+helper. PASS actual native launch, Noctalia Ricy launch and shortcut-only
+restore/transfer; the user reported the requested behavior passed after reboot
+on 2026-10-13. Full shell-switch and failure recovery after this update remain
+NOT RUN. Shared menu/default/FileManager1 coupling remains;
+this narrow shortcut exception does not prove complete Recovery isolation.
+
 The [contribution grounding](CONTRIBUTION-AUDIT.md) identifies RECOVERY consumers
 and part-level exceptions. On the audited installation, native blur is loaded,
 the ricyblur selector is enabled but failed. Its original earlier-binary

@@ -1,5 +1,61 @@
 # Dolphin baseline — Ricy file manager
 
+## Shell-specific Dolphin shortcut policy — 2026-10-13
+
+KNOWN user-approved routing: Plasma Meta+E opens native Dolphin/Breeze; Plasma
+application launcher opens Ricy Dolphin. In Noctalia, both open Ricy Dolphin.
+This supersedes the unconditional native-shortcut exception below.
+
+The [existing switching integration](../ricy-kit/contributions/plasma-noctalia-switching/README.md#dolphin-launch-policy--2026-10-13)
+captures/transfers/restores Meta+E alongside its existing shell shortcuts.
+The current older snapshot was extended while preserving its saved menu and
+clipboard entries. Only Dolphin's cached desktop-action component is refreshed
+on Noctalia entry; the native application action remains registered on Plasma
+return, retaining its explicit restored binding. The menu/default/FileManager1
+registrations and all Dolphin visual assets remain unchanged.
+
+PASS offline shortcut migration/reentry/restore and recovery checks, actual
+live shortcut-only round trip, single Meta+E owner in each binding phase, and
+Noctalia cached-action launch with the Ricy helper/QSS; native Breeze launch
+was verified in the preceding repair. User-reported PASS on 2026-10-13: the
+requested routing passed after reboot. Agent physical key input and complete
+shell-switch/Recovery round trips after this change are NOT RUN.
+
+## Native Dolphin shortcut exception — 2026-10-13
+
+KNOWN: at the user's request, Meta+E now belongs only to the local
+`org.kde.dolphin-plasma.desktop` action. It executes
+`/usr/bin/env QT_STYLE_OVERRIDE=breeze /usr/bin/dolphin --new-window %u`.
+The original Ricy desktop action has no assigned shortcut; its menu entry,
+MIME default, FileManager1 route, wrapper and visual assets remain available.
+This supersedes the customized Meta+E routing recorded below. No shell switch,
+global style change, service restart or KWin restart accompanies this repair.
+The shortcut server is owned by KWin in this session; the inactive standalone
+kglobalaccel service was not evidence that shortcuts were unavailable.
+
+PASS one live Meta+E owner, persisted assignment, actual cached-action launch
+with Breeze loaded and no Ricy helper/stylesheet, inspected native-window
+capture and unchanged Noctalia menu/clipboard shortcuts. Private backup
+contains the previous desktop/shortcut state and a scoped restoration script.
+NOT RUN physical keyboard input, a fresh login, rollback execution or full
+Recovery round trips. This is a local shortcut exception, not independent
+Recovery for FileManager1 or the complete session.
+
+## Auxiliary surfaces update — 2026-10-13
+
+KNOWN: the [maintained QSS and helper](../ricy-kit/contributions/dolphin-noctalia-identity/README.md#2026-10-13--settings-auxiliary-panels-and-status-controls)
+now cover settings/toolbar dialogs, Information/Folders/Terminal card surfaces,
+zoom paint, and the disk-space indicator. The inherited vertical margins that
+clipped the disk-space button are removed in the existing helper, with its
+native value/provider retained. This supersedes the earlier clipped-storage
+observation for the captured 1x layout; narrow-width native elision, general
+small-status summaries, and file-row bounds are separate limitations.
+No canonical token or global KDE configuration change. Native Plasma/Breeze
+receives no Ricy QSS/helper. Helper changes require a new Ricy process.
+
+PASS scoped native captures and component checks at 1x/1.5x; live scaled desktop,
+complete popup/settings coverage, file operations, and Recovery NOT RUN.
+
 Audit date:2026-10-11 (America/Sao_Paulo). Status: **KNOWN installed/configured
 baseline**, read-only. Current direction: [ADR-0011](adr/0011-dolphin-as-ricy-file-manager.md).
 The user assesses Dolphin as **about 90% visually complete**. This is the user's

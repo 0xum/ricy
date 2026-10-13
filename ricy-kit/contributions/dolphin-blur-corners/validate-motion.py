@@ -23,6 +23,10 @@ with tempfile.TemporaryDirectory(prefix='ricy-motion-validation-') as temporary:
     config = work / 'config'
     config.mkdir()
     (config / 'kdeglobals').write_text('[KDE]\nAnimationDurationFactor=1\n')
+    close_assets = work / 'data/icons/Ricy-Dolphin/scalable/actions'
+    close_assets.mkdir(parents=True)
+    shutil.copy2(here.parent / 'dolphin-noctalia-identity/icons/Ricy-Dolphin/scalable/actions/dialog-close.svg',
+                 close_assets / 'dialog-close.svg')
     includes = [f'-I{path}' for path in Path('/usr/include/KF6').iterdir() if path.is_dir()]
     for name in ('validate-motion.cpp', 'motion.h', 'ui.cpp', 'ui.json'):
         shutil.copy2(here / name, work / name)
@@ -34,5 +38,19 @@ with tempfile.TemporaryDirectory(prefix='ricy-motion-validation-') as temporary:
                     '-lKF6KIOFileWidgets', '-lKF6KIOCore', '-lKF6KIOWidgets', '-lKF6IconThemes'], check=True)
     environment = dict(os.environ, QT_QPA_PLATFORM='offscreen', XDG_CONFIG_HOME=str(config),
                        XDG_DATA_HOME=str(work / 'data'), XDG_STATE_HOME=str(work / 'state'))
-    subprocess.run([str(work / 'validate-motion')], env=environment, check=True)
+    subprocess.run([str(work / 'validate-motion'),
+                    str(here.parent / 'dolphin-noctalia-identity/dolphin.qss')], env=environment, check=True)
+    # Loading through Qt's factory exercises ownership that direct fixtures miss.
+    generic = work / 'plugins/generic'
+    generic.mkdir(parents=True)
+    subprocess.run(['g++', '-std=c++17', '-fPIC', '-shared', *includes,
+                    str(work / 'ui.cpp'), '-o', str(generic / 'libricydolphinui.so'),
+                    *qt, '-lKF6ConfigCore', '-lKF6IconThemes'], check=True)
+    subprocess.run(['g++', '-std=c++17', str(here / 'validate-plugin-lifetime.cpp'),
+                    '-o', str(work / 'validate-plugin-lifetime'), *qt], check=True)
+    environment['QT_PLUGIN_PATH'] = str(work / 'plugins')
+    subprocess.run([str(work / 'validate-plugin-lifetime'), '-plugin', 'ricydolphinui'],
+                   env=environment, check=True)
+    print('PASS generic plugin creation and application shutdown without double deletion')
+
 print('NOT RUN live Dolphin/compositor, large directory repaint/CPU, native KDE disable and Recovery')

@@ -122,6 +122,15 @@ def main():
     # Scoped native popup, scrollbar and panel treatments requested 2026-10-11.
     for adaptation in ('context_menu', 'scrollbars', 'rubber_band', 'panel_layout', 'launch'):
         dolphin.pop(adaptation)
+    terminal_surface = dolphin.pop('embedded_terminal')
+    require(terminal_surface['radius'] == 8 and terminal_surface['inner_shadow'] == {
+        'color': '#000000', 'alpha_255': 65, 'extent_logical_px': 4,
+        'falloff': 'quadratic', 'placement': 'inside'},
+        'Review the user-approved scoped terminal inset recipe')
+    terminal_helper = (ROOT / terminal_surface['source']).read_text()
+    require(all(value in terminal_helper for value in (
+        'TerminalInnerRadius = 8;', 'TerminalShadowExtent = 4;', 'TerminalShadowAlpha = 65;')),
+        'Embedded terminal paint differs from canonical scoped values')
     require(dolphin['rows']['radius_max'] == tokens['geometry']['native_radius_logical_px']['medium'],
             'Dolphin rows must use the native medium radius')
     dolphin['rows'] = dict(dolphin['rows'])

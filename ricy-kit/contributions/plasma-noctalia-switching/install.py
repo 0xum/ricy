@@ -94,7 +94,8 @@ for name, title, mode, icon in [('noctalia', 'Return to Noctalia', 'noctalia', '
     write(home / '.local/share/applications' / f'ricy-{name}.desktop',
           '[Desktop Entry]\nType=Application\nName=' + title + '\n'
           'Comment=Preservation wallpaper, panels and custom profile; it also goes on next login\n'
-          'Exec=' + quote(base / 'ricy') + ' ' + mode + '\nIcon=' + icon + '\nCategories=Utility;\nTerminal=false\n')
+          'Exec=' + quote(base / 'ricy') + ' ' + mode + '\nIcon=' + icon + '\nCategories=Utility;\nTerminal=false\n'
+          + ('NoDisplay=true\n' if mode == 'alternar' else ''))
 for name in ['ricy', 'integration.py']:
     (base / name).chmod(0o755)
 (backup / 'manifest.json').write_text(json.dumps(manifest, indent=2) + '\n')

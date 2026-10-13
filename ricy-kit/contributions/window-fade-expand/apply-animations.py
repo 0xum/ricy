@@ -28,7 +28,7 @@ def main():
  parser=argparse.ArgumentParser();parser.add_argument('--restaurar',type=Path);args=parser.parse_args()
  if args.restaurar:
   restore(args.restaurar);print('Previous effect and preferences restored.');return
- before=configparser.ConfigParser(interpolation=None,strict=False);before.optionxform=str;before.read(config)
+ before=configparser.ConfigParser(interpolation=None,strict=False,allow_no_value=True);before.optionxform=str;before.read(config)
  backup=state/'ricy-fade-expand-backups'/datetime.now().strftime('%Y%m%d-%H%M%S-%f');backup.mkdir(parents=True,mode=0o700)
  m={'had_effect':target.exists(),'settings':[{'group':g,'key':k,'value':before.get(g,k,fallback=None)} for g,k in settings]}
  if target.exists():shutil.copytree(target,backup/'effect')

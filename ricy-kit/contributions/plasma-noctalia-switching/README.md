@@ -14,6 +14,35 @@ Requires the Plasma Wayland session, its three units already installed, Python/P
 
 ## Use
 
+### Dolphin launch policy — 2026-10-13
+
+At the user's request, Plasma uses native Dolphin/Breeze for Meta+E and the
+Ricy-customized Dolphin for the application launcher. Noctalia uses the Ricy
+version for both. The existing shortcut transfer now includes Meta+E, captures
+its Plasma owner, and restores that owner on return. The native launcher alias
+is hidden from application search; the original Dolphin menu/default and
+FileManager1 registrations keep the Ricy wrapper.
+
+An older active three-key snapshot is extended once without replacing captured
+menu/clipboard assignments. The persistent Dolphin action entry, including an empty
+assignment, marks the new capture within the existing list schema. Reentry
+preserves it. Dolphin remains a registered application on return; only the
+temporary menu/clipboard components are unregistered. Entering Noctalia
+refreshes only Dolphin's KGlobalAccel desktop-action cache so an older native
+Exec cannot bypass the current Ricy desktop entry. No new daemon, protocol,
+session restart, appearance token or snapshot-path migration is introduced.
+
+PASS isolated capture/transfer/restore, unbound-original and older/partial
+snapshot scenarios; live shortcut-only restore/transfer round trip, unchanged
+snapshot, actual Noctalia cached-action launch with Ricy helper/QSS, and native
+Plasma route ownership. The earlier native-action test confirmed Breeze with
+no Ricy helper/QSS. User-reported PASS on 2026-10-13: requested launch behavior
+passed after reboot. Agent physical key input and a complete shell-switch/
+Recovery round trip after this change are NOT RUN. The private backup contains
+the earlier integration source and shortcut state; return to Plasma before
+using the existing installation restorer. Native Dolphin remains installed
+and accessible independently of the visual helper.
+
 ```bash
 ricy noctalia   # select Noctalia and enable it for the next login
 ricy plasma     # select Plasma and disable Noctalia autostart
@@ -49,3 +78,21 @@ python "$HOME/Projects/ricy/ricy-kit/contributions/plasma-noctalia-switching/res
 The restorer only restores wrappers/command entries and the alternation state. It does not replace captured appletsrc/plasmashellrc for diagnosis, preserving the current desktop. It does not delete the Noctalia profile, effects, appearance or backups. The old replaced scripts again have the original limitation: they can restore an old wallpaper/layout. To keep alternating, keep this contribution installed.
 
 It is not a session/compositor exchange: Noctalia is integrated to KDE/KWin. Desktop changes themselves are shared. login/block appearance remains independent; its restorers remain in other contributions.
+
+## Cold-login initialization
+
+On a fresh login, the shell and search units can be installed but not yet loaded
+by the user manager. `systemctl reset-failed` then reports `Unit not loaded`;
+this preparation must not abort startup. Integration treats clearing prior
+failures as optional, followed by a checked shell start. Real startup/readiness
+failures retain the existing Plasma restoration path. `test-startup.py`, included
+by `verify.py`, exercises both cases without contacting the desktop session.
+
+## Application menu entries
+
+Only **Return to Noctalia** and **Return to Plasma** are visible shell-switching
+entries. The optional toggle remains available through `ricy alternar` and an
+undisplayed desktop entry. Menu/clipboard desktop IDs remain registered for
+shortcuts with `NoDisplay=true`; they are internal helpers rather than extra
+application-search results. Legacy test entries and the package's direct daemon
+launcher are excluded from this installation's application menu.

@@ -8,6 +8,7 @@
 #include <QStyleFactory>
 #include <QStyleOptionViewItem>
 #include <QStyleOptionHeader>
+#include <QStyleOptionDockWidget>
 #include <QFont>
 #include <QPainter>
 #include <QAbstractItemView>
@@ -29,11 +30,79 @@
 #include <QDockWidget>
 #include <QSplitterHandle>
 #include <QMouseEvent>
+#include <QtMath>
+#include <QStandardPaths>
 #include <KIconTheme>
 #include <KIconLoader>
 #include "motion.h"
 
 namespace {
+// Scoped values documented in application_adaptations.dolphin.embedded_terminal.
+constexpr qreal TerminalInnerRadius = 8;
+constexpr int TerminalShadowExtent = 4;
+constexpr int TerminalShadowAlpha = 65;
+bool embeddedTerminal(const QWidget *widget) {
+    if (!widget || !widget->inherits("Konsole::TerminalDisplay")) return false;
+    for (auto *parent = widget->parentWidget(); parent; parent = parent->parentWidget())
+        if (parent->inherits("TerminalPanel")) return true;
+    return false;
+}
+class TerminalInsetSurface : public QWidget {
+public:
+    explicit TerminalInsetSurface(QWidget *terminal)
+        : QWidget(terminal), m_originalMask(terminal->mask()) {
+        setObjectName(QStringLiteral("ricyTerminalInset"));
+        setAttribute(Qt::WA_TransparentForMouseEvents);
+        setAttribute(Qt::WA_NoSystemBackground);
+        setFocusPolicy(Qt::NoFocus);
+        terminal->installEventFilter(this);
+        sync();
+    }
+    void sync() {
+        auto *terminal = parentWidget();
+        if (!terminal || terminal->size().isEmpty()) return;
+        const QRect area = terminal->rect();
+        const qreal radius = qMin(TerminalInnerRadius,qMin(area.width(),area.height())/2.0);
+        QPainterPath shape;
+        shape.addRoundedRect(QRectF(area),radius,radius);
+        QRegion mask(shape.toFillPolygon().toPolygon());
+        if (!m_originalMask.isEmpty()) mask &= m_originalMask;
+        if (terminal->mask() != mask) terminal->setMask(mask);
+        if (geometry() != area) setGeometry(area);
+        raise();
+        show();
+        update();
+    }
+protected:
+    bool eventFilter(QObject *, QEvent *event) override {
+        if (event->type() == QEvent::Resize || event->type() == QEvent::Show ||
+            event->type() == QEvent::LayoutRequest) sync();
+        return false;
+    }
+    void paintEvent(QPaintEvent *) override {
+        QPainter painter(this);
+        painter.setRenderHint(QPainter::Antialiasing);
+        const QRectF area(rect());
+        const qreal radius = qMin(TerminalInnerRadius,qMin(width(),height())/2.0);
+        // Bounded inset bands avoid capturing/repainting the terminal's text
+        // into a graphics effect. No timer, outside shadow or input interception.
+        for (int inset=0; inset<TerminalShadowExtent; ++inset) {
+            const QRectF outer = area.adjusted(inset,inset,-inset,-inset);
+            const QRectF inner = outer.adjusted(1,1,-1,-1);
+            if (inner.isEmpty()) break;
+            QPainterPath band;
+            band.setFillRule(Qt::OddEvenFill);
+            band.addRoundedRect(outer,qMax<qreal>(0,radius-inset),qMax<qreal>(0,radius-inset));
+            band.addRoundedRect(inner,qMax<qreal>(0,radius-inset-1),qMax<qreal>(0,radius-inset-1));
+            const qreal strength = 1-inset/qreal(TerminalShadowExtent);
+            QColor shadow("#000000");
+            shadow.setAlpha(qRound(TerminalShadowAlpha*strength*strength));
+            painter.fillPath(band,shadow);
+        }
+    }
+private:
+    QRegion m_originalMask;
+};
 struct PlacesPaint { QString text; int iconSize; };
 thread_local const PlacesPaint *nativePlacesPaint = nullptr;
 
@@ -57,11 +126,34 @@ void chip(QPainter *painter, QRectF rect, QColor fill, QColor outline = Qt::tran
     painter->drawRoundedRect(rect, radius, radius);
     painter->restore();
 }
+void panelDivider(QPainter *painter, const QRectF &area, bool vertical, bool hover, bool dragging) {
+    painter->save();
+    painter->setRenderHint(QPainter::Antialiasing);
+    painter->setPen(Qt::NoPen);
+    QColor color("#242435");
+    if (dragging) color = QColor("#cba6f7");
+    else if (hover) { color = QColor("#a6adc8"); color.setAlpha(128); }
+    painter->setBrush(color);
+    const QRectF line = vertical
+        ? QRectF(qFloor(area.center().x())-1,area.top()+12,2,qMax<qreal>(0,area.height()-24))
+        : QRectF(area.left()+12,qFloor(area.center().y())-1,qMax<qreal>(0,area.width()-24),2);
+    painter->drawRoundedRect(line,1,1);
+    painter->restore();
+}
 class ChipStyle : public QProxyStyle {
 public:
     explicit ChipStyle(QStyle *base) : QProxyStyle(base) {}
+    int styleHint(StyleHint hint, const QStyleOption *option = nullptr,
+                  const QWidget *widget = nullptr, QStyleHintReturn *result = nullptr) const override {
+        // QSS owns the native close-button backing in every interaction state.
+        if (hint == SH_DockWidget_ButtonsHaveFrame && widget &&
+            widget->objectName() == QStringLiteral("qt_dockwidget_closebutton")) return true;
+        return QProxyStyle::styleHint(hint,option,widget,result);
+    }
     int pixelMetric(PixelMetric metric, const QStyleOption *option = nullptr,
                     const QWidget *widget = nullptr) const override {
+        if (metric == PM_DockWidgetTitleMargin && qobject_cast<const QDockWidget *>(widget))
+            return 8;
         const auto *tabs = qobject_cast<const QTabBar *>(widget);
         if (metric == PM_TabBarScrollButtonWidth && tabs &&
             (tabs->shape() == QTabBar::RoundedNorth || tabs->shape() == QTabBar::RoundedSouth))
@@ -70,6 +162,22 @@ public:
     }
     QRect subElementRect(SubElement element, const QStyleOption *option,
                          const QWidget *widget = nullptr) const override {
+        if (element == SE_DockWidgetTitleBarText && option && qobject_cast<const QDockWidget *>(widget)) {
+            const auto *dockOption = qstyleoption_cast<const QStyleOptionDockWidget *>(option);
+            if (dockOption && !dockOption->verticalTitleBar)
+                return QStyle::visualRect(option->direction,option->rect,option->rect.adjusted(0,2,-32,2));
+        }
+        if (element == SE_DockWidgetCloseButton && option && qobject_cast<const QDockWidget *>(widget)) {
+            const auto *dockOption = qstyleoption_cast<const QStyleOptionDockWidget *>(option);
+            if (dockOption && !dockOption->verticalTitleBar) {
+                const QRect area = option->rect;
+                // Preserve the native button and close signal; give it the same
+                // 24px control centered across the title and the card's 4px
+                // top gutter, so the visible space above/below is balanced.
+                const QRect button(area.right()-8-24+1,area.top()+(area.height()+4-24)/2,24,24);
+                return QStyle::visualRect(option->direction,area,button);
+            }
+        }
         if (element == SE_TabWidgetTabBar && option) {
             const auto *container = qobject_cast<const QTabWidget *>(widget);
             if (container && (container->tabPosition() == QTabWidget::North ||
@@ -113,6 +221,13 @@ public:
     }
     void drawPrimitive(PrimitiveElement element, const QStyleOption *option,
                        QPainter *painter, const QWidget *widget = nullptr) const override {
+        if (element == PE_IndicatorDockWidgetResizeHandle && option &&
+            widget && widget->inherits("QMainWindow")) {
+            const bool hover = option->state.testFlag(State_MouseOver);
+            panelDivider(painter,option->rect,!option->state.testFlag(State_Horizontal),
+                         hover,hover && widget->property("ricyDockDragging").toBool());
+            return;
+        }
         if (qobject_cast<const QTabBar *>(widget) &&
             (element == PE_IndicatorTabTearLeft || element == PE_IndicatorTabTearRight)) {
             // Keep Qt's native overflow visibility/placement, using the existing
@@ -266,6 +381,23 @@ public:
     }
     void drawControl(ControlElement element, const QStyleOption *option,
                      QPainter *painter, const QWidget *widget = nullptr) const override {
+        if (element == CE_DockWidgetTitle && qobject_cast<const QDockWidget *>(widget)) {
+            if (const auto *dock = qstyleoption_cast<const QStyleOptionDockWidget *>(option);
+                dock && !dock->verticalTitleBar) {
+                // Paint the native title once. QSS/Kvantum fallback can produce
+                // two shifted labels when both own title padding and text.
+                const QRect text = QStyle::visualRect(option->direction,option->rect,
+                                                      option->rect.adjusted(16,2,-40,2));
+                painter->save();
+                painter->setFont(widget->font());
+                painter->setPen(QColor("#a6adc8"));
+                const QString title = painter->fontMetrics().elidedText(dock->title,Qt::ElideRight,text.width());
+                painter->drawText(text,QStyle::visualAlignment(option->direction,Qt::AlignLeft | Qt::AlignVCenter)
+                                      | Qt::TextHideMnemonic,title);
+                painter->restore();
+                return;
+            }
+        }
         if (element == CE_RubberBand) {
             // Preserve the native drag rectangle and animation opacity while
             // matching the medium-radius translucent selection treatment.
@@ -455,7 +587,12 @@ protected:
         qreal innerX = width() - 8, innerY = 64;
         bool found = false;
         bool sidebarVisible = false;
+        qreal sidebarBottom = height()-8;
         for (auto *child : window->findChildren<QWidget *>()) {
+            if (auto *dock = qobject_cast<QDockWidget *>(child);
+                dock && dock->isVisible() && dock->window() == window &&
+                dock->widget() && dock->widget()->inherits("KFilePlacesView"))
+                sidebarBottom = dock->mapTo(window,QPoint(0,dock->height())).y()-8;
             if (child->inherits("KFilePlacesView") && child->isVisible() && child->window() == window)
                 sidebarVisible = true;
             if (!child->inherits("DolphinViewContainer") || !child->isVisible()) continue;
@@ -464,7 +601,9 @@ protected:
             if (!found || pos.y() < innerY) innerY = pos.y();
             found = true;
         }
-        const qreal left = 8, top = 8, right = width()-8, bottom = height()-8;
+        // Stop the Places backing above a bottom terminal dock. Its title and
+        // top gutter must inherit the same base surface across the whole row.
+        const qreal left = 8, top = 8, right = width()-8, bottom = qMin<qreal>(height()-8,sidebarBottom);
         if (right <= left || bottom <= top) return;
         // File cards have their own 4px top/side margin; the L ends at the outer container
         // edge, leaving that same gutter between the two panels.
@@ -505,7 +644,15 @@ protected:
 
 class RicyDolphinUi : public QObject {
 public:
-    RicyDolphinUi() : QObject(qApp) {
+    // QGuiApplication owns generic plugin instances and deletes them at shutdown.
+    // Parenting to qApp would also delete this instance through QObject children.
+    RicyDolphinUi() : QObject(nullptr) {
+        // Read the native hover-selection preference as disabled in this Ricy
+        // process only. Nonpersistent entries survive other config saves
+        // without changing dolphinrc or Plasma's independently loaded value.
+        m_dolphinConfig = KSharedConfig::openConfig(QStringLiteral("dolphinrc"));
+        KConfigGroup(m_dolphinConfig,QStringLiteral("General")).writeEntry(
+            "ShowSelectionToggle",false,KConfigBase::WriteConfigFlags{});
         // Process-local native KDE selection. An absent/invalid optional overlay
         // keeps the system theme; no dolphinrc/kdeglobals theme override is saved.
         const QString overlay = QStringLiteral("Ricy-Dolphin");
@@ -513,6 +660,9 @@ public:
             KIconTheme::forceThemeForTests(overlay);
             KIconLoader::global()->reconfigure(QCoreApplication::applicationName(), {});
         }
+        const QString closePath = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+            QStringLiteral("icons/Ricy-Dolphin/scalable/actions/dialog-close.svg"));
+        m_dockCloseIcon = closePath.isEmpty() ? QIcon::fromTheme(QStringLiteral("dialog-close")) : QIcon(closePath);
         qApp->installEventFilter(this);
         QTimer::singleShot(0, this, [this] {
             if (QStyle *base = QStyleFactory::create(QStringLiteral("kvantum"))) {
@@ -538,6 +688,10 @@ public:
         });
     }
     bool eventFilter(QObject *object,QEvent *event) override {
+        if (event->type() == QEvent::Polish || event->type() == QEvent::Show || event->type() == QEvent::Resize)
+            if (auto *widget = qobject_cast<QWidget *>(object); embeddedTerminal(widget))
+                if (!widget->findChild<QWidget *>(QStringLiteral("ricyTerminalInset"),Qt::FindDirectChildrenOnly))
+                    new TerminalInsetSurface(widget);
         if (event->type() == QEvent::Resize || event->type() == QEvent::Show)
             if (auto *menu = qobject_cast<QMenu *>(object)) {
                 // Match the popup's actual surface to its rounded QSS panel,
@@ -554,6 +708,21 @@ public:
                 handle->setProperty("ricyDragging",event->type() == QEvent::MouseButtonPress);
                 handle->update();
             }
+        // Dock separators belong to QMainWindow rather than QSplitterHandle.
+        // Keep native hit testing/resizing and share the existing divider paint.
+        if (auto *window = qobject_cast<QWidget *>(object);
+            window && window->inherits("DolphinMainWindow")) {
+            if ((event->type() == QEvent::MouseButtonPress || event->type() == QEvent::MouseButtonRelease) &&
+                static_cast<QMouseEvent *>(event)->button() == Qt::LeftButton) {
+                window->setProperty("ricyDockDragging",event->type() == QEvent::MouseButtonPress);
+                window->update();
+            } else if (event->type() == QEvent::UngrabMouse || event->type() == QEvent::Hide) {
+                if (window->property("ricyDockDragging").toBool()) {
+                    window->setProperty("ricyDockDragging",false);
+                    window->update();
+                }
+            }
+        }
         // KIO fixes the navigator to the editor's native height when its mode
         // changes. Keep both limits consistent with the padded 36px bar;
         // raising only minimumHeight leaves a smaller native maximumHeight.
@@ -564,7 +733,15 @@ public:
         if (event->type() == QEvent::Resize || event->type() == QEvent::LayoutRequest ||
             event->type() == QEvent::Show || event->type() == QEvent::Hide || event->type() == QEvent::Move) {
             auto *widget = qobject_cast<QWidget *>(object);
-            if (widget && widget->inherits("DolphinViewContainer")) {
+            // Native disk-space layout inherits 8px top/bottom style margins
+            // inside a fixed 30px status row, clipping its text to 14px.
+            if (widget && widget->inherits("StatusBarSpaceInfo") && widget->layout())
+                widget->layout()->setContentsMargins(2,0,0,0);
+            // Auxiliary panels use the same outer gutter and inner padding as
+            // file cards. Their native layouts may be initialized after polish.
+            if (widget && (widget->inherits("DolphinViewContainer") ||
+                           widget->inherits("InformationPanel") ||
+                           widget->inherits("FoldersPanel") || widget->inherits("TerminalPanel"))) {
                 widget->setAttribute(Qt::WA_StyledBackground);
                 const bool rightEdge = widget->mapTo(widget->window(), QPoint(widget->width(),0)).x()
                                        >= widget->window()->width()-12;
@@ -580,7 +757,9 @@ public:
                 // QSS only paints this QWidget's margin; reserve the actual
                 // 4px top/side gutter plus 8px inner padding in the native layout.
                 // Keep the outer right/bottom window margins at their original 8px.
-                if (widget->layout()) widget->layout()->setContentsMargins(leftEdge?16:12,12,rightEdge?16:12,16);
+                const QMargins margins(leftEdge?16:12,12,rightEdge?16:12,16);
+                if (widget->layout() && widget->layout()->contentsMargins() != margins)
+                    widget->layout()->setContentsMargins(margins);
             }
             if (auto *dock = qobject_cast<QDockWidget *>(widget);
                 dock && dock->widget() && dock->widget()->inherits("KFilePlacesView"))
@@ -602,23 +781,65 @@ public:
         // Keep the native buttons/signals, but align their actual hit rectangles
         // inside the pill after Qt has finished laying out the tab bar.
         if (event->type() == QEvent::Paint) {
+            if (auto *button = qobject_cast<QAbstractButton *>(object);
+                button && button->objectName() == QStringLiteral("qt_dockwidget_closebutton") &&
+                qobject_cast<QDockWidget *>(button->parentWidget())) {
+                // Keep Qt's real button/actions, but bypass its title-icon
+                // reduction and theme-specific icon positioning entirely.
+                QPainter painter(button);
+                QStyleOptionToolButton option;
+                option.initFrom(button);
+                option.state |= QStyle::State_AutoRaise;
+                if (button->isDown()) option.state |= QStyle::State_Sunken;
+                else if (button->underMouse()) option.state |= QStyle::State_Raised;
+                button->style()->drawPrimitive(QStyle::PE_PanelButtonTool,&option,&painter,button);
+                const QIcon icon = m_dockCloseIcon.isNull() ? button->icon() : m_dockCloseIcon;
+                QPixmap glyph = icon.pixmap(QSize(16,16),button->devicePixelRatioF(),QIcon::Normal,QIcon::Off);
+                if (!glyph.isNull()) {
+                    const QColor foreground(!button->isEnabled() ? "#a6adc8" :
+                        button->isDown() ? "#11111b" : button->underMouse() ? "#000000" : "#cdd6f4");
+                    {
+                        QPainter tint(&glyph);
+                        tint.setCompositionMode(QPainter::CompositionMode_SourceIn);
+                        tint.fillRect(QRectF(QPointF(),glyph.deviceIndependentSize()),foreground);
+                    }
+                    const QSizeF size = glyph.deviceIndependentSize();
+                    painter.drawPixmap(QPointF((button->width()-size.width())/2,
+                                              (button->height()-size.height())/2),glyph);
+                }
+                return true;
+            }
+            if (auto *capacity = qobject_cast<QWidget *>(object);
+                capacity && capacity->inherits("KCapacityBar") &&
+                capacity->parentWidget() && capacity->parentWidget()->inherits("StatusBarSpaceInfo")) {
+                // Paint only the native value; retain its model, tooltip and
+                // accessibility. Other KDE capacity bars keep their own style.
+                const QVariant value = capacity->property("value");
+                if (value.isValid()) {
+                    const QRectF track(0,(capacity->height()-6)/2.0,capacity->width(),6);
+                    const qreal fraction = qBound(0,value.toInt(),100)/100.0;
+                    QRectF fill = track;
+                    fill.setWidth(track.width()*fraction);
+                    if (capacity->layoutDirection() == Qt::RightToLeft)
+                        fill.moveRight(track.right());
+                    QPainter painter(capacity);
+                    painter.setRenderHint(QPainter::Antialiasing);
+                    painter.setPen(Qt::NoPen);
+                    painter.setBrush(QColor("#46485c"));
+                    painter.drawRoundedRect(track,3,3);
+                    painter.setBrush(QColor(capacity->isEnabled() ? "#cba6f7" : "#a6adc8"));
+                    painter.drawRoundedRect(fill,3,3);
+                    return true;
+                }
+            }
             if (auto *handle = qobject_cast<QSplitterHandle *>(object)) {
                 bool filePanels = false;
                 for (auto *child : handle->splitter()->findChildren<QWidget *>())
                     if (child->inherits("DolphinViewContainer")) { filePanels = true; break; }
                 if (filePanels) {
                     QPainter painter(handle);
-                    painter.setRenderHint(QPainter::Antialiasing);
-                    painter.setPen(Qt::NoPen);
-                    QColor color("#242435");
-                    if (handle->property("ricyDragging").toBool()) color = QColor("#cba6f7");
-                    else if (handle->underMouse()) { color = QColor("#a6adc8"); color.setAlpha(128); }
-                    painter.setBrush(color);
-                    const bool horizontal = handle->orientation() == Qt::Horizontal;
-                    const QRectF line = horizontal
-                        ? QRectF((handle->width()-2)/2.0,12,2,qMax(0,handle->height()-24))
-                        : QRectF(12,(handle->height()-2)/2.0,qMax(0,handle->width()-24),2);
-                    painter.drawRoundedRect(line,1,1);
+                    panelDivider(&painter,handle->rect(),handle->orientation() == Qt::Horizontal,
+                                 handle->underMouse(),handle->property("ricyDragging").toBool());
                     return true;
                 }
             }
@@ -661,6 +882,15 @@ public:
         if(event->type() == QEvent::Polish) {
             auto *widget = qobject_cast<QWidget *>(object);
             installChromeMotion(widget);
+            // Qt's native title button has a fixed vertical size policy; reserve
+            // its control slot as well as positioning its native layout item.
+            if (widget && widget->objectName() == QStringLiteral("qt_dockwidget_closebutton") &&
+                qobject_cast<QDockWidget *>(widget->parentWidget()))
+                widget->setMinimumSize(24,24);
+            if (widget && (widget->inherits("InformationPanel") ||
+                           widget->inherits("FoldersPanel") || widget->inherits("TerminalPanel"))) {
+                widget->setAttribute(Qt::WA_StyledBackground);
+            }
             // Let QSS rounded popup corners expose the desktop, not a square
             // native backing. Preserve Qt popup flags and all menu actions.
             if (auto *menu = qobject_cast<QMenu *>(widget)) {
@@ -719,6 +949,8 @@ public:
         return false;
     }
 private:
+    KSharedConfig::Ptr m_dolphinConfig;
+    QIcon m_dockCloseIcon;
     QPointer<QStyle> m_chipStyle;
 };
 class RicyDolphinUiPlugin : public QGenericPlugin {

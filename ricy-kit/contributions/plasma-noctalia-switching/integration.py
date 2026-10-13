@@ -19,9 +19,11 @@ VIEWS = HOME / '.config/plasmashellrc'
 SHELL = 'noctalia-teste.service'
 ADAPTER = 'noctalia-busca-desktop.service'
 PLASMA = 'plasma-plasmashell.service'
-KEYS = [16777250, 268435488, 268435542]
+KEYS = [16777250, 268435488, 268435542, 268435525]
+DOLPHIN_ACTION = ['org.kde.dolphin.desktop', '_launch', 'Dolphin', 'Dolphin']
 ACTIONS = [(['codex-noctalia-menu.desktop', '_launch', 'Menu Noctalia', 'Menu Noctalia'], KEYS[:2]),
-           (['codex-noctalia-clipboard.desktop', '_launch', 'Noctalia Clipboard', 'Noctalia Clipboard'], KEYS[2:])]
+           (['codex-noctalia-clipboard.desktop', '_launch', 'Noctalia Clipboard', 'Noctalia Clipboard'], KEYS[2:3]),
+           (DOLPHIN_ACTION, KEYS[3:])]
 
 
 def run(*args, check=True):
@@ -70,20 +72,59 @@ def shortcut_call(method, signature, args):
                          GLib.Variant(signature, args), None, Gio.DBusCallFlags.NONE, 5000, None).unpack()
 
 
-def capture_shortcuts():
+def shortcut_snapshot(keys):
     originals = {}
-    for key in KEYS:
+    for key in keys:
         for e in shortcut_call('getGlobalShortcutsByKey', '(i)', (key,))[0]:
-            if e[2] in [a[0][0] for a in ACTIONS]:
+            # Only the menu/clipboard actions are temporary shell helpers.
+            # Dolphin is a persistent application and may own a Plasma key.
+            if e[2] in [a[0][0] for a in ACTIONS[:2]]:
                 continue
             entry = {'id': [e[2], e[0], e[3], e[1]], 'keys': list(e[6])}
             originals[(e[2], e[0])] = entry
+    return originals
+
+
+def capture_shortcuts():
+    originals = shortcut_snapshot(KEYS)
+    # Record Dolphin even when unbound. Its empty entry also distinguishes a
+    # captured Meta+E policy from an older three-key snapshot on reentry.
+    originals.setdefault(tuple(DOLPHIN_ACTION[:2]), {
+        'id': DOLPHIN_ACTION, 'keys': list(shortcut_call('shortcut', '(as)', (DOLPHIN_ACTION,))[0])})
     save('atalhos.json', list(originals.values()))
+
+
+def ensure_dolphin_shortcut_snapshot():
+    """Extend an active older snapshot without replacing Plasma's saved keys."""
+    saved = json.loads((STATE / 'atalhos.json').read_text())
+    originals = {tuple(entry['id'][:2]): entry for entry in saved}
+    if tuple(DOLPHIN_ACTION[:2]) in originals:
+        return False
+    # A partial earlier capture may already contain the original Meta+E owner.
+    # Do not replace it with the current Noctalia assignment.
+    if not any(KEYS[3] in entry['keys'] for entry in saved):
+        for identity, entry in shortcut_snapshot(KEYS[3:]).items():
+            if identity in originals:
+                originals[identity]['keys'] = list(dict.fromkeys(originals[identity]['keys'] + entry['keys']))
+            else:
+                originals[identity] = entry
+    originals.setdefault(tuple(DOLPHIN_ACTION[:2]), {
+        'id': DOLPHIN_ACTION,
+        'keys': [key for key in shortcut_call('shortcut', '(as)', (DOLPHIN_ACTION,))[0]
+                 if key != KEYS[3]]})
+    save('atalhos.json', list(originals.values()))
+    return True
 
 
 def transfer_shortcuts():
     for e in json.loads((STATE / 'atalhos.json').read_text()):
         shortcut_call('setForeignShortcut', '(asai)', (e['id'], [k for k in e['keys'] if k not in KEYS]))
+    # KGlobalAccel's desktop-action component can retain an earlier native
+    # Exec even after the service cache/desktop entry points at the Ricy wrapper.
+    # Refresh only this application component before registering its route.
+    path = shortcut_call('getComponent', '(s)', (DOLPHIN_ACTION[0],))[0]
+    if path and path != '/':
+        run('qdbus6', 'org.kde.kglobalaccel', path, 'org.kde.kglobalaccel.Component.cleanUp')
     for action, keys in ACTIONS:
         for _ in range(20):
             shortcut_call('doRegister', '(as)', (action,))
@@ -103,7 +144,9 @@ def restore_shortcuts():
         shortcut_call('setForeignShortcut', '(asai)', (action, []))
     for e in json.loads((STATE / 'atalhos.json').read_text()):
         shortcut_call('setForeignShortcut', '(asai)', (e['id'], e['keys']))
-    for action, _ in ACTIONS:
+    # Keep the real Dolphin action registered, including its restored empty
+    # assignment, so its declared default cannot reclaim Plasma's Meta+E.
+    for action, _ in ACTIONS[:2]:
         shortcut_call('unregister', '(ss)', (action[0], action[1]))
 
 
@@ -168,9 +211,13 @@ def start():
     snapshot_panels()
     if not (STATE / 'troca-ativa').exists():
         capture_shortcuts()
+    else:
+        ensure_dolphin_shortcut_snapshot()
     try:
         ctl('stop', 'plasma-krunner.service')
-        ctl('reset-failed', SHELL, ADAPTER)
+        # Fresh login units may be unloaded; clearing old failures is optional.
+        # The following checked start still triggers recovery for real failures.
+        run('systemctl', '--user', 'reset-failed', SHELL, ADAPTER, check=False)
         ctl('start', SHELL)
         for _ in range(50):
             try:

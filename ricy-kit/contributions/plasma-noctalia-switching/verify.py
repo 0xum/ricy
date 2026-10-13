@@ -67,3 +67,9 @@ except ValueError:
 else:
     raise AssertionError('Backup vazio deveria ser recusado.')
 print('Regressions passed: wallpaper, desktops, widgets, separate tray, references/IDs, views, idempotence, and empty backup; valid Python syntax.')
+
+# Isolated cold-login regression; no live services or desktop files are touched.
+import subprocess
+import sys
+subprocess.run([sys.executable, str(base / "test-startup.py")], check=True)
+subprocess.run([sys.executable, "-B", str(base / "test-shortcuts.py")], check=True)

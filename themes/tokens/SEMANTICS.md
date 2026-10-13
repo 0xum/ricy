@@ -129,6 +129,15 @@ outer corners and background blur; children must not add competing shadows.
 Qt helper owns popup masks, distinct from KWin window radius. Complete deployed
 shell/compositor recipes remain UNKNOWN.
 
+The requested embedded Dolphin terminal has a scoped inset recipe at
+`application_adaptations.dolphin.embedded_terminal`: the existing 8px control
+radius and 4px spacing step, black with alpha65/255 at the edge, decaying
+quadratically inward across 4px. This gives the native dark display a shallow
+recess without altering its background/profile or adding outer elevation.
+The existing Qt helper owns its mask and input-transparent inset paint, only
+inside Dolphin's TerminalPanel. This is not a shared shadow preset; the missing
+universal shadow roles above remain MISSING.
+
 ## Motion
 
 These roles describe purpose/preferences; they do not start animations.

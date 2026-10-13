@@ -1,5 +1,87 @@
 # Dolphin with identity Noctalia
 
+## 2026-10-13 — Rounded native terminal surface
+
+The existing helper clips only the embedded Konsole display and paints its
+subtle inset shadow. QSS/card geometry and the native terminal profile remain
+unchanged. See the [implementation and checks](../dolphin-blur-corners/README.md#rounded-embedded-terminal-with-inset-shadow--2026-10-13).
+The helper-only backup uses `apply.py --restaurar BACKUP`; reopen Ricy Dolphin
+after restoration. Plasma and global KDE settings receive no change.
+
+## 2026-10-13 — Unlocked panel controls and terminal spacing
+
+The existing QSS styles native dock close-button backings with the established
+card, hover, and accent roles. The helper owns their 28px hit area, 16px glyph,
+title alignment, and the uniform junction above the bottom terminal; see the
+[implementation and validation record](../dolphin-blur-corners/README.md#unlocked-dock-headers-and-terminal-junction--2026-10-13).
+This supersedes the former QSS-only title padding. Native panel locking,
+close/reopen, terminal content, and card padding are preserved. The private
+QSS/helper backup follows `apply.py --restaurar BACKUP`; reopen Ricy Dolphin to
+load restored files. Plasma and global KDE settings receive no change.
+
+## 2026-10-13 — Match auxiliary-panel padding to file cards
+
+Information, Folders, and Terminal panels now reuse the file card's 8px inner
+padding and 4px top/interior side gutters, with 8px bottom/window-edge gutters.
+The existing helper applies matching real layout margins after lazy layout
+creation; QSS alone does not reserve QWidget layout space. Edge properties are
+shared with file cards, including terminal panels spanning both window edges.
+This supersedes the earlier auxiliary-panel inset without outer gutters.
+
+PASS: live 1x Dolphin capture of Folders/Information alongside the file card,
+isolated native panel rendering, source/installed equality, QSS checks at
+1x/1.5x, motion/plugin-lifetime checks at 1x, architecture, and whitespace.
+Live terminal padding, floating panels, live 1.5x desktop, and Recovery NOT RUN.
+Only Ricy QSS/helper changed; existing user windows retain their mapped helper.
+A new Ricy process was opened to load the matching pair. Private QSS/helper
+backup and the existing `apply.py --restaurar BACKUP` route preserve rollback;
+reopen Ricy Dolphin after restoration. Plasma and global theme settings remain
+unchanged.
+
+## 2026-10-13 — Settings, auxiliary panels, and status controls
+
+The existing Ricy-only QSS now extends the established surface/card, text,
+accent, focus, and radius roles to settings and toolbar configuration dialogs.
+Buttons, list navigation, combo/spin fields, and group frames retain native
+actions and keyboard behavior. Check/radio indicators remain native. Information,
+Folders, and Terminal panels use borderless solid cards; embedded terminal text,
+font, profile, and rendering remain native. The existing Qt helper gives these
+panels an 8px content inset after their lazy layouts become available.
+
+The zoom slider uses the existing accent and outline. The native disk-space
+layout formerly left only 14px for its text inside a 30px status row. The helper
+removes its inherited vertical margins; the scoped status button uses compact
+padding. Only the disk-space KCapacityBar receives flat capsule paint from its
+native value, preserving providers and tooltips. Other KDE capacity bars keep
+their native style. New processes are required for helper changes; live QSS
+updates alone do not reload the mapped helper.
+
+PASS: native Dolphin captures of settings, toolbar configuration, auxiliary
+panels, and readable disk-space/zoom controls at 1x; source/installed helper and
+QSS equality; existing motion/lifetime and extended QSS keyboard/state checks
+at 1x and 1.5x; architecture and whitespace checks. Narrow windows still use
+native text elision and metadata wrapping. Composited popup coverage, all
+settings pages, a live 1.5x desktop, transfers, and Recovery round trips NOT RUN.
+This extends the existing Qt/QSS adaptation without changing ownership,
+canonical tokens, global KDE/Kvantum settings, launchers, or KWin code. The
+private QSS/helper backup uses `apply.py --restaurar BACKUP`; reopen Ricy Dolphin
+after restoring. The native Plasma/Breeze process receives no Ricy helper or QSS.
+
+## 2026-10-13 — Borderless main content panel
+
+The Ricy-only `DolphinViewContainer` outline is transparent. Its existing 1px
+border slot preserves content geometry; fill, radius, padding, and margins stay
+unchanged. This QSS rule also applies to each content pane in split view. The
+native Plasma/Breeze process receives no stylesheet update. Ownership and
+dependencies remain the existing Dolphin Qt/QSS adaptation.
+
+PASS: source, installed QSS, and the running Ricy process stylesheet match;
+existing QSS interaction checks and architecture checks pass. Visual NOT RUN:
+the target window was not visible in desktop captures. Live Recovery NOT RUN.
+The private QSS-only backup uses the existing `apply.py --restaurar BACKUP`
+manifest format; reopen Ricy Dolphin after restoration. No global KDE theme,
+launcher, helper binary, or file-access dependency changes.
+
 Kvantum's exclusive Ricy-Dolphin variant, derived from KDE-Noctalia/Catppuccin MIT installed. Background #181825, text #cdd6f4, secondary #a6adc8, contour #46485c, control cards #313244 and featured #977dba/#cba6f7. The interface and all three file modes inherit the active KDE/Qt application font. Controls of the bar, fields and tabs have corners of 8 px. Menus preserve the existing KDE-Noctalia compact variant. Breeze Dark Icons and preserved archive operations.
 
 The theme is assigned only to dolphin in Kvantum/Applications. Launcher ricy-dolphin injects Qt sheet and transparency helper. Desktop, FileManager1 service and drop-in plasma-dolphin.service use the launcher. The current version requires sister contribution dolphin-blur-corners, which contains the Qt compiler. Background 0,70 with blur, area of translucent, rounded archives of 12 px and native external corners of 16 px by the optional KWin effect. The side uses chip involving icon + name; lines, hover, selection/focus and file header use rounded capsules, keeping the drawings and native events. Read your README for compilation, evidence, version update, and reverse corners.

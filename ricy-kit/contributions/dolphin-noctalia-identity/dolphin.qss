@@ -41,7 +41,7 @@ QDockWidget { color: #a6adc8; }
 QStatusBar { color: #a6adc8; }
 
 /* Main panel and L panel: #313244; outer shell keeps glass. */
-DolphinViewContainer { background-color: #313244; border: 1px solid #46485c; border-radius: 12px; padding: 8px; margin: 4px 4px 8px 4px; }
+DolphinViewContainer { background-color: #313244; border: 1px solid transparent; border-radius: 12px; padding: 8px; margin: 4px 4px 8px 4px; }
 DolphinViewContainer[ricyRightEdge="true"] { margin-right: 8px; }
 DolphinViewContainer[ricyLeftEdge="true"] { margin-left: 8px; }
 KItemListContainer { background: transparent; border: none; padding: 0px; margin: 0px; }
@@ -82,3 +82,54 @@ DolphinStatusBar { background: transparent; border: none; }
 
 /* Back from all viewport: titles, icons, chips and capability together. */
 KFilePlacesView { padding-left: 12px; padding-right: 12px; color: #cdd6f4; selection-background-color: #cba6f7; selection-color: #11111b; }
+
+/* Settings and auxiliary dialogs reuse the solid surface and control roles. */
+QDialog { background-color: #181825; color: #cdd6f4; }
+QDialog QLabel { color: #cdd6f4; background: transparent; border: none; }
+QDialog QPushButton { background-color: #313244; color: #cdd6f4; border: 1px solid #46485c; border-radius: 8px; padding: 4px 12px; min-height: 20px; }
+QDialog QPushButton:hover { background-color: #977dba; color: #000000; border-color: #977dba; }
+QDialog QPushButton:default, QDialog QPushButton:checked, QDialog QPushButton:pressed { background-color: #cba6f7; color: #11111b; border-color: #cba6f7; }
+QDialog QPushButton:focus { border-color: #cba6f7; }
+QDialog QPushButton:disabled { background-color: #313244; color: #a6adc8; border-color: transparent; }
+KEditToolBar QPushButton { padding: 4px 8px; }
+QDialog QComboBox, QDialog QSpinBox, QDialog QDoubleSpinBox { background-color: #313244; color: #cdd6f4; border: 1px solid #46485c; border-radius: 8px; padding: 4px 8px; min-height: 20px; selection-background-color: #cba6f7; selection-color: #11111b; }
+QDialog QComboBox:hover, QDialog QSpinBox:hover, QDialog QDoubleSpinBox:hover { border-color: #a6adc8; }
+QDialog QComboBox:focus, QDialog QSpinBox:focus, QDialog QDoubleSpinBox:focus { border-color: #cba6f7; }
+QDialog QComboBox:disabled, QDialog QSpinBox:disabled, QDialog QDoubleSpinBox:disabled { color: #a6adc8; border-color: transparent; }
+QDialog QComboBox QAbstractItemView { background-color: #313244; color: #cdd6f4; selection-background-color: #cba6f7; selection-color: #11111b; }
+QDialog QAbstractItemView { background-color: #313244; alternate-background-color: #313244; color: #cdd6f4; border: 1px solid transparent; border-radius: 12px; padding: 4px; selection-background-color: #cba6f7; selection-color: #11111b; }
+QDialog QAbstractItemView::item { border: 1px solid transparent; border-radius: 6px; padding: 4px; }
+QDialog QAbstractItemView::item:hover { background-color: #977dba; color: #000000; }
+QDialog QAbstractItemView::item:selected { background-color: #cba6f7; color: #11111b; }
+QDialog QAbstractItemView::item:focus { border-color: #cba6f7; }
+QDialog QAbstractItemView:disabled { color: #a6adc8; }
+QDialog QCheckBox, QDialog QRadioButton { color: #cdd6f4; spacing: 8px; padding: 4px 0px; }
+QDialog QCheckBox:disabled, QDialog QRadioButton:disabled { color: #a6adc8; }
+QDialog QLineEdit:disabled { color: #a6adc8; border-color: transparent; }
+QDialog QGroupBox { color: #a6adc8; border: 1px solid #46485c; border-radius: 12px; margin-top: 12px; padding: 12px; }
+QDialog QGroupBox::title { subcontrol-origin: margin; subcontrol-position: top left; left: 12px; padding: 0px 4px; }
+/* Auxiliary panels are solid content cards; keep embedded terminal paint native. */
+InformationPanel, FoldersPanel, TerminalPanel { background-color: #313244; border: 1px solid transparent; border-radius: 12px; padding: 8px; margin: 4px 4px 8px 4px; }
+InformationPanel[ricyRightEdge="true"], FoldersPanel[ricyRightEdge="true"], TerminalPanel[ricyRightEdge="true"] { margin-right: 8px; }
+InformationPanel[ricyLeftEdge="true"], FoldersPanel[ricyLeftEdge="true"], TerminalPanel[ricyLeftEdge="true"] { margin-left: 8px; }
+InformationPanel QLabel { color: #cdd6f4; }
+FoldersPanel QTreeView { background: transparent; color: #cdd6f4; border: none; selection-background-color: #cba6f7; selection-color: #11111b; }
+FoldersPanel QTreeView::item { border-radius: 6px; padding: 4px; }
+FoldersPanel QTreeView::item:hover { background-color: #977dba; color: #000000; }
+FoldersPanel QTreeView::item:selected { background-color: #cba6f7; color: #11111b; }
+/* The helper aligns native dock titles; locked panels retain their empty title. */
+/* Keep native close actions and dock dragging; expose a full control hit area. */
+QDockWidget::close-button { background: #313244; border: 1px solid transparent; border-radius: 8px; }
+QDockWidget::close-button:hover { background: #977dba; border-color: #977dba; }
+QDockWidget::close-button:pressed { background: #cba6f7; border-color: #cba6f7; }
+QDockWidget::close-button:disabled { background: transparent; border-color: transparent; }
+/* Slider owns only zoom paint; native range, wheel and keyboard remain intact. */
+QSlider:horizontal { min-height: 20px; }
+QSlider::groove:horizontal { background: #46485c; height: 6px; border-radius: 3px; }
+QSlider::sub-page:horizontal { background: #cba6f7; border-radius: 3px; }
+QSlider::handle:horizontal { background: #cba6f7; border: 1px solid #cba6f7; border-radius: 6px; width: 12px; margin: -3px 0px; }
+QSlider::handle:horizontal:hover, QSlider::handle:horizontal:pressed { background: #977dba; border-color: #977dba; }
+QSlider::handle:horizontal:focus { border-color: #cdd6f4; }
+QSlider::handle:horizontal:disabled { background: #a6adc8; border-color: #a6adc8; }
+/* Compact disk-space button must fit the status row instead of toolbar padding. */
+DolphinStatusBar QToolButton { padding: 0px 4px; border-radius: 6px; }
