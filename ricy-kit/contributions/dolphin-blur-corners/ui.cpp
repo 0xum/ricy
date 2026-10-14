@@ -9,10 +9,15 @@
 #include <QStyleOptionViewItem>
 #include <QStyleOptionHeader>
 #include <QStyleOptionDockWidget>
+#include <QStyleOptionComboBox>
+#include <QStyleOptionSpinBox>
+#include <QSpinBox>
+#include <QDoubleSpinBox>
 #include <QFont>
 #include <QPainter>
 #include <QAbstractItemView>
 #include <QAbstractItemDelegate>
+#include <QStyledItemDelegate>
 #include <QGraphicsWidget>
 #include <QGraphicsEffect>
 #include <QPointer>
@@ -28,12 +33,13 @@
 #include <QLayout>
 #include <QMenu>
 #include <QDockWidget>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QFrame>
+#include <KWindowEffects>
 #include <QSplitterHandle>
 #include <QMouseEvent>
 #include <QtMath>
-#include <QStandardPaths>
-#include <KIconTheme>
-#include <KIconLoader>
 #include "motion.h"
 
 namespace {
@@ -584,11 +590,24 @@ public:
 protected:
     void paintEvent(QPaintEvent *) override {
         QWidget *window = parentWidget();
+        const bool configure = window->window()->inherits("DolphinSettingsDialog");
+        const bool mirrored = configure && window->layoutDirection() == Qt::RightToLeft;
         qreal innerX = width() - 8, innerY = 64;
         bool found = false;
         bool sidebarVisible = false;
         qreal sidebarBottom = height()-8;
         for (auto *child : window->findChildren<QWidget *>()) {
+            if (configure) {
+                if (child->inherits("KPageStackedWidget") && child->isVisible()) {
+                    const QPoint pos = child->mapTo(window,QPoint());
+                    innerX = mirrored ? width()-pos.x()-child->width()-8 : pos.x()-8;
+                    innerY = pos.y()-8;
+                    found = true;
+                }
+                if (child->inherits("KDEPrivate::KPageListView") && child->isVisible())
+                    sidebarVisible = true;
+                continue;
+            }
             if (auto *dock = qobject_cast<QDockWidget *>(child);
                 dock && dock->isVisible() && dock->window() == window &&
                 dock->widget() && dock->widget()->inherits("KFilePlacesView"))
@@ -603,7 +622,9 @@ protected:
         }
         // Stop the Places backing above a bottom terminal dock. Its title and
         // top gutter must inherit the same base surface across the whole row.
-        const qreal left = 8, top = 8, right = width()-8, bottom = qMin<qreal>(height()-8,sidebarBottom);
+        const qreal inset = configure ? 0 : 8;
+        const qreal left = inset, top = inset, right = width()-inset;
+        const qreal bottom = configure ? height() : qMin<qreal>(height()-8,sidebarBottom);
         if (right <= left || bottom <= top) return;
         // File cards have their own 4px top/side margin; the L ends at the outer container
         // edge, leaving that same gutter between the two panels.
@@ -634,6 +655,10 @@ protected:
         path.quadTo(left, top, left+radius, top);
         path.closeSubpath();
         QPainter painter(this);
+        if (mirrored) {
+            painter.translate(width(),0);
+            painter.scale(-1,1);
+        }
         painter.setRenderHint(QPainter::Antialiasing);
         painter.setPen(Qt::NoPen);
         painter.setBrush(QColor("#313244"));
@@ -641,6 +666,82 @@ protected:
     }
 };
 }
+
+// Paint-only glyphs in native field slots; Qt handles every click and value.
+class FieldArrows : public QWidget {
+    struct ArrowSlot { QRect rect; bool up; bool enabled; };
+public:
+    explicit FieldArrows(QWidget *field) : QWidget(field) {
+        setObjectName(QStringLiteral("ricyFieldArrows"));
+        setAttribute(Qt::WA_TransparentForMouseEvents);
+        setAttribute(Qt::WA_NoSystemBackground);
+        setFocusPolicy(Qt::NoFocus);
+        field->installEventFilter(this);
+        if (auto *spin=qobject_cast<QSpinBox *>(field))
+            connect(spin,&QSpinBox::valueChanged,this,[this]{update();});
+        if (auto *spin=qobject_cast<QDoubleSpinBox *>(field))
+            connect(spin,&QDoubleSpinBox::valueChanged,this,[this]{update();});
+        sync();
+    }
+    void sync() {
+        QRect area;
+        for (const auto &slot:arrowSlots()) area=area.united(slot.rect);
+        if (area.isEmpty()) { hide(); return; }
+        if (geometry()!=area) setGeometry(area);
+        raise(); show(); update();
+    }
+protected:
+    bool eventFilter(QObject *,QEvent *event) override {
+        if (event->type()==QEvent::Resize || event->type()==QEvent::Show ||
+            event->type()==QEvent::StyleChange || event->type()==QEvent::EnabledChange ||
+            event->type()==QEvent::LayoutDirectionChange || event->type()==QEvent::ReadOnlyChange) sync();
+        return false;
+    }
+    void paintEvent(QPaintEvent *) override {
+        QPainter painter(this);
+        painter.setRenderHint(QPainter::Antialiasing);
+        painter.setBrush(Qt::NoBrush);
+        const auto *spin=qobject_cast<QAbstractSpinBox *>(parentWidget());
+        for (const auto &slot:arrowSlots()) {
+            painter.setPen(QPen(QColor(slot.enabled?"#cdd6f4":"#a6adc8"),1.5,
+                                Qt::SolidLine,Qt::RoundCap,Qt::RoundJoin));
+            const QPointF center=QRectF(slot.rect.translated(-geometry().topLeft())).center();
+            if (spin && spin->buttonSymbols()==QAbstractSpinBox::PlusMinus) {
+                painter.drawLine(center+QPointF(-3,0),center+QPointF(3,0));
+                if (slot.up) painter.drawLine(center+QPointF(0,-3),center+QPointF(0,3));
+            } else {
+                const qreal direction=slot.up?-1:1;
+                QPainterPath path;
+                path.moveTo(center+QPointF(-3,-1.5*direction));
+                path.lineTo(center+QPointF(0,1.5*direction));
+                path.lineTo(center+QPointF(3,-1.5*direction));
+                painter.drawPath(path);
+            }
+        }
+    }
+private:
+    QList<ArrowSlot> arrowSlots() const {
+        auto *field=parentWidget();
+        if (auto *combo=qobject_cast<QComboBox *>(field)) {
+            QStyleOptionComboBox option; option.initFrom(combo); option.editable=combo->isEditable();
+            return {{combo->style()->subControlRect(QStyle::CC_ComboBox,&option,QStyle::SC_ComboBoxArrow,combo),false,combo->isEnabled()}};
+        }
+        auto *spin=qobject_cast<QAbstractSpinBox *>(field);
+        if (!spin || spin->buttonSymbols()==QAbstractSpinBox::NoButtons) return {};
+        QStyleOptionSpinBox option; option.initFrom(spin); option.frame=spin->hasFrame(); option.buttonSymbols=spin->buttonSymbols();
+        option.stepEnabled=QAbstractSpinBox::StepUpEnabled|QAbstractSpinBox::StepDownEnabled;
+        bool up=spin->isEnabled() && !spin->isReadOnly(),down=up;
+        if (auto *integer=qobject_cast<QSpinBox *>(spin)) {
+            up &= integer->wrapping() || integer->value()<integer->maximum();
+            down &= integer->wrapping() || integer->value()>integer->minimum();
+        } else if (auto *decimal=qobject_cast<QDoubleSpinBox *>(spin)) {
+            up &= decimal->wrapping() || decimal->value()<decimal->maximum();
+            down &= decimal->wrapping() || decimal->value()>decimal->minimum();
+        }
+        return {{spin->style()->subControlRect(QStyle::CC_SpinBox,&option,QStyle::SC_SpinBoxUp,spin),true,up},
+                {spin->style()->subControlRect(QStyle::CC_SpinBox,&option,QStyle::SC_SpinBoxDown,spin),false,down}};
+    }
+};
 
 class RicyDolphinUi : public QObject {
 public:
@@ -653,16 +754,8 @@ public:
         m_dolphinConfig = KSharedConfig::openConfig(QStringLiteral("dolphinrc"));
         KConfigGroup(m_dolphinConfig,QStringLiteral("General")).writeEntry(
             "ShowSelectionToggle",false,KConfigBase::WriteConfigFlags{});
-        // Process-local native KDE selection. An absent/invalid optional overlay
-        // keeps the system theme; no dolphinrc/kdeglobals theme override is saved.
-        const QString overlay = QStringLiteral("Ricy-Dolphin");
-        if (KIconTheme(overlay).isValid()) {
-            KIconTheme::forceThemeForTests(overlay);
-            KIconLoader::global()->reconfigure(QCoreApplication::applicationName(), {});
-        }
-        const QString closePath = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-            QStringLiteral("icons/Ricy-Dolphin/scalable/actions/dialog-close.svg"));
-        m_dockCloseIcon = closePath.isEmpty() ? QIcon::fromTheme(QStringLiteral("dialog-close")) : QIcon(closePath);
+        // KDE owns icon selection and change notifications for chrome/content.
+        // Never force a private theme or load a bundled action glyph.
         qApp->installEventFilter(this);
         QTimer::singleShot(0, this, [this] {
             if (QStyle *base = QStyleFactory::create(QStringLiteral("kvantum"))) {
@@ -688,6 +781,88 @@ public:
         });
     }
     bool eventFilter(QObject *object,QEvent *event) override {
+        if (event->type()==QEvent::Paint) {
+            if (auto *pageView=qobject_cast<QWidget *>(object); pageView &&
+                (pageView->inherits("KPageWidget") || pageView->inherits("DolphinSettingsDialog")) &&
+                pageView->window()->inherits("DolphinSettingsDialog")) {
+                // Match the main window's glass backing in gutters/footer.
+                // Source composition avoids multiplying alpha through wrappers.
+                QPainter painter(pageView);
+                painter.setCompositionMode(QPainter::CompositionMode_Source);
+                painter.fillRect(pageView->rect(),QColor(24,24,37,178));
+                return true;
+            }
+            if (auto *popup=qobject_cast<QWidget *>(object); popup && popup->property("ricyConfigurePopup").toBool()) {
+                QPainter painter(popup);
+                painter.setRenderHint(QPainter::Antialiasing);
+                painter.setCompositionMode(QPainter::CompositionMode_Source);
+                painter.fillRect(popup->rect(),Qt::transparent);
+                painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+                painter.setPen(QPen(QColor("#46485c"),1));
+                painter.setBrush(QColor("#313244"));
+                painter.drawRoundedRect(QRectF(popup->rect()).adjusted(0.5,0.5,-0.5,-0.5),12,12);
+                return true;
+            }
+        }
+        if (event->type() == QEvent::Polish || event->type() == QEvent::Show || event->type() == QEvent::Resize) {
+            if (auto *popup=qobject_cast<QWidget *>(object); popup && popup->inherits("QComboBoxPrivateContainer")) {
+                auto *combo=qobject_cast<QComboBox *>(popup->parentWidget());
+                if (combo && combo->window()->inherits("DolphinSettingsDialog")) {
+                    if (!popup->property("ricyConfigurePopup").toBool()) {
+                        popup->setProperty("ricyConfigurePopup",true);
+                        popup->style()->unpolish(popup);
+                        popup->style()->polish(popup);
+                    }
+                    // This detached list is a solid card, independent of the
+                    // main window's glass material. Preserve Qt popup input.
+                    if (!popup->testAttribute(Qt::WA_WState_Created))
+                        popup->setAttribute(Qt::WA_TranslucentBackground,true);
+                    popup->setAttribute(Qt::WA_NoSystemBackground,false);
+                    popup->setAttribute(Qt::WA_StyledBackground);
+                    popup->setAutoFillBackground(false);
+                    QPalette palette=popup->palette();
+                    palette.setColor(QPalette::Window,QColor("#313244"));
+                    palette.setColor(QPalette::Highlight,QColor("#cba6f7"));
+                    palette.setColor(QPalette::HighlightedText,QColor("#11111b"));
+                    popup->setPalette(palette);
+                    for (auto *view : popup->findChildren<QAbstractItemView *>())
+                        view->setPalette(palette);
+                    popup->setWindowOpacity(1.0);
+                    popup->setContentsMargins(12,12,12,12);
+                    if (popup->layout()) popup->layout()->setContentsMargins(0,0,0,0);
+                    QPainterPath shape;
+                    shape.addRoundedRect(QRectF(popup->rect()),12,12);
+                    popup->setMask(QRegion(shape.toFillPolygon().toPolygon()));
+                    if (event->type()==QEvent::Show)
+                        QTimer::singleShot(0,popup,[popup]{
+                            if (popup->windowHandle()) KWindowEffects::enableBlurBehind(popup->windowHandle(),false);
+                        });
+                }
+            }
+        }
+        if (event->type() == QEvent::Paint && object->property("ricyConfigureHeader").toBool()) {
+            if (auto *header = qobject_cast<QWidget *>(object)) {
+                // Replace only the native header backing. Children still paint
+                // the title and interactive search field through Qt.
+                QPainter painter(header);
+                painter.setCompositionMode(QPainter::CompositionMode_Source);
+                painter.fillRect(header->rect(),QColor(24,24,37,178));
+                painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+                painter.setRenderHint(QPainter::Antialiasing);
+                painter.setPen(Qt::NoPen);
+                painter.setBrush(QColor("#313244"));
+                const QPoint position = header->mapTo(header->parentWidget(),QPoint());
+                painter.drawRoundedRect(QRectF(-position.x(),-position.y(),
+                    header->parentWidget()->width(),header->parentWidget()->height()),12,12);
+                return true;
+            }
+        }
+        if (event->type() == QEvent::Polish || event->type() == QEvent::Show ||
+            event->type() == QEvent::Resize || event->type() == QEvent::LayoutRequest) {
+            if (auto *widget = qobject_cast<QWidget *>(object);
+                widget && widget->window()->inherits("DolphinSettingsDialog"))
+                configureSettings(widget->window());
+        }
         if (event->type() == QEvent::Polish || event->type() == QEvent::Show || event->type() == QEvent::Resize)
             if (auto *widget = qobject_cast<QWidget *>(object); embeddedTerminal(widget))
                 if (!widget->findChild<QWidget *>(QStringLiteral("ricyTerminalInset"),Qt::FindDirectChildrenOnly))
@@ -793,7 +968,7 @@ public:
                 if (button->isDown()) option.state |= QStyle::State_Sunken;
                 else if (button->underMouse()) option.state |= QStyle::State_Raised;
                 button->style()->drawPrimitive(QStyle::PE_PanelButtonTool,&option,&painter,button);
-                const QIcon icon = m_dockCloseIcon.isNull() ? button->icon() : m_dockCloseIcon;
+                const QIcon icon = QIcon::fromTheme(QStringLiteral("dialog-close"), button->icon());
                 QPixmap glyph = icon.pixmap(QSize(16,16),button->devicePixelRatioF(),QIcon::Normal,QIcon::Off);
                 if (!glyph.isNull()) {
                     const QColor foreground(!button->isEnabled() ? "#a6adc8" :
@@ -882,6 +1057,9 @@ public:
         if(event->type() == QEvent::Polish) {
             auto *widget = qobject_cast<QWidget *>(object);
             installChromeMotion(widget);
+            if (widget && (qobject_cast<QComboBox *>(widget) || qobject_cast<QSpinBox *>(widget) || qobject_cast<QDoubleSpinBox *>(widget)))
+                if (!widget->findChild<QWidget *>(QStringLiteral("ricyFieldArrows"),Qt::FindDirectChildrenOnly))
+                    new FieldArrows(widget);
             // Qt's native title button has a fixed vertical size policy; reserve
             // its control slot as well as positioning its native layout item.
             if (widget && widget->objectName() == QStringLiteral("qt_dockwidget_closebutton") &&
@@ -949,8 +1127,102 @@ public:
         return false;
     }
 private:
+    void configureSettings(QWidget *dialog) {
+        // Adapt only the native Configure dialog; KDE keeps all page models,
+        // settings controls, search/filtering and button connections.
+        if (!dialog->property("ricyConfigure").toBool()) {
+            dialog->setProperty("ricyConfigure",true);
+            if (!dialog->testAttribute(Qt::WA_WState_Created))
+                dialog->setAttribute(Qt::WA_TranslucentBackground);
+            dialog->setAttribute(Qt::WA_StyledBackground);
+            dialog->style()->unpolish(dialog);
+            dialog->style()->polish(dialog);
+        }
+        if (dialog->layout() && dialog->layout()->contentsMargins() != QMargins(8,8,8,8))
+            dialog->layout()->setContentsMargins(8,8,8,8);
+        if (dialog->windowHandle() && !dialog->property("ricyConfigureBlurSet").toBool()) {
+            dialog->setProperty("ricyConfigureBlurSet",true);
+            QTimer::singleShot(0,dialog,[dialog]{
+                if (dialog->windowHandle()) KWindowEffects::enableBlurBehind(dialog->windowHandle(),true);
+            });
+        }
+        for (auto *widget : dialog->findChildren<QWidget *>()) {
+            if (widget->window() != dialog) continue;
+            if (auto *combo=qobject_cast<QComboBox *>(widget)) {
+                if (!combo->property("ricyConfigureCombo").toBool()) {
+                    combo->setProperty("ricyConfigureCombo",true);
+                    // Qt's menu delegate bypasses item-view QSS. Use Qt's own
+                    // styled rows with the existing model/selection/actions.
+                    combo->setItemDelegate(new QStyledItemDelegate(combo));
+                }
+                QPalette palette=combo->palette();
+                palette.setColor(QPalette::Highlight,QColor("#cba6f7"));
+                palette.setColor(QPalette::HighlightedText,QColor("#11111b"));
+                if (combo->palette()!=palette) combo->setPalette(palette);
+            }
+            if (widget->inherits("KPageWidget") && widget->layout()) {
+                widget->layout()->setSpacing(8);
+                for (auto *frame : widget->findChildren<QFrame *>(QString(),Qt::FindDirectChildrenOnly))
+                    if (frame->metaObject()->className() == QByteArray("QFrame") &&
+                        (frame->frameShape() == QFrame::HLine || frame->maximumHeight() == 1))
+                        frame->hide();
+            }
+            if ((widget->inherits("KTitleWidget") || widget->objectName() == "KPageView::Search") && widget->layout()) {
+                // Keep native title and search palettes aligned with the
+                // shared backing; native widgets retain their fonts/actions.
+                QList<QWidget *> headerWidgets{widget};
+                headerWidgets.append(widget->findChildren<QWidget *>());
+                if (!widget->property("ricyConfigureHeader").toBool()) {
+                    widget->setProperty("ricyConfigureHeader",true);
+                    widget->style()->unpolish(widget);
+                    widget->style()->polish(widget);
+                }
+                for (auto *header : headerWidgets) {
+                    header->setAutoFillBackground(false);
+                    QPalette palette = header->palette();
+                    palette.setColor(QPalette::Window,QColor("#313244"));
+                    palette.setColor(QPalette::WindowText,QColor("#cdd6f4"));
+                    header->setPalette(palette);
+                }
+                const QMargins margins(widget->inherits("KTitleWidget") ? 12 : 8,8,8,8);
+                if (widget->layout()->contentsMargins() != margins)
+                    widget->layout()->setContentsMargins(margins);
+            }
+            if (widget->inherits("KDEPrivate::KPageListView") && !widget->property("ricyConfigureNavigation").toBool()) {
+                widget->setProperty("ricyConfigureNavigation",true);
+                widget->setMinimumWidth(widget->sizeHint().width()+16);
+                if (auto *navigation = qobject_cast<QAbstractItemView *>(widget))
+                    navigation->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+                widget->style()->unpolish(widget);
+                widget->style()->polish(widget);
+            }
+            if (widget->inherits("KPageStackedWidget")) {
+                if (!widget->property("ricyConfigureCard").toBool()) {
+                    widget->setProperty("ricyConfigureCard",true);
+                    widget->setAttribute(Qt::WA_StyledBackground);
+                    widget->style()->unpolish(widget);
+                    widget->style()->polish(widget);
+                }
+                for (auto *page : widget->findChildren<QWidget *>(QString(),Qt::FindDirectChildrenOnly))
+                    if (page->layout() && page->layout()->contentsMargins() != QMargins(12,12,12,12))
+                        page->layout()->setContentsMargins(12,12,12,12);
+            }
+            if (qobject_cast<QDialogButtonBox *>(widget) && widget->layout() &&
+                widget->layout()->contentsMargins() != QMargins(12,8,0,0))
+                widget->layout()->setContentsMargins(12,8,0,0);
+        }
+        QWidget *pageView = nullptr;
+        for (auto *widget : dialog->findChildren<QWidget *>())
+            if (widget->inherits("KPageWidget")) { pageView = widget; break; }
+        if (!pageView) return;
+        auto *panel = pageView->findChild<QWidget *>(QStringLiteral("ricyShellPanel"),Qt::FindDirectChildrenOnly);
+        if (!panel) panel = new ShellPanel(pageView);
+        if (panel->geometry() != pageView->rect()) panel->setGeometry(pageView->rect());
+        panel->lower();
+        panel->show();
+        panel->update();
+    }
     KSharedConfig::Ptr m_dolphinConfig;
-    QIcon m_dockCloseIcon;
     QPointer<QStyle> m_chipStyle;
 };
 class RicyDolphinUiPlugin : public QGenericPlugin {

@@ -372,22 +372,38 @@ with `apply.py --restaurar BACKUP`; then reload Noctalia and reopen Dolphin.
 
 ## Identity & Motion Pass — Iconography
 
-An optional13-glyph Actions-only XDG overlay supplies Tabler chrome identity.
-The existing Dolphin-only helper selects it in-process when valid; missing
-overlay preserves the system Breeze theme, and missing names inherit Breeze/
-hicolor. Native content/Places/device providers remain unchanged. No global
-icon setting or persistent dolphinrc theme override is written.
+### System icons — 2026-10-14
 
-Use `apply-icons.py` for a scoped helper/overlay installation and the printed
-private manifest for existing `apply.py --restaurar BACKUP` rollback. Reopen
-Dolphin for helper changes; the full applicator includes the same optional
-payload for reproduction. Qt/KF6IconThemes headers are required to build.
+The user approved Papirus after the live preview. Dolphin now follows the KDE/Qt
+system icon theme by default (`Papirus-Dark` on the observed desktop), including
+navigation, menus, folders, view modes and dock close. The private Tabler overlay,
+its forced theme selection and direct close SVG are removed. The existing
+Ricy-Dolphin **Kvantum style** is unrelated to the retired icon theme and retained.
+Qt/KDE owns theme propagation and native missing-icon inheritance. Button geometry,
+state colors, actions, QSS, shortcuts and FileManager1 retain their existing owners.
+The helper does not write global or dolphinrc icon preferences or require Noctalia.
+`--system-icons` is still accepted for compatibility with the earlier preview
+command; it is no longer necessary and creates no separate mode.
 
-[Mapping, licensing, provenance and fallback](icons/Ricy-Dolphin/README.md) and
-[phase evidence](../../../docs/DOLPHIN-BASELINE.md#identity--motion-pass--phase-2-iconography--2026-10-11)
-record PASS within scope and the outstanding shutdown FAIL/Recovery UNKNOWN.
+Run `python3 -B ricy-kit/contributions/dolphin-noctalia-identity/apply-icons.py`
+for the scoped installation: build the helper, back up helper/wrapper/retired
+installed overlay, install atomically, and remove only the icon overlay.
+Use the printed manifest with `apply.py --restaurar BACKUP` to roll back, then
+reopen Dolphin. Existing processes retain their mapped helper and icon cache.
+The full applicator also retires the overlay, preserving its backup target.
+
 `python3 -B ricy-kit/contributions/dolphin-noctalia-identity/validate-icons.py`
-checks scope, provenance and nonempty Qt SVG paint without installing.
+checks system inheritance even when a valid legacy overlay is present, plus
+native theme reconfiguration in an isolated fixture. It simulates Qt's platform
+update without broadcasting to the desktop. Real Settings notifications and
+Plasma Recovery remain NOT RUN. No additional runtime/Recovery dependency is
+introduced; the helper no longer directly links KF6IconThemes. The validator
+still uses that existing native library to inspect resolution.
+
+The original Tabler SVG/license/provenance remains in Git at `247ca86` under
+`ricy-kit/contributions/dolphin-noctalia-identity/icons/Ricy-Dolphin/` and in the
+private pre-removal backup. The historical [phase evidence](../../../docs/DOLPHIN-BASELINE.md#identity--motion-pass--phase-2-iconography--2026-10-11)
+describes the superseded overlay, not the current icon policy.
 
 ## Identity & Motion Pass — Motion
 

@@ -85,6 +85,31 @@ KFilePlacesView { padding-left: 12px; padding-right: 12px; color: #cdd6f4; selec
 
 /* Settings and auxiliary dialogs reuse the solid surface and control roles. */
 QDialog { background-color: #181825; color: #cdd6f4; }
+/* Configure uses the same unified L and central cards as the main window.
+   Native page controls/search/actions remain intact; other dialogs keep their roles. */
+DolphinSettingsDialog { background-color: rgba(24,24,37,178); }
+DolphinSettingsDialog KPageWidget, DolphinSettingsDialog KTitleWidget,
+DolphinSettingsDialog KTitleWidget QWidget { background: transparent; border: none; }
+DolphinSettingsDialog KPageWidget > QFrame { background: transparent; border: none; }
+DolphinSettingsDialog QWidget[ricyConfigureHeader="true"] { background-color: #313244; border: none; }
+DolphinSettingsDialog QAbstractItemView[ricyConfigureNavigation="true"] {
+    background: transparent; border: none; border-radius: 0px; padding: 4px 8px;
+}
+DolphinSettingsDialog QWidget[ricyConfigureCard="true"] {
+    background-color: #313244; border: 1px solid transparent; border-radius: 12px;
+}
+DolphinSettingsDialog QDialogButtonBox { background: transparent; border: none; }
+QComboBox { padding-right: 32px; }
+QComboBox::drop-down { background: transparent; border: none; width: 24px; subcontrol-origin: padding; subcontrol-position: top right; }
+QComboBox::down-arrow { image: none; width: 8px; height: 8px; }
+/* Numeric fields retain native step slots, without square button backings. */
+QSpinBox::up-button, QSpinBox::down-button, QDoubleSpinBox::up-button, QDoubleSpinBox::down-button { background: transparent; border: none; }
+QSpinBox::up-arrow, QSpinBox::down-arrow, QDoubleSpinBox::up-arrow, QDoubleSpinBox::down-arrow { image: none; }
+QComboBoxPrivateContainer[ricyConfigurePopup="true"] { background-color: #313244; border: 1px solid #46485c; border-radius: 12px; padding: 8px; }
+QComboBoxPrivateContainer[ricyConfigurePopup="true"] QAbstractItemView { background-color: #313244; border: none; border-radius: 0px; padding: 0px; color: #cdd6f4; selection-background-color: #cba6f7; selection-color: #11111b; }
+QComboBoxPrivateContainer[ricyConfigurePopup="true"] QAbstractItemView::item { background: transparent; border: none; border-radius: 6px; padding: 4px 12px; }
+QComboBoxPrivateContainer[ricyConfigurePopup="true"] QAbstractItemView::item:selected { background-color: #cba6f7; color: #11111b; }
+QComboBoxPrivateContainer[ricyConfigurePopup="true"] QAbstractItemView::item:disabled { color: #a6adc8; }
 QDialog QLabel { color: #cdd6f4; background: transparent; border: none; }
 QDialog QPushButton { background-color: #313244; color: #cdd6f4; border: 1px solid #46485c; border-radius: 8px; padding: 4px 12px; min-height: 20px; }
 QDialog QPushButton:hover { background-color: #977dba; color: #000000; border-color: #977dba; }

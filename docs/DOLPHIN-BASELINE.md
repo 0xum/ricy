@@ -1,5 +1,71 @@
 # Dolphin baseline — Ricy file manager
 
+## Configure visual adaptation — 2026-10-14
+
+KNOWN native consumer: `DolphinSettingsDialog` with KPageWidget, searchable
+KPageListView, KPageStackedWidget, native tabs/forms and QDialogButtonBox.
+The user requested the established main-window language: a unified header/sidebar
+L, solid central cards and consistent spacing. The existing helper/QSS now adapts
+only this dialog, reusing base/card/text/state roles, 8px outer/gutter spacing,
+12px card padding/radius and the native header typography. The L backing remains input-transparent and follows native resize/RTL layout.
+The outer/gutter/footer backing reuses the main-window glass alpha178/255;
+central cards and the L remain opaque. Native blur is explicitly requested for
+Configure through Dolphin's existing KF6WindowSystem framework.
+
+Selectors and numeric fields throughout Ricy Dolphin now use paint-only glyphs
+in Qt's native dropdown/step slots, without square button backings. Qt retains
+clicks, models, limits, fractional/wrapping behavior, keyboard and field modes.
+The helper preserves NoButtons/PlusMinus and disabled/read-only roles; it does
+not add its own value or selection actions.
+Detached selector lists use an opaque solid card, 1px outline, 12px radius/inset
+and rounded mask. Transparent corner pixels preserve the shape; native blur is
+explicitly disabled for this popover, independent of the outer window's glass material. Qt's standard styled item delegate applies
+the established accent/on-accent selection pair instead of the style's menu
+painting. There is no bundled icon, popup gradient or translucent content backing.
+Other auxiliary dialogs and the main-window material retain their existing roles.
+
+Ownership remains in the existing Dolphin visual contribution. The helper now
+directly links Dolphin's existing KF6WindowSystem for native per-window blur
+requests; no additional runtime package, compositor patch, settings model,
+preference writer or Recovery path is added.
+Only helper/QSS are installed together, atomically with a private manifest backup.
+The existing identity restorer rolls back the pair; reopen Dolphin afterward.
+Validation details are recorded in [the contribution](../ricy-kit/contributions/dolphin-blur-corners/README.md#configure-panels-and-selectors--2026-10-14).
+
+## System Papirus icons — 2026-10-14
+
+KNOWN: after the live trial, the user approved Papirus and removal of the Dolphin
+Tabler overlay. KDE `Icons/Theme` and GTK already select `Papirus-Dark`, installed
+in the user's XDG icon directory. Dolphin now follows native KDE/Qt icon selection
+by default, including dock close. The helper's forced theme/direct SVG path and
+the source/installed icon overlay are removed. The same-named Ricy-Dolphin Kvantum
+style is retained. No separate preview mode or fixed per-app Papirus theme remains.
+
+The scoped applicator backs up helper, wrapper and installed legacy overlay,
+installs the helper/wrapper atomically, then removes only that icon directory.
+No desktop defaults, shortcuts, FileManager1, QSS/Kvantum, canonical tokens or
+Plasma session settings change. The existing helper/wrapper ownership and native
+Recovery file access remain; no additional runtime dependency is introduced.
+The helper no longer directly links KF6IconThemes; native test probes still use it.
+
+The live trial confirmed KDE/Qt `Papirus-Dark` and navigation, folder, menu,
+view-mode and close assets in the installed Papirus-Dark tree. Client-rendered
+Dolphin captures showed the Papirus glyphs with the existing Ricy layout/colors.
+This is not a compositor capture or a full visual-state/Recovery certification.
+The isolated fixture checks system icons despite a valid leftover legacy theme
+and simulates Qt platform/native loader reconfiguration without broadcasting.
+PASS after adoption: default live launch without preview flags resolves KDE/Qt
+and all probed assets to Papirus-Dark; inspected client-rendered capture. Native
+close/motion/plugin lifetime passed at 1x/1.5x; source/build/installed equality,
+retired installed overlay absence, retained Kvantum, syntax, architecture and
+whitespace passed. The native glyph fixture retains visible-size/centering checks
+with a five-value RGB tolerance for antialiased theme strokes.
+Real Settings notifications and Plasma Recovery remain NOT RUN.
+
+See [current commands and rollback](../ricy-kit/contributions/dolphin-noctalia-identity/README.md#system-icons--2026-10-14).
+Original overlay/license/provenance remains in Git at `247ca86` and the private
+backup; the 2026-10-11 phase below is historical and superseded.
+
 ## Shell-specific Dolphin shortcut policy — 2026-10-13
 
 KNOWN user-approved routing: Plasma Meta+E opens native Dolphin/Breeze; Plasma
@@ -391,8 +457,8 @@ or KWin migration is required. Live failure Recovery remains UNKNOWN.
 Started only after the Typography commit `f7db218`. This is not a clean-shutdown
 or independent Recovery certification; Motion has not started at this gate.
 
-[Overlay mapping/provenance](../ricy-kit/contributions/dolphin-noctalia-identity/icons/Ricy-Dolphin/README.md)
-records actual native action names from the live KActionCollection, named Tabler
+The retired overlay mapping/provenance (Git `247ca86`,
+`ricy-kit/contributions/dolphin-noctalia-identity/icons/Ricy-Dolphin/README.md`) records actual native action names from the live KActionCollection, named Tabler
 resources and internal Noctalia aliases. Thirteen selected action assets come
 from pinned, MIT-licensed upstream SVGs, preserving geometry/stroke and adapting
 only KDE filenames/palette CSS. Current breadcrumbs, tab close/overflow primitives

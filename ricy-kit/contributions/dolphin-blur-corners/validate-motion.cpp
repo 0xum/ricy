@@ -261,25 +261,34 @@ int main(int argc, char **argv) {
     const int bottomGap = dock->widget()->y()+4-close->geometry().bottom()-1;
     require(qAbs(topGap-bottomGap) <= 1,
             "close button balances title-top and card-top gaps within pixel rounding");
-    auto closeHasColor = [close](const QColor &color) {
+    // Native theme strokes can be antialiased without fully opaque pixels.
+    // A five-channel-value tolerance retains the foreground-pair check.
+    auto nearColor = [](const QColor &actual, const QColor &expected) {
+        return qAbs(actual.red()-expected.red()) <= 5 &&
+               qAbs(actual.green()-expected.green()) <= 5 &&
+               qAbs(actual.blue()-expected.blue()) <= 5;
+    };
+    auto closeHasColor = [close, nearColor](const QColor &color) {
         const QImage image = close->grab().toImage();
         for (int y=0; y<image.height(); ++y)
             for (int x=0; x<image.width(); ++x)
-                if (image.pixelColor(x,y) == color) return true;
+                if (nearColor(image.pixelColor(x,y),color)) return true;
         return false;
     };
     leave(close); QTest::qWait(20);
     const QImage closeImage = close->grab().toImage();
+    if (qEnvironmentVariableIsSet("RICY_DOCK_CLOSE_FIXTURE"))
+        closeImage.save(qEnvironmentVariable("RICY_DOCK_CLOSE_FIXTURE"));
     QRect glyphBounds;
     for (int y=0; y<closeImage.height(); ++y)
         for (int x=0; x<closeImage.width(); ++x)
-            if (closeImage.pixelColor(x,y) == QColor("#cdd6f4"))
+            if (nearColor(closeImage.pixelColor(x,y),QColor("#cdd6f4")))
                 glyphBounds = glyphBounds.united(QRect(x,y,1,1));
     require(!glyphBounds.isEmpty() && glyphBounds.width() >= 6*closeImage.devicePixelRatio(),
-            "Tabler close stroke remains legible without Qt icon reduction");
+            "system close stroke remains legible without Qt icon reduction");
     require(qAbs(glyphBounds.center().x()+0.5-closeImage.width()/2.0) <= 1 &&
             qAbs(glyphBounds.center().y()+0.5-closeImage.height()/2.0) <= 1,
-            "Tabler close glyph is centered horizontally and vertically");
+            "system close glyph is centered horizontally and vertically");
     QTest::mouseMove(close,close->rect().center()); enter(close); QTest::qWait(30);
     require(closeHasColor(QColor("#977dba")), "native dock close hover uses existing fill");
     require(closeHasColor(QColor("#000000")), "hover close glyph uses on-hover foreground");
@@ -293,6 +302,6 @@ int main(int argc, char **argv) {
     dock->setLayoutDirection(Qt::RightToLeft); QTest::qWait(20);
     require(close->x() == 8 && dock->rect().contains(close->geometry()),
             "dock close control mirrors within RTL title area");
-    fprintf(stderr,"PASS native dock 24px close geometry, balanced vertical gaps, centered smaller Tabler glyph, paired hover/press colors, close/reopen and RTL under production QSS\n");
+    fprintf(stderr,"PASS native dock 24px close geometry, balanced vertical gaps, centered system glyph, paired hover/press colors, close/reopen and RTL under production QSS\n");
     return 0;
 }

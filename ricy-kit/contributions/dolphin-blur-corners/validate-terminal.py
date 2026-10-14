@@ -20,7 +20,7 @@ with tempfile.TemporaryDirectory(prefix='ricy-terminal-validation-') as temporar
                         '-o', str(work / f'{source}.moc')], check=True)
     subprocess.run(['g++', '-std=c++17', '-fPIC', *includes, *flags,
                     str(work / 'validate-terminal.cpp'), '-o', str(work / 'validate-terminal'),
-                    *libs, '-lKF6Parts', '-lKF6CoreAddons', '-lKF6IconThemes', '-lKF6ConfigCore'], check=True)
+                    *libs, '-lKF6Parts', '-lKF6CoreAddons', '-lKF6IconThemes', '-lKF6ConfigCore', '-lKF6WindowSystem'], check=True)
     environment = dict(os.environ, QT_QPA_PLATFORM='offscreen', XDG_CONFIG_HOME=str(work / 'config'),
                        XDG_DATA_HOME=str(work / 'data'), XDG_STATE_HOME=str(work / 'state'),
                        XDG_CACHE_HOME=str(work / 'cache'))

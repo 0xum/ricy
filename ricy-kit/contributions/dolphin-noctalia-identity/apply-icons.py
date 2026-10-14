@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
-"""Install the optional Dolphin chrome overlay and existing helper with rollback."""
+"""Install system icon inheritance and retire the Dolphin overlay with rollback."""
 import datetime
-import hashlib
 import json
 import os
 from pathlib import Path
@@ -9,26 +8,19 @@ import shutil
 import subprocess
 import sys
 import tempfile
-import xml.etree.ElementTree as ET
 
 here = Path(__file__).resolve().parent
 home = Path.home()
-source = here / 'icons/Ricy-Dolphin'
-provenance = json.loads((source / 'provenance.json').read_text())
-for asset in provenance['assets']:
-    path = source / 'scalable/actions' / (asset['kde_name'] + '.svg')
-    ET.parse(path)
-    assert hashlib.sha256(path.read_bytes()).hexdigest() == asset['asset_sha256']
-assert {p.stem for p in (source / 'scalable/actions').glob('*.svg')} == {a['kde_name'] for a in provenance['assets']}
 environment = dict(os.environ, XDG_CACHE_HOME=str(home / '.cache/ricy-dolphin-identity-motion/iconography'))
 library = Path(subprocess.check_output([sys.executable, str(here.parent / 'dolphin-blur-corners/build-ui.py')],
                                        env=environment, text=True).strip())
 overlay = home / '.local/share/icons/Ricy-Dolphin'
 helper = home / '.local/share/ricy-dolphin/plugins/generic/libricydolphinui.so'
+wrapper = home / '.local/bin/ricy-dolphin'
 backup = home / '.local/state/ricy-dolphin-backups' / datetime.datetime.now().strftime('%Y%m%d-%H%M%S-%f')
 backup.mkdir(parents=True, mode=0o700)
 manifest = []
-for number, path in enumerate((overlay, helper)):
+for number, path in enumerate((overlay, helper, wrapper)):
     if path.exists():
         if path.is_dir():
             shutil.copytree(path, backup / str(number))
@@ -39,26 +31,18 @@ for number, path in enumerate((overlay, helper)):
 print('Backup:', backup, flush=True)
 # Update only the selected payload. Files are atomic; previously mapped helper
 # inodes remain valid. The manifest can restore previous files/absence exactly.
-for path in source.rglob('*'):
-    if not path.is_file():
-        continue
-    destination = overlay / path.relative_to(source)
+for source, destination in ((library, helper), (here / 'launch.py', wrapper)):
     destination.parent.mkdir(parents=True, exist_ok=True)
     fd, temporary = tempfile.mkstemp(prefix='.ricy-icons-', dir=destination.parent)
     os.close(fd)
     try:
-        shutil.copy2(path, temporary)
+        shutil.copy2(source, temporary)
+        os.chmod(temporary, 0o755)
         os.replace(temporary, destination)
     finally:
         if os.path.exists(temporary):
             os.unlink(temporary)
-fd, temporary = tempfile.mkstemp(prefix='.ricy-icons-', dir=helper.parent)
-os.close(fd)
-try:
-    shutil.copy2(library, temporary)
-    os.replace(temporary, helper)
-finally:
-    if os.path.exists(temporary):
-        os.unlink(temporary)
-print('Applied. New Dolphin processes select the optional overlay; missing overlay keeps the system theme.')
+if overlay.exists():
+    shutil.rmtree(overlay)
+print('Applied. Dolphin follows the KDE system icon theme. The retired Tabler overlay is backed up and removed.')
 print('Rollback: apply.py --restaurar BACKUP; reopen Dolphin. Global KDE theme and dolphinrc are unchanged.')

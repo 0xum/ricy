@@ -22,11 +22,7 @@ with tempfile.TemporaryDirectory(prefix='ricy-motion-validation-') as temporary:
     work = Path(temporary)
     config = work / 'config'
     config.mkdir()
-    (config / 'kdeglobals').write_text('[KDE]\nAnimationDurationFactor=1\n')
-    close_assets = work / 'data/icons/Ricy-Dolphin/scalable/actions'
-    close_assets.mkdir(parents=True)
-    shutil.copy2(here.parent / 'dolphin-noctalia-identity/icons/Ricy-Dolphin/scalable/actions/dialog-close.svg',
-                 close_assets / 'dialog-close.svg')
+    (config / 'kdeglobals').write_text('[KDE]\nAnimationDurationFactor=1\n[Icons]\nTheme=breeze-dark\n')
     includes = [f'-I{path}' for path in Path('/usr/include/KF6').iterdir() if path.is_dir()]
     for name in ('validate-motion.cpp', 'motion.h', 'ui.cpp', 'ui.json'):
         shutil.copy2(here / name, work / name)
@@ -34,9 +30,9 @@ with tempfile.TemporaryDirectory(prefix='ricy-motion-validation-') as temporary:
     subprocess.run(['/usr/lib/qt6/moc', *includes, *flags, str(work / 'ui.cpp'),
                     '-o', str(work / 'ui.moc')], check=True)
     subprocess.run(['g++', '-std=c++17', '-fPIC', *includes, str(work / 'validate-motion.cpp'),
-                    '-o', str(work / 'validate-motion'), *qt, '-lKF6ConfigCore',
+                    '-o', str(work / 'validate-motion'), *qt, '-lKF6ConfigCore', '-lKF6WindowSystem',
                     '-lKF6KIOFileWidgets', '-lKF6KIOCore', '-lKF6KIOWidgets', '-lKF6IconThemes'], check=True)
-    environment = dict(os.environ, QT_QPA_PLATFORM='offscreen', XDG_CONFIG_HOME=str(config),
+    environment = dict(os.environ, QT_QPA_PLATFORM='offscreen', QT_QPA_PLATFORMTHEME='kde', XDG_CONFIG_HOME=str(config),
                        XDG_DATA_HOME=str(work / 'data'), XDG_STATE_HOME=str(work / 'state'))
     subprocess.run([str(work / 'validate-motion'),
                     str(here.parent / 'dolphin-noctalia-identity/dolphin.qss')], env=environment, check=True)
@@ -45,7 +41,7 @@ with tempfile.TemporaryDirectory(prefix='ricy-motion-validation-') as temporary:
     generic.mkdir(parents=True)
     subprocess.run(['g++', '-std=c++17', '-fPIC', '-shared', *includes,
                     str(work / 'ui.cpp'), '-o', str(generic / 'libricydolphinui.so'),
-                    *qt, '-lKF6ConfigCore', '-lKF6IconThemes'], check=True)
+                    *qt, '-lKF6ConfigCore', '-lKF6WindowSystem', '-lKF6IconThemes'], check=True)
     subprocess.run(['g++', '-std=c++17', str(here / 'validate-plugin-lifetime.cpp'),
                     '-o', str(work / 'validate-plugin-lifetime'), *qt], check=True)
     environment['QT_PLUGIN_PATH'] = str(work / 'plugins')

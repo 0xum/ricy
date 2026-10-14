@@ -3,6 +3,74 @@
 Record significant changes in short entries. Minimum fields:
 Model/Agent, Date, Purpose, Validation performed. Do not sign source files.
 
+## 2026-10-14 — Align Dolphin Configure panels and selectors with the existing identity
+
+- **Model/Agent:** Codex (GPT-6).
+- **Date:** 2026-10-14 (America/Sao_Paulo).
+- **Purpose:** Adapt the native Configure dialog to the existing unified header/
+  sidebar L, solid central cards, 8px gutters and 12px card padding/radii. Preserve
+  KDE search/page/form/tab ownership and Defaults/OK/Apply/Cancel. Follow the user's
+  selector feedback with a centered paint-only chevron and an opaque popover,
+  using native Qt styled rows and established selection colors. Extend the
+  user-requested field-glyph cleanup throughout Ricy Dolphin: selectors and
+  integer/fractional steppers lose square backings while native slots, actions,
+  limits, keyboard and field modes remain intact. Install only
+  helper/QSS with private rollback. Follow the user's glass-gutter and outline
+  feedback with the existing alpha178/255 base and a 1px popup outline/12px inset.
+  Link Dolphin's existing KF6WindowSystem to enable blur on Configure and disable
+  it on the solid popover; no additional runtime package, compositor patch,
+  token, defaults, settings writer or Recovery path. Preserve the adopted system Papirus policy.
+- **Validation performed:** Work-in-progress checkpoint at the user's request.
+  PASS native Configure geometry/glass alpha, outline/insets/solid popover,
+  field arrows and numeric mouse/keyboard/limit checks, resize/RTL, search,
+  page/tab navigation and Apply/Cancel at 1x/1.5x. PASS motion/plugin lifetime,
+  QSS interaction regressions, system icon inheritance, build/source/installed
+  equality, architecture and whitespace. Inspected client-rendered captures of
+  real Configure pages and popover; live probe reports native blur available
+  and requested on Configure. Final visual acceptance, real preference
+  persistence, full compositor/multiple-monitor coverage and Plasma Recovery
+  remain NOT RUN. This checkpoint does not mark the visual work complete.
+
+## 2026-10-14 — Adopt system Papirus icons and remove the Dolphin Tabler overlay
+
+- **Model/Agent:** Codex (GPT-6).
+- **Date:** 2026-10-14 (America/Sao_Paulo).
+- **Purpose:** Apply the user's approval after the preview. Dolphin follows the
+  current KDE/Qt system theme (`Papirus-Dark`) by default, including dock close.
+  Remove the forced overlay/direct SVG and the source/installed Tabler icon
+  assets; preserve their history and private rollback backup. Update the scoped
+  and full applicators so they retire only that icon directory. Keep Kvantum,
+  QSS, layout/state colors, native actions, defaults, FileManager1, shortcuts,
+  canonical tokens and Plasma Recovery paths. No new runtime dependency; the
+  helper no longer directly links KF6IconThemes. Noctalia control glyphs remain.
+- **Validation performed:** PASS native system inheritance despite a valid
+  leftover legacy overlay and simulated Qt/KDE theme reconfiguration; native
+  close geometry/legibility/state colors, motion and plugin shutdown at 1x/1.5x;
+  build/source/installed equality, retired installed overlay absence and retained
+  Kvantum style. PASS default live launch without preview flags: KDE/Qt both
+  Papirus-Dark with navigation/folder/menu/view/close paths under Papirus-Dark;
+  inspected client-rendered capture. PASS Python syntax, architecture and whitespace.
+  The glyph check now allows five RGB channel values of antialiasing difference
+  while preserving minimum visible size and centered geometry. Real Settings
+  notifications, complete visual states/compositor and Plasma Recovery are NOT RUN.
+
+## 2026-10-14 — Preview system Papirus icons without replacing Tabler
+
+- **Model/Agent:** Codex (GPT-6).
+- **Date:** 2026-10-14 (America/Sao_Paulo).
+- **Purpose:** Preserve the default Tabler overlay and add `--system-icons` to
+  the existing Dolphin wrapper for the user's Papirus trial. The opt-in process
+  follows KDE/Qt icons, including dock close, while preserving native actions,
+  layout and state colors. Atomically install only helper/wrapper with a private
+  manifest backup. No global setting, shortcut/default/FileManager1, compositor,
+  token or additional runtime/Recovery dependency changes.
+- **Validation performed:** PASS isolated default and preview native loader/
+  Qt icon resolution with native theme reconfiguration, existing motion/close/
+  plugin lifetime regression, helper build and installed equality. PASS real
+  Dolphin probe: KDE/Qt both Papirus-Dark and navigation, folder, menu, view and
+  close paths under Papirus-Dark. PASS architecture and whitespace. Real Settings
+  theme-change notification and Plasma Recovery round trip are NOT RUN.
+
 ## 2026-10-13 — Route Dolphin shortcuts by the active shell
 
 - **Model/Agent:** Codex (GPT-6).

@@ -1,5 +1,57 @@
 # Dolphin: transparency with Qt and KWin native corners
 
+## Configure panels and selectors — 2026-10-14
+
+The existing helper adapts only DolphinSettingsDialog's native KPageWidget.
+Header/search and sidebar join the same L backing as the main-window language;
+native pages receive solid rounded central cards, 12px insets and 8px gutters.
+Header painting replaces only its backing; native title, search/filtering, page
+model, forms, tabs and Defaults/OK/Apply/Cancel stay in KDE. The input-transparent L follows resize and RTL without a continuous timer.
+Gutters and footer expose the existing main-window glass backing (alpha178/255),
+with native blur explicitly enabled for this dialog. No new material/token is invented.
+
+QComboBox and numeric QSpinBox/QDoubleSpinBox throughout Ricy Dolphin use
+input-transparent glyph children in their native dropdown/step slots, reusing
+the navigator's stroke/foreground roles. Square native button backings are removed.
+Qt retains clicks, fractional steps, min/max/wrapping, read-only/disabled behavior,
+keyboard and NoButtons/PlusMinus modes. Other dialogs receive only this shared
+field treatment, without Configure's panel layout. Its popover has an opaque card fill, a 1px outline, 12px radius/inset and
+standard Qt styled rows using accent/on-accent selection. Transparent corners
+retain its shape while native blur is explicitly disabled for this window. This removes
+the native style's translucent menu backing; the main window remains unchanged.
+Other dialog layouts are excluded. The helper links Dolphin's existing KF6WindowSystem
+for native Qt-window blur requests; no additional runtime package or compositor
+effect is needed. KF6WindowSystem headers/library are build prerequisites.
+
+```bash
+python3 -B ricy-kit/contributions/dolphin-blur-corners/validate-configure.py
+QT_SCALE_FACTOR=1.5 python3 -B ricy-kit/contributions/dolphin-blur-corners/validate-configure.py
+```
+
+The isolated native KPageDialog fixture checks L/card geometry and pixels,
+resize/RTL, search filtering, page/tab navigation, keyboard control access,
+chevron hit-slot/legibility, glass alpha in gutters, solid popover pixels,
+outline/insets/selection/Escape, numeric mouse/keyboard/limit checks in an
+auxiliary dialog and Apply/Cancel.
+It never writes real Dolphin settings. Install helper and QSS as a pair with
+the existing private manifest backup and atomic file replacement. Restore using
+the identity `apply.py --restaurar BACKUP`, then reopen Dolphin. The full identity
+applicator already builds/copies both payloads; it also changes other preferences
+and is not a validation command. Recovery independence is not certified here.
+
+## System Papirus icons — 2026-10-14
+
+Dolphin now follows the KDE/Qt system icon theme by default, currently Papirus-Dark.
+The forced Tabler overlay and direct dock-close SVG are removed; dock-close paint
+uses the current native `dialog-close` icon. Existing layout, colors, native actions,
+QSS/Kvantum and recovery paths are retained. The helper no longer directly links
+KF6IconThemes. PASS native close/motion/plugin lifetime at 1x/1.5x, system loader
+reconfiguration, installed equality and default live Papirus resolution/capture.
+Real Settings notification, compositor/full state coverage and Plasma Recovery
+are NOT RUN. [Installation and rollback](../dolphin-noctalia-identity/README.md#system-icons--2026-10-14)
+use the existing private manifest restorer. Earlier Tabler records below are
+historical; their geometry/state-color behavior is retained with system glyphs.
+
 ## Hide normal hover-selection badges in Ricy — 2026-10-13
 
 The helper sets Dolphin's native `General/ShowSelectionToggle` preference to
@@ -566,10 +618,17 @@ QSS or additional Recovery dependency. New processes load this correction.
 
 ## Identity & Motion Pass — optional chrome overlay
 
+Superseded on 2026-10-14 by the user-approved system Papirus icon policy.
+The helper now follows KDE/Qt and resolves dock close from the current system
+theme. The forced Tabler overlay and direct SVG path are removed; the same-named
+Kvantum style is retained. [Current behavior and rollback](../dolphin-noctalia-identity/README.md#system-icons--2026-10-14)
+describe installation and validation. No compositor/effect change is involved.
+
+Historical phase record:
+
 The Qt helper now selects a valid optional Ricy-Dolphin icon overlay through the
 process-local native KDE icon loader. Missing overlay leaves the system theme;
 content/device/application icons remain inherited native assets. KF6IconThemes
 headers/library supplement the existing Qt build prerequisites; Dolphin already
 requires the native library. No compositor/effect source or ABI change occurs.
-See [mapping and license](../dolphin-noctalia-identity/icons/Ricy-Dolphin/README.md)
-and [validation/rollback](../../../docs/DOLPHIN-BASELINE.md#identity--motion-pass--phase-2-iconography--2026-10-11).
+Mapping, assets and license are retained in Git at `247ca86`. See [historical validation/rollback](../../../docs/DOLPHIN-BASELINE.md#identity--motion-pass--phase-2-iconography--2026-10-11).

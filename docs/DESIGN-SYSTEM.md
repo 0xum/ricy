@@ -37,6 +37,16 @@ guide; do not universalize a component's radius, font, or opacity. Blur depends
 on compositor implementation and window class, not just color/opacity.
 Application icons retain their own identity.
 
+### Active Dolphin icon identity — 2026-10-14
+
+The user approved Papirus after a live trial. Dolphin follows the active KDE/Qt
+system icon theme, currently `Papirus-Dark`, for chrome and content. KDE remains
+the authority for icon-theme selection and native fallback/change propagation;
+Ricy does not pin an independent per-app theme. The old Dolphin Tabler overlay
+and direct close asset are removed. Noctalia's internal control glyph registry
+is unchanged. The same-named Ricy-Dolphin Kvantum style, geometry, state colors,
+actions and canonical tokens are retained. See the [current evidence](DOLPHIN-BASELINE.md#system-papirus-icons--2026-10-14).
+
 KNOWN: TOML configs, JSON palettes, QSS, and installers still repeat values.
 Central tokens can be parsed directly or packaged by approved applications;
 they are not executable desktop configuration. The existing identity SVG is the

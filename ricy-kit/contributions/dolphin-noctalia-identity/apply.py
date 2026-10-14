@@ -57,7 +57,8 @@ for key in list(cfg['Applications']):
 cfg['Applications'][name]='dolphin'
 with config.open('w') as f: cfg.write(f,space_around_delimiters=False)
 root.mkdir(parents=True,exist_ok=True); shutil.copy2(here/'dolphin.qss',root/'dolphin.qss')
-shutil.copytree(here/'icons/Ricy-Dolphin',overlay,dirs_exist_ok=True)
+# Retire only the old icon overlay; the same-named Kvantum theme is retained.
+if overlay.exists(): shutil.rmtree(overlay)
 wrapper.parent.mkdir(parents=True,exist_ok=True)
 shutil.copy2(here/'launch.py',wrapper); wrapper.chmod(0o755)
 plugin=root/'plugins/generic'; plugin.mkdir(parents=True,exist_ok=True)
