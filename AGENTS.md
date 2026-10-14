@@ -1,9 +1,11 @@
 # Ricy — Agent Constitution
 
 ## Project Definition
-An opinionated desktop for CachyOS, KWin/Wayland, and Noctalia, with Plasma/Dolphin
-Recovery. The shell currently runs within a Plasma session; the target design is
-not evidence of implementation. State and boundaries: [ARCHITECTURE](docs/ARCHITECTURE.md).
+An opinionated desktop for CachyOS, KWin/Wayland, and Noctalia, targeting its own
+session with Dolphin. KDE Plasma is a separate desktop, not Ricy's backup.
+The shell currently runs within a Plasma session; the target design is not
+evidence of implementation. Decision: [ADR-0012](docs/adr/0012-independent-ricy-session.md).
+State and boundaries: [ARCHITECTURE](docs/ARCHITECTURE.md).
 
 ## Project Language
 [Always use en-US as the language.]
@@ -34,10 +36,14 @@ Use KNOWN (evidence), INFERRED (inference), PLANNED (future), and UNKNOWN (unpro
 ## Architectural Invariants
 RICY-001: a single-space experience, without workspace UI, actions, or gestures.
 RICY-002: KWin is infrastructure. RICY-003: Noctalia is the primary shell.
-RICY-004: preserve Plasma Recovery. RICY-005: Dolphin is the Ricy file manager;
-visual customization must not make recovery file access depend on Ricy code.
+RICY-004: Ricy owns its session independently of the Plasma desktop.
+RICY-005: Dolphin is the Ricy file manager; optional visual customization must
+not prevent native file access when it fails.
 RICY-006: centralized identity; reuse the [existing design](docs/DESIGN-SYSTEM.md).
 The full normative text is in INVARIANTS; discrepancies are in ARCHITECTURE.
+ADR-0012 supersedes the Plasma-as-backup requirement in older local rules/skills.
+Their existing runtime safeguards still apply during migration: preserve current
+switching routes and backups until replacements are validated.
 
 ## Agent Behavioral Rules
 - Never infer architecture solely from implementation. Read local rules before

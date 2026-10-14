@@ -1,18 +1,21 @@
 # Ricy
 
 An opinionated desktop for CachyOS, built on KWin/Wayland, with Noctalia as the
-primary shell and Plasma/Dolphin for fallback and recovery.
+primary shell and Dolphin as the file manager, targeting its own login session.
+KDE Plasma is a separate desktop, not Ricy's backup.
 
 **Current state:** Noctalia is integrated into the Plasma session, which still
-provides the wallpaper/desktop. Dolphin is the file manager in Ricy and Plasma
-Recovery; the separate Ricy Files prototype is retired. An independent session
-remains planned. The user assesses Dolphin visual work as about 90% complete;
+provides the wallpaper/desktop. The separate Ricy Files prototype is retired.
+The independent session is accepted but not implemented; see
+[ADR-0012](docs/adr/0012-independent-ricy-session.md). The user assesses Dolphin
+visual work as about 90% complete;
 see the [read-only baseline](docs/DOLPHIN-BASELINE.md), not a certification of
 all functions or recovery.
 
 **Architecture:** KWin remains infrastructure; Ricy uses a single workspace.
-Preserving access to Plasma and Dolphin is a requirement. Legacy discrepancies
-and recovery limits are documented.
+Ricy owns its session settings and failure handling. Existing Plasma switching,
+installed packages and backups remain intact during migration. Legacy
+discrepancies and recovery limits are documented.
 
 **Development:** agent-first, with evidence and incremental changes.
 Start with [AGENTS.md](AGENTS.md); [CLAUDE.md](CLAUDE.md) reuses the same rules.

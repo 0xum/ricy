@@ -1,6 +1,8 @@
 # ADR-0002 — Plasma Recovery
 
-Status: Accepted
+Status: **Superseded** by [ADR-0012](0012-independent-ricy-session.md) on
+2026-10-14. The original decision below is preserved as history. Existing return
+scripts remain transitional runtime assets, not the target session architecture.
 
 ## Context
 

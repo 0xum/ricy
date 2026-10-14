@@ -1,5 +1,21 @@
 # Incremental migration
 
+## Session direction — accepted on 2026-10-14
+
+[ADR-0012](adr/0012-independent-ricy-session.md) replaces the Plasma-as-backup
+model: Ricy is its own KWin/Wayland + Noctalia session, with isolated desktop
+settings and its own failure policy. KDE Plasma is another desktop when installed.
+The architecture and same-account isolation model are approved; runtime entry
+points, exact paths and the application-sharing inventory remain to be implemented.
+Existing kit paths, wrappers, snapshots and installed
+packages stay intact until replacements are validated.
+
+ADR-0012 records the evaluated alternatives and the approved selection: scoped
+settings in the same account, an explicit application-sharing inventory and
+sequential logins. Resolve wallpaper,
+lock/authentication, portals, power, shortcut and activation ownership before
+installing a Ricy entry; two entries alone do not provide theme isolation.
+
 ## Current structure — KNOWN
 - Root: README and wrappers with absolute paths to the active kit.
 - `ricy-kit/`: 23 remaining contribution directories, outputs/scripts, demonstrations
@@ -44,7 +60,7 @@ been approved. No contribution currently has sufficient evidence for REMOVE.
 | Theme Tokens and Assets | themes/ and themes/tokens/ | Canonical JSON and offline board consumption implemented; runtime/assets require individual migration while maintaining values and appearance |
 | Search/ Shortcuts Adapter/KDE/Dolphin | integrations/kde/ | Map D-Bus, units, desktops and paths in both kits |
 | Autostart and integration units | services/ | Preserve order/readiness, names and return policy |
-| Alternance and snapshots | recovery/plasma/ | Validate restoration and reduce Ricy dependency without losing panels |
+| Alternance and snapshots | Existing recovery/plasma/ reservation retained for transitional tooling | Preserve current restoration; it does not define the independent session or a KDE backup requirement |
 | Preparation/applicators | installer/ | Separate public backup/state materials by allowlist |
 | AIC8800 Driver | integrations/hardware/ | Keep optional, pin/licenses and kernel support |
 | Common wrappers/helpers | core/ if justified | Find real duplication; do not create framework |
@@ -71,24 +87,35 @@ of exposure to the user; propose minimum adjustment without altering fallback.
 portable path, absence of private data; choose versioning before publishing.
 3. Centralize consumption of tokens, one component at a time, with visual comparison.
 4. Extract patches/builds and component integrations with path compatibility.
-5. Design Plasma Recovery isolation and only then an independent Ricy session.
+5. Implement the independent Ricy session within ADR-0012's approved
+   configuration boundary; validate Ricy failure handling and separate
+   desktop preferences before retiring current shell-switching integration.
 6. Maintain Dolphin as the file manager; evaluate separately authorized visual
    polish without taking over upstream filesystem responsibilities.
 
-## Architecture Decisions Required — Only Blocked Future Parts
+## Approved session architecture — implementation pending
 
-ARCHITECTURE DECISION REQUIRED
+ARCHITECTURE APPROVED — ADR-0012, 2026-10-14
 
-**Problem:** how to separate the future Ricy session without losing wallpaper/desktop and recovery that today depend on plasmashell and Ricy scripts?
+**Problem:** how to implement the accepted independent Ricy session without
+sharing desktop preferences or inheriting implicit plasmashell dependencies?
 
 **Evidence:**  `plasma-noctalia-switching/integration.py` keeps plasmashell, uses D-Bus/KGlobalAccel and reads Ricy snapshots when restoring. View
 [ARCHITECTURE C-002](ARCHITECTURE.md) and [RECOVERY](RECOVERY.md).
 
-**Options:** A. conserve the current integration while specifying and testing an independent route; B. create dedicated sessions and set wallpaper ownership, login and recovery before migrating.
+**Options:** A. separate login entries with shared settings (insufficient theme
+isolation); B. separate session configuration in the same account with explicit
+application sharing; C. separate accounts. See ADR-0012 for evidence and impact.
 
-**Recommended:** A in this foundation; draw up comparative proposal before B.
+**Selected:** B, explicitly approved by the user. Ricy is its own session and
+KDE's backup role is retired. Do not request approval again for this architecture;
+new decisions outside the documented scope still follow architecture-change.
 
-**Impact:** units, login, wallpaper, shortcuts, compositor and return after crash. Runtime separation is PLANNED and is not implemented without explicit approval. The already requested documentary reservation remains valid and independent of this decision.
+**Impact:** units, login, wallpaper, locking/authentication, portals, power,
+shortcuts, app activation and failure handling. Runtime separation is PLANNED.
+Inventory concrete startup dependencies and application sharing within the
+approved boundary before activation. Existing documentary reservations do not
+authorize moving current state or snapshots.
 
 ## File-level extraction map
 

@@ -3,6 +3,11 @@
 Status: **Accepted** — explicitly approved by the user on 2026-10-11
 (America/Sao_Paulo).
 
+Amended by [ADR-0012](0012-independent-ricy-session.md) on 2026-10-14: Dolphin
+remains selected, while Plasma's backup role is retired. File access when optional
+visual customization fails remains required within Ricy. References below to
+Plasma Recovery describe the original decision and preserved current runtime.
+
 Approval: the user supplied the instruction to retire the own Ricy Files,
 choose Dolphin, preserve runtime/tokens, and record a read-only baseline.
 This selects an architecture; it does not authorize runtime/default changes.

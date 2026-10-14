@@ -3,6 +3,28 @@
 Record significant changes in short entries. Minimum fields:
 Model/Agent, Date, Purpose, Validation performed. Do not sign source files.
 
+## 2026-10-14 — Define Ricy as an independent session and retire KDE's backup role
+
+- **Model/Agent:** Codex (GPT-6).
+- **Date:** 2026-10-14 (America/Sao_Paulo).
+- **Purpose:** Record the user's explicit architectural direction in ADR-0012,
+  supersede ADR-0002 and amend the recovery context of ADR-0011 without changing
+  the Dolphin choice. Update RICY-004/005, project/subsystem rules, target,
+  component boundaries, migration and failure guidance. KDE is a separate
+  desktop; Ricy owns its lifecycle and session preferences. Record the subsequent
+  explicit approval of same-account session isolation, scoped application sharing
+  and sequential logins. Identify wallpaper, lock/authentication,
+  portal, power, activation and failure-validation gates. Preserve all installed
+  packages, services, current switching paths and private history/backups.
+- **Validation performed:** Read-only inspection confirms KDE/Wayland, only the
+  Plasma login entry, inactive Noctalia/disabled login integration, shared light
+  KDE preferences with KDE-Noctalia Kvantum, and the installed plasmalogin manager.
+  Independent-session implementation, login, security, visual isolation and
+  failure trials are NOT RUN. PASS `./scripts/verify architecture` (local
+  links, required files and validator syntax; no unavailable checks) and
+  `git diff --check`. Component/integration execution is NOT APPLICABLE to this
+  documentation-only change; the independent-session runtime remains unproven.
+
 ## 2026-10-14 — Align Dolphin Configure panels and selectors with the existing identity
 
 - **Model/Agent:** Codex (GPT-6).

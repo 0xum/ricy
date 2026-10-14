@@ -6,6 +6,12 @@ not necessarily revalidated at runtime. **INFERRED**: a reasonable conclusion
 from evidence. **PLANNED**: an accepted decision not yet implemented.
 **UNKNOWN**: insufficient evidence; do not fill gaps with plausible assumptions.
 
+Target updated on 2026-10-14 under [ADR-0012](adr/0012-independent-ricy-session.md):
+Ricy is its own session; KDE Plasma is a separate desktop, not a backup.
+Read-only environment observations on that date confirm only the Plasma login
+entry exists and the current session remains KDE/Wayland. Installed login uses
+plasmalogin; historical SDDM references do not establish the current manager.
+
 [Invariants](INVARIANTS.md) → [ADRs](adr/README.md) → architecture/components →
 local rules → implementation. Record conflicts and their scope.
 
@@ -38,14 +44,21 @@ The status helper observes a systemd unit; it does not prove session health.
 ## TARGET — PLANNED
 ```text
 CachyOS
-└── KWin / Wayland
-    ├── Ricy Desktop
-    │   ├── Noctalia Shell
-    │   ├── Ricy Core / Services (responsibilities still to be defined)
-    │   └── Dolphin with Ricy visual adaptations
-    └── Plasma Recovery
-        └── plasmashell, Dolphin, System Settings, and KDE tools
+├── Ricy session (dedicated login and configuration)
+│   ├── KWin / Wayland
+│   ├── Noctalia Shell
+│   ├── Selected upstream services + Ricy integration
+│   └── Dolphin with Ricy visual adaptations
+└── KDE Plasma session (independent desktop when installed)
+    └── Its own shell, appearance and session settings
 ```
+
+Ricy startup must not depend on launching the Plasma desktop and hiding panels.
+Shared KWin, KDE libraries and selected upstream services are allowed. Ricy owns
+its failure handling; it does not automatically fall back to the Plasma session.
+ADR-0012's same-account configuration isolation, explicit application sharing
+and sequential login model are approved; lifecycle/configuration implementation
+and runtime validation remain pending.
 
 The division into `core/`, `shell/noctalia/`, `compositor/kwin/`, `apps/`,
 `services/`, `themes/`, `integrations/`, `recovery/plasma/`, `installer/`, and `tools/`
@@ -59,21 +72,24 @@ scripts, profile/state and recovery paths remain unchanged.
 `themes/tokens/` now holds the canonical consumable JSON and an offline identity
 board renderer under [ADR-0005](adr/0005-consumable-visual-tokens.md); this does not
 migrate shell/session runtime or implement an application.
-New Core/Services, IPC, and dedicated-session contracts are UNKNOWN, not implicitly
-approved APIs. See [migration](MIGRATION-PLAN.md).
+New Core/Services and IPC contracts are UNKNOWN, not implicitly approved APIs.
+The dedicated session and configuration-sharing boundary are approved under
+ADR-0012; exact paths, startup dependencies and failure behavior require
+implementation and validation within that contract. See
+[migration](MIGRATION-PLAN.md).
 
 [ADR-0011](adr/0011-dolphin-as-ricy-file-manager.md) explicitly chooses
-Dolphin for Ricy and Plasma Recovery. The own prototype and 07–10 implementation
-roadmap are closed; no own filesystem, Trash adapter, FileManager1, toolkit or
-Dolphin fork is planned. Historical assessments/ADRs remain in
+Dolphin for Ricy; ADR-0012 retires the Plasma Recovery context. The own prototype
+and 07–10 implementation roadmap are closed; no own filesystem, Trash adapter,
+FileManager1, toolkit or Dolphin fork is planned. Historical assessments/ADRs remain in
 [the closed exploration](history/ricy-files/README.md), without active authority.
 
 The [Dolphin baseline](DOLPHIN-BASELINE.md) records the read-only installed
 configuration, registered integrations, helper/theme provenance and remaining
 visual backlog. The user's90% visual assessment is recorded separately from
 functional/recovery evidence. Current shared integration is preserved; the
-policy of usable Recovery when visual customizations fail is not a claim that
-independent failure recovery has already been demonstrated.
+policy of usable native file access when visual customizations fail is not a
+claim that independent failure handling has already been demonstrated.
 
 ## Ownership and boundaries
 - **UPSTREAM**: Noctalia, KWin, Plasma, Dolphin, Qt, Kvantum, and third-party themes.
@@ -95,7 +111,7 @@ These are the kit's baseline, not claims about the latest upstream versions.
 | ID | Current evidence | Consequence/treatment |
 |---|---|---|
 | C-001 | [Workspace audit](WORKSPACE-AUDIT.md) identifies Ricy Noctalia UI/commands and shared Plasma surfaces; [activation record](CHANGELOG.md) supersedes grounding G-02's earlier-binary observation | The cumulative RICY-001/UUID correction is deployed from an isolated build: it disables Ricy groups/badges, workspace widget, navigation/alert commands and settings. Visible-window membership remains internal. The earlier audits did not activate; the subsequent window-identity fix did. Shared KWin/Plasma shortcuts, menus and gestures remain preserved; full live compliance is UNKNOWN. |
-| C-002 | `integration.py` uses plasmashell/wallpaper and restores through Ricy scripts | Separate, independent recovery is PLANNED. Do not claim isolation has already been achieved. |
+| C-002 | `integration.py` uses plasmashell/wallpaper and restores through Ricy scripts | ADR-0012 accepts an independent Ricy session and retires KDE's backup role. Session/configuration isolation and Ricy-owned failure handling remain PLANNED; preserve current routes during migration. |
 | C-003 | Launcher and FileManager1 integration use customized Dolphin | Dolphin is the chosen base. Preserve existing integration; optional visual failure recovery remains unproven, with no MIME/default changes in this task. |
 | C-004 | Canonical consumable JSON now exists in themes/tokens; configs/QSS/scripts still contain values | Offline identity board consumes central tokens with exact byte equality. Runtime migrations remain PLANNED; see ADR-0005 and the token audit. |
 | C-005 | Two kit trees and absolute paths in wrappers | INFERRED: moving directories can break units and shortcuts. Preserve and map references before migration. |

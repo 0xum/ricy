@@ -1,5 +1,17 @@
 # Components
 
+Target contract update — 2026-10-14: [ADR-0012](adr/0012-independent-ricy-session.md)
+defines Ricy as its own session and KDE Plasma as a separate desktop. The tables
+below map current consumers; RECOVERY classifications describe existing return
+mechanisms, not a requirement that KDE be the target backup. The old
+`recovery/plasma/` extraction reservation is retained for compatibility and does
+not select the location of a new session bootstrap. No runtime owner is migrated.
+
+For the new target, Noctalia owns the visual shell, KWin remains infrastructure,
+and Ricy owns login/lifecycle, scoped integration and failure policy. Upstream
+desktop-service selection and exact configuration paths remain to be implemented
+and validated within ADR-0012's approved same-account isolation/sharing contract.
+
 The maintained grounding is [CONTRIBUTION-AUDIT](CONTRIBUTION-AUDIT.md): consumers,
 dependencies, cumulative lineage, part-level classifications, recovery impact,
 and read-only observations for all 24 contributions and shared material.
@@ -61,7 +73,7 @@ binary; G-03's blur observation is unchanged by this shell fix.
 |  [prepare-environment.py](../ricy-kit/prepare-environment.py), outputs/ | Preparation and seeds/templates; you can create private backups | installer/ + integrations/ | Python and destination settings | HISTORICAL root recipe; see audit | Do not execute on active kit to validate structure |
 |  [generate-kvantum-variant.py](../ricy-kit/generate-kvantum-variant.py)  | Qt style variant | themes/ | Kvantum/existing theme | HISTORICAL generator; selected theme assets ACTIVE elsewhere | Shared style with recovery |
 |  [Transport kit](ricy-kit/AGENTS.md) and archives/ | Reproduction/historical | installer/ and historical file after audit | Manifests, scripts and licenses | HISTORICAL; UNKNOWN publication readiness | Do not copy active installation status |
-| KWin / Plasma / Dolphin | Compositor, shared desktop, and the Ricy/Recovery file manager | compositor/kwin/ + recovery/plasma/ | System Packages | ACTIVE infrastructure/desktop; RECOVERY packages/tools | Unremovable |
+| KWin / Plasma / Dolphin | Current compositor, shared desktop, and file manager; target Ricy/KDE are separate sessions under ADR-0012 | compositor/kwin/; existing recovery/plasma/ reservation is transitional | System Packages | ACTIVE current infrastructure/desktop; existing return dependencies preserved | No package removal in the session-definition decision |
 |  [Core](../core/AGENTS.md) / [Services](../services/AGENTS.md)  | Future common limits; current services are in the contributions | core/ + services/ | UNKNOWN: new contracts | UNKNOWN implementation; PLANNED | Do not create new daemon/IPC by assumption |
 
 Classes have part-level overrides in the [audit](CONTRIBUTION-AUDIT.md): notably

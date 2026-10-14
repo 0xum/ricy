@@ -1,20 +1,28 @@
 # Recovery
 
 ## Contract and state
-Primary Session (TARGET / PLANNED): **Ricy + Noctalia**.
-Recovery Session (TARGET / PLANNED): **Plasma + Dolphin** and KDE tools.
-Principle: recovery should depend on as few Ricy-specific components as reasonably
-possible. Read [ADR-0002](adr/0002-plasma-recovery.md).
+Ricy Session (TARGET / PLANNED): **dedicated KWin/Wayland + Noctalia + Dolphin**.
+KDE Plasma, when installed, is an **independent desktop, not Ricy's backup**.
+[ADR-0012](adr/0012-independent-ricy-session.md) supersedes
+[ADR-0002](adr/0002-plasma-recovery.md). Ricy must own its failure handling,
+diagnosis and rollback without requiring an automatic Plasma launch.
+The architecture and configuration-isolation model are approved; lifecycle/security mechanisms are not yet
+implemented. Native file access must remain usable if optional visual helpers fail.
 
 CURRENT / KNOWN: switching occurs within Plasma Wayland. Plasmashell remains
 responsible for wallpaper/desktop; return uses Ricy scripts, user systemd,
 D-Bus, KGlobalAccel, and panel/shortcut snapshots. No isolation against KWin,
 login, or Ricy-script failure has been demonstrated.
 
-[ADR-0011](adr/0011-dolphin-as-ricy-file-manager.md) selects Dolphin in Ricy
-and Plasma Recovery. Access to files must not require an own Ricy application,
+All Plasma Recovery references below describe current transitional behavior or
+dated evidence, not the new product requirement. Preserve the existing scripts,
+snapshots, packages and login access during migration. A safe rollback of the
+current installation is distinct from requiring KDE as Ricy's backup desktop.
+
+[ADR-0011](adr/0011-dolphin-as-ricy-file-manager.md), amended by ADR-0012,
+selects Dolphin in Ricy. Access to files must not require an own Ricy application,
 filesystem/Trash implementation or FileManager1 service. Ricy visual adaptations
-are permitted, but Recovery must remain usable if those adaptations fail.
+are permitted, but native file access must remain usable if those adaptations fail.
 
 The [baseline](DOLPHIN-BASELINE.md) confirms that the existing user desktop
 override, FileManager1 service and systemd drop-in still use the visual wrapper
@@ -79,7 +87,7 @@ failures: do not use that result alone as proof of recovery.
 | Shell/adapter fails during switching | The protected block in `start()` calls `restore()`; the command disables the preference if restart fails. Not every exception is inside that block. |
 | Shell crashes after switching | Units have a restart policy; UNKNOWN: guaranteed fallback after persistent failure. |
 | Missing/corrupted snapshot or unavailable D-Bus | Return may fail; preserve backups and investigate the error instead of overwriting the layout based on assumptions. |
-| KWin/login/user-session failure | UNKNOWN: an independent procedure has not yet been validated. A decoupled recovery session is PLANNED. |
+| KWin/login/user-session failure | UNKNOWN: independent Ricy failure handling has not been validated. ADR-0012 does not require a Plasma fallback session. |
 | Customized Dolphin / incompatible plugin | Launcher, QSS, Qt plugin, and KWin effect exist; consult contribution restorers instead of removing Dolphin. |
 
 Current snapshots are in `${XDG_STATE_HOME:-$HOME/.local/state}/ricy-alternancia/`.
